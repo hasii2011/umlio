@@ -16,7 +16,7 @@ dependencies = [
     'codeallybasic>=1.10.4',
     'codeallyadvanced>=1.4.2',
     'pyutmodelv2>=2.2.3',
-    'umlshapes>=0.5.0',
+    'umlshapes>=0.5.1',
 ]
 
 [project.optional-dependencies]

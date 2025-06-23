@@ -56,8 +56,10 @@ class XmlConstants:
 
     ATTRIBUTE_IMPLEMENTING_CLASS_NAME:   str = 'implementingClassName'
 
-    ELEMENT_DIAGRAM:   str = 'UMLDiagram'
-    ELEMENT_UML_CLASS: str = 'UmlClass'
+    ELEMENT_DIAGRAM:      str = 'UMLDiagram'
+    ELEMENT_UML_CLASS:    str = 'UmlClass'
+    ELEMENT_UML_USE_CASE: str = 'UmlUseCase'
+    ELEMENT_UML_ACTOR:    str = 'UmlActor'
 
     ELEMENT_MODEL_CLASS:       str = 'PyutClass'
     ELEMENT_MODEL_TEXT:        str = 'PyutText'

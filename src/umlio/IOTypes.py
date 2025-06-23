@@ -10,12 +10,16 @@ from dataclasses import field
 
 from pathlib import Path
 
+from umlshapes.shapes.UmlActor import UmlActor
 from umlshapes.shapes.UmlClass import UmlClass
+from umlshapes.shapes.UmlUseCase import UmlUseCase
 
 UML_VERSION: str = '12.0'
 
 UmlDiagramTitle = NewType('UmlDiagramTitle', str)
 UmlClasses      = NewType('UmlClasses',      List[UmlClass])
+UmlUseCases     = NewType('UmlUseCases',     List[UmlUseCase])
+UmlActors       = NewType('UmlActors',       List[UmlActor])
 
 ElementAttributes = NewType('ElementAttributes', Dict[str, str])
 
@@ -27,13 +31,21 @@ class UmlDiagramType(Enum):
     NOT_SET          = 'Not Set'
 
 
-def createUmlClassesFactory() -> UmlClasses:
+def umlClassesFactory() -> UmlClasses:
     """
     Factory method to create  the UmlClasses data structure;
 
     Returns:  A new data structure
     """
     return UmlClasses([])
+
+
+def umlUseCasesFactory() -> UmlUseCases:
+    return UmlUseCases([])
+
+
+def umlActorsFactory() -> UmlActors:
+    return UmlActors([])
 
 
 @dataclass
@@ -44,7 +56,9 @@ class UmlDiagram:
     scrollPositionY: int = 1
     pixelsPerUnitX:  int = 1
     pixelsPerUnitY:  int = 1
-    umlClasses:      UmlClasses  = field(default_factory=createUmlClassesFactory)
+    umlClasses:      UmlClasses  = field(default_factory=umlClassesFactory)
+    umlUseCases:     UmlUseCases = field(default_factory=umlUseCasesFactory)
+    umlActors:       UmlActors   = field(default_factory=umlActorsFactory)
 
 
 UmlDiagrams = NewType('UmlDiagrams', Dict[UmlDiagramTitle, UmlDiagram])
