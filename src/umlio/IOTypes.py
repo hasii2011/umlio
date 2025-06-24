@@ -12,6 +12,8 @@ from pathlib import Path
 
 from umlshapes.shapes.UmlActor import UmlActor
 from umlshapes.shapes.UmlClass import UmlClass
+from umlshapes.shapes.UmlNote import UmlNote
+from umlshapes.shapes.UmlText import UmlText
 from umlshapes.shapes.UmlUseCase import UmlUseCase
 
 UML_VERSION: str = '12.0'
@@ -20,6 +22,8 @@ UmlDiagramTitle = NewType('UmlDiagramTitle', str)
 UmlClasses      = NewType('UmlClasses',      List[UmlClass])
 UmlUseCases     = NewType('UmlUseCases',     List[UmlUseCase])
 UmlActors       = NewType('UmlActors',       List[UmlActor])
+UmlNotes        = NewType('UmlNotes',        List[UmlNote])
+UmlTexts        = NewType('UmlTexts',        List[UmlText])
 
 ElementAttributes = NewType('ElementAttributes', Dict[str, str])
 
@@ -48,6 +52,14 @@ def umlActorsFactory() -> UmlActors:
     return UmlActors([])
 
 
+def umlNotesFactory() -> UmlNotes:
+    return UmlNotes([])
+
+
+def umlTextsFactory() -> UmlTexts:
+    return UmlTexts([])
+
+
 @dataclass
 class UmlDiagram:
     diagramType:     UmlDiagramType  = UmlDiagramType.NOT_SET
@@ -59,6 +71,8 @@ class UmlDiagram:
     umlClasses:      UmlClasses  = field(default_factory=umlClassesFactory)
     umlUseCases:     UmlUseCases = field(default_factory=umlUseCasesFactory)
     umlActors:       UmlActors   = field(default_factory=umlActorsFactory)
+    umlNotes:        UmlNotes    = field(default_factory=umlNotesFactory)
+    umlTexts:        UmlTexts    = field(default_factory=umlTextsFactory)
 
 
 UmlDiagrams = NewType('UmlDiagrams', Dict[UmlDiagramTitle, UmlDiagram])

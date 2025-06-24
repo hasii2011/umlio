@@ -8,6 +8,8 @@ from codeallyadvanced.ui.UnitTestBaseW import UnitTestBaseW
 from pyutmodelv2.PyutActor import PyutActor
 
 from pyutmodelv2.PyutClass import PyutClass
+from pyutmodelv2.PyutNote import PyutNote
+from pyutmodelv2.PyutText import PyutText
 from pyutmodelv2.PyutUseCase import PyutUseCase
 from pyutmodelv2.enumerations.PyutDisplayParameters import PyutDisplayParameters
 from pyutmodelv2.enumerations.PyutStereotype import PyutStereotype
@@ -16,6 +18,8 @@ from umlshapes.preferences.UmlPreferences import UmlPreferences
 from umlshapes.shapes.UmlActor import UmlActor
 
 from umlshapes.shapes.UmlClass import UmlClass
+from umlshapes.shapes.UmlNote import UmlNote
+from umlshapes.shapes.UmlText import UmlText
 from umlshapes.shapes.UmlUseCase import UmlUseCase
 from umlshapes.types.UmlDimensions import UmlDimensions
 from umlshapes.types.UmlPosition import UmlPosition
@@ -66,6 +70,28 @@ EXPECTED_SINGLE_ACTOR: str = (
     '        <UmlActor id="remember.central.issue.child" width="233" height="233" x="500" y="200">\n'
     '            <PyutActor id="0" name="LoboMalo" fileName="" />\n'
     '        </UmlActor>\n'
+    '    </UMLDiagram>\n'
+    '</UmlProject>'
+)
+
+EXPECTED_SINGLE_NOTE: str = (
+    "<?xml version='1.0' encoding='iso-8859-1'?>\n"
+    '<UmlProject version="12.0" codePath="/users/hasii">\n'
+    '    <UMLDiagram type="Use Case Diagram" title="Uml Note Diagram" scrollPositionX="1" scrollPositionY="1" pixelsPerUnitX="1" pixelsPerUnitY="1">\n'
+    '        <UmlNote id="remember.the.Alamo" width="233" height="233" x="666" y="777">\n'
+    '            <PyutNote id="777" content="I am the best MAGA Note" fileName="" />\n'
+    '        </UmlNote>\n'
+    '    </UMLDiagram>\n'
+    '</UmlProject>'
+)
+
+EXPECTED_SINGLE_TEXT: str = (
+    "<?xml version='1.0' encoding='iso-8859-1'?>\n"
+    '<UmlProject version="12.0" codePath="/users/hasii">\n'
+    '    <UMLDiagram type="Class Diagram" title="Uml Text Diagram" scrollPositionX="1" scrollPositionY="1" pixelsPerUnitX="1" pixelsPerUnitY="1">\n'
+    '        <UmlText id="remember.the.Alamo" width="150" height="50" x="1024" y="768">\n'
+    '            <PyutText id="1789" content="Soy el mejor texto americano" />\n'
+    '        </UmlText>\n'
     '    </UMLDiagram>\n'
     '</UmlProject>'
 )
@@ -164,11 +190,11 @@ class TestUmlShapesToXml(UnitTestBaseW):
 
         pyutActor: PyutActor = PyutActor(actorName='LoboMalo')
         pyutActor.id = 0
-        umlActor:  UmlActor  = UmlActor(
+        umlActor: UmlActor  = UmlActor(
             pyutActor=pyutActor,
             size=UmlDimensions(width=233, height=233)
         )
-        umlActor.id = 'remember.central.issue.child'
+        umlActor.id       = 'remember.central.issue.child'
         umlActor.position = UmlPosition(x=500, y=200)
 
         singleActorDiagram.umlActors.append(umlActor)
@@ -182,6 +208,59 @@ class TestUmlShapesToXml(UnitTestBaseW):
 
         self.maxDiff = None
         self.assertEqual(EXPECTED_SINGLE_ACTOR, singleActorXML, 'Actor serialization changed')
+
+    def testSingleNote(self):
+
+        umlShapesToXml:    UmlShapesToXml = self._createXmlCreator()
+        singleNoteDiagram: UmlDiagram     = self._createUmlDiagram(UmlDiagramType.USE_CASE_DIAGRAM, 'Uml Note Diagram')
+
+        pyutNote: PyutNote = PyutNote(content='I am the best MAGA Note')
+        pyutNote.id = 777
+
+        umlNote: UmlNote = UmlNote(
+            pyutNote=pyutNote,
+            size=UmlDimensions(width=233, height=233)
+        )
+        umlNote.id       = 'remember.the.Alamo'
+        umlNote.position = UmlPosition(x=666, y=777)
+
+        singleNoteDiagram.umlNotes.append(umlNote)
+        umlShapesToXml.serialize(umlDiagram=singleNoteDiagram)
+
+        singleNoteXML: str = umlShapesToXml.xml
+
+        self.logger.debug(f'{singleNoteXML=}')
+        self._debugWriteToFile('SingleNote.xml', xml=singleNoteXML)
+
+        self.maxDiff = None
+        self.assertEqual(EXPECTED_SINGLE_NOTE, singleNoteXML, 'Note serialization changed')
+
+    def testSingleText(self):
+
+        umlShapesToXml:    UmlShapesToXml = self._createXmlCreator()
+        singleTextDiagram: UmlDiagram     = self._createUmlDiagram(UmlDiagramType.CLASS_DIAGRAM, 'Uml Text Diagram')
+
+        pyutText: PyutText = PyutText(content='Soy el mejor texto americano')
+        pyutText.id = 1789
+
+        umlText: UmlText = UmlText(
+            pyutText=pyutText,
+            size=UmlDimensions(width=150, height=50)
+        )
+
+        umlText.id       = 'remember.the.Alamo'
+        umlText.position = UmlPosition(x=1024, y=768)
+
+        singleTextDiagram.umlTexts.append(umlText)
+        umlShapesToXml.serialize(umlDiagram=singleTextDiagram)
+
+        singleTextXML: str = umlShapesToXml.xml
+
+        self.logger.debug(f'{singleTextXML=}')
+        self._debugWriteToFile('SingleText.xml', xml=singleTextXML)
+
+        self.maxDiff = None
+        self.assertEqual(EXPECTED_SINGLE_TEXT, singleTextXML, 'Note serialization changed')
 
     def _createSingleClass(self) -> UmlClass:
 

@@ -60,6 +60,8 @@ class XmlConstants:
     ELEMENT_UML_CLASS:    str = 'UmlClass'
     ELEMENT_UML_USE_CASE: str = 'UmlUseCase'
     ELEMENT_UML_ACTOR:    str = 'UmlActor'
+    ELEMENT_UML_NOTE:     str = 'UmlNote'
+    ELEMENT_UML_TEXT:     str = 'UmlText'
 
     ELEMENT_MODEL_CLASS:       str = 'PyutClass'
     ELEMENT_MODEL_TEXT:        str = 'PyutText'
