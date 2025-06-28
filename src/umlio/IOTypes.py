@@ -16,6 +16,8 @@ from umlshapes.shapes.UmlNote import UmlNote
 from umlshapes.shapes.UmlText import UmlText
 from umlshapes.shapes.UmlUseCase import UmlUseCase
 
+from umlshapes.links.UmlLink import UmlLink
+
 UML_VERSION: str = '12.0'
 
 UmlDiagramTitle = NewType('UmlDiagramTitle', str)
@@ -24,6 +26,7 @@ UmlUseCases     = NewType('UmlUseCases',     List[UmlUseCase])
 UmlActors       = NewType('UmlActors',       List[UmlActor])
 UmlNotes        = NewType('UmlNotes',        List[UmlNote])
 UmlTexts        = NewType('UmlTexts',        List[UmlText])
+UmlLinks        = NewType('UmlLinks',        List[UmlLink])
 
 ElementAttributes = NewType('ElementAttributes', Dict[str, str])
 
@@ -60,6 +63,10 @@ def umlTextsFactory() -> UmlTexts:
     return UmlTexts([])
 
 
+def umlLinksFactory() -> UmlLinks:
+    return UmlLinks([])
+
+
 @dataclass
 class UmlDiagram:
     diagramType:     UmlDiagramType  = UmlDiagramType.NOT_SET
@@ -73,6 +80,7 @@ class UmlDiagram:
     umlActors:       UmlActors   = field(default_factory=umlActorsFactory)
     umlNotes:        UmlNotes    = field(default_factory=umlNotesFactory)
     umlTexts:        UmlTexts    = field(default_factory=umlTextsFactory)
+    umlLinks:        UmlLinks    = field(default_factory=umlLinksFactory)
 
 
 UmlDiagrams = NewType('UmlDiagrams', Dict[UmlDiagramTitle, UmlDiagram])

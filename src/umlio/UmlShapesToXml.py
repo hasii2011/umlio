@@ -11,6 +11,7 @@ from xml.etree.ElementTree import indent as xmlIndent
 from xml.etree.ElementTree import tostring as xmlToString
 from xml.etree.ElementTree import fromstring as xmlFromString
 
+from umlio.UmlLinksToXml import UmlLinksToXml
 from umlio.UmlNotesToXml import UmlNotesToXml
 from umlio.UmlTextsToXml import UmlTextsToXml
 from umlio.UmlUseCasesToXml import UmlUseCasesToXml
@@ -81,6 +82,7 @@ class UmlShapesToXml:
         umlUseCaseToXml: UmlUseCasesToXml = UmlUseCasesToXml()
         umlNotesToXml:   UmlNotesToXml    = UmlNotesToXml()
         umlTextsToXml:   UmlTextsToXml    = UmlTextsToXml()
+        umlLinksToXml:   UmlLinksToXml    = UmlLinksToXml()
 
         documentElement: Element       = self._umlDocumentAttributesToXml(umlDiagram=umlDiagram)
 
@@ -89,6 +91,7 @@ class UmlShapesToXml:
 
         umlNotesToXml.serialize(documentTop=documentElement, umlNotes=umlDiagram.umlNotes)
         umlTextsToXml.serialize(documentTop=documentElement, umlTexts=umlDiagram.umlTexts)
+        umlLinksToXml.serialize(documentTop=documentElement, umlLinks=umlDiagram.umlLinks)
 
     def _umlDocumentAttributesToXml(self, umlDiagram: UmlDiagram) -> Element:
         """

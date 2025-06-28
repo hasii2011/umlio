@@ -40,8 +40,19 @@ class XmlConstants:
     ATTRIBUTE_DEFAULT_VALUE: str = 'defaultValue'
     ATTRIBUTE_METHOD_RETURN_TYPE: str = 'returnType'
 
-    ATTRIBUTE_CARDINALITY_SOURCE:      str = 'cardinalitySource'
-    ATTRIBUTE_CARDINALITY_DESTINATION: str = 'cardinalityDestination'
+    ATTRIBUTE_SOURCE_CARDINALITY_VALUE:      str = 'sourceCardinalityValue'
+    ATTRIBUTE_DESTINATION_CARDINALITY_VALUE: str = 'destinationCardinalityValue'
+
+    ATTRIBUTE_DELTA_X: str = 'deltaX'
+    ATTRIBUTE_DELTA_Y: str = 'deltaY'
+
+    ATTRIBUTE_LINK_FROM_X: str = 'fromX'
+    ATTRIBUTE_LINK_FROM_Y: str = 'fromY'
+
+    ATTRIBUTE_LINK_TO_X: str = 'toX'
+    ATTRIBUTE_LINK_TO_Y: str = 'toY'
+
+    ATTRIBUTE_SPLINE:    str = 'spline'
 
     ATTRIBUTE_SOURCE_ID:                 str = 'sourceId'
     ATTRIBUTE_DESTINATION_ID:            str = 'destinationId'
@@ -62,6 +73,11 @@ class XmlConstants:
     ELEMENT_UML_ACTOR:    str = 'UmlActor'
     ELEMENT_UML_NOTE:     str = 'UmlNote'
     ELEMENT_UML_TEXT:     str = 'UmlText'
+    ELEMENT_UML_LINK:     str = 'UmlLink'
+
+    ELEMENT_ASSOCIATION_LABEL:             str = 'AssociationName'
+    ELEMENT_ASSOCIATION_SOURCE_LABEL:      str = 'SourceCardinality'
+    ELEMENT_ASSOCIATION_DESTINATION_LABEL: str = 'DestinationCardinality'
 
     ELEMENT_MODEL_CLASS:       str = 'PyutClass'
     ELEMENT_MODEL_TEXT:        str = 'PyutText'
@@ -81,3 +97,5 @@ class XmlConstants:
 
     ELEMENT_MODEL_SD_INSTANCE:   str = 'PyutSDInstance'
     ELEMENT_MODEL_SD_MESSAGE:    str = 'PyutSDMessage'
+
+    ELEMENT_MODEL_LINE_CONTROL_POINT: str = 'LineControlPoint'

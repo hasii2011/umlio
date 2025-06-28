@@ -100,8 +100,8 @@ class PyutToXml:
         attributes: ElementAttributes = ElementAttributes({
             XmlConstants.ATTRIBUTE_NAME:                    pyutLink.name,
             XmlConstants.ATTRIBUTE_TYPE:                    pyutLink.linkType.name,
-            XmlConstants.ATTRIBUTE_CARDINALITY_SOURCE:      pyutLink.sourceCardinality,
-            XmlConstants.ATTRIBUTE_CARDINALITY_DESTINATION: pyutLink.destinationCardinality,
+            XmlConstants.ATTRIBUTE_SOURCE_CARDINALITY_VALUE:      pyutLink.sourceCardinality,
+            XmlConstants.ATTRIBUTE_DESTINATION_CARDINALITY_VALUE: pyutLink.destinationCardinality,
             # XmlConstants.ATTR_BIDIRECTIONAL:           str(pyutLink.getBidir()),
             XmlConstants.ATTRIBUTE_BIDIRECTIONAL:           str(pyutLink.bidirectional),
             XmlConstants.ATTRIBUTE_SOURCE_ID:               str(srcLinkId),
