@@ -102,7 +102,7 @@ class PyutToXml:
             XmlConstants.ATTRIBUTE_TYPE:                    pyutLink.linkType.name,
             XmlConstants.ATTRIBUTE_SOURCE_CARDINALITY_VALUE:      pyutLink.sourceCardinality,
             XmlConstants.ATTRIBUTE_DESTINATION_CARDINALITY_VALUE: pyutLink.destinationCardinality,
-            # XmlConstants.ATTR_BIDIRECTIONAL:           str(pyutLink.getBidir()),
+            XmlConstants.ATTR_BIDIRECTIONAL:                str(pyutLink.bidirectional),
             XmlConstants.ATTRIBUTE_BIDIRECTIONAL:           str(pyutLink.bidirectional),
             XmlConstants.ATTRIBUTE_SOURCE_ID:               str(srcLinkId),
             XmlConstants.ATTRIBUTE_DESTINATION_ID:          str(destLinkId),
