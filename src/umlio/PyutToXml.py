@@ -89,8 +89,6 @@ class PyutToXml:
         Returns:
             A new minidom element
         """
-        # src   = pyutLink.getSource()
-        # dst   = pyutLink.getDestination()
         src: LinkSource      = pyutLink.source
         dst: LinkDestination = pyutLink.destination
 
@@ -98,14 +96,13 @@ class PyutToXml:
         destLinkId: int = dst.id
 
         attributes: ElementAttributes = ElementAttributes({
-            XmlConstants.ATTRIBUTE_NAME:                    pyutLink.name,
-            XmlConstants.ATTRIBUTE_TYPE:                    pyutLink.linkType.name,
+            XmlConstants.ATTRIBUTE_NAME:           pyutLink.name,
+            XmlConstants.ATTRIBUTE_TYPE:           pyutLink.linkType.name,
+            XmlConstants.ATTRIBUTE_SOURCE_ID:      str(srcLinkId),
+            XmlConstants.ATTRIBUTE_DESTINATION_ID: str(destLinkId),
+            XmlConstants.ATTRIBUTE_BIDIRECTIONAL:  str(pyutLink.bidirectional),
             XmlConstants.ATTRIBUTE_SOURCE_CARDINALITY_VALUE:      pyutLink.sourceCardinality,
             XmlConstants.ATTRIBUTE_DESTINATION_CARDINALITY_VALUE: pyutLink.destinationCardinality,
-            XmlConstants.ATTR_BIDIRECTIONAL:                str(pyutLink.bidirectional),
-            XmlConstants.ATTRIBUTE_BIDIRECTIONAL:           str(pyutLink.bidirectional),
-            XmlConstants.ATTRIBUTE_SOURCE_ID:               str(srcLinkId),
-            XmlConstants.ATTRIBUTE_DESTINATION_ID:          str(destLinkId),
         })
         pyutLinkElement: Element = SubElement(oglLinkElement, XmlConstants.ELEMENT_MODEL_LINK, attrib=attributes)
 
