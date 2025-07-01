@@ -1,6 +1,10 @@
 
+from typing import cast
+
 from logging import Logger
 from logging import getLogger
+
+from wx import Point
 
 from xml.etree.ElementTree import Element
 from xml.etree.ElementTree import SubElement
@@ -9,6 +13,8 @@ from umlshapes.links.DeltaXY import DeltaXY
 from umlshapes.links.UmlAssociation import UmlAssociation
 from umlshapes.links.UmlAssociationLabel import UmlAssociationLabel
 from umlshapes.links.UmlLink import UmlLink
+from umlshapes.links.eventhandlers.UmlLinkEventHandler import LineControlPoints
+
 from umlshapes.types.Common import EndPoints
 from umlshapes.types.UmlPosition import UmlPosition
 
@@ -56,9 +62,6 @@ class UmlLinksToXml(BaseUmlToXml):
             for eltName in associationLabels:
                 umlAssociationLabel: UmlAssociationLabel = associationLabels[eltName]
 
-                # relativePosition: Tuple[int, int] = oglAssociationLabel.GetRelativePosition()
-                # x: int = relativePosition[0]
-                # y: int = relativePosition[1]
                 linkDelta: DeltaXY = umlAssociationLabel.linkDelta
 
                 labelAttributes: ElementAttributes = ElementAttributes({
@@ -68,11 +71,13 @@ class UmlLinksToXml(BaseUmlToXml):
                 # noinspection PyUnusedLocal
                 labelElement: Element = SubElement(oglLinkSubElement, eltName, attrib=labelAttributes)
 
-        # save control points (not anchors!)
-        for x, y in umlLink.segments[1:-1]:
+        lineControlPoints: LineControlPoints = umlLink.GetLineControlPoints()
+        realControlPoints: LineControlPoints = self._removeEndPoints(umlLink=umlLink, lineControlPoints=lineControlPoints)
+        for pt in realControlPoints:
+            wxPoint: Point = cast(Point, pt)
             controlPointAttributes: ElementAttributes = ElementAttributes({
-                XmlConstants.ATTRIBUTE_X: str(x),
-                XmlConstants.ATTRIBUTE_Y: str(y),
+                XmlConstants.ATTRIBUTE_X: str(wxPoint.x),
+                XmlConstants.ATTRIBUTE_Y: str(wxPoint.y),
             })
             SubElement(oglLinkSubElement, XmlConstants.ELEMENT_MODEL_LINE_CONTROL_POINT, attrib=controlPointAttributes)
 
@@ -123,3 +128,26 @@ class UmlLinksToXml(BaseUmlToXml):
         })
 
         return attributes
+
+    def _removeEndPoints(self, umlLink: 'UmlLink', lineControlPoints: LineControlPoints) -> LineControlPoints:
+        """
+        Do not consider the end points
+
+        Args:
+            umlLink:
+            lineControlPoints:
+
+        Returns:  The control points less the 2 end points
+        """
+
+        realControlPoints: LineControlPoints = LineControlPoints(lineControlPoints[:])
+
+        x1, y1, x2, y2 = umlLink.FindLineEndPoints()
+
+        pt1: Point = Point(x1, y1)
+        pt2: Point = Point(x2, y2)
+
+        realControlPoints.remove(pt1)
+        realControlPoints.remove(pt2)
+
+        return realControlPoints
