@@ -1,3 +1,4 @@
+
 from typing import Dict
 from typing import NewType
 from typing import Tuple
@@ -14,6 +15,7 @@ from pyutmodelv2.PyutClass import PyutClass
 from pyutmodelv2.PyutLink import PyutLink
 from pyutmodelv2.enumerations.PyutLinkType import PyutLinkType
 
+from umlshapes.links.UmlInterface import UmlInterface
 from umlshapes.links.UmlInheritance import UmlInheritance
 from umlshapes.links.UmlAssociation import UmlAssociation
 from umlshapes.links.UmlLink import UmlLink
@@ -37,6 +39,12 @@ DESTINATION_PYUT_CLASS_ID: int = 777
 SOURCE_UML_CLASS_ID:      str = 'provide.serious.hand.change'
 DESTINATION_UML_CLASS_ID: str = 'believe.able.power.moment'
 
+INTERFACE_UML_CLASS_NAME:    str = 'Interface'
+IMPLEMENTING_UML_CLASS_NAME: str = 'Implementor'
+INTERFACE_UML_CLASS_ID:      str = 'card.carrying.interface'
+IMPLEMENTING_UML_CLASS_ID:   str = 'valley.darkness.implementor'
+INTERFACE_PYUT_CLASS_ID:     int = 2222
+IMPLEMENTING_PYUT_CLASS_ID:  int = 4444
 
 UML_LINK_CANONICAL_MONIKER: str = 'die.free.open.point'
 
@@ -73,14 +81,17 @@ class RelationshipCreator:
             linkType=PyutLinkType.INHERITANCE,
             associationClass=UmlInheritance
         )
-
+        interface: AssociationDescription = AssociationDescription(
+            linkType=PyutLinkType.INTERFACE,
+            associationClass=UmlInterface
+        )
         self._relationShips: RelationshipDescription = RelationshipDescription(
             {
                 PyutLinkType.ASSOCIATION: association,
                 PyutLinkType.INHERITANCE: inheritance,
+                PyutLinkType.INTERFACE:   interface,
                 # Identifiers.ID_DISPLAY_UML_COMPOSITION: composition,
                 # Identifiers.ID_DISPLAY_UML_AGGREGATION: aggregation,
-                # Identifiers.ID_DISPLAY_UML_INTERFACE:   interface
             }
         )
 
@@ -90,8 +101,8 @@ class RelationshipCreator:
 
         if associationDescription.linkType == PyutLinkType.INHERITANCE:
             return self._createUmlInheritance(associationDescription=associationDescription)
-        # elif associationDescription.linkType == PyutLinkType.INTERFACE:
-        #     self._displayUmlInterface(associationDescription=associationDescription)
+        elif associationDescription.linkType == PyutLinkType.INTERFACE:
+            return self._createUmlInterface()
         else:
             return self._createAssociation(associationDescription=associationDescription)
 
@@ -129,9 +140,9 @@ class RelationshipCreator:
 
     def _createUmlInheritance(self, associationDescription: AssociationDescription) -> CreatedAssociation:
 
-        basePyutClass: PyutClass = PyutClass(name=f'BaseClass')
+        basePyutClass: PyutClass = PyutClass(name=f'{BASE_UML_CLASS_NAME}')
         associationDescription.classCounter += 1
-        subPyutClass: PyutClass = PyutClass(name=f'SubClass')
+        subPyutClass: PyutClass = PyutClass(name=f'{SUBCLASS_UML_CLASS_NAME}')
 
         basePyutClass.id = BASE_CLASS_PYUT_ID
         subPyutClass.id  = SUBCLASS_PYUT_ID
@@ -169,6 +180,47 @@ class RelationshipCreator:
             sourceUmlClass=subClassUmlClass,
             destinationUmlClass=baseUmlClass,
             association=umlInheritance
+        )
+
+    def _createUmlInterface(self) -> CreatedAssociation:
+
+        interfacePyutClass:    PyutClass = PyutClass(name=f'{INTERFACE_UML_CLASS_NAME}')
+        implementingPyutClass: PyutClass = PyutClass(name=f'{IMPLEMENTING_UML_CLASS_NAME}')
+
+        interfacePyutClass.id    = INTERFACE_PYUT_CLASS_ID
+        implementingPyutClass.id = IMPLEMENTING_PYUT_CLASS_ID
+
+        interfaceUmlClass:    UmlClass = UmlClass(pyutClass=interfacePyutClass)
+        implementingUmlClass: UmlClass = UmlClass(pyutClass=implementingPyutClass)
+
+        interfaceUmlClass.id    = INTERFACE_UML_CLASS_ID
+        implementingUmlClass.id = IMPLEMENTING_UML_CLASS_ID
+
+        interfaceUmlClass.position    = UmlPosition(x=3333, y=3333)
+        implementingUmlClass.position = UmlPosition(x=4444, y=4444)
+
+        interfaceUmlClass.SetCanvas(self._diagramFrame)
+        implementingUmlClass.SetCanvas(self._diagramFrame)
+
+        pyutInterface: PyutLink = PyutLink(linkType=PyutLinkType.INTERFACE, source=implementingPyutClass, destination=interfacePyutClass)     # TODO use PyutInterface
+
+        umlInterface: UmlInterface = UmlInterface(pyutLink=pyutInterface, interfaceClass=interfaceUmlClass, implementingClass=implementingUmlClass)
+
+        umlInterface.id = UML_LINK_CANONICAL_MONIKER
+
+        umlInterface.SetCanvas(self._diagramFrame)
+        umlInterface.MakeLineControlPoints(n=2)       # Make this configurable
+
+        umlInterface.InsertLineControlPoint(point=Point(x=372, y=433))
+        umlInterface.InsertLineControlPoint(point=Point(x=400, y=433))
+
+        # REMEMBER:   from subclass to base class
+        implementingUmlClass.addLink(umlLink=umlInterface, destinationClass=interfaceUmlClass)
+
+        return CreatedAssociation(
+            sourceUmlClass=implementingUmlClass,
+            destinationUmlClass=interfaceUmlClass,
+            association=umlInterface
         )
 
     def _createClassPair(self, classCounter: int) -> Tuple[UmlClass, UmlClass]:

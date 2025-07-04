@@ -1,6 +1,5 @@
+
 from typing import cast
-from unittest import TestSuite
-from unittest import main as unitTestMain
 
 from pathlib import Path
 
@@ -38,6 +37,9 @@ from tests.RelationshipCreator import RelationshipCreator
 from umlio.IOTypes import UmlDiagram
 
 from umlio.UmlShapesToXml import UmlShapesToXml
+
+from unittest import TestSuite
+from unittest import main as unitTestMain
 
 SOURCE_PYUT_CLASS_ID:      str = str(INT_SOURCE_PYUT_CLASS_ID)
 DESTINATION_PYUT_CLASS_ID: str = str(INT_DESTINATION_PYUT_CLASS_ID)
@@ -77,6 +79,25 @@ EXPECTED_INHERITANCE_XML: str = (
     '            <LineControlPoint x="100" y="100" />\n'
     '            <LineControlPoint x="200" y="200" />\n'
     '            <PyutLink name="" type="INHERITANCE" sourceId="111" destinationId="999" bidirectional="False" sourceCardinalityValue="" destinationCardinalityValue="" />\n'
+    '        </UmlLink>\n'
+    '    </UMLDiagram>\n'
+    '</UmlProject>'
+)
+
+EXPECTED_INTERFACE_XML: str = (
+    "<?xml version='1.0' encoding='iso-8859-1'?>\n"
+    '<UmlProject version="12.0" codePath="/users/hasii">\n'
+    '    <UMLDiagram type="Class Diagram" title="Interface Class Diagram" scrollPositionX="1" scrollPositionY="1" pixelsPerUnitX="1" pixelsPerUnitY="1">\n'
+    '        <UmlClass id="valley.darkness.implementor" width="150" height="75" x="4444" y="4444">\n'
+    '            <PyutClass id="4444" name="Implementor" displayMethods="True" displayParameters="Unspecified" displayConstructor="Unspecified" displayDunderMethods="Unspecified" displayFields="True" displayStereotype="True" fileName="" description="" />\n'
+    '        </UmlClass>\n'
+    '        <UmlClass id="card.carrying.interface" width="150" height="75" x="3333" y="3333">\n'
+    '            <PyutClass id="2222" name="Interface" displayMethods="True" displayParameters="Unspecified" displayConstructor="Unspecified" displayDunderMethods="Unspecified" displayFields="True" displayStereotype="True" fileName="" description="" />\n'
+    '        </UmlClass>\n'
+    '        <UmlLink id="die.free.open.point" fromX="4481" fromY="4444" toX="3370" toY="3333" spline="False">\n'
+    '            <LineControlPoint x="372" y="433" />\n'
+    '            <LineControlPoint x="400" y="433" />\n'
+    '            <PyutLink name="" type="INTERFACE" sourceId="4444" destinationId="2222" bidirectional="False" sourceCardinalityValue="" destinationCardinalityValue="" />\n'
     '        </UmlLink>\n'
     '    </UMLDiagram>\n'
     '</UmlProject>'
@@ -128,6 +149,15 @@ class TestUmlRelationships(UnitTestBaseW):
             diagramName='Inheritance Class Diagram',
             failMessage='Inheritance serialization changed',
             expectedXml=EXPECTED_INHERITANCE_XML
+        )
+
+    def testInterface(self):
+        self._runAssociationTest(
+            linkType=PyutLinkType.INTERFACE,
+            fileName='Interface.xml',
+            diagramName='Interface Class Diagram',
+            failMessage='Interface serialization changed',
+            expectedXml=EXPECTED_INTERFACE_XML
         )
 
     def _runAssociationTest(self, linkType: PyutLinkType, fileName: str, diagramName: str, failMessage: str, expectedXml: str):
