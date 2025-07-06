@@ -16,7 +16,7 @@ from umlio.UmlNotesToXml import UmlNotesToXml
 from umlio.UmlTextsToXml import UmlTextsToXml
 from umlio.UmlUseCasesToXml import UmlUseCasesToXml
 from umlio.XMLConstants import XmlConstants
-from umlio.IOTypes import UML_VERSION
+from umlio.IOTypes import XML_VERSION
 from umlio.IOTypes import UmlDiagram
 from umlio.UmlClassToXml import UmlClassToXml
 
@@ -40,7 +40,7 @@ class UmlShapesToXml:
 
         xmlProjectElement: Element = Element('UmlProject')
 
-        xmlProjectElement.set(XmlConstants.ATTRIBUTE_VERSION, UML_VERSION)
+        xmlProjectElement.set(XmlConstants.ATTRIBUTE_VERSION, XML_VERSION)
         xmlProjectElement.set(XmlConstants.ATTRIBUTE_CODE_PATH, str(projectCodePath))
 
         diagramTree: ElementTree = ElementTree(xmlProjectElement)

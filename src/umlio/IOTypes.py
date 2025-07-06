@@ -18,7 +18,7 @@ from umlshapes.shapes.UmlUseCase import UmlUseCase
 
 from umlshapes.links.UmlLink import UmlLink
 
-UML_VERSION: str = '12.0'
+XML_VERSION: str = '12.0'
 
 UmlDiagramTitle = NewType('UmlDiagramTitle', str)
 UmlClasses      = NewType('UmlClasses',      List[UmlClass])
@@ -93,6 +93,6 @@ def createUmlDiagramsFactory() -> UmlDiagrams:
 @dataclass
 class UmlProject:
     fileName:    str  = ''
-    version:     str  = UML_VERSION
+    version:     str  = XML_VERSION
     codePath:    Path = Path('')
     umlDiagrams: UmlDiagrams = field(default_factory=createUmlDiagramsFactory)
