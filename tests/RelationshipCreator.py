@@ -1,14 +1,18 @@
 
 from typing import Dict
 from typing import NewType
+from typing import Optional
 from typing import Tuple
-from typing import cast
 
 from logging import Logger
 from logging import getLogger
 
 from dataclasses import dataclass
 
+from pyutmodelv2.PyutInterface import PyutInterface
+from pyutmodelv2.PyutModelTypes import ClassName
+from umlshapes.links.UmlLollipopInterface import UmlLollipopInterface
+from umlshapes.types.Common import AttachmentSide
 from wx import Point
 
 from pyutmodelv2.PyutClass import PyutClass
@@ -48,10 +52,12 @@ IMPLEMENTING_PYUT_CLASS_ID:  int = 4444
 
 UML_LINK_CANONICAL_MONIKER: str = 'die.free.open.point'
 
+CANONICAl_LOLLIPOP_NAME: str = 'IFake'
+
 
 @dataclass
 class AssociationDescription:
-    associationClass:   type[UmlLink] = cast(type[UmlLink], None)
+    associationClass:   type(UmlLink) | type(UmlLollipopInterface)
     linkType:           PyutLinkType  = PyutLinkType.ASSOCIATION
     associationCounter: int = 0
     classCounter:       int = 0
@@ -62,9 +68,10 @@ RelationshipDescription = NewType('RelationshipDescription', Dict[PyutLinkType, 
 
 @dataclass
 class CreatedAssociation:
-    sourceUmlClass:      UmlClass
-    destinationUmlClass: UmlClass
-    association:         UmlLink
+    sourceUmlClass:      Optional[UmlClass]             = None
+    association:         Optional[UmlLink]              = None
+    destinationUmlClass: Optional[UmlClass]             = None
+    lollipopInterface:   Optional[UmlLollipopInterface] = None
 
 
 class RelationshipCreator:
@@ -85,16 +92,22 @@ class RelationshipCreator:
             linkType=PyutLinkType.INTERFACE,
             associationClass=UmlInterface
         )
+        lollipop: AssociationDescription = AssociationDescription(
+            linkType=PyutLinkType.LOLLIPOP,
+            associationClass=UmlLollipopInterface
+        )
         self._relationShips: RelationshipDescription = RelationshipDescription(
             {
                 PyutLinkType.ASSOCIATION: association,
                 PyutLinkType.INHERITANCE: inheritance,
                 PyutLinkType.INTERFACE:   interface,
+                PyutLinkType.LOLLIPOP:    lollipop,
                 # Identifiers.ID_DISPLAY_UML_COMPOSITION: composition,
                 # Identifiers.ID_DISPLAY_UML_AGGREGATION: aggregation,
             }
         )
 
+    # noinspection PyTypeChecker
     def createRelationship(self, linkType: PyutLinkType) -> CreatedAssociation:
 
         associationDescription: AssociationDescription = self._relationShips[linkType]
@@ -103,6 +116,8 @@ class RelationshipCreator:
             return self._createUmlInheritance(associationDescription=associationDescription)
         elif associationDescription.linkType == PyutLinkType.INTERFACE:
             return self._createUmlInterface()
+        elif associationDescription.linkType == PyutLinkType.LOLLIPOP:
+            return self._createLollipop()
         else:
             return self._createAssociation(associationDescription=associationDescription)
 
@@ -221,6 +236,30 @@ class RelationshipCreator:
             sourceUmlClass=implementingUmlClass,
             destinationUmlClass=interfaceUmlClass,
             association=umlInterface
+        )
+
+    def _createLollipop(self) -> CreatedAssociation:
+
+        # Need them model
+        implementingPyutClass: PyutClass = PyutClass(name=f'{IMPLEMENTING_UML_CLASS_NAME}')
+        implementingPyutClass.id = IMPLEMENTING_PYUT_CLASS_ID
+
+        # Need the attached to UI Shape
+        implementingUmlClass: UmlClass = UmlClass(pyutClass=implementingPyutClass)
+        implementingUmlClass.id       = IMPLEMENTING_UML_CLASS_ID
+        implementingUmlClass.position = UmlPosition(x=3333, y=3333)
+
+        # fill out the model
+        pyutInterface: PyutInterface = PyutInterface(name=CANONICAl_LOLLIPOP_NAME)
+        pyutInterface.addImplementor(ClassName(implementingPyutClass.name))
+
+        # Need the lollipop
+        umlLollipopInterface: UmlLollipopInterface = UmlLollipopInterface(pyutInterface=pyutInterface)
+        umlLollipopInterface.attachedTo     = implementingUmlClass
+        umlLollipopInterface.attachmentSide = AttachmentSide.RIGHT
+        return CreatedAssociation(
+            destinationUmlClass=implementingUmlClass,
+            lollipopInterface=umlLollipopInterface
         )
 
     def _createClassPair(self, classCounter: int) -> Tuple[UmlClass, UmlClass]:

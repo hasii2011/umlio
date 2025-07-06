@@ -24,11 +24,11 @@ class UmlClassToXml(BaseUmlToXml):
     def serialize(self, documentTop: Element, umlClasses: UmlClasses) -> Element:
 
         for umlClass in umlClasses:
-            self._oglClassToXml(documentTop=documentTop, umlClass=umlClass)
+            self._umlClassToXml(documentTop=documentTop, umlClass=umlClass)
 
         return documentTop
 
-    def _oglClassToXml(self, documentTop: Element, umlClass: UmlClass) -> Element:
+    def _umlClassToXml(self, documentTop: Element, umlClass: UmlClass) -> Element:
         """
         Exports an UmlClass to a minidom Element.
 
@@ -40,8 +40,8 @@ class UmlClassToXml(BaseUmlToXml):
             The newly created `UmlClass` Element
         """
         attributes = self._umlBaseAttributes(umlShape=umlClass)
-        oglClassSubElement: Element = SubElement(documentTop, XmlConstants.ELEMENT_UML_CLASS, attrib=attributes)
+        umlClassSubElement: Element = SubElement(documentTop, XmlConstants.ELEMENT_UML_CLASS, attrib=attributes)
 
-        self._pyutToXml.pyutClassToXml(graphicElement=oglClassSubElement, pyutClass=umlClass.pyutClass)
+        self._pyutToXml.pyutClassToXml(umlClassElement=umlClassSubElement, pyutClass=umlClass.pyutClass)
 
-        return oglClassSubElement
+        return umlClassSubElement

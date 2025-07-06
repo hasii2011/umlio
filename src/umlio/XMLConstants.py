@@ -66,6 +66,9 @@ class XmlConstants:
     ATTRIBUTE_DESTINATION_TIME: str = 'destinationTime'
 
     ATTRIBUTE_IMPLEMENTING_CLASS_NAME:   str = 'implementingClassName'
+    ATTRIBUTE_LINE_CENTUM:               str = 'lineCentum'
+    ATTRIBUTE_ATTACHMENT_SIDE:           str = 'attachmentSide'
+    ATTRIBUTE_ATTACHED_TO_ID:            str = 'attachedToId'
 
     ELEMENT_DIAGRAM:      str = 'UMLDiagram'
     ELEMENT_UML_CLASS:    str = 'UmlClass'
@@ -74,6 +77,7 @@ class XmlConstants:
     ELEMENT_UML_NOTE:     str = 'UmlNote'
     ELEMENT_UML_TEXT:     str = 'UmlText'
     ELEMENT_UML_LINK:     str = 'UmlLink'
+    ELEMENT_LOLLIPOP:     str = 'UmlLollipopInterface'
 
     ELEMENT_ASSOCIATION_LABEL:             str = 'AssociationName'
     ELEMENT_ASSOCIATION_SOURCE_LABEL:      str = 'SourceCardinality'

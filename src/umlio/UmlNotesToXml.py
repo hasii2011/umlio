@@ -27,12 +27,12 @@ class UmlNotesToXml(BaseUmlToXml):
 
         for note in umlNotes:
             umlNote: UmlNote = cast (UmlNote, note)
-            umlNoteElement: Element = self._oglNoteToXml(documentTop=documentTop, umlNote=umlNote)
-            self._pyutToXml.pyutNoteToXml(pyutNote=umlNote.pyutNote, oglNoteElement=umlNoteElement)
+            umlNoteElement: Element = self._umlNoteToXml(documentTop=documentTop, umlNote=umlNote)
+            self._pyutToXml.pyutNoteToXml(pyutNote=umlNote.pyutNote, umlNoteElement=umlNoteElement)
 
         return documentTop
 
-    def _oglNoteToXml(self, documentTop: Element, umlNote: UmlNote) -> Element:
+    def _umlNoteToXml(self, documentTop: Element, umlNote: UmlNote) -> Element:
 
         attributes = self._umlBaseAttributes(umlShape=umlNote)
         umlNoteSubElement: Element = SubElement(documentTop, XmlConstants.ELEMENT_UML_NOTE, attrib=attributes)

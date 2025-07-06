@@ -4,6 +4,7 @@ from typing import cast
 from logging import Logger
 from logging import getLogger
 
+from umlshapes.links.UmlLollipopInterface import UmlLollipopInterface
 from wx import Point
 
 from xml.etree.ElementTree import Element
@@ -37,14 +38,14 @@ class UmlLinksToXml(BaseUmlToXml):
     def serialize(self, documentTop: Element, umlLinks: UmlLinks) -> Element:
 
         for umlLink in umlLinks:
-            #     if isinstance(oglLink, OglInterface2):
-            #         self._oglInterface2ToXml(documentElement=documentTop, oglInterface=oglLink)
-            #     else:
-            self._oglLinkToXml(documentElement=documentTop, umlLink=umlLink)
+            if isinstance(umlLink, UmlLollipopInterface):
+                self.umlLollipopInterfaceToXml(documentElement=documentTop, umlLollipopInterface=umlLink)
+            else:
+                self._umlLinkToXml(documentElement=documentTop, umlLink=umlLink)
 
         return documentTop
 
-    def _oglLinkToXml(self, documentElement: Element, umlLink: UmlLink) -> Element:
+    def _umlLinkToXml(self, documentElement: Element, umlLink: UmlLink) -> Element:
 
         attributes:        ElementAttributes = self._umlLinkAttributes(umlLink=umlLink)
         oglLinkSubElement: Element           = SubElement(documentElement, XmlConstants.ELEMENT_UML_LINK, attrib=attributes)
@@ -81,33 +82,34 @@ class UmlLinksToXml(BaseUmlToXml):
             })
             SubElement(oglLinkSubElement, XmlConstants.ELEMENT_MODEL_LINE_CONTROL_POINT, attrib=controlPointAttributes)
 
-        self._pyutToXml.pyutLinkToXml(pyutLink=umlLink.pyutLink, oglLinkElement=oglLinkSubElement)
+        self._pyutToXml.pyutLinkToXml(pyutLink=umlLink.pyutLink, umlLinkElement=oglLinkSubElement)
 
         return oglLinkSubElement
 
-    # def _oglInterface2ToXml(self, documentElement: Element, oglInterface: OglInterface2) -> Element:
-    #     """
-    #
-    #     Args:
-    #         documentElement:  untangler element for document
-    #         oglInterface:     Lollipop to serialize
-    #     Returns:
-    #         New untangle element
-    #     """
-    #     destAnchor:      SelectAnchorPoint = oglInterface.destinationAnchor
-    #     attachmentPoint: AttachmentSide    = destAnchor.attachmentPoint
-    #     x, y = destAnchor.GetPosition()
-    #
-    #     attributes: ElementAttributes = ElementAttributes({
-    #         XmlConstants.ATTR_LOLLIPOP_ATTACHMENT_POINT: attachmentPoint.__str__(),
-    #         XmlConstants.ATTR_X:                         str(x),
-    #         XmlConstants.ATTR_Y:                         str(y),
-    #     })
-    #     oglInterface2: Element = SubElement(documentElement, XmlConstants.ELEMENT_OGL_INTERFACE2, attrib=attributes)
-    #
-    #     self._pyutToXml.pyutInterfaceToXml(oglInterface.pyutInterface, oglInterface2)
-    #     return oglInterface2
-    #
+    def umlLollipopInterfaceToXml(self, documentElement: Element, umlLollipopInterface: UmlLollipopInterface) -> Element:
+        """
+
+        Args:
+            documentElement:        Xml Element
+            umlLollipopInterface:   Lollipop to serialize
+
+        Returns: A new Element
+        """
+        attachedToId: str = umlLollipopInterface.attachedTo.id
+        attributes: ElementAttributes = ElementAttributes({
+            XmlConstants.ATTRIBUTE_LINE_CENTUM:     str(umlLollipopInterface.lineCentum),
+            XmlConstants.ATTRIBUTE_ATTACHMENT_SIDE: umlLollipopInterface.attachmentSide.value,
+            XmlConstants.ATTRIBUTE_ATTACHED_TO_ID:     attachedToId,
+            # XmlConstants.ATTR_LOLLIPOP_ATTACHMENT_POINT: attachmentPoint.__str__(),
+            # XmlConstants.ATTR_X:                         str(x),
+            # XmlConstants.ATTR_Y:                         str(y),
+        })
+        lollipopElement: Element = SubElement(documentElement, XmlConstants.ELEMENT_LOLLIPOP, attrib=attributes)
+
+        self._pyutToXml.pyutInterfaceToXml(umlLollipopInterface.pyutInterface, lollipopElement)
+
+        return lollipopElement
+
     def _umlLinkAttributes(self, umlLink: UmlLink) -> ElementAttributes:
 
         # srcX, srcY   = umlLink.sourceAnchor.model.GetPosition()

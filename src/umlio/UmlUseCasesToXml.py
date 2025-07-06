@@ -30,12 +30,12 @@ class UmlUseCasesToXml(BaseUmlToXml):
         for actor in umlActors:
             umlActor:        UmlActor = cast(UmlActor, actor)
             umlActorElement: Element  = self._umlActorToXml(documentTop=documentTop, umlActor=umlActor)
-            self._pyutToXml.pyutActorToXml(pyutActor=umlActor.pyutActor, oglActorElement=umlActorElement)
+            self._pyutToXml.pyutActorToXml(pyutActor=umlActor.pyutActor, umlActorElement=umlActorElement)
 
         for useCase in umlUseCases:
             umlUseCase:        UmlUseCase = cast(UmlUseCase, useCase)
             umlUseCaseElement: Element    = self._umlUseCaseToXml(documentTop=documentTop, umlUseCase=umlUseCase)
-            self._pyutToXml.pyutUseCaseToXml(pyutUseCase=umlUseCase.pyutUseCase, oglUseCaseElement=umlUseCaseElement)
+            self._pyutToXml.pyutUseCaseToXml(pyutUseCase=umlUseCase.pyutUseCase, umlUseCaseElement=umlUseCaseElement)
 
         return documentTop
 

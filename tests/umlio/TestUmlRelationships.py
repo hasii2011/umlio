@@ -7,14 +7,20 @@ from wx.lib.ogl import OGLInitialize
 
 from codeallyadvanced.ui.UnitTestBaseW import UnitTestBaseW
 
+from pyutmodelv2.enumerations.PyutLinkType import PyutLinkType
+
 from umlshapes.IApplicationAdapter import IApplicationAdapter
+
 from umlshapes.frames.UmlClassDiagramFrame import CreateLollipopCallback
 from umlshapes.frames.UmlClassDiagramFrame import UmlClassDiagramFrame
+
 from umlshapes.preferences.UmlPreferences import UmlPreferences
 
 from tests.RelationshipCreator import BASE_CLASS_PYUT_ID
 from tests.RelationshipCreator import BASE_UML_CLASS_ID
 from tests.RelationshipCreator import BASE_UML_CLASS_NAME
+from tests.RelationshipCreator import CANONICAl_LOLLIPOP_NAME
+from tests.RelationshipCreator import IMPLEMENTING_UML_CLASS_ID
 from tests.RelationshipCreator import SUBCLASS_PYUT_ID
 from tests.RelationshipCreator import SUBCLASS_UML_CLASS_ID
 from tests.RelationshipCreator import SUBCLASS_UML_CLASS_NAME
@@ -28,8 +34,6 @@ from tests.RelationshipCreator import UML_LINK_CANONICAL_MONIKER
 
 from umlio.IOTypes import UmlDiagramTitle
 from umlio.IOTypes import UmlDiagramType
-
-from pyutmodelv2.enumerations.PyutLinkType import PyutLinkType
 
 from tests.RelationshipCreator import CreatedAssociation
 from tests.RelationshipCreator import RelationshipCreator
@@ -103,6 +107,23 @@ EXPECTED_INTERFACE_XML: str = (
     '</UmlProject>'
 )
 
+EXPECTED_LOLLIPOP_XML: str = (
+    "<?xml version='1.0' encoding='iso-8859-1'?>\n"
+    '<UmlProject version="12.0" codePath="/users/hasii">\n'
+    '    <UMLDiagram type="Class Diagram" title="Lollipop Class Diagram" scrollPositionX="1" scrollPositionY="1" pixelsPerUnitX="1" pixelsPerUnitY="1">\n'
+    '        <UmlClass id="valley.darkness.implementor" width="150" height="75" x="3333" y="3333">\n'
+    '            <PyutClass id="4444" name="Implementor" displayMethods="True" displayParameters="Unspecified" displayConstructor="Unspecified" displayDunderMethods="Unspecified" displayFields="True" displayStereotype="True" fileName="" description="" />\n'
+    '        </UmlClass>\n'
+    f'        <UmlLollipopInterface lineCentum="0.1" attachmentSide="Right" attachedToId="{IMPLEMENTING_UML_CLASS_ID}">\n'
+    f'            <PyutInterface id="1" name="{CANONICAl_LOLLIPOP_NAME}" description="">\n'
+    '                <Implementor implementingClassName="Implementor" />\n'
+    '            </PyutInterface>\n'
+    '        </UmlLollipopInterface>\n'
+    '    </UMLDiagram>\n'
+    '</UmlProject>'
+
+)
+
 
 class TestUmlRelationships(UnitTestBaseW):
     """
@@ -160,6 +181,15 @@ class TestUmlRelationships(UnitTestBaseW):
             expectedXml=EXPECTED_INTERFACE_XML
         )
 
+    def testLollipop(self):
+        self._runAssociationTest(
+            linkType=PyutLinkType.LOLLIPOP,
+            fileName='Lollipop.xml',
+            diagramName='Lollipop Class Diagram',
+            failMessage='Lollipop serialization changed',
+            expectedXml=EXPECTED_LOLLIPOP_XML
+        )
+
     def _runAssociationTest(self, linkType: PyutLinkType, fileName: str, diagramName: str, failMessage: str, expectedXml: str):
         """
 
@@ -175,9 +205,13 @@ class TestUmlRelationships(UnitTestBaseW):
 
         createdAssociation: CreatedAssociation = self._relationShipCreator.createRelationship(linkType)
 
-        associationsDiagram.umlClasses.append(createdAssociation.sourceUmlClass)
-        associationsDiagram.umlClasses.append(createdAssociation.destinationUmlClass)
-        associationsDiagram.umlLinks.append(createdAssociation.association)
+        if linkType == PyutLinkType.LOLLIPOP:
+            associationsDiagram.umlClasses.append(createdAssociation.destinationUmlClass)
+            associationsDiagram.umlLinks.append(createdAssociation.lollipopInterface)
+        else:
+            associationsDiagram.umlClasses.append(createdAssociation.sourceUmlClass)
+            associationsDiagram.umlClasses.append(createdAssociation.destinationUmlClass)
+            associationsDiagram.umlLinks.append(createdAssociation.association)
 
         umlShapesToXml.serialize(umlDiagram=associationsDiagram)
 

@@ -26,12 +26,12 @@ class UmlTextsToXml(BaseUmlToXml):
 
         for text in umlTexts:
             umlText: UmlText = cast(UmlText, text)
-            umlTextElement: Element = self._oglTextToXml(documentTop=documentTop, umlText=umlText)
-            self._pyutToXml.pyutTextToXml(pyutText=umlText.pyutText, oglTextElement=umlTextElement)
+            umlTextElement: Element = self._umlTextToXml(documentTop=documentTop, umlText=umlText)
+            self._pyutToXml.pyutTextToXml(pyutText=umlText.pyutText, umlTextElement=umlTextElement)
 
         return documentTop
 
-    def _oglTextToXml(self, documentTop: Element, umlText: UmlText) -> Element:
+    def _umlTextToXml(self, documentTop: Element, umlText: UmlText) -> Element:
 
         attributes = self._umlBaseAttributes(umlShape=umlText)
         umlTextSubElement: Element = SubElement(documentTop, XmlConstants.ELEMENT_UML_TEXT, attrib=attributes)

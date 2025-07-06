@@ -42,13 +42,13 @@ class PyutToXml:
         super().__init__()
         self.logger: Logger = getLogger(__name__)
 
-    def pyutClassToXml(self, pyutClass: PyutClass, graphicElement: Element) -> Element:
+    def pyutClassToXml(self, pyutClass: PyutClass, umlClassElement: Element) -> Element:
         """
         Exporting a PyutClass to a miniDom Element.
 
         Args:
-            pyutClass:       The pyut class to serialize
-            graphicElement:  The xml element to update
+            pyutClass:        The pyut class to serialize
+            umlClassElement:  The xml element to update
 
         Returns:
             A new updated element
@@ -69,7 +69,7 @@ class PyutToXml:
 
         attributes = attributes | commonAttributes
 
-        pyutClassElement: Element = SubElement(graphicElement, XmlConstants.ELEMENT_MODEL_CLASS, attrib=attributes)
+        pyutClassElement: Element = SubElement(umlClassElement, XmlConstants.ELEMENT_MODEL_CLASS, attrib=attributes)
 
         for method in pyutClass.methods:
             self._pyutMethodToXml(pyutMethod=method, pyutClassElement=pyutClassElement)
@@ -78,13 +78,13 @@ class PyutToXml:
             self._pyutFieldToXml(pyutField=pyutField, pyutClassElement=pyutClassElement)
         return pyutClassElement
 
-    def pyutLinkToXml(self, pyutLink: PyutLink, oglLinkElement: Element) -> Element:
+    def pyutLinkToXml(self, pyutLink: PyutLink, umlLinkElement: Element) -> Element:
         """
         Exporting a PyutLink to an Element.
 
         Args:
             pyutLink:   Link to save
-            oglLinkElement:     xml document
+            umlLinkElement:     xml document
 
         Returns:
             A new minidom element
@@ -104,7 +104,7 @@ class PyutToXml:
             XmlConstants.ATTRIBUTE_SOURCE_CARDINALITY_VALUE:      pyutLink.sourceCardinality,
             XmlConstants.ATTRIBUTE_DESTINATION_CARDINALITY_VALUE: pyutLink.destinationCardinality,
         })
-        pyutLinkElement: Element = SubElement(oglLinkElement, XmlConstants.ELEMENT_MODEL_LINK, attrib=attributes)
+        pyutLinkElement: Element = SubElement(umlLinkElement, XmlConstants.ELEMENT_MODEL_LINK, attrib=attributes)
 
         return pyutLinkElement
 
@@ -128,7 +128,7 @@ class PyutToXml:
 
         return pyutInterfaceElement
 
-    def pyutNoteToXml(self, pyutNote: PyutNote, oglNoteElement: Element) -> Element:
+    def pyutNoteToXml(self, pyutNote: PyutNote, umlNoteElement: Element) -> Element:
 
         noteId:       int = pyutNote.id
         content:      str = pyutNote.content
@@ -141,11 +141,11 @@ class PyutToXml:
             XmlConstants.ATTRIBUTE_CONTENT:  fixedContent,
             XmlConstants.ATTRIBUTE_FILENAME: pyutNote.fileName,
         })
-        pyutNoteElement: Element = SubElement(oglNoteElement, XmlConstants.ELEMENT_MODEL_NOTE, attrib=attributes)
+        pyutNoteElement: Element = SubElement(umlNoteElement, XmlConstants.ELEMENT_MODEL_NOTE, attrib=attributes)
 
         return pyutNoteElement
 
-    def pyutTextToXml(self, pyutText: PyutText, oglTextElement: Element) -> Element:
+    def pyutTextToXml(self, pyutText: PyutText, umlTextElement: Element) -> Element:
 
         textId:       int = pyutText.id
         content:      str = pyutText.content
@@ -155,11 +155,11 @@ class PyutToXml:
             XmlConstants.ATTRIBUTE_ID:       str(textId),
             XmlConstants.ATTRIBUTE_CONTENT:  fixedContent,
         })
-        pyutTextElement: Element = SubElement(oglTextElement, XmlConstants.ELEMENT_MODEL_TEXT, attrib=attributes)
+        pyutTextElement: Element = SubElement(umlTextElement, XmlConstants.ELEMENT_MODEL_TEXT, attrib=attributes)
 
         return pyutTextElement
 
-    def pyutActorToXml(self, pyutActor: PyutActor, oglActorElement: Element) -> Element:
+    def pyutActorToXml(self, pyutActor: PyutActor, umlActorElement: Element) -> Element:
 
         actorId:  int = pyutActor.id
         fileName: str = pyutActor.fileName
@@ -171,11 +171,11 @@ class PyutToXml:
             XmlConstants.ATTRIBUTE_NAME:     pyutActor.name,
             XmlConstants.ATTRIBUTE_FILE_NAME: fileName,
         })
-        pyutActorElement: Element = SubElement(oglActorElement, XmlConstants.ELEMENT_MODEL_ACTOR, attributes)
+        pyutActorElement: Element = SubElement(umlActorElement, XmlConstants.ELEMENT_MODEL_ACTOR, attributes)
 
         return pyutActorElement
 
-    def pyutUseCaseToXml(self, pyutUseCase: PyutUseCase, oglUseCaseElement: Element) -> Element:
+    def pyutUseCaseToXml(self, pyutUseCase: PyutUseCase, umlUseCaseElement: Element) -> Element:
 
         useCaseId: int = pyutUseCase.id
         fileName:  str = pyutUseCase.fileName
@@ -187,7 +187,7 @@ class PyutToXml:
             XmlConstants.ATTRIBUTE_NAME:     pyutUseCase.name,
             XmlConstants.ATTRIBUTE_FILE_NAME: fileName
         })
-        pyutUseCaseElement: Element = SubElement(oglUseCaseElement, XmlConstants.ELEMENT_MODEL_USE_CASE, attributes)
+        pyutUseCaseElement: Element = SubElement(umlUseCaseElement, XmlConstants.ELEMENT_MODEL_USE_CASE, attributes)
 
         return pyutUseCaseElement
 
@@ -338,12 +338,10 @@ class PyutToXml:
 
         return pyutFieldElement
 
-    def _pyutImplementorToXml(self, className: ClassName, xmlDoc: Element) -> Element:
+    def _pyutImplementorToXml(self, className: ClassName, pyutInterfaceElement: Element) -> Element:
 
-        # root: Element = xmlDoc.createElement(XmlConstants.ELEMENT_IMPLEMENTOR)
-        # root.setAttribute()
         attributes: ElementAttributes = ElementAttributes({
             XmlConstants.ATTRIBUTE_IMPLEMENTING_CLASS_NAME: className,
         })
-        implementorElement: Element = SubElement(xmlDoc, XmlConstants.ELEMENT_MODEL_IMPLEMENTOR, attrib=attributes)
+        implementorElement: Element = SubElement(pyutInterfaceElement, XmlConstants.ELEMENT_MODEL_IMPLEMENTOR, attrib=attributes)
         return implementorElement
