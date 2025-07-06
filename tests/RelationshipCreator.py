@@ -13,6 +13,7 @@ from pyutmodelv2.PyutInterface import PyutInterface
 from pyutmodelv2.PyutModelTypes import ClassName
 from umlshapes.links.UmlLollipopInterface import UmlLollipopInterface
 from umlshapes.types.Common import AttachmentSide
+
 from wx import Point
 
 from pyutmodelv2.PyutClass import PyutClass
@@ -52,7 +53,8 @@ IMPLEMENTING_PYUT_CLASS_ID:  int = 4444
 
 UML_LINK_CANONICAL_MONIKER: str = 'die.free.open.point'
 
-CANONICAl_LOLLIPOP_NAME: str = 'IFake'
+CANONICAl_LOLLIPOP_NAME:  str            = 'IFake'
+LOLLIPOP_ATTACHMENT_SIDE: AttachmentSide = AttachmentSide.RIGHT
 
 
 @dataclass
@@ -256,7 +258,7 @@ class RelationshipCreator:
         # Need the lollipop
         umlLollipopInterface: UmlLollipopInterface = UmlLollipopInterface(pyutInterface=pyutInterface)
         umlLollipopInterface.attachedTo     = implementingUmlClass
-        umlLollipopInterface.attachmentSide = AttachmentSide.RIGHT
+        umlLollipopInterface.attachmentSide = LOLLIPOP_ATTACHMENT_SIDE
         return CreatedAssociation(
             destinationUmlClass=implementingUmlClass,
             lollipopInterface=umlLollipopInterface

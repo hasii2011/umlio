@@ -21,6 +21,7 @@ from tests.RelationshipCreator import BASE_UML_CLASS_ID
 from tests.RelationshipCreator import BASE_UML_CLASS_NAME
 from tests.RelationshipCreator import CANONICAl_LOLLIPOP_NAME
 from tests.RelationshipCreator import IMPLEMENTING_UML_CLASS_ID
+from tests.RelationshipCreator import IMPLEMENTING_UML_CLASS_NAME
 from tests.RelationshipCreator import SUBCLASS_PYUT_ID
 from tests.RelationshipCreator import SUBCLASS_UML_CLASS_ID
 from tests.RelationshipCreator import SUBCLASS_UML_CLASS_NAME
@@ -109,18 +110,18 @@ EXPECTED_INTERFACE_XML: str = (
 
 EXPECTED_LOLLIPOP_XML: str = (
     "<?xml version='1.0' encoding='iso-8859-1'?>\n"
-    '<UmlProject version="12.0" codePath="/users/hasii">\n'
-    '    <UMLDiagram type="Class Diagram" title="Lollipop Class Diagram" scrollPositionX="1" scrollPositionY="1" pixelsPerUnitX="1" pixelsPerUnitY="1">\n'
-    '        <UmlClass id="valley.darkness.implementor" width="150" height="75" x="3333" y="3333">\n'
-    '            <PyutClass id="4444" name="Implementor" displayMethods="True" displayParameters="Unspecified" displayConstructor="Unspecified" displayDunderMethods="Unspecified" displayFields="True" displayStereotype="True" fileName="" description="" />\n'
-    '        </UmlClass>\n'
+    f'<UmlProject version="12.0" codePath="/users/hasii">\n'
+    f'    <UMLDiagram type="Class Diagram" title="Lollipop Class Diagram" scrollPositionX="1" scrollPositionY="1" pixelsPerUnitX="1" pixelsPerUnitY="1">\n'
+    f'        <UmlClass id="valley.darkness.implementor" width="150" height="75" x="3333" y="3333">\n'
+    f'            <PyutClass id="4444" name="{IMPLEMENTING_UML_CLASS_NAME}" displayMethods="True" displayParameters="Unspecified" displayConstructor="Unspecified" displayDunderMethods="Unspecified" displayFields="True" displayStereotype="True" fileName="" description="" />\n'
+    f'        </UmlClass>\n'
     f'        <UmlLollipopInterface lineCentum="0.1" attachmentSide="Right" attachedToId="{IMPLEMENTING_UML_CLASS_ID}">\n'
     f'            <PyutInterface id="1" name="{CANONICAl_LOLLIPOP_NAME}" description="">\n'
-    '                <Implementor implementingClassName="Implementor" />\n'
-    '            </PyutInterface>\n'
-    '        </UmlLollipopInterface>\n'
-    '    </UMLDiagram>\n'
-    '</UmlProject>'
+    f'                <Implementor implementingClassName="{IMPLEMENTING_UML_CLASS_NAME}" />\n'
+    f'            </PyutInterface>\n'
+    f'        </UmlLollipopInterface>\n'
+    f'    </UMLDiagram>\n'
+    f'</UmlProject>'
 
 )
 
