@@ -10,6 +10,7 @@ from dataclasses import field
 
 from pathlib import Path
 
+from umlshapes.links.UmlLollipopInterface import UmlLollipopInterface
 from umlshapes.shapes.UmlActor import UmlActor
 from umlshapes.shapes.UmlClass import UmlClass
 from umlshapes.shapes.UmlNote import UmlNote
@@ -26,7 +27,7 @@ UmlUseCases     = NewType('UmlUseCases',     List[UmlUseCase])
 UmlActors       = NewType('UmlActors',       List[UmlActor])
 UmlNotes        = NewType('UmlNotes',        List[UmlNote])
 UmlTexts        = NewType('UmlTexts',        List[UmlText])
-UmlLinks        = NewType('UmlLinks',        List[UmlLink])
+UmlLinks        = NewType('UmlLinks',        List[UmlLink | UmlLollipopInterface])
 
 ElementAttributes = NewType('ElementAttributes', Dict[str, str])
 

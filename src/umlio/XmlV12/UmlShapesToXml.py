@@ -1,6 +1,7 @@
 
 from logging import Logger
 from logging import getLogger
+
 from pathlib import Path
 
 from xml.etree.ElementTree import Element
@@ -65,7 +66,7 @@ class UmlShapesToXml:
 
         Returns:  The serialized XML
         """
-        if self.prettyPrint is True:
+        if self.prettyPrint:
             return self._toPrettyString(self._xmlProjectElement)
         else:
             return self._toString(self._xmlProjectElement)
@@ -92,6 +93,15 @@ class UmlShapesToXml:
         umlNotesToXml.serialize(documentTop=documentElement, umlNotes=umlDiagram.umlNotes)
         umlTextsToXml.serialize(documentTop=documentElement, umlTexts=umlDiagram.umlTexts)
         umlLinksToXml.serialize(documentTop=documentElement, umlLinks=umlDiagram.umlLinks)
+
+    def writeXml(self, fileName: Path):
+        """
+        Persist the XML
+
+        Args:
+            fileName:  The path object to the file
+        """
+        fileName.write_text(self.xml)
 
     def _umlDocumentAttributesToXml(self, umlDiagram: UmlDiagram) -> Element:
         """

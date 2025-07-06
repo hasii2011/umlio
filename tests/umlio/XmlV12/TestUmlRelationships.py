@@ -22,6 +22,7 @@ from tests.RelationshipCreator import BASE_UML_CLASS_NAME
 from tests.RelationshipCreator import CANONICAl_LOLLIPOP_NAME
 from tests.RelationshipCreator import IMPLEMENTING_UML_CLASS_ID
 from tests.RelationshipCreator import IMPLEMENTING_UML_CLASS_NAME
+from tests.RelationshipCreator import PYUT_INTERFACE_CANONICAL_ID
 from tests.RelationshipCreator import SUBCLASS_PYUT_ID
 from tests.RelationshipCreator import SUBCLASS_UML_CLASS_ID
 from tests.RelationshipCreator import SUBCLASS_UML_CLASS_NAME
@@ -116,7 +117,7 @@ EXPECTED_LOLLIPOP_XML: str = (
     f'            <PyutClass id="4444" name="{IMPLEMENTING_UML_CLASS_NAME}" displayMethods="True" displayParameters="Unspecified" displayConstructor="Unspecified" displayDunderMethods="Unspecified" displayFields="True" displayStereotype="True" fileName="" description="" />\n'
     f'        </UmlClass>\n'
     f'        <UmlLollipopInterface lineCentum="0.1" attachmentSide="Right" attachedToId="{IMPLEMENTING_UML_CLASS_ID}">\n'
-    f'            <PyutInterface id="1" name="{CANONICAl_LOLLIPOP_NAME}" description="">\n'
+    f'            <PyutInterface id="{PYUT_INTERFACE_CANONICAL_ID}" name="{CANONICAl_LOLLIPOP_NAME}" description="">\n'
     f'                <Implementor implementingClassName="{IMPLEMENTING_UML_CLASS_NAME}" />\n'
     f'            </PyutInterface>\n'
     f'        </UmlLollipopInterface>\n'

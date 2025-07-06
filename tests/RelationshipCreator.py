@@ -1,7 +1,7 @@
 
 from typing import Dict
 from typing import NewType
-from typing import Optional
+from typing import cast
 from typing import Tuple
 
 from logging import Logger
@@ -53,13 +53,14 @@ IMPLEMENTING_PYUT_CLASS_ID:  int = 4444
 
 UML_LINK_CANONICAL_MONIKER: str = 'die.free.open.point'
 
-CANONICAl_LOLLIPOP_NAME:  str            = 'IFake'
-LOLLIPOP_ATTACHMENT_SIDE: AttachmentSide = AttachmentSide.RIGHT
+CANONICAl_LOLLIPOP_NAME:     str            = 'IFake'
+LOLLIPOP_ATTACHMENT_SIDE:    AttachmentSide = AttachmentSide.RIGHT
+PYUT_INTERFACE_CANONICAL_ID: int            = 0xDEADBEEF
 
 
 @dataclass
 class AssociationDescription:
-    associationClass:   type(UmlLink) | type(UmlLollipopInterface)
+    associationClass:   type[UmlLink] | type[UmlLollipopInterface]
     linkType:           PyutLinkType  = PyutLinkType.ASSOCIATION
     associationCounter: int = 0
     classCounter:       int = 0
@@ -70,10 +71,10 @@ RelationshipDescription = NewType('RelationshipDescription', Dict[PyutLinkType, 
 
 @dataclass
 class CreatedAssociation:
-    sourceUmlClass:      Optional[UmlClass]             = None
-    association:         Optional[UmlLink]              = None
-    destinationUmlClass: Optional[UmlClass]             = None
-    lollipopInterface:   Optional[UmlLollipopInterface] = None
+    sourceUmlClass:      UmlClass             = cast(UmlClass, None)
+    association:         UmlLink              = cast(UmlLink, None)
+    destinationUmlClass: UmlClass             = cast(UmlClass, None)
+    lollipopInterface:   UmlLollipopInterface = cast(UmlLollipopInterface, None)
 
 
 class RelationshipCreator:
@@ -141,7 +142,7 @@ class RelationshipCreator:
 
         associationDescription.associationCounter += 1
 
-        umlAssociation = associationDescription.associationClass(pyutLink=pyutLink)
+        umlAssociation = associationDescription.associationClass(pyutLink)      # type: ignore
 
         umlAssociation.id = UML_LINK_CANONICAL_MONIKER
         umlAssociation.SetCanvas(self._diagramFrame)
@@ -253,6 +254,7 @@ class RelationshipCreator:
 
         # fill out the model
         pyutInterface: PyutInterface = PyutInterface(name=CANONICAl_LOLLIPOP_NAME)
+        pyutInterface.id = PYUT_INTERFACE_CANONICAL_ID
         pyutInterface.addImplementor(ClassName(implementingPyutClass.name))
 
         # Need the lollipop
