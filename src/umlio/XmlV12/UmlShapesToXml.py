@@ -11,14 +11,14 @@ from xml.etree.ElementTree import indent as xmlIndent
 from xml.etree.ElementTree import tostring as xmlToString
 from xml.etree.ElementTree import fromstring as xmlFromString
 
-from umlio.UmlLinksToXml import UmlLinksToXml
-from umlio.UmlNotesToXml import UmlNotesToXml
-from umlio.UmlTextsToXml import UmlTextsToXml
-from umlio.UmlUseCasesToXml import UmlUseCasesToXml
-from umlio.XMLConstants import XmlConstants
+from umlio.XmlV12.UmlLinksToXml import UmlLinksToXml
+from umlio.XmlV12.UmlNotesToXml import UmlNotesToXml
+from umlio.XmlV12.UmlTextsToXml import UmlTextsToXml
+from umlio.XmlV12.UmlUseCasesToXml import UmlUseCasesToXml
+from umlio.XmlV12.XMLConstants import XmlConstants
 from umlio.IOTypes import XML_VERSION
 from umlio.IOTypes import UmlDiagram
-from umlio.UmlClassToXml import UmlClassToXml
+from umlio.XmlV12.UmlClassToXml import UmlClassToXml
 
 INDENT_SPACES: str = '    '     # TODO: Make this configurable
 

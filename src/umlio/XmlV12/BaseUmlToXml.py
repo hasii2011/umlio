@@ -4,7 +4,7 @@ from umlshapes.types.UmlDimensions import UmlDimensions
 from umlshapes.types.UmlPosition import UmlPosition
 
 from umlio.IOTypes import ElementAttributes
-from umlio.XMLConstants import XmlConstants
+from umlio.XmlV12.XMLConstants import XmlConstants
 
 
 class BaseUmlToXml:

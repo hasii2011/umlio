@@ -30,7 +30,7 @@ from umlio.IOTypes import UmlDiagram
 from umlio.IOTypes import UmlDiagramTitle
 from umlio.IOTypes import UmlDiagramType
 
-from umlio.UmlShapesToXml import UmlShapesToXml
+from umlio.XmlV12.UmlShapesToXml import UmlShapesToXml
 
 EXPECTED_EMPTY_PROJECT: str = '<?xml version=\'1.0\' encoding=\'iso-8859-1\'?>\n<UmlProject version="12.0" codePath="/users/hasii" />'
 

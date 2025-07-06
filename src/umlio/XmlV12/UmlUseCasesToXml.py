@@ -9,11 +9,11 @@ from xml.etree.ElementTree import SubElement
 from umlshapes.shapes.UmlActor import UmlActor
 from umlshapes.shapes.UmlUseCase import UmlUseCase
 
-from umlio.BaseUmlToXml import BaseUmlToXml
+from umlio.XmlV12.BaseUmlToXml import BaseUmlToXml
 from umlio.IOTypes import UmlActors
 from umlio.IOTypes import UmlUseCases
-from umlio.PyutToXml import PyutToXml
-from umlio.XMLConstants import XmlConstants
+from umlio.XmlV12.PyutToXml import PyutToXml
+from umlio.XmlV12.XMLConstants import XmlConstants
 
 
 class UmlUseCasesToXml(BaseUmlToXml):
