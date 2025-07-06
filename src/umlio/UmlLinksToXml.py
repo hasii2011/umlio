@@ -100,9 +100,6 @@ class UmlLinksToXml(BaseUmlToXml):
             XmlConstants.ATTRIBUTE_LINE_CENTUM:     str(umlLollipopInterface.lineCentum),
             XmlConstants.ATTRIBUTE_ATTACHMENT_SIDE: umlLollipopInterface.attachmentSide.value,
             XmlConstants.ATTRIBUTE_ATTACHED_TO_ID:     attachedToId,
-            # XmlConstants.ATTR_LOLLIPOP_ATTACHMENT_POINT: attachmentPoint.__str__(),
-            # XmlConstants.ATTR_X:                         str(x),
-            # XmlConstants.ATTR_Y:                         str(y),
         })
         lollipopElement: Element = SubElement(documentElement, XmlConstants.ELEMENT_LOLLIPOP, attrib=attributes)
 
