@@ -8,13 +8,19 @@ from umlio.IOTypes import UmlDiagram
 from umlio.IOTypes import UmlDiagramTitle
 from umlio.IOTypes import UmlDiagramType
 from umlio.IOTypes import UmlProject
+from umlio.Writer import PROJECT_SUFFIX
 from umlio.Writer import Writer
 from umlio.Writer import XML_SUFFIX
 
 from tests.umlio.UmlIOBaseTest import UmlIOBaseTest
 
 UNIT_TEST_DIAGRAM_DIRECTORY: str = 'UmlDiagramProjects'
-EMPTY_DIAGRAMS_PROJECT:      str = f'EmptyDiagramsProject{XML_SUFFIX}'
+BASE_FILENAME:               str = 'EmptyDiagramsProject'
+EMPTY_DIAGRAMS_PROJECT:      str = f'{BASE_FILENAME}{XML_SUFFIX}'
+
+EMPTY_DIAGRAMS_COMPRESSED_PROJECT: str = f'{BASE_FILENAME}{PROJECT_SUFFIX}'
+
+EXPECTED_FILE_SIZE: int = 224
 
 
 class TestWriter(UmlIOBaseTest):
@@ -42,6 +48,37 @@ class TestWriter(UmlIOBaseTest):
         directory:             Path = Path.home() / UNIT_TEST_DIAGRAM_DIRECTORY
         emptyDiagramsFileName: Path = directory / EMPTY_DIAGRAMS_PROJECT
 
+        umlProject: UmlProject = self._createEmptyDiagramsProject(emptyDiagramsFileName)
+        directory.mkdir(parents=True, exist_ok=True)
+        emptyDiagramsFileName.touch()
+        writer: Writer = Writer()
+        writer.writeXmlFile(umlProject=umlProject, fileName=emptyDiagramsFileName)
+
+        goldenFileName: str = UnitTestBase.getFullyQualifiedResourceFileName(
+            package=UmlIOBaseTest.GOLDEN_FILES_PACKAGE_NAME,
+            fileName=EMPTY_DIAGRAMS_PROJECT
+        )
+        status: int = self._runDiff(generatedFile=emptyDiagramsFileName, goldenFile=Path(goldenFileName))
+
+        self.assertEqual(0, status)
+
+    def testWriteEmptyDiagramsCompressedFile(self):
+        directory:             Path = Path.home() / UNIT_TEST_DIAGRAM_DIRECTORY
+        emptyDiagramsFileName: Path = directory / EMPTY_DIAGRAMS_COMPRESSED_PROJECT
+
+        umlProject: UmlProject = self._createEmptyDiagramsProject(emptyDiagramsFileName)
+        directory.mkdir(parents=True, exist_ok=True)
+        emptyDiagramsFileName.touch()
+
+        writer: Writer = Writer()
+        writer.writeFile(umlProject=umlProject, fileName=emptyDiagramsFileName)
+
+        actualFileSize: int = emptyDiagramsFileName.stat().st_size
+
+        self.assertEqual(EXPECTED_FILE_SIZE, actualFileSize, 'Hmm.  Maybe zlib changed')
+
+    def _createEmptyDiagramsProject(self, emptyDiagramsFileName: Path) -> UmlProject:
+
         umlProject: UmlProject = UmlProject()
         umlProject.codePath = Path.home()
         umlProject.fileName = emptyDiagramsFileName.as_posix()
@@ -58,18 +95,7 @@ class TestWriter(UmlIOBaseTest):
         umlProject.umlDiagrams[titleOne]  = diagramOne
         umlProject.umlDiagrams[titleTwo]  = diagramTwo
 
-        directory.mkdir(parents=True, exist_ok=True)
-        emptyDiagramsFileName.touch()
-        writer: Writer = Writer()
-        writer.writeXmlFile(umlProject=umlProject, fileName=emptyDiagramsFileName)
-
-        goldenFileName: str = UnitTestBase.getFullyQualifiedResourceFileName(
-            package=UmlIOBaseTest.GOLDEN_FILES_PACKAGE_NAME,
-            fileName=EMPTY_DIAGRAMS_PROJECT
-        )
-        status: int = self._runDiff(generatedFile=emptyDiagramsFileName, goldenFile=Path(goldenFileName))
-
-        self.assertEqual(0, status)
+        return umlProject
 
 
 def suite() -> TestSuite:
