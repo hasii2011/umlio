@@ -6,12 +6,10 @@ from pathlib import Path
 from zlib import compress
 from zlib import ZLIB_VERSION
 
-
+from umlio.IOTypes import PROJECT_SUFFIX
 from umlio.IOTypes import UmlProject
+from umlio.IOTypes import XML_SUFFIX
 from umlio.XmlV12.UmlShapesToXml import UmlShapesToXml
-
-PROJECT_SUFFIX: str = '.udt'        # UML Diagramming Tool
-XML_SUFFIX:     str = '.xml'
 
 
 class Writer:

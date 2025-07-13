@@ -21,6 +21,9 @@ from umlshapes.links.UmlLink import UmlLink
 
 XML_VERSION: str = '12.0'
 
+PROJECT_SUFFIX: str = '.udt'        # UML Diagramming Tool
+XML_SUFFIX:     str = '.xml'
+
 UmlDiagramTitle = NewType('UmlDiagramTitle', str)
 UmlClasses      = NewType('UmlClasses',      List[UmlClass])
 UmlUseCases     = NewType('UmlUseCases',     List[UmlUseCase])
@@ -97,3 +100,4 @@ class UmlProject:
     version:     str  = XML_VERSION
     codePath:    Path = Path('')
     umlDiagrams: UmlDiagrams = field(default_factory=createUmlDiagramsFactory)
+

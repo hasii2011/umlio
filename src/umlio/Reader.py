@@ -1,0 +1,81 @@
+
+from pathlib import Path
+
+from logging import Logger
+from logging import getLogger
+
+from zlib import decompress
+from zlib import ZLIB_VERSION
+
+from umlio.IOTypes import PROJECT_SUFFIX
+from umlio.IOTypes import UmlProject
+from umlio.IOTypes import XML_SUFFIX
+from umlio.UnTanglerV12.UnTangler import UnTangler
+from umlio.UnsupportedFileTypeException import UnsupportedFileTypeException
+
+
+class Reader:
+    """
+    """
+    def __init__(self):
+
+        self.logger: Logger = getLogger(__name__)
+
+    def readFile(self, fileName: Path) -> UmlProject:
+        """
+        Parse the input .put file
+
+        Args:
+            fileName: The fully qualified file name
+        """
+        suffix: str = fileName.suffix
+        if len(suffix) < 0 or suffix != PROJECT_SUFFIX:
+            raise UnsupportedFileTypeException(message=f'File does not end with {PROJECT_SUFFIX} suffix')
+
+        rawXmlString: str = self._decompressFile(fileName=fileName)
+
+        untangler: UnTangler = UnTangler()
+
+        untangler.untangleXml(xmlString=rawXmlString, fileName=fileName)
+
+        return untangler.umlProject
+
+    def readXmlFile(self, fileName: Path) -> UmlProject:
+        """
+        Parse the input XML file;
+
+        Args:
+            fileName: Fully qualified file name
+        """
+        suffix: str = fileName.suffix
+        if len(suffix) < 0 or suffix != XML_SUFFIX:
+            raise UnsupportedFileTypeException(message=f'File does not end with .xml suffix')
+
+        untangler: UnTangler = UnTangler()
+
+        untangler.untangleFile(fileName=fileName)
+
+        return untangler.umlProject
+
+    def _decompressFile(self, fileName: Path) -> str:
+        """
+        Decompresses a previously Pyut compressed file
+
+        Args:
+            fileName: Fully qualified file name with a PROJECT_SUFFIX suffix
+
+        Returns:  A raw XML String
+        """
+        try:
+            with open(fileName, "rb") as compressedFile:
+                compressedData: bytes = compressedFile.read()
+        except (ValueError, Exception) as e:
+            self.logger.error(f'decompress open:  {e}')
+            raise e
+        else:
+            self.logger.info(f'{ZLIB_VERSION=}')
+            xmlBytes:  bytes = decompress(compressedData)  # has b`....` around it
+            xmlString: str   = xmlBytes.decode()
+            self.logger.debug(f'Document read:\n{xmlString}')
+
+        return xmlString

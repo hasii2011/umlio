@@ -1,6 +1,8 @@
-from pathlib import Path
+
 from unittest import TestSuite
 from unittest import main as unitTestMain
+
+from pathlib import Path
 
 from codeallybasic.UnitTestBase import UnitTestBase
 
@@ -8,17 +10,13 @@ from umlio.IOTypes import UmlDiagram
 from umlio.IOTypes import UmlDiagramTitle
 from umlio.IOTypes import UmlDiagramType
 from umlio.IOTypes import UmlProject
-from umlio.Writer import PROJECT_SUFFIX
 from umlio.Writer import Writer
-from umlio.Writer import XML_SUFFIX
 
 from tests.umlio.UmlIOBaseTest import UmlIOBaseTest
+from tests.umlio.UmlIOBaseTest import EMPTY_DIAGRAMS_COMPRESSED_PROJECT
+from tests.umlio.UmlIOBaseTest import EMPTY_DIAGRAMS_XML_PROJECT
 
-UNIT_TEST_DIAGRAM_DIRECTORY: str = 'UmlDiagramProjects'
-BASE_FILENAME:               str = 'EmptyDiagramsProject'
-EMPTY_DIAGRAMS_PROJECT:      str = f'{BASE_FILENAME}{XML_SUFFIX}'
-
-EMPTY_DIAGRAMS_COMPRESSED_PROJECT: str = f'{BASE_FILENAME}{PROJECT_SUFFIX}'
+UNIT_TEST_DIAGRAM_DIRECTORY:       str = 'UmlDiagramProjects'
 
 EXPECTED_FILE_SIZE: int = 224
 
@@ -40,13 +38,10 @@ class TestWriter(UmlIOBaseTest):
     def tearDown(self):
         super().tearDown()
 
-    def testWriteFile(self):
-        pass
-
     def testWriteEmptyDiagramsXmlFile(self):
 
         directory:             Path = Path.home() / UNIT_TEST_DIAGRAM_DIRECTORY
-        emptyDiagramsFileName: Path = directory / EMPTY_DIAGRAMS_PROJECT
+        emptyDiagramsFileName: Path = directory / EMPTY_DIAGRAMS_XML_PROJECT
 
         umlProject: UmlProject = self._createEmptyDiagramsProject(emptyDiagramsFileName)
         directory.mkdir(parents=True, exist_ok=True)
@@ -56,7 +51,7 @@ class TestWriter(UmlIOBaseTest):
 
         goldenFileName: str = UnitTestBase.getFullyQualifiedResourceFileName(
             package=UmlIOBaseTest.GOLDEN_FILES_PACKAGE_NAME,
-            fileName=EMPTY_DIAGRAMS_PROJECT
+            fileName=EMPTY_DIAGRAMS_XML_PROJECT
         )
         status: int = self._runDiff(generatedFile=emptyDiagramsFileName, goldenFile=Path(goldenFileName))
 
