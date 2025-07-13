@@ -9,7 +9,7 @@ from zlib import ZLIB_VERSION
 from umlio.IOTypes import PROJECT_SUFFIX
 from umlio.IOTypes import UmlProject
 from umlio.IOTypes import XML_SUFFIX
-from umlio.XmlV12.UmlShapesToXml import UmlShapesToXml
+from umlio.SerializerV12.UmlShapesToXml import UmlShapesToXml
 
 
 class Writer:

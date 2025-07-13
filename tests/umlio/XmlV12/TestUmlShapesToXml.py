@@ -28,7 +28,7 @@ from wx.lib.ogl import OGLInitialize
 from umlio.IOTypes import UmlDiagram
 from umlio.IOTypes import UmlDiagramType
 
-from umlio.XmlV12.UmlShapesToXml import UmlShapesToXml
+from umlio.SerializerV12.UmlShapesToXml import UmlShapesToXml
 
 from tests.umlio.UmlIOBaseTest import UmlIOBaseTest
 

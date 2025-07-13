@@ -4,28 +4,29 @@ from typing import cast
 from logging import Logger
 from logging import getLogger
 
-from umlshapes.links.UmlLollipopInterface import UmlLollipopInterface
 from wx import Point
 
 from xml.etree.ElementTree import Element
 from xml.etree.ElementTree import SubElement
 
 from umlshapes.links.DeltaXY import DeltaXY
+from umlshapes.links.UmlLink import UmlLink
 from umlshapes.links.UmlAssociation import UmlAssociation
 from umlshapes.links.UmlAssociationLabel import UmlAssociationLabel
-from umlshapes.links.UmlLink import UmlLink
+from umlshapes.links.UmlLollipopInterface import UmlLollipopInterface
+
 from umlshapes.links.eventhandlers.UmlLinkEventHandler import LineControlPoints
 
 from umlshapes.types.Common import EndPoints
 from umlshapes.types.UmlPosition import UmlPosition
 
-from umlio.XmlV12.BaseUmlToXml import BaseUmlToXml
-
 from umlio.IOTypes import ElementAttributes
 from umlio.IOTypes import UmlLinks
-from umlio.XmlV12.PyutToXml import PyutToXml
 
-from umlio.XmlV12.XMLConstants import XmlConstants
+from umlio.SerializerV12.PyutToXml import PyutToXml
+
+from umlio.SerializerV12.XMLConstants import XmlConstants
+from umlio.SerializerV12.BaseUmlToXml import BaseUmlToXml
 
 
 class UmlLinksToXml(BaseUmlToXml):

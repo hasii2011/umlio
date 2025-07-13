@@ -1,5 +1,4 @@
 
-
 from typing import cast
 
 from logging import Logger
@@ -10,10 +9,11 @@ from xml.etree.ElementTree import SubElement
 
 from umlshapes.shapes.UmlNote import UmlNote
 
-from umlio.XmlV12.BaseUmlToXml import BaseUmlToXml
 from umlio.IOTypes import UmlNotes
-from umlio.XmlV12.PyutToXml import PyutToXml
-from umlio.XmlV12.XMLConstants import XmlConstants
+
+from umlio.SerializerV12.BaseUmlToXml import BaseUmlToXml
+from umlio.SerializerV12.PyutToXml import PyutToXml
+from umlio.SerializerV12.XMLConstants import XmlConstants
 
 
 class UmlNotesToXml(BaseUmlToXml):
