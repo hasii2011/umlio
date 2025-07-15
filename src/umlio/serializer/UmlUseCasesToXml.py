@@ -12,9 +12,9 @@ from umlshapes.shapes.UmlUseCase import UmlUseCase
 from umlio.IOTypes import UmlActors
 from umlio.IOTypes import UmlUseCases
 
-from umlio.SerializerV12.BaseUmlToXml import BaseUmlToXml
-from umlio.SerializerV12.PyutToXml import PyutToXml
-from umlio.SerializerV12.XMLConstants import XmlConstants
+from umlio.serializer.BaseUmlToXml import BaseUmlToXml
+from umlio.serializer.PyutToXml import PyutToXml
+from umlio.serializer.XMLConstants import XmlConstants
 
 
 class UmlUseCasesToXml(BaseUmlToXml):

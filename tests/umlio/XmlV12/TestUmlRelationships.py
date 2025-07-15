@@ -42,7 +42,7 @@ from tests.RelationshipCreator import RelationshipCreator
 
 from umlio.IOTypes import UmlDiagram
 
-from umlio.SerializerV12.UmlShapesToXml import UmlShapesToXml
+from umlio.serializer.UmlShapesToXml import UmlShapesToXml
 
 from unittest import TestSuite
 from unittest import main as unitTestMain

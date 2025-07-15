@@ -23,10 +23,10 @@ from umlshapes.types.UmlPosition import UmlPosition
 from umlio.IOTypes import ElementAttributes
 from umlio.IOTypes import UmlLinks
 
-from umlio.SerializerV12.PyutToXml import PyutToXml
+from umlio.serializer.PyutToXml import PyutToXml
 
-from umlio.SerializerV12.XMLConstants import XmlConstants
-from umlio.SerializerV12.BaseUmlToXml import BaseUmlToXml
+from umlio.serializer.XMLConstants import XmlConstants
+from umlio.serializer.BaseUmlToXml import BaseUmlToXml
 
 
 class UmlLinksToXml(BaseUmlToXml):

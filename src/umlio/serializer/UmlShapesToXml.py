@@ -15,12 +15,12 @@ from xml.etree.ElementTree import fromstring as xmlFromString
 from umlio.IOTypes import XML_VERSION
 from umlio.IOTypes import UmlDiagram
 
-from umlio.SerializerV12.UmlLinksToXml import UmlLinksToXml
-from umlio.SerializerV12.UmlNotesToXml import UmlNotesToXml
-from umlio.SerializerV12.UmlTextsToXml import UmlTextsToXml
-from umlio.SerializerV12.UmlUseCasesToXml import UmlUseCasesToXml
-from umlio.SerializerV12.XMLConstants import XmlConstants
-from umlio.SerializerV12.UmlClassToXml import UmlClassToXml
+from umlio.serializer.UmlLinksToXml import UmlLinksToXml
+from umlio.serializer.UmlNotesToXml import UmlNotesToXml
+from umlio.serializer.UmlTextsToXml import UmlTextsToXml
+from umlio.serializer.UmlUseCasesToXml import UmlUseCasesToXml
+from umlio.serializer.XMLConstants import XmlConstants
+from umlio.serializer.UmlClassToXml import UmlClassToXml
 
 INDENT_SPACES: str = '    '     # TODO: Make this configurable
 

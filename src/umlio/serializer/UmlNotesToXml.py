@@ -11,9 +11,9 @@ from umlshapes.shapes.UmlNote import UmlNote
 
 from umlio.IOTypes import UmlNotes
 
-from umlio.SerializerV12.BaseUmlToXml import BaseUmlToXml
-from umlio.SerializerV12.PyutToXml import PyutToXml
-from umlio.SerializerV12.XMLConstants import XmlConstants
+from umlio.serializer.BaseUmlToXml import BaseUmlToXml
+from umlio.serializer.PyutToXml import PyutToXml
+from umlio.serializer.XMLConstants import XmlConstants
 
 
 class UmlNotesToXml(BaseUmlToXml):

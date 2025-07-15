@@ -11,13 +11,13 @@ from codeallybasic.SecureConversions import SecureConversions
 
 from umlio.IOTypes import UmlDiagram
 from umlio.IOTypes import UmlDiagramType
-from umlio.SerializerV12.XMLConstants import XmlConstants
+from umlio.serializer.XMLConstants import XmlConstants
 
 from umlio.IOTypes import UmlDiagrams
 from umlio.IOTypes import UmlProject
 
 
-class UnTangler:
+class DeSerializer:
     def __init__(self):
         self.logger: Logger = getLogger(__name__)
 
