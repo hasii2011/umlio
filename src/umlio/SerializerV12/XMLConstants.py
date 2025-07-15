@@ -5,8 +5,8 @@ class XmlConstants:
     """
     ATTRIBUTE_VERSION: str = 'version'
 
-    ATTRIBUTE_TYPE:  str = 'type'
-    ATTRIBUTE_TITLE: str = 'title'
+    ATTRIBUTE_DIAGRAM_TYPE: str = 'diagramType'
+    ATTRIBUTE_TITLE:        str = 'title'
 
     ATTRIBUTE_CODE_PATH: str = 'codePath'
 

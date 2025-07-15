@@ -97,7 +97,7 @@ class PyutToXml:
 
         attributes: ElementAttributes = ElementAttributes({
             XmlConstants.ATTRIBUTE_NAME:           pyutLink.name,
-            XmlConstants.ATTRIBUTE_TYPE:           pyutLink.linkType.name,
+            XmlConstants.ATTRIBUTE_DIAGRAM_TYPE:           pyutLink.linkType.name,
             XmlConstants.ATTRIBUTE_SOURCE_ID:      str(srcLinkId),
             XmlConstants.ATTRIBUTE_DESTINATION_ID: str(destLinkId),
             XmlConstants.ATTRIBUTE_BIDIRECTIONAL:  str(pyutLink.bidirectional),
@@ -305,7 +305,7 @@ class PyutToXml:
 
         attributes = {
             XmlConstants.ATTRIBUTE_NAME:          pyutParameter.name,
-            XmlConstants.ATTRIBUTE_TYPE:          pyutParameter.type.value,
+            XmlConstants.ATTRIBUTE_DIAGRAM_TYPE:          pyutParameter.type.value,
             # XmlConstants.ATTR_DEFAULT_VALUE: pyutParameter.defaultValue,
         }
 
@@ -331,7 +331,7 @@ class PyutToXml:
         attributes = {
             XmlConstants.ATTRIBUTE_NAME:          pyutField.name,
             XmlConstants.ATTRIBUTE_VISIBILITY:    pyutField.visibility.name,
-            XmlConstants.ATTRIBUTE_TYPE:          pyutField.type.value,
+            XmlConstants.ATTRIBUTE_DIAGRAM_TYPE:          pyutField.type.value,
             XmlConstants.ATTRIBUTE_DEFAULT_VALUE: pyutField.defaultValue,
         }
         pyutFieldElement: Element = SubElement(pyutClassElement, XmlConstants.ELEMENT_MODEL_FIELD, attrib=attributes)

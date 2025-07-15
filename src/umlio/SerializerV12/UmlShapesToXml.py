@@ -116,7 +116,7 @@ class UmlShapesToXml:
         """
 
         attributes = {
-            XmlConstants.ATTRIBUTE_TYPE:              umlDiagram.diagramType.value,
+            XmlConstants.ATTRIBUTE_DIAGRAM_TYPE:              umlDiagram.diagramType.value,
             XmlConstants.ATTRIBUTE_TITLE:             umlDiagram.diagramTitle,
             XmlConstants.ATTRIBUTE_SCROLL_POSITION_X: str(umlDiagram.scrollPositionX),
             XmlConstants.ATTRIBUTE_SCROLL_POSITION_Y: str(umlDiagram.scrollPositionY),

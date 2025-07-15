@@ -10,7 +10,7 @@ from zlib import ZLIB_VERSION
 from umlio.IOTypes import PROJECT_SUFFIX
 from umlio.IOTypes import UmlProject
 from umlio.IOTypes import XML_SUFFIX
-from umlio.UnTanglerV12.UnTangler import UnTangler
+from umlio.DeSerializerV12.UnTangler import UnTangler
 from umlio.UnsupportedFileTypeException import UnsupportedFileTypeException
 
 
@@ -36,7 +36,7 @@ class Reader:
 
         untangler: UnTangler = UnTangler()
 
-        untangler.untangleXml(xmlString=rawXmlString, fileName=fileName)
+        untangler.untangleXml(fileName=fileName)
 
         return untangler.umlProject
 
@@ -53,7 +53,7 @@ class Reader:
 
         untangler: UnTangler = UnTangler()
 
-        untangler.untangleFile(fileName=fileName)
+        untangler.untangleXml(fileName=fileName)
 
         return untangler.umlProject
 

@@ -95,9 +95,12 @@ def createUmlDiagramsFactory() -> UmlDiagrams:
 
 
 @dataclass
-class UmlProject:
+class ProjectInformation:
     fileName:    str  = ''
     version:     str  = XML_VERSION
     codePath:    Path = Path('')
-    umlDiagrams: UmlDiagrams = field(default_factory=createUmlDiagramsFactory)
 
+
+@dataclass
+class UmlProject(ProjectInformation):
+    umlDiagrams: UmlDiagrams = field(default_factory=createUmlDiagramsFactory)

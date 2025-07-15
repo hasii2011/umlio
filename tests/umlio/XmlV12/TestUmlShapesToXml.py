@@ -37,14 +37,14 @@ EXPECTED_EMPTY_PROJECT: str = '<?xml version=\'1.0\' encoding=\'iso-8859-1\'?>\n
 EXPECTED_EMPTY_DIAGRAM: str = (
     '<?xml version=\'1.0\' encoding=\'iso-8859-1\'?>\n'
     '<UmlProject version="12.0" codePath="/users/hasii">\n    '
-    '<UMLDiagram type="Not Set" title="" scrollPositionX="1" scrollPositionY="1" pixelsPerUnitX="1" pixelsPerUnitY="1" />\n'
+    '<UMLDiagram diagramType="Not Set" title="" scrollPositionX="1" scrollPositionY="1" pixelsPerUnitX="1" pixelsPerUnitY="1" />\n'
     '</UmlProject>'
 )
 
 EXPECTED_SINGLE_CLASS_XML: str = (
     "<?xml version='1.0' encoding='iso-8859-1'?>\n"
     '<UmlProject version="12.0" codePath="/users/hasii">\n'
-    '    <UMLDiagram type="Class Diagram" title="Unit Test Class Diagram" scrollPositionX="1" scrollPositionY="1" pixelsPerUnitX="1" pixelsPerUnitY="1">\n'
+    '    <UMLDiagram diagramType="Class Diagram" title="Unit Test Class Diagram" scrollPositionX="1" scrollPositionY="1" pixelsPerUnitX="1" pixelsPerUnitY="1">\n'
     '        <UmlClass id="play.small.long.group" width="125" height="100" x="300" y="500">\n'
     '            <PyutClass id="0" name="ClassName 1" displayMethods="True" displayParameters="Unspecified" displayConstructor="Unspecified" displayDunderMethods="Unspecified" displayFields="True" displayStereotype="True" fileName="" description="" />\n'
     '        </UmlClass>\n'
@@ -55,7 +55,7 @@ EXPECTED_SINGLE_CLASS_XML: str = (
 EXPECTED_SINGLE_USE_CASE_XML: str = (
     "<?xml version='1.0' encoding='iso-8859-1'?>\n"
     '<UmlProject version="12.0" codePath="/users/hasii">\n'
-    '    <UMLDiagram type="Use Case Diagram" title="Use Case Diagram" scrollPositionX="1" scrollPositionY="1" pixelsPerUnitX="1" pixelsPerUnitY="1">\n'
+    '    <UMLDiagram diagramType="Use Case Diagram" title="Use Case Diagram" scrollPositionX="1" scrollPositionY="1" pixelsPerUnitX="1" pixelsPerUnitY="1">\n'
     '        <UmlUseCase id="remember.central.issue.child" width="125" height="100" x="300" y="500">\n'
     '            <PyutUseCase id="1" name="I am a lonely boy" fileName="" />\n'
     '        </UmlUseCase>\n'
@@ -66,7 +66,7 @@ EXPECTED_SINGLE_USE_CASE_XML: str = (
 EXPECTED_SINGLE_ACTOR: str = (
     "<?xml version='1.0' encoding='iso-8859-1'?>\n"
     '<UmlProject version="12.0" codePath="/users/hasii">\n'
-    '    <UMLDiagram type="Use Case Diagram" title="Use Case Actor Diagram" scrollPositionX="1" scrollPositionY="1" pixelsPerUnitX="1" pixelsPerUnitY="1">\n'
+    '    <UMLDiagram diagramType="Use Case Diagram" title="Use Case Actor Diagram" scrollPositionX="1" scrollPositionY="1" pixelsPerUnitX="1" pixelsPerUnitY="1">\n'
     '        <UmlActor id="remember.central.issue.child" width="233" height="233" x="500" y="200">\n'
     '            <PyutActor id="0" name="LoboMalo" fileName="" />\n'
     '        </UmlActor>\n'
@@ -77,7 +77,7 @@ EXPECTED_SINGLE_ACTOR: str = (
 EXPECTED_SINGLE_NOTE: str = (
     "<?xml version='1.0' encoding='iso-8859-1'?>\n"
     '<UmlProject version="12.0" codePath="/users/hasii">\n'
-    '    <UMLDiagram type="Use Case Diagram" title="Uml Note Diagram" scrollPositionX="1" scrollPositionY="1" pixelsPerUnitX="1" pixelsPerUnitY="1">\n'
+    '    <UMLDiagram diagramType="Use Case Diagram" title="Uml Note Diagram" scrollPositionX="1" scrollPositionY="1" pixelsPerUnitX="1" pixelsPerUnitY="1">\n'
     '        <UmlNote id="remember.the.Alamo" width="233" height="233" x="666" y="777">\n'
     '            <PyutNote id="777" content="I am the best MAGA Note" fileName="" />\n'
     '        </UmlNote>\n'
@@ -88,7 +88,7 @@ EXPECTED_SINGLE_NOTE: str = (
 EXPECTED_SINGLE_TEXT: str = (
     "<?xml version='1.0' encoding='iso-8859-1'?>\n"
     '<UmlProject version="12.0" codePath="/users/hasii">\n'
-    '    <UMLDiagram type="Class Diagram" title="Uml Text Diagram" scrollPositionX="1" scrollPositionY="1" pixelsPerUnitX="1" pixelsPerUnitY="1">\n'
+    '    <UMLDiagram diagramType="Class Diagram" title="Uml Text Diagram" scrollPositionX="1" scrollPositionY="1" pixelsPerUnitX="1" pixelsPerUnitY="1">\n'
     '        <UmlText id="remember.the.Alamo" width="150" height="50" x="1024" y="768">\n'
     '            <PyutText id="1789" content="Soy el mejor texto americano" />\n'
     '        </UmlText>\n'
