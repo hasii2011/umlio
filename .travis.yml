@@ -25,8 +25,8 @@ install:
   - PY_VERSION=${GLOBAL#* }
   - pyenv global ${PY_VERSION}
   - pip install --upgrade pip
-  - pip install wheel
-  - pip install setuptools
+  - pip install wheel==0.45.1
+  - pip install setuptools==75.8.0
   - pip install html-testRunner~=1.2.1
   - pip install six==1.16.0
   - pip install attrdict3
