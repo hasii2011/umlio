@@ -21,7 +21,7 @@ class XmlConstants:
     ATTRIBUTE_HEIGHT: str = 'height'
     ATTRIBUTE_X:      str = 'x'
     ATTRIBUTE_Y:      str = 'y'
-    ATTRIBUTE_NAME:  str = 'name'
+    ATTRIBUTE_NAME:   str = 'name'
 
     ATTRIBUTE_DISPLAY_STEREOTYPE:     str = 'displayStereotype'
     ATTRIBUTE_DISPLAY_METHODS:        str = 'displayMethods'
@@ -30,7 +30,6 @@ class XmlConstants:
     ATTRIBUTE_DISPLAY_CONSTRUCTOR:    str = 'displayConstructor'
     ATTRIBUTE_DISPLAY_DUNDER_METHODS: str = 'displayDunderMethods'
 
-    ATTRIBUTE_FILE_NAME:     str = 'fileName'
     ATTRIBUTE_STEREOTYPE:    str = 'stereotype'
     ATTRIBUTE_FILENAME:      str = 'fileName'
     ATTRIBUTE_CONTENT:       str = 'content'
@@ -53,6 +52,7 @@ class XmlConstants:
     ATTRIBUTE_LINK_TO_Y: str = 'toY'
 
     ATTRIBUTE_SPLINE:    str = 'spline'
+    ATTRIBUTE_LINK_TYPE: str = 'type'       # TODO:  Should be linkType
 
     ATTRIBUTE_SOURCE_ID:                 str = 'sourceId'
     ATTRIBUTE_DESTINATION_ID:            str = 'destinationId'
@@ -69,6 +69,8 @@ class XmlConstants:
     ATTRIBUTE_LINE_CENTUM:               str = 'lineCentum'
     ATTRIBUTE_ATTACHMENT_SIDE:           str = 'attachmentSide'
     ATTRIBUTE_ATTACHED_TO_ID:            str = 'attachedToId'
+
+    ATTRIBUTE_FIELD_TYPE: str = 'type'          # TODO: This should be fieldType
 
     ELEMENT_DIAGRAM:      str = 'UMLDiagram'
     ELEMENT_UML_CLASS:    str = 'UmlClass'
@@ -91,6 +93,8 @@ class XmlConstants:
     ELEMENT_MODEL_LINK:        str = 'PyutLink'
     ELEMENT_MODEL_INTERFACE:   str = 'PyutInterface'
     ELEMENT_MODEL_IMPLEMENTOR: str = 'Implementor'
+
+    ELEMENT_MODEL_IMPLEMENTING_CLASS_NAME: str = 'implementingClassName'
 
     ELEMENT_MODEL_METHOD:      str = 'PyutMethod'
     ELEMENT_MODEL_PARAMETER:   str = 'PyutParameter'

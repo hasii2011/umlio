@@ -169,7 +169,7 @@ class PyutToXml:
         attributes: ElementAttributes = ElementAttributes({
             XmlConstants.ATTRIBUTE_ID:       str(actorId),
             XmlConstants.ATTRIBUTE_NAME:     pyutActor.name,
-            XmlConstants.ATTRIBUTE_FILE_NAME: fileName,
+            XmlConstants.ATTRIBUTE_FILENAME: fileName,
         })
         pyutActorElement: Element = SubElement(umlActorElement, XmlConstants.ELEMENT_MODEL_ACTOR, attributes)
 
@@ -185,7 +185,7 @@ class PyutToXml:
         attributes: ElementAttributes = ElementAttributes({
             XmlConstants.ATTRIBUTE_ID:       str(useCaseId),
             XmlConstants.ATTRIBUTE_NAME:     pyutUseCase.name,
-            XmlConstants.ATTRIBUTE_FILE_NAME: fileName
+            XmlConstants.ATTRIBUTE_FILENAME: fileName
         })
         pyutUseCaseElement: Element = SubElement(umlUseCaseElement, XmlConstants.ELEMENT_MODEL_USE_CASE, attributes)
 

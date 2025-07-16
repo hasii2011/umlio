@@ -10,6 +10,8 @@ from dataclasses import field
 
 from pathlib import Path
 
+from codeallybasic.SecureConversions import SecureConversions
+
 from umlshapes.links.UmlLollipopInterface import UmlLollipopInterface
 from umlshapes.shapes.UmlActor import UmlActor
 from umlshapes.shapes.UmlClass import UmlClass
@@ -18,6 +20,11 @@ from umlshapes.shapes.UmlText import UmlText
 from umlshapes.shapes.UmlUseCase import UmlUseCase
 
 from umlshapes.links.UmlLink import UmlLink
+from umlshapes.types.UmlDimensions import UmlDimensions
+from umlshapes.types.UmlPosition import UmlPosition
+from untangle import Element
+
+from umlio.serializer.XMLConstants import XmlConstants
 
 XML_VERSION: str = '12.0'
 
@@ -104,3 +111,36 @@ class ProjectInformation:
 @dataclass
 class UmlProject(ProjectInformation):
     umlDiagrams: UmlDiagrams = field(default_factory=createUmlDiagramsFactory)
+
+
+#
+# Untangler helper types
+#
+Elements = NewType('Elements', List[Element])
+
+
+@dataclass
+class GraphicInformation:
+    """
+    Internal Class used to move information from a untangler element into Python
+    """
+    id:       str
+    size:     UmlDimensions
+    position: UmlPosition
+
+    @classmethod
+    def toGraphicInfo(cls, graphicElement: Element) -> 'GraphicInformation':
+
+        graphicInformation: GraphicInformation = GraphicInformation(
+            id=graphicElement[XmlConstants.ATTRIBUTE_ID],
+            position=UmlPosition(
+                x=int(graphicElement[XmlConstants.ATTRIBUTE_X]),
+                y=int(graphicElement[XmlConstants.ATTRIBUTE_Y])
+            ),
+            size=UmlDimensions(
+                width=SecureConversions.secureInteger(graphicElement[XmlConstants.ATTRIBUTE_WIDTH]),
+                height=SecureConversions.secureInteger(graphicElement[XmlConstants.ATTRIBUTE_HEIGHT])
+            )
+        )
+
+        return graphicInformation

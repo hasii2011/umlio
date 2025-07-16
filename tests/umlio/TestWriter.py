@@ -18,7 +18,7 @@ from tests.umlio.UmlIOBaseTest import EMPTY_DIAGRAMS_XML_PROJECT
 
 UNIT_TEST_DIAGRAM_DIRECTORY:       str = 'UmlDiagramProjects'
 
-EXPECTED_FILE_SIZE: int = 224
+EXPECTED_FILE_SIZE: int = 227
 
 
 class TestWriter(UmlIOBaseTest):

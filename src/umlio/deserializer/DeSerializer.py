@@ -10,10 +10,12 @@ from untangle import parse
 from codeallybasic.SecureConversions import SecureConversions
 
 from umlio.IOTypes import UmlDiagram
+from umlio.IOTypes import UmlDiagramTitle
 from umlio.IOTypes import UmlDiagramType
+from umlio.IOTypes import UmlTexts
+from umlio.deserializer.UmlTextDeSerializer import UmlTextDeSerializer
 from umlio.serializer.XMLConstants import XmlConstants
 
-from umlio.IOTypes import UmlDiagrams
 from umlio.IOTypes import UmlProject
 
 
@@ -22,15 +24,10 @@ class DeSerializer:
         self.logger: Logger = getLogger(__name__)
 
         self._umlProject:  UmlProject  = UmlProject()
-        self._umlDiagrams: UmlDiagrams = UmlDiagrams({})
 
     @property
     def umlProject(self) -> UmlProject:
         return self._umlProject
-
-    @property
-    def umlDiagrams(self) -> UmlDiagrams:
-        return self.umlDiagrams
 
     def untangleFile(self, fileName: Path):
         pass
@@ -59,42 +56,27 @@ class DeSerializer:
                 pixelsPerUnitX=SecureConversions.secureInteger(umlDiagramElement[XmlConstants.ATTRIBUTE_PIXELS_PER_UNIT_X]),
                 pixelsPerUnitY=SecureConversions.secureInteger(umlDiagramElement[XmlConstants.ATTRIBUTE_PIXELS_PER_UNIT_Y])
             )
+            umlDiagram.diagramTitle = UmlDiagramTitle(umlDiagramElement[XmlConstants.ATTRIBUTE_TITLE])
+
             if umlDiagramElement[XmlConstants.ATTRIBUTE_DIAGRAM_TYPE] == UmlDiagramType.CLASS_DIAGRAM.value:
                 umlDiagram.diagramType = UmlDiagramType.CLASS_DIAGRAM
                 # document.oglClasses = self._graphicClassesToOglClasses(pyutDocument=pyutDocument)
                 # document.oglNotes   = self._graphicNotesToOglNotes(pyutDocument=pyutDocument)
-                # document.oglTexts   = self._graphicalTextToOglTexts(pyutDocument=pyutDocument)
+                umlDiagram.umlTexts   = self._deserializeUmlTextElements(umlDiagramElement=umlDiagramElement)
 
+            self._umlProject.umlDiagrams[umlDiagram.diagramTitle] = umlDiagram
 
-    # def _extractProjectInformationForFile(self, fileName: Path):
-    #     """
-    #     Allows callers to inspect the project information.  For example the XML version
-    #
-    #     Args:
-    #         fileName: The fully qualified file for a .xml or .put file
-    #
-    #     Returns:  A project information data class`
-    #     """
-    #     suffix: str = fileName.suffix
-    #
-    #     if suffix.endswith('.put') is False and suffix.endswith('.xml') is False:
-    #         raise UnsupportedFileTypeException(message='File must end with .xml or .put extension')
-    #
-    #     if suffix.endswith('.xml'):
-    #     elif suffix.endswith('.put'):
-    #         xmlString = self.decompressFile(fqFileName=fileName)
-    #     else:
-    #         assert False, 'Unknown file suffix;  Should not get here'
-    #
-    #     root:        Element = parse(xmlString)
-    #     pyutProject: Element = root.PyutProject
-    #
-    #     projectInformation = self._populateProjectInformation()
-    #     projectInformation.fileName = fileName
-    #
-    #     return projectInformation
+    def _deserializeUmlTextElements(self, umlDiagramElement: Element) -> UmlTexts:
+        """
+        Yeah, yeah, I know bad English;
 
-    def _populateProjectInformation(self, pyutProject: Element):
+        Args:
+            umlDiagramElement:  The Element document
 
-        self._umlProject.version  = pyutProject['version']
-        self._umlProject.codePath = pyutProject['CodePath']
+        Returns:  untangled OglText objects if any exist, else an empty list
+        """
+
+        umlTextDeSerializer: UmlTextDeSerializer = UmlTextDeSerializer()
+        umlTexts: UmlTexts = umlTextDeSerializer.deserialize(umlDiagramElement=umlDiagramElement)
+
+        return umlTexts

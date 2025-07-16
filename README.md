@@ -33,7 +33,7 @@ I am concerned about GitHub's Copilot project
 
 
 
-I urge you to read about the[Give up GitHub](https://GiveUpGitHub.org) campaign from[the Software Freedom Conservancy](https://sfconservancy.org).
+I urge you to read about the [Give up GitHub](https://GiveUpGitHub.org) campaign from[the Software Freedom Conservancy](https://sfconservancy.org).
 
 While I do not advocate for all the issues listed there I do not like that a company like Microsoft may profit from open source projects.
 
