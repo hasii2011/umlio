@@ -30,7 +30,7 @@ from pyutmodelv2.PyutSDMessage import PyutSDMessage
 from pyutmodelv2.PyutText import PyutText
 from pyutmodelv2.PyutUseCase import PyutUseCase
 
-from umlio.serializer.XMLConstants import XmlConstants
+from umlio.XMLConstants import XmlConstants
 
 
 class PyutToXml:

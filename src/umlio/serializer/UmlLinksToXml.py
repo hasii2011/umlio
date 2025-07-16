@@ -25,7 +25,7 @@ from umlio.IOTypes import UmlLinks
 
 from umlio.serializer.PyutToXml import PyutToXml
 
-from umlio.serializer.XMLConstants import XmlConstants
+from umlio.XMLConstants import XmlConstants
 from umlio.serializer.BaseUmlToXml import BaseUmlToXml
 
 

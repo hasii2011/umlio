@@ -24,7 +24,7 @@ from umlshapes.types.UmlDimensions import UmlDimensions
 from umlshapes.types.UmlPosition import UmlPosition
 from untangle import Element
 
-from umlio.serializer.XMLConstants import XmlConstants
+from umlio.XMLConstants import XmlConstants
 
 XML_VERSION: str = '12.0'
 

@@ -14,7 +14,7 @@ from umlio.IOTypes import UmlDiagramTitle
 from umlio.IOTypes import UmlDiagramType
 from umlio.IOTypes import UmlTexts
 from umlio.deserializer.UmlTextDeSerializer import UmlTextDeSerializer
-from umlio.serializer.XMLConstants import XmlConstants
+from umlio.XMLConstants import XmlConstants
 
 from umlio.IOTypes import UmlProject
 

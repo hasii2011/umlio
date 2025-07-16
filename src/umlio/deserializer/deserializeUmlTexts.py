@@ -15,7 +15,7 @@ from umlio.IOTypes import GraphicInformation
 from umlio.IOTypes import UmlTexts
 from umlio.IOTypes import umlTextsFactory
 from umlio.deserializer.UnTanglePyut import UnTanglePyut
-from umlio.serializer.XMLConstants import XmlConstants
+from umlio.XMLConstants import XmlConstants
 
 
 class deserializeUmlTexts:

@@ -13,7 +13,7 @@ from umlio.IOTypes import UmlTexts
 
 from umlio.serializer.BaseUmlToXml import BaseUmlToXml
 from umlio.serializer.PyutToXml import PyutToXml
-from umlio.serializer.XMLConstants import XmlConstants
+from umlio.XMLConstants import XmlConstants
 
 
 class UmlTextsToXml(BaseUmlToXml):

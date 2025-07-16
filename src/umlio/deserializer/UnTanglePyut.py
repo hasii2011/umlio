@@ -44,7 +44,7 @@ from pyutmodelv2.enumerations.PyutDisplayMethods import PyutDisplayMethods
 
 from umlio.IOTypes import Elements
 
-from umlio.serializer.XMLConstants import XmlConstants
+from umlio.XMLConstants import XmlConstants
 
 
 @dataclass
