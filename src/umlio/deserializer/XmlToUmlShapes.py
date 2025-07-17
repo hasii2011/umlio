@@ -19,7 +19,7 @@ from umlio.XMLConstants import XmlConstants
 from umlio.IOTypes import UmlProject
 
 
-class DeSerializer:
+class XmlToUmlShapes:
     def __init__(self):
         self.logger: Logger = getLogger(__name__)
 
@@ -29,10 +29,10 @@ class DeSerializer:
     def umlProject(self) -> UmlProject:
         return self._umlProject
 
-    def untangleFile(self, fileName: Path):
+    def untangleProjectFile(self, fileName: Path):
         pass
 
-    def untangleXml(self, fileName: Path):
+    def untangleXmlFile(self, fileName: Path):
         """
         Untangle the input Xml string to UmlShapes
         Args:
@@ -65,6 +65,9 @@ class DeSerializer:
                 umlDiagram.umlTexts   = self._deserializeUmlTextElements(umlDiagramElement=umlDiagramElement)
 
             self._umlProject.umlDiagrams[umlDiagram.diagramTitle] = umlDiagram
+
+    def untangleXml(self, rawXml: str):
+        pass
 
     def _deserializeUmlTextElements(self, umlDiagramElement: Element) -> UmlTexts:
         """

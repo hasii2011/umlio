@@ -10,7 +10,7 @@ from zlib import ZLIB_VERSION
 from umlio.IOTypes import PROJECT_SUFFIX
 from umlio.IOTypes import UmlProject
 from umlio.IOTypes import XML_SUFFIX
-from umlio.deserializer.DeSerializer import DeSerializer
+from umlio.deserializer.XmlToUmlShapes import XmlToUmlShapes
 from umlio.UnsupportedFileTypeException import UnsupportedFileTypeException
 
 
@@ -34,9 +34,9 @@ class Reader:
 
         rawXmlString: str = self._decompressFile(fileName=fileName)
 
-        untangler: DeSerializer = DeSerializer()
+        untangler: XmlToUmlShapes = XmlToUmlShapes()
 
-        untangler.untangleXml(fileName=fileName)
+        untangler.untangleXmlFile(fileName=fileName)
 
         return untangler.umlProject
 
@@ -51,11 +51,11 @@ class Reader:
         if len(suffix) < 0 or suffix != XML_SUFFIX:
             raise UnsupportedFileTypeException(message=f'File does not end with .xml suffix')
 
-        untangler: DeSerializer = DeSerializer()
+        xmlToUmlShapes: XmlToUmlShapes = XmlToUmlShapes()
 
-        untangler.untangleXml(fileName=fileName)
+        xmlToUmlShapes.untangleXmlFile(fileName=fileName)
 
-        return untangler.umlProject
+        return xmlToUmlShapes.umlProject
 
     def _decompressFile(self, fileName: Path) -> str:
         """

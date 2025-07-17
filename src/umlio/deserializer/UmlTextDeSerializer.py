@@ -15,7 +15,7 @@ from umlio.IOTypes import GraphicInformation
 from umlio.IOTypes import UmlTexts
 from umlio.IOTypes import umlTextsFactory
 
-from umlio.deserializer.UnTanglePyut import UnTanglePyut
+from umlio.deserializer.XmlToPyut import XmlToPyut
 
 from umlio.XMLConstants import XmlConstants
 
@@ -30,7 +30,7 @@ class UmlTextDeSerializer:
 
         self.logger: Logger = getLogger(__name__)
 
-        self._untanglePyut: UnTanglePyut = UnTanglePyut()
+        self._untanglePyut: XmlToPyut = XmlToPyut()
 
     def deserialize(self, umlDiagramElement: Element) -> UmlTexts:
         """

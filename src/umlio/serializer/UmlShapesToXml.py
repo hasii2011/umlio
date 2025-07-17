@@ -27,7 +27,7 @@ INDENT_SPACES: str = '    '     # TODO: Make this configurable
 
 class UmlShapesToXml:
     """
-
+    The driver class to turn UML Shapes to XML
     """
     def __init__(self, projectCodePath: Path):
         """
@@ -40,7 +40,7 @@ class UmlShapesToXml:
         self.logger:           Logger = getLogger(__name__)
         self._projectCodePath: Path   = projectCodePath
 
-        xmlProjectElement: Element = Element('UmlProject')
+        xmlProjectElement: Element = Element(XmlConstants.ELEMENT_UML_PROJECT)
 
         xmlProjectElement.set(XmlConstants.ATTRIBUTE_VERSION, XML_VERSION)
         xmlProjectElement.set(XmlConstants.ATTRIBUTE_CODE_PATH, str(projectCodePath))
@@ -123,7 +123,7 @@ class UmlShapesToXml:
             XmlConstants.ATTRIBUTE_PIXELS_PER_UNIT_X: str(umlDiagram.pixelsPerUnitX),
             XmlConstants.ATTRIBUTE_PIXELS_PER_UNIT_Y: str(umlDiagram.pixelsPerUnitY),
         }
-        documentTop: Element = SubElement(self._xmlProjectElement, XmlConstants.ELEMENT_DIAGRAM, attrib=attributes)
+        documentTop: Element = SubElement(self._xmlProjectElement, XmlConstants.ELEMENT_UML_DIAGRAM, attrib=attributes)
 
         return documentTop
 

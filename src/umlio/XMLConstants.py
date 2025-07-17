@@ -72,7 +72,8 @@ class XmlConstants:
 
     ATTRIBUTE_FIELD_TYPE: str = 'type'          # TODO: This should be fieldType
 
-    ELEMENT_DIAGRAM:      str = 'UMLDiagram'
+    ELEMENT_UML_PROJECT:  str = 'UmlProject'
+    ELEMENT_UML_DIAGRAM:  str = 'UMLDiagram'
     ELEMENT_UML_CLASS:    str = 'UmlClass'
     ELEMENT_UML_USE_CASE: str = 'UmlUseCase'
     ELEMENT_UML_ACTOR:    str = 'UmlActor'

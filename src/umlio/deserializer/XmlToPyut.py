@@ -59,7 +59,7 @@ class ConvolutedPyutSDMessageInformation:
     destinationId: int           = -1
 
 
-class UnTanglePyut:
+class XmlToPyut:
     """
     Converts pyutmodel Version 11 XML to Pyut Objects
     """
@@ -386,8 +386,8 @@ class UnTanglePyut:
         pyutObject.fileName = pyutElement[XmlConstants.ATTRIBUTE_FILENAME]
 
         if pyutObject.name is None:
-            UnTanglePyut.noteCounter += 1
-            pyutObject.name = f'{UnTanglePyut.NOTE_NAME}-{UnTanglePyut.noteCounter}'
+            XmlToPyut.noteCounter += 1
+            pyutObject.name = f'{XmlToPyut.NOTE_NAME}-{XmlToPyut.noteCounter}'
         return pyutObject
 
     def _securePyutDisplayMethods(self, displayStr: str) -> PyutDisplayMethods:

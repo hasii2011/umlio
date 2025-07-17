@@ -14,11 +14,11 @@ from umlio.IOTypes import Elements
 from umlio.IOTypes import GraphicInformation
 from umlio.IOTypes import UmlTexts
 from umlio.IOTypes import umlTextsFactory
-from umlio.deserializer.UnTanglePyut import UnTanglePyut
+from umlio.deserializer.XmlToPyut import XmlToPyut
 from umlio.XMLConstants import XmlConstants
 
 
-class deserializeUmlTexts:
+class DeserializeUmlTexts:
     """
     Yes, I know bad English
     """
@@ -28,7 +28,7 @@ class deserializeUmlTexts:
 
         self.logger: Logger = getLogger(__name__)
 
-        self._untanglePyut: UnTanglePyut = UnTanglePyut()
+        self._untanglePyut: XmlToPyut = XmlToPyut()
 
     def unTangle(self, umlDiagram: Element) -> UmlTexts:
         """
