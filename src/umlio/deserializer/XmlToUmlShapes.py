@@ -13,7 +13,7 @@ from umlio.IOTypes import UmlDiagram
 from umlio.IOTypes import UmlDiagramTitle
 from umlio.IOTypes import UmlDiagramType
 from umlio.IOTypes import UmlTexts
-from umlio.deserializer.UmlTextDeSerializer import UmlTextDeSerializer
+from umlio.deserializer.XmlTextsToUmlTexts import XmlTextsToUmlTexts
 from umlio.XMLConstants import XmlConstants
 
 from umlio.IOTypes import UmlProject
@@ -79,7 +79,7 @@ class XmlToUmlShapes:
         Returns:  untangled OglText objects if any exist, else an empty list
         """
 
-        umlTextDeSerializer: UmlTextDeSerializer = UmlTextDeSerializer()
+        umlTextDeSerializer: XmlTextsToUmlTexts = XmlTextsToUmlTexts()
         umlTexts: UmlTexts = umlTextDeSerializer.deserialize(umlDiagramElement=umlDiagramElement)
 
         return umlTexts

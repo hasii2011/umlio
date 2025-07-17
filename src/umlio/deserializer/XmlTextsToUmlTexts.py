@@ -20,7 +20,7 @@ from umlio.deserializer.XmlToPyut import XmlToPyut
 from umlio.XMLConstants import XmlConstants
 
 
-class UmlTextDeSerializer:
+class XmlTextsToUmlTexts:
     """
     Yes, I know bad English
     """

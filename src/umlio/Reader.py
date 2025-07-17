@@ -11,7 +11,7 @@ from umlio.IOTypes import PROJECT_SUFFIX
 from umlio.IOTypes import UmlProject
 from umlio.IOTypes import XML_SUFFIX
 from umlio.deserializer.XmlToUmlShapes import XmlToUmlShapes
-from umlio.UnsupportedFileTypeException import UnsupportedFileTypeException
+from umlio.exceptions.UnsupportedFileTypeException import UnsupportedFileTypeException
 
 
 class Reader:
