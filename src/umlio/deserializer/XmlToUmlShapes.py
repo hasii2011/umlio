@@ -16,12 +16,14 @@ from umlio.IOTypes import UmlDiagramType
 from umlio.IOTypes import UmlNotes
 from umlio.IOTypes import UmlTexts
 from umlio.IOTypes import UmlProject
+from umlio.IOTypes import UmlUseCases
 
 from umlio.deserializer.XmlActorsToUmlActors import XmlActorsToUmlActors
 from umlio.deserializer.XmlNotesToUmlNotes import XmlNotesToUmlNotes
 from umlio.deserializer.XmlTextsToUmlTexts import XmlTextsToUmlTexts
 
 from umlio.XMLConstants import XmlConstants
+from umlio.deserializer.XmlUseCasesToUmlUseCases import XmlUseCasesToUmlUseCases
 
 
 class XmlToUmlShapes:
@@ -70,8 +72,9 @@ class XmlToUmlShapes:
                 umlDiagram.umlTexts   = self._deserializeUmlTextElements(umlDiagramElement=umlDiagramElement)
             elif umlDiagramElement[XmlConstants.ATTRIBUTE_DIAGRAM_TYPE] == UmlDiagramType.USE_CASE_DIAGRAM.value:
                 umlDiagram.diagramType = UmlDiagramType.USE_CASE_DIAGRAM
-                umlDiagram.umlNotes  = self._deserializeUmlNoteElements(umlDiagramElement=umlDiagramElement)
-                umlDiagram.umlActors = self._deserializeUmlActorElements(umlDiagramElement=umlDiagramElement)
+                umlDiagram.umlNotes    = self._deserializeUmlNoteElements(umlDiagramElement=umlDiagramElement)
+                umlDiagram.umlActors   = self._deserializeUmlActorElements(umlDiagramElement=umlDiagramElement)
+                umlDiagram.umlUseCases = self._deserializeUmlUseCaseElements(umlDiagramElement=umlDiagramElement)
 
             self._umlProject.umlDiagrams[umlDiagram.diagramTitle] = umlDiagram
 
@@ -119,3 +122,17 @@ class XmlToUmlShapes:
         umlActors: UmlActors = xmlActorsToUmlActors.deserialize(umlDiagramElement=umlDiagramElement)
 
         return umlActors
+
+    def _deserializeUmlUseCaseElements(self, umlDiagramElement: Element) -> UmlUseCases:
+        """
+
+        Args:
+            umlDiagramElement:  The diagram Element
+
+        Returns:  deserialized UmlUseCase objects if any exist, else an empty list
+        """
+        xmlUseCasesToUmlUseCases: XmlUseCasesToUmlUseCases = XmlUseCasesToUmlUseCases()
+
+        umlUseCases: UmlUseCases = xmlUseCasesToUmlUseCases.deserialize(umlDiagramElement=umlDiagramElement)
+
+        return umlUseCases

@@ -1,0 +1,8 @@
+<?xml version='1.0' encoding='iso-8859-1'?>
+<UmlProject version="12.0" codePath="/users/hasii">
+    <UMLDiagram diagramType="Use Case Diagram" title="Use Case Diagram" scrollPositionX="1" scrollPositionY="1" pixelsPerUnitX="1" pixelsPerUnitY="1">
+        <UmlUseCase id="remember.central.issue.child" width="125" height="100" x="300" y="500">
+            <PyutUseCase id="1" name="I am a lonely boy" fileName="" />
+        </UmlUseCase>
+    </UMLDiagram>
+</UmlProject>

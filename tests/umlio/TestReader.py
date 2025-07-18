@@ -18,9 +18,10 @@ from umlio.IOTypes import UmlProject
 
 from umlio.Reader import Reader
 
-SINGLE_TEXT_DIAGRAM_XML_PROJECT:  str = 'SingleTextProject.xml'
-SINGLE_NOTE_DIAGRAM_XML_PROJECT:  str = 'SingleNoteProject.xml'
-SINGLE_ACTOR_DIAGRAM_XML_PROJECT: str = 'SingleActorProject.xml'
+SINGLE_TEXT_DIAGRAM_XML_PROJECT:     str = 'SingleTextProject.xml'
+SINGLE_NOTE_DIAGRAM_XML_PROJECT:     str = 'SingleNoteProject.xml'
+SINGLE_ACTOR_DIAGRAM_XML_PROJECT:    str = 'SingleActorProject.xml'
+SINGLE_USE_CASE_DIAGRAM_XML_PROJECT: str = 'SingleUseCaseProject.xml'
 
 
 class TestReader(UnitTestBaseW):
@@ -29,7 +30,6 @@ class TestReader(UnitTestBaseW):
         Gato Malo – Humberto A. Sanchez II
         Generated: 11 July 2025
     """
-
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
@@ -63,7 +63,7 @@ class TestReader(UnitTestBaseW):
 
         textDiagram: UmlDiagram = umlProject.umlDiagrams[UmlDiagramTitle('Uml Text Diagram')]
 
-        self.assertEqual(1, len(textDiagram.umlTexts), 'Not the right Uml Text object count')
+        self.assertEqual(1, len(textDiagram.umlTexts), 'Not the correct Uml Text object count')
 
     def testDeserializedUmlNoteElements(self):
 
@@ -77,7 +77,7 @@ class TestReader(UnitTestBaseW):
 
         noteDiagram: UmlDiagram = umlProject.umlDiagrams[UmlDiagramTitle('Uml Note Diagram')]
 
-        self.assertEqual(1, len(noteDiagram.umlNotes), 'Not the right Uml Note object count')
+        self.assertEqual(1, len(noteDiagram.umlNotes), 'Not the correct Uml Note object count')
 
     def testDeserializedUmlActorElements(self):
 
@@ -90,7 +90,20 @@ class TestReader(UnitTestBaseW):
         umlProject: UmlProject = reader.readXmlFile(Path(umlActorProject))
         noteDiagram: UmlDiagram = umlProject.umlDiagrams[UmlDiagramTitle('Use Case Actor Diagram')]
 
-        self.assertEqual(1, len(noteDiagram.umlActors), 'Not the right Uml Actor object count')
+        self.assertEqual(1, len(noteDiagram.umlActors), 'Not the correct Uml Actor object count')
+
+    def testDeserializedUmlUseCaseElements(self):
+
+        umlUseCaseProject: str = UnitTestBase.getFullyQualifiedResourceFileName(
+            package=UmlIOBaseTest.GOLDEN_FILES_PACKAGE_NAME,
+            fileName=SINGLE_USE_CASE_DIAGRAM_XML_PROJECT)
+
+        reader: Reader = Reader()
+
+        umlProject: UmlProject = reader.readXmlFile(Path(umlUseCaseProject))
+        useCaseDiagram: UmlDiagram = umlProject.umlDiagrams[UmlDiagramTitle('Use Case Diagram')]
+
+        self.assertEqual(1, len(useCaseDiagram.umlUseCases), 'Not the correct Uml Use Case object count')
 
 
 def suite() -> TestSuite:
