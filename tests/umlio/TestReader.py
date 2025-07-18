@@ -18,7 +18,8 @@ from umlio.IOTypes import UmlProject
 
 from umlio.Reader import Reader
 
-SINGLE_TEXT_DIAGRAMS_XML_PROJECT: str = 'SingleTextProject.xml'
+SINGLE_TEXT_DIAGRAM_XML_PROJECT: str = 'SingleTextProject.xml'
+SINGLE_NOTE_DIAGRAM_XML_PROJECT: str = 'SingleNoteProject.xml'
 
 
 class TestReader(UnitTestBaseW):
@@ -53,7 +54,7 @@ class TestReader(UnitTestBaseW):
 
         umlTextProject: str = UnitTestBase.getFullyQualifiedResourceFileName(
             package=UmlIOBaseTest.GOLDEN_FILES_PACKAGE_NAME,
-            fileName=SINGLE_TEXT_DIAGRAMS_XML_PROJECT)
+            fileName=SINGLE_TEXT_DIAGRAM_XML_PROJECT)
 
         reader: Reader = Reader()
 
@@ -62,6 +63,20 @@ class TestReader(UnitTestBaseW):
         textDiagram: UmlDiagram = umlProject.umlDiagrams[UmlDiagramTitle('Uml Text Diagram')]
 
         self.assertEqual(1, len(textDiagram.umlTexts), 'Not the right Uml Text object count')
+
+    def testDeserializedUmlNoteElements(self):
+
+        umlNoteProject: str = UnitTestBase.getFullyQualifiedResourceFileName(
+            package=UmlIOBaseTest.GOLDEN_FILES_PACKAGE_NAME,
+            fileName=SINGLE_NOTE_DIAGRAM_XML_PROJECT)
+
+        reader: Reader = Reader()
+
+        umlProject: UmlProject = reader.readXmlFile(Path(umlNoteProject))
+
+        noteDiagram: UmlDiagram = umlProject.umlDiagrams[UmlDiagramTitle('Uml Note Diagram')]
+
+        self.assertEqual(1, len(noteDiagram.umlNotes), 'Not the right Uml Note object count')
 
 
 def suite() -> TestSuite:

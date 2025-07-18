@@ -21,9 +21,9 @@ class Reader:
 
         self.logger: Logger = getLogger(__name__)
 
-    def readFile(self, fileName: Path) -> UmlProject:
+    def readProjectFile(self, fileName: Path) -> UmlProject:
         """
-        Parse the input .put file
+        Parse the input PROJECT_SUFFIX file
 
         Args:
             fileName: The fully qualified file name
@@ -34,11 +34,11 @@ class Reader:
 
         rawXmlString: str = self._decompressFile(fileName=fileName)
 
-        untangler: XmlToUmlShapes = XmlToUmlShapes()
+        xmlToUmlShapes: XmlToUmlShapes = XmlToUmlShapes()
 
-        untangler.untangleXmlFile(fileName=fileName)
+        xmlToUmlShapes.deserializeXml(rawXml=rawXmlString)
 
-        return untangler.umlProject
+        return xmlToUmlShapes.umlProject
 
     def readXmlFile(self, fileName: Path) -> UmlProject:
         """
@@ -53,7 +53,7 @@ class Reader:
 
         xmlToUmlShapes: XmlToUmlShapes = XmlToUmlShapes()
 
-        xmlToUmlShapes.untangleXmlFile(fileName=fileName)
+        xmlToUmlShapes.deserializeXmlFile(fileName=fileName)
 
         return xmlToUmlShapes.umlProject
 
