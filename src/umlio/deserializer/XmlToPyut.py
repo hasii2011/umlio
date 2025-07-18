@@ -108,41 +108,42 @@ class XmlToPyut:
 
         return pyutClass
 
-    def textToPyutText(self, graphicText: Element) -> PyutText:
+    def textToPyutText(self, umlTextElement: Element) -> PyutText:
         """
         Parses the Text elements
         Args:
-            graphicText:   Of the form:   <Text id="3" content="I am standalone text"/>
+            umlTextElement:   Of the form:   <UmlText id="xx.xx.xx"/>
 
         Returns: A PyutText Object
         """
-        textElement: Element  = graphicText.PyutText
+        pyutTextElement: Element  = umlTextElement.PyutText
         pyutText:    PyutText = PyutText()
 
-        pyutText.id  = int(textElement[XmlConstants.ATTRIBUTE_ID])
+        pyutText.id  = int(pyutTextElement[XmlConstants.ATTRIBUTE_ID])
 
-        rawContent:   str = textElement['content']
+        rawContent:   str = pyutTextElement['content']
         cleanContent: str = rawContent.replace(XML_END_OF_LINE_MARKER, osLineSep)
         pyutText.content = cleanContent
 
         return pyutText
 
-    def noteToPyutNote(self, graphicNote: Element) -> PyutNote:
+    def noteToPyutNote(self, umlNoteElement: Element) -> PyutNote:
         """
-        Parse Note elements
+        Parse Note element
+
         Args:
-            graphicNote: of the form:  <Note id="2" content="I am a UML Note" filename=""/>
+            umlNoteElement: of the form:  <UmlNote id="xx.xx.xx"/>
 
         Returns: A PyutNote Object
         """
-        noteElement = graphicNote.PyutNote
+        pyutNoteElement = umlNoteElement.PyutNote
 
         pyutNote: PyutNote = PyutNote()
 
         # fix line feeds
-        pyutNote = cast(PyutNote, self._addPyutObjectAttributes(pyutElement=noteElement, pyutObject=pyutNote))
+        pyutNote = cast(PyutNote, self._addPyutObjectAttributes(pyutElement=pyutNoteElement, pyutObject=pyutNote))
 
-        rawContent:   str = noteElement[XmlConstants.ATTRIBUTE_CONTENT]
+        rawContent:   str = pyutNoteElement[XmlConstants.ATTRIBUTE_CONTENT]
         cleanContent: str = rawContent.replace(XML_END_OF_LINE_MARKER, osLineSep)
         pyutNote.content = cleanContent
 
@@ -168,31 +169,31 @@ class XmlToPyut:
 
         return pyutInterface
 
-    def actorToPyutActor(self, graphicActor: Element) -> PyutActor:
+    def actorToPyutActor(self, umlActorElement: Element) -> PyutActor:
         """
 
         Args:
-            graphicActor:   untangle Element in the above format
+            umlActorElement:   untangle Element in the above format
 
         Returns:   PyutActor
         """
-        actorElement: Element   = graphicActor.PyutActor
+        pyutActorElement: Element   = umlActorElement.PyutActor
 
         pyutActor: PyutActor = PyutActor()
 
-        pyutActor = cast(PyutActor, self._addPyutObjectAttributes(pyutElement=actorElement, pyutObject=pyutActor))
+        pyutActor = cast(PyutActor, self._addPyutObjectAttributes(pyutElement=pyutActorElement, pyutObject=pyutActor))
 
         return pyutActor
 
-    def useCaseToPyutUseCase(self, graphicUseCase: Element) -> PyutUseCase:
+    def useCaseToPyutUseCase(self, umlUseCaseElement: Element) -> PyutUseCase:
         """
 
         Args:
-            graphicUseCase:  An `untangle` Element in the above format
+            umlUseCaseElement:  An `untangle` Element in the above format
 
         Returns:  PyutUseCase
         """
-        useCaseElement: Element     = graphicUseCase.PyutUseCase
+        useCaseElement: Element     = umlUseCaseElement.PyutUseCase
 
         pyutUseCase:    PyutUseCase = PyutUseCase()
 

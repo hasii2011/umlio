@@ -48,14 +48,13 @@ class XmlTextsToUmlTexts:
             self.logger.debug(f'{textElement}')
 
             graphicInformation: GraphicInformation = GraphicInformation.toGraphicInfo(graphicElement=textElement)
-            pyutText:           PyutText           = self._xmlToPyut.textToPyutText(graphicText=textElement)
+            pyutText:           PyutText           = self._xmlToPyut.textToPyutText(umlTextElement=textElement)
             umlText:            UmlText            = UmlText(pyutText=pyutText)
 
             umlText.id       = graphicInformation.id
             umlText.size     = graphicInformation.size
             umlText.position = graphicInformation.position
 
-            umlText.pyutText = pyutText
             umlTexts.append(umlText)
 
         return umlTexts

@@ -28,7 +28,7 @@ class DeserializeUmlTexts:
 
         self.logger: Logger = getLogger(__name__)
 
-        self._untanglePyut: XmlToPyut = XmlToPyut()
+        self._xmlToPyut: XmlToPyut = XmlToPyut()
 
     def unTangle(self, umlDiagram: Element) -> UmlTexts:
         """
@@ -36,18 +36,18 @@ class DeserializeUmlTexts:
         Args:
             umlDiagram:  The Element document
 
-        Returns:  untangled OglText objects if any exist, else an empty list
+        Returns:  deserialize UmlText objects if any exist, else an empty list
         """
 
         umlTexts:     UmlTexts = umlTextsFactory()
         textElements: Elements = cast(Elements, umlDiagram.get_elements(XmlConstants.ELEMENT_UML_TEXT))
 
-        for graphicText in textElements:
-            self.logger.debug(f'{graphicText}')
+        for umlTextElement in textElements:
+            self.logger.debug(f'{umlTextElement}')
 
-            graphicInformation: GraphicInformation = GraphicInformation.toGraphicInfo(graphicElement=graphicText)
+            graphicInformation: GraphicInformation = GraphicInformation.toGraphicInfo(graphicElement=umlTextElement)
 
-            pyutText: PyutText = self._untanglePyut.textToPyutText(graphicText=graphicText)
+            pyutText: PyutText = self._xmlToPyut.textToPyutText(umlTextElement=umlTextElement)
             umlText:  UmlText  = UmlText(pyutText=pyutText, size=graphicInformation.size)
 
             umlText.position = graphicInformation.position

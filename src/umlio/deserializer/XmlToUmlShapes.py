@@ -9,16 +9,19 @@ from untangle import parse
 
 from codeallybasic.SecureConversions import SecureConversions
 
+from umlio.IOTypes import UmlActors
 from umlio.IOTypes import UmlDiagram
 from umlio.IOTypes import UmlDiagramTitle
 from umlio.IOTypes import UmlDiagramType
 from umlio.IOTypes import UmlNotes
 from umlio.IOTypes import UmlTexts
+from umlio.IOTypes import UmlProject
+
+from umlio.deserializer.XmlActorsToUmlActors import XmlActorsToUmlActors
 from umlio.deserializer.XmlNotesToUmlNotes import XmlNotesToUmlNotes
 from umlio.deserializer.XmlTextsToUmlTexts import XmlTextsToUmlTexts
-from umlio.XMLConstants import XmlConstants
 
-from umlio.IOTypes import UmlProject
+from umlio.XMLConstants import XmlConstants
 
 
 class XmlToUmlShapes:
@@ -67,7 +70,8 @@ class XmlToUmlShapes:
                 umlDiagram.umlTexts   = self._deserializeUmlTextElements(umlDiagramElement=umlDiagramElement)
             elif umlDiagramElement[XmlConstants.ATTRIBUTE_DIAGRAM_TYPE] == UmlDiagramType.USE_CASE_DIAGRAM.value:
                 umlDiagram.diagramType = UmlDiagramType.USE_CASE_DIAGRAM
-                umlDiagram.umlNotes   = self._deserializeUmlNoteElements(umlDiagramElement=umlDiagramElement)
+                umlDiagram.umlNotes  = self._deserializeUmlNoteElements(umlDiagramElement=umlDiagramElement)
+                umlDiagram.umlActors = self._deserializeUmlActorElements(umlDiagramElement=umlDiagramElement)
 
             self._umlProject.umlDiagrams[umlDiagram.diagramTitle] = umlDiagram
 
@@ -101,3 +105,17 @@ class XmlToUmlShapes:
         umlNotes: UmlNotes = xmlNotesToUmlNotes.deserialize(umlDiagramElement=umlDiagramElement)
 
         return umlNotes
+
+    def _deserializeUmlActorElements(self, umlDiagramElement: Element) -> UmlActors:
+        """
+
+        Args:
+            umlDiagramElement:  The diagram Element
+
+        Returns:  deserialized UmlActor objects if any exist, else an empty list
+        """
+        xmlActorsToUmlActors: XmlActorsToUmlActors = XmlActorsToUmlActors()
+
+        umlActors: UmlActors = xmlActorsToUmlActors.deserialize(umlDiagramElement=umlDiagramElement)
+
+        return umlActors

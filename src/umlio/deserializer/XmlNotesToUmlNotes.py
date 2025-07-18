@@ -40,14 +40,13 @@ class XmlNotesToUmlNotes:
             self.logger.debug(f'{noteElement}')
 
             graphicInformation: GraphicInformation = GraphicInformation.toGraphicInfo(graphicElement=noteElement)
-            pyutNote:           PyutNote           = self._xmlToPyut.noteToPyutNote(graphicNote=noteElement)
+            pyutNote:           PyutNote           = self._xmlToPyut.noteToPyutNote(umlNoteElement=noteElement)
             umlNote:            UmlNote            = UmlNote(pyutNote=pyutNote)
 
             umlNote.id       = graphicInformation.id
             umlNote.size     = graphicInformation.size
             umlNote.position = graphicInformation.position
 
-            umlNote.pyutNote = pyutNote
             umlNotes.append(umlNote)
 
         return umlNotes
