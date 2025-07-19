@@ -97,7 +97,7 @@ class PyutToXml:
 
         attributes: ElementAttributes = ElementAttributes({
             XmlConstants.ATTRIBUTE_NAME:           pyutLink.name,
-            XmlConstants.ATTRIBUTE_DIAGRAM_TYPE:           pyutLink.linkType.name,
+            XmlConstants.ATTRIBUTE_LINK_TYPE:      pyutLink.linkType.name,
             XmlConstants.ATTRIBUTE_SOURCE_ID:      str(srcLinkId),
             XmlConstants.ATTRIBUTE_DESTINATION_ID: str(destLinkId),
             XmlConstants.ATTRIBUTE_BIDIRECTIONAL:  str(pyutLink.bidirectional),
@@ -304,9 +304,8 @@ class PyutToXml:
     def _pyutParameterToXml(self, pyutParameter: PyutParameter, pyutMethodElement: Element) -> Element:
 
         attributes = {
-            XmlConstants.ATTRIBUTE_NAME:          pyutParameter.name,
-            XmlConstants.ATTRIBUTE_DIAGRAM_TYPE:          pyutParameter.type.value,
-            # XmlConstants.ATTR_DEFAULT_VALUE: pyutParameter.defaultValue,
+            XmlConstants.ATTRIBUTE_NAME:           pyutParameter.name,
+            XmlConstants.ATTRIBUTE_PARAMETER_TYPE: pyutParameter.type.value,
         }
 
         defaultValue = pyutParameter.defaultValue

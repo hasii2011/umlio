@@ -1,25 +1,34 @@
 
+from typing import List
+
 from unittest import TestSuite
 from unittest import main as unitTestMain
 
 from pathlib import Path
 
-from pyutmodelv2.PyutActor import PyutActor
+from random import choice
 
+from pyutmodelv2.PyutActor import PyutActor
 from pyutmodelv2.PyutClass import PyutClass
+from pyutmodelv2.PyutField import PyutField
+from pyutmodelv2.PyutMethod import PyutMethod
 from pyutmodelv2.PyutNote import PyutNote
+from pyutmodelv2.PyutParameter import PyutParameter
 from pyutmodelv2.PyutText import PyutText
+from pyutmodelv2.PyutType import PyutType
 from pyutmodelv2.PyutUseCase import PyutUseCase
 from pyutmodelv2.enumerations.PyutDisplayParameters import PyutDisplayParameters
 from pyutmodelv2.enumerations.PyutStereotype import PyutStereotype
+from pyutmodelv2.enumerations.PyutVisibility import PyutVisibility
 
 from umlshapes.preferences.UmlPreferences import UmlPreferences
-from umlshapes.shapes.UmlActor import UmlActor
 
+from umlshapes.shapes.UmlActor import UmlActor
 from umlshapes.shapes.UmlClass import UmlClass
 from umlshapes.shapes.UmlNote import UmlNote
 from umlshapes.shapes.UmlText import UmlText
 from umlshapes.shapes.UmlUseCase import UmlUseCase
+
 from umlshapes.types.UmlDimensions import UmlDimensions
 from umlshapes.types.UmlPosition import UmlPosition
 
@@ -46,7 +55,7 @@ EXPECTED_SINGLE_CLASS_XML: str = (
     '<UmlProject version="12.0" codePath="/users/hasii">\n'
     '    <UMLDiagram diagramType="Class Diagram" title="Unit Test Class Diagram" scrollPositionX="1" scrollPositionY="1" pixelsPerUnitX="1" pixelsPerUnitY="1">\n'
     '        <UmlClass id="play.small.long.group" width="125" height="100" x="300" y="500">\n'
-    '            <PyutClass id="0" name="ClassName 1" displayMethods="True" displayParameters="Unspecified" displayConstructor="Unspecified" displayDunderMethods="Unspecified" displayFields="True" displayStereotype="True" fileName="" description="" />\n'
+    '            <PyutClass id="0" name="ClassName1" displayMethods="True" displayParameters="Unspecified" displayConstructor="Unspecified" displayDunderMethods="Unspecified" displayFields="True" displayStereotype="True" fileName="" description="" />\n'
     '        </UmlClass>\n'
     '    </UMLDiagram>\n'
     '</UmlProject>'
@@ -104,7 +113,10 @@ class TestUmlShapesToXml(UmlIOBaseTest):
         Generated: 19 June 2025
     """
 
-    classCounter: int = 1
+    classCounter:     int = 111
+    methodCounter:    int = 222
+    parameterCounter: int = 333
+    fieldCounter:     int = 444
 
     @classmethod
     def setUpClass(cls):
@@ -145,8 +157,8 @@ class TestUmlShapesToXml(UmlIOBaseTest):
         singleClass:        UmlClass       = self._createSingleClass()
 
         singleClass.id = 'play.small.long.group'        # So XML matches
-        singleClass.id = 'play.small.long.group'        # So XML matches
-        singleClass.pyutClass.id = 0
+        singleClass.pyutClass.id   = 0
+        singleClass.pyutClass.name = 'ClassName1'
 
         singleClassDiagram.umlClasses.append(singleClass)
         umlShapesToXml.serialize(umlDiagram=singleClassDiagram)
@@ -262,19 +274,62 @@ class TestUmlShapesToXml(UmlIOBaseTest):
         self.maxDiff = None
         self.assertEqual(EXPECTED_SINGLE_TEXT, singleTextXML, 'Note serialization changed')
 
-    def _createSingleClass(self) -> UmlClass:
+    def testComplexClass(self):
+
+        umlShapesToXml:       UmlShapesToXml = self._createXmlCreator()
+        multipleClassDiagram: UmlDiagram     = self._createUmlDiagram(UmlDiagramType.CLASS_DIAGRAM, 'Complex Class Diagram')
+
+        classOne: UmlClass = self._createSingleClass(size=UmlDimensions(75, 75),   position=UmlPosition(333, 333))
+        classTwo: UmlClass = self._createSingleClass(size=UmlDimensions(200, 100), position=UmlPosition(666, 666))
+
+        classOne._pyutClass.addMethod(self._createSingleMethod())
+        classOne._pyutClass.addMethod(self._createSingleMethod())
+
+        classTwo._pyutClass.addMethod(self._createSingleMethod())
+        classTwo._pyutClass.addMethod(self._createSingleMethod())
+
+        displayParameterChoices: List[PyutDisplayParameters] = [
+            PyutDisplayParameters.WITHOUT_PARAMETERS,
+            PyutDisplayParameters.WITH_PARAMETERS,
+            PyutDisplayParameters.UNSPECIFIED
+        ]
+        classOne.pyutClass.displayParameters = choice(displayParameterChoices)
+        classTwo.pyutClass.displayParameters = choice(displayParameterChoices)
+        print(f'{classOne.pyutClass.displayParameters=}')
+        print(f'{classTwo.pyutClass.displayParameters=}')
+
+        multipleClassDiagram.umlClasses.append(classOne)
+        multipleClassDiagram.umlClasses.append(classTwo)
+
+        umlShapesToXml.serialize(umlDiagram=multipleClassDiagram)
+
+        multipleClassXML: str = umlShapesToXml.xml
+
+        self.logger.debug(f'{multipleClassXML=}')
+
+        self._debugWriteToFile('MultipleClassXML.xml', xml=multipleClassXML)
+
+    def _createSingleClass(self, size: UmlDimensions = UmlDimensions(width=125, height=100), position: UmlPosition = UmlPosition(x=300, y=500)) -> UmlClass:
+        """
+
+        Args:
+            size:
+            position:
+
+        Returns:
+        """
 
         umlClass: UmlClass = UmlClass(
             pyutClass=self._createPyutClass(),
-            size=UmlDimensions(width=125, height=100)
+            size=size
         )
 
-        umlClass.position = UmlPosition(x=300, y=500)
+        umlClass.position = position
         return umlClass
 
     def _createPyutClass(self) -> PyutClass:
 
-        className: str = f'{self._preferences.defaultClassName} {TestUmlShapesToXml.classCounter}'
+        className: str = f'{self._preferences.defaultClassName}{TestUmlShapesToXml.classCounter}'
         TestUmlShapesToXml.classCounter += 1
 
         pyutClass: PyutClass  = PyutClass(name=className)
@@ -284,6 +339,42 @@ class TestUmlShapesToXml(UmlIOBaseTest):
         pyutClass.displayParameters = PyutDisplayParameters.UNSPECIFIED
 
         return pyutClass
+
+    def _createSingleMethod(self) -> PyutMethod:
+
+        methodName: str = f'{self._preferences.defaultNameMethod}-{TestUmlShapesToXml.methodCounter}'
+        TestUmlShapesToXml.methodCounter += 1
+        pyutMethod: PyutMethod = PyutMethod(name=methodName)
+
+        pyutParameter: PyutParameter = self._createSingleParameter()
+        pyutMethod.addParameter(pyutParameter)
+
+        return pyutMethod
+
+    def _createSingleField(self) -> PyutField:
+
+        fieldName: str = f'{self._preferences.defaultNameField}-{TestUmlShapesToXml.methodCounter}'
+        TestUmlShapesToXml.fieldCounter += 1
+
+        pyutField:  PyutField            = PyutField(name=fieldName)
+        visibility: List[PyutVisibility] = [PyutVisibility.PRIVATE, PyutVisibility.PROTECTED, PyutVisibility.PUBLIC]
+
+        pyutField.visibility = choice(visibility)
+
+        return pyutField
+
+    def _createSingleParameter(self) -> PyutParameter:
+
+        parameterName: str = f'{self._preferences.defaultNameParameter}-{TestUmlShapesToXml.parameterCounter}'
+        TestUmlShapesToXml.parameterCounter += 1
+
+        pyutParameter: PyutParameter  = PyutParameter(name=parameterName)
+        typeList:      List[PyutType] = [PyutType(value='str'), PyutType(value='float'), PyutType(value='int')]
+
+        pyutParameter.type = choice(typeList)
+        print(f'{pyutParameter.type=}')
+
+        return pyutParameter
 
     def _createXmlCreator(self) -> UmlShapesToXml:
 

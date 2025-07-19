@@ -70,7 +70,8 @@ class XmlConstants:
     ATTRIBUTE_ATTACHMENT_SIDE:           str = 'attachmentSide'
     ATTRIBUTE_ATTACHED_TO_ID:            str = 'attachedToId'
 
-    ATTRIBUTE_FIELD_TYPE: str = 'type'          # TODO: This should be fieldType
+    ATTRIBUTE_FIELD_TYPE:     str = 'fieldType'
+    ATTRIBUTE_PARAMETER_TYPE: str = 'parameterType'
 
     ELEMENT_UML_PROJECT:  str = 'UmlProject'
     ELEMENT_UML_DIAGRAM:  str = 'UMLDiagram'
