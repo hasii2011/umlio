@@ -10,6 +10,7 @@ from untangle import parse
 from codeallybasic.SecureConversions import SecureConversions
 
 from umlio.IOTypes import UmlActors
+from umlio.IOTypes import UmlClasses
 from umlio.IOTypes import UmlDiagram
 from umlio.IOTypes import UmlDiagramTitle
 from umlio.IOTypes import UmlDiagramType
@@ -19,6 +20,7 @@ from umlio.IOTypes import UmlProject
 from umlio.IOTypes import UmlUseCases
 
 from umlio.deserializer.XmlActorsToUmlActors import XmlActorsToUmlActors
+from umlio.deserializer.XmlClassesToUmlClasses import XmlClassesToUmlClasses
 from umlio.deserializer.XmlNotesToUmlNotes import XmlNotesToUmlNotes
 from umlio.deserializer.XmlTextsToUmlTexts import XmlTextsToUmlTexts
 
@@ -68,6 +70,7 @@ class XmlToUmlShapes:
             if umlDiagramElement[XmlConstants.ATTRIBUTE_DIAGRAM_TYPE] == UmlDiagramType.CLASS_DIAGRAM.value:
                 umlDiagram.diagramType = UmlDiagramType.CLASS_DIAGRAM
                 # document.oglClasses = self._graphicClassesToOglClasses(pyutDocument=pyutDocument)
+                umlDiagram.umlClasses = self._deserializeUmlClassElements(umlDiagramElement=umlDiagramElement)
                 umlDiagram.umlNotes   = self._deserializeUmlNoteElements(umlDiagramElement=umlDiagramElement)
                 umlDiagram.umlTexts   = self._deserializeUmlTextElements(umlDiagramElement=umlDiagramElement)
             elif umlDiagramElement[XmlConstants.ATTRIBUTE_DIAGRAM_TYPE] == UmlDiagramType.USE_CASE_DIAGRAM.value:
@@ -81,6 +84,13 @@ class XmlToUmlShapes:
     def deserializeXml(self, rawXml: str):
         pass
 
+    def _deserializeUmlClassElements(self, umlDiagramElement: Element) -> UmlClasses:
+
+        umlClassesDeSerializer: XmlClassesToUmlClasses = XmlClassesToUmlClasses()
+        umlClasses:            UmlClasses              = umlClassesDeSerializer.deserialize(umlDiagramElement=umlDiagramElement)
+
+        return umlClasses
+
     def _deserializeUmlTextElements(self, umlDiagramElement: Element) -> UmlTexts:
         """
         Yeah, yeah, I know bad English;
@@ -90,7 +100,6 @@ class XmlToUmlShapes:
 
         Returns:  deserialized UmlText objects if any exist, else an empty list
         """
-
         umlTextDeSerializer: XmlTextsToUmlTexts = XmlTextsToUmlTexts()
         umlTexts: UmlTexts = umlTextDeSerializer.deserialize(umlDiagramElement=umlDiagramElement)
 

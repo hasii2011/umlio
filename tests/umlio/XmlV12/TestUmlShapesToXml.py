@@ -1,5 +1,6 @@
 
 from typing import List
+from typing import cast
 
 from unittest import TestSuite
 from unittest import main as unitTestMain
@@ -119,7 +120,7 @@ class TestUmlShapesToXml(UmlIOBaseTest):
     methodCounter:    int  = 222
     parameterCounter: int  = 333
     fieldCounter:     int  = 444
-    TEMPORARY_PATH:   Path = None
+    TEMPORARY_PATH:   Path = cast(Path, None)
 
     @classmethod
     def setUpClass(cls):
@@ -366,7 +367,7 @@ class TestUmlShapesToXml(UmlIOBaseTest):
 
     def _createSingleField(self) -> PyutField:
 
-        fieldName: str = f'{self._preferences.defaultNameField}-{TestUmlShapesToXml.methodCounter}'
+        fieldName: str = f'{self._preferences.defaultNameField}-{TestUmlShapesToXml.fieldCounter}'
         TestUmlShapesToXml.fieldCounter += 1
 
         pyutField:  PyutField            = PyutField(name=fieldName)

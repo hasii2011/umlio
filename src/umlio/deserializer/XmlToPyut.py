@@ -70,8 +70,8 @@ class XmlToPyut:
 
         self.logger: Logger = getLogger(__name__)
 
-    def classToPyutClass(self, graphicClass: Element) -> PyutClass:
-        classElement: Element = graphicClass.PyutClass
+    def classToPyutClass(self, umlClassElement: Element) -> PyutClass:
+        classElement: Element = umlClassElement.PyutClass
 
         pyutClass: PyutClass = PyutClass()
 

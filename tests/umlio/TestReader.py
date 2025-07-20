@@ -22,6 +22,7 @@ SINGLE_TEXT_DIAGRAM_XML_PROJECT:     str = 'SingleTextProject.xml'
 SINGLE_NOTE_DIAGRAM_XML_PROJECT:     str = 'SingleNoteProject.xml'
 SINGLE_ACTOR_DIAGRAM_XML_PROJECT:    str = 'SingleActorProject.xml'
 SINGLE_USE_CASE_DIAGRAM_XML_PROJECT: str = 'SingleUseCaseProject.xml'
+COMPLEX_CLASSES_DIAGRAM_XML_PROJECT: str = 'ComplexClassesProject.xml'
 
 
 class TestReader(UnitTestBaseW):
@@ -100,10 +101,23 @@ class TestReader(UnitTestBaseW):
 
         reader: Reader = Reader()
 
-        umlProject: UmlProject = reader.readXmlFile(Path(umlUseCaseProject))
+        umlProject:     UmlProject = reader.readXmlFile(Path(umlUseCaseProject))
         useCaseDiagram: UmlDiagram = umlProject.umlDiagrams[UmlDiagramTitle('Use Case Diagram')]
 
         self.assertEqual(1, len(useCaseDiagram.umlUseCases), 'Not the correct Uml Use Case object count')
+
+    def testDeserializeComplexClasses(self):
+
+        complexClassesProject: str = UnitTestBase.getFullyQualifiedResourceFileName(
+            package=UmlIOBaseTest.GOLDEN_FILES_PACKAGE_NAME,
+            fileName=COMPLEX_CLASSES_DIAGRAM_XML_PROJECT)
+
+        reader:     Reader     = Reader()
+        umlProject: UmlProject = reader.readXmlFile(Path(complexClassesProject))
+
+        complexClassesDiagram: UmlDiagram = umlProject.umlDiagrams[UmlDiagramTitle('Full Fledge Class Diagram')]
+
+        self.assertEqual(2, len(complexClassesDiagram.umlClasses), 'Not the correct UML class object count')
 
 
 def suite() -> TestSuite:
