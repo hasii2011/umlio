@@ -4,6 +4,8 @@ from typing import List
 from unittest import TestSuite
 from unittest import main as unitTestMain
 
+from os import sep as osSep
+
 from pathlib import Path
 
 from random import choice
@@ -113,14 +115,19 @@ class TestUmlShapesToXml(UmlIOBaseTest):
         Generated: 19 June 2025
     """
 
-    classCounter:     int = 111
-    methodCounter:    int = 222
-    parameterCounter: int = 333
-    fieldCounter:     int = 444
+    classCounter:     int  = 111
+    methodCounter:    int  = 222
+    parameterCounter: int  = 333
+    fieldCounter:     int  = 444
+    TEMPORARY_PATH:   Path = None
 
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
+
+        TestUmlShapesToXml.TEMPORARY_PATH = Path(f'{osSep}{Path.home()}{osSep}tmp')
+        TestUmlShapesToXml.deleteDirectory(path=TestUmlShapesToXml.TEMPORARY_PATH)
+        TestUmlShapesToXml.TEMPORARY_PATH.mkdir(exist_ok=True)
 
     def setUp(self):
         super().setUp()
@@ -282,11 +289,17 @@ class TestUmlShapesToXml(UmlIOBaseTest):
         classOne: UmlClass = self._createSingleClass(size=UmlDimensions(75, 75),   position=UmlPosition(333, 333))
         classTwo: UmlClass = self._createSingleClass(size=UmlDimensions(200, 100), position=UmlPosition(666, 666))
 
-        classOne._pyutClass.addMethod(self._createSingleMethod())
-        classOne._pyutClass.addMethod(self._createSingleMethod())
+        classOne.pyutClass.addMethod(self._createSingleMethod())
+        classOne.pyutClass.addMethod(self._createSingleMethod())
 
-        classTwo._pyutClass.addMethod(self._createSingleMethod())
-        classTwo._pyutClass.addMethod(self._createSingleMethod())
+        classTwo.pyutClass.addMethod(self._createSingleMethod())
+        classTwo.pyutClass.addMethod(self._createSingleMethod())
+
+        classOne.pyutClass.addField(self._createSingleField())
+        classOne.pyutClass.addField(self._createSingleField())
+
+        classTwo.pyutClass.addField(self._createSingleField())
+        classTwo.pyutClass.addField(self._createSingleField())
 
         displayParameterChoices: List[PyutDisplayParameters] = [
             PyutDisplayParameters.WITHOUT_PARAMETERS,
@@ -295,8 +308,8 @@ class TestUmlShapesToXml(UmlIOBaseTest):
         ]
         classOne.pyutClass.displayParameters = choice(displayParameterChoices)
         classTwo.pyutClass.displayParameters = choice(displayParameterChoices)
-        print(f'{classOne.pyutClass.displayParameters=}')
-        print(f'{classTwo.pyutClass.displayParameters=}')
+        self.logger.info(f'{classOne.pyutClass.displayParameters=}')
+        self.logger.info(f'{classTwo.pyutClass.displayParameters=}')
 
         multipleClassDiagram.umlClasses.append(classOne)
         multipleClassDiagram.umlClasses.append(classTwo)
@@ -372,7 +385,7 @@ class TestUmlShapesToXml(UmlIOBaseTest):
         typeList:      List[PyutType] = [PyutType(value='str'), PyutType(value='float'), PyutType(value='int')]
 
         pyutParameter.type = choice(typeList)
-        print(f'{pyutParameter.type=}')
+        self.logger.info(f'{pyutParameter.type=}')
 
         return pyutParameter
 
@@ -383,9 +396,26 @@ class TestUmlShapesToXml(UmlIOBaseTest):
 
     def _debugWriteToFile(self, fileName: str, xml: str):
 
-        p: Path = Path(f'/tmp/{fileName}')
+        p: Path = Path(f'/{TestUmlShapesToXml.TEMPORARY_PATH}/{fileName}')
+        # p: Path = Path(f'/tmp/{fileName}')
 
         p.write_text(xml)
+
+    @classmethod
+    def deleteDirectory(cls, path: Path):
+        """
+        Will delete any files in the directory or subdirectories
+
+        Args:
+            path: The directory to delete
+
+        """
+        for posixPath in path.iterdir():
+            if posixPath.is_dir():
+                cls.deleteDirectory(posixPath)
+            else:
+                posixPath.unlink()
+        path.rmdir()  # Remove the directory itself
 
 
 def suite() -> TestSuite:

@@ -330,7 +330,7 @@ class PyutToXml:
         attributes = {
             XmlConstants.ATTRIBUTE_NAME:          pyutField.name,
             XmlConstants.ATTRIBUTE_VISIBILITY:    pyutField.visibility.name,
-            XmlConstants.ATTRIBUTE_DIAGRAM_TYPE:          pyutField.type.value,
+            XmlConstants.ATTRIBUTE_FIELD_TYPE:    pyutField.type.value,
             XmlConstants.ATTRIBUTE_DEFAULT_VALUE: pyutField.defaultValue,
         }
         pyutFieldElement: Element = SubElement(pyutClassElement, XmlConstants.ELEMENT_MODEL_FIELD, attrib=attributes)
