@@ -2,7 +2,11 @@
 from logging import Logger
 from logging import getLogger
 from pathlib import Path
+from typing import List
+from typing import cast
 
+from umlshapes.eventengine.UmlEventEngine import UmlEventEngine
+from wx import CallAfter
 from wx import CommandEvent
 from wx import DEFAULT_FRAME_STYLE
 from wx import EVT_MENU
@@ -15,39 +19,23 @@ from wx import ID_EXIT
 
 from wx import Menu
 from wx import MenuBar
-# from wx import CommandEvent
-from wx import OK
+from wx import Notebook
+from wx.core import CallLater
 
 from wx.lib.sized_controls import SizedFrame
 from wx.lib.sized_controls import SizedPanel
 
-from pyutmodelv2.PyutInterface import PyutInterface
-from pyutmodelv2.PyutInterface import PyutInterfaces
-from pyutmodelv2.PyutModelTypes import ClassName
-
-from umlshapes.IApplicationAdapter import IApplicationAdapter
-from umlshapes.UmlDiagram import UmlDiagram
-from umlshapes.UmlUtils import UmlUtils
-from umlshapes.dialogs.DlgEditInterface import DlgEditInterface
-from umlshapes.eventengine.UmlEventEngine import UmlEventEngine
-from umlshapes.frames.UmlClassDiagramFrame import UmlClassDiagramFrame
-
-from umlshapes.links.UmlLollipopInterface import UmlLollipopInterface
-from umlshapes.links.eventhandlers.UmlLollipopInterfaceEventHandler import UmlLollipopInterfaceEventHandler
 
 from umlshapes.preferences.UmlPreferences import UmlPreferences
-from umlshapes.shapes.UmlClass import UmlClass
 
-from umlshapes.types.Common import AttachmentSide
-from umlshapes.types.UmlPosition import UmlPosition
-
-from tests.demo.DemoApplicationAdapter import DemoApplicationAdapter
-from tests.demo.DemoCommon import Identifiers
 from umlio.IOTypes import UmlProject
 from umlio.Reader import Reader
 
-FRAME_WIDTH:  int = 1024
-FRAME_HEIGHT: int = 720
+from tests.demo.DemoCommon import Identifiers
+from tests.demo.ProjectPanel import ProjectPanel
+
+FRAME_WIDTH:  int = 800
+FRAME_HEIGHT: int = 400
 
 
 class DemoAppFrame(SizedFrame):
@@ -56,25 +44,22 @@ class DemoAppFrame(SizedFrame):
 
         super().__init__(parent=None, title='Demonstrate UMLIO', size=(FRAME_WIDTH, FRAME_HEIGHT), style=DEFAULT_FRAME_STYLE | FRAME_FLOAT_ON_PARENT)
 
-        self._applicationAdapter: IApplicationAdapter = DemoApplicationAdapter(frame=self)
-
         sizedPanel: SizedPanel = self.GetContentsPane()
         sizedPanel.SetSizerProps(expand=True, proportion=1)
-        self._diagramFrame = UmlClassDiagramFrame(
-            parent=sizedPanel,
-            applicationAdapter=self._applicationAdapter,
-            createLollipopCallback=self._createLollipopInterface
-        )
-        # noinspection PyUnresolvedReferences
-        self._diagramFrame.SetSizerProps(expand=True, proportion=1)
+
+        self._notebook: Notebook = cast(Notebook, None)
+
+        self._openProjects:   List[UmlProject] = []
+        self._umlEventEngine: UmlEventEngine   = UmlEventEngine()
 
         self._createApplicationMenuBar()
 
         self.CreateStatusBar()  # should always do this when there's a resize border
         self.SetAutoLayout(True)
+
         self.Show(True)
 
-        self._preferences:         UmlPreferences      = UmlPreferences()
+        self._preferences: UmlPreferences = UmlPreferences()
 
         self._pyutInterfaceCount: int = 0
 
@@ -82,7 +67,6 @@ class DemoAppFrame(SizedFrame):
 
         menuBar:  MenuBar = MenuBar()
         fileMenu: Menu    = Menu()
-        viewMenu: Menu    = Menu()
 
         fileMenu.Append(Identifiers.ID_OPEN_XML_FILE, 'Load Xml Diagram')
         fileMenu.AppendSeparator()
@@ -90,38 +74,12 @@ class DemoAppFrame(SizedFrame):
         fileMenu.AppendSeparator()
         # fileMenu.Append(ID_PREFERENCES, "P&references", "Uml preferences")
 
-        # viewMenu.Append(id=Identifiers.ID_DISPLAY_UML_INTERFACE,   item='UML Interface',   helpString='Display Normal Interface')
-        # viewMenu.Append(id=Identifiers.ID_DISPLAY_UML_AGGREGATION, item='UML Aggregation', helpString='Display a aggregation Link')
-        # viewMenu.Append(id=Identifiers.ID_DISPLAY_UML_COMPOSITION, item='UML Composition', helpString='Display a composition Link')
-        # viewMenu.Append(id=Identifiers.ID_DISPLAY_UML_INHERITANCE, item='UML Inheritance', helpString='Display an Inheritance Link')
-        # viewMenu.Append(id=Identifiers.ID_DISPLAY_UML_ASSOCIATION, item='Uml Association', helpString='Display Bare Association')
-        # viewMenu.Append(id=Identifiers.ID_DESERIALIZE_UML_CLASS,       item='Uml Class',          helpString='Display an Uml Class')
-        # viewMenu.Append(id=Identifiers.ID_DISPLAY_UML_TEXT,        item='Uml Text',           helpString='Display Uml Text')
-        # viewMenu.Append(id=Identifiers.ID_DISPLAY_UML_NOTE,        item='Uml Note',           helpString='Display Uml Note')
-        # viewMenu.Append(id=Identifiers.ID_DISPLAY_UML_USE_CASE,    item='Uml Use Case',       helpString='Display Uml Use Case')
-        # viewMenu.Append(id=Identifiers.ID_DISPLAY_UML_ACTOR,       item='Uml Actor',          helpString='Display Uml Actor')
-        # viewMenu.Append(id=self._ID_DISPLAY_SEQUENCE_DIAGRAM,    item='Sequence Diagram', helpString='Display Sequence Diagram')
-        viewMenu.AppendSeparator()
-
         menuBar.Append(fileMenu, 'File')
-        menuBar.Append(viewMenu, 'View')
 
         self.SetMenuBar(menuBar)
 
         # self.Bind(EVT_MENU, self._onOglPreferences, id=ID_PREFERENCES)
         self.Bind(EVT_MENU, self._onLoadXmlFile, id=Identifiers.ID_OPEN_XML_FILE)
-
-        # self.Bind(EVT_MENU, self._onDisplayElement, id=Identifiers.ID_DISPLAY_UML_TEXT)
-        # self.Bind(EVT_MENU, self._onDisplayElement, id=Identifiers.ID_DISPLAY_UML_NOTE)
-        # self.Bind(EVT_MENU, self._onDisplayElement, id=Identifiers.ID_DISPLAY_UML_USE_CASE)
-        # self.Bind(EVT_MENU, self._onDisplayElement, id=Identifiers.ID_DISPLAY_UML_ACTOR)
-        # self.Bind(EVT_MENU, self._onDisplayElement, id=Identifiers.ID_DISPLAY_UML_CLASS)
-        # self.Bind(EVT_MENU, self._onDisplayElement, id=Identifiers.ID_DISPLAY_UML_ASSOCIATION)
-        # self.Bind(EVT_MENU, self._onDisplayElement, id=Identifiers.ID_DISPLAY_UML_INHERITANCE)
-        # self.Bind(EVT_MENU, self._onDisplayElement, id=Identifiers.ID_DISPLAY_UML_COMPOSITION)
-        # self.Bind(EVT_MENU, self._onDisplayElement, id=Identifiers.ID_DISPLAY_UML_AGGREGATION)
-        # self.Bind(EVT_MENU, self._onDisplayElement, id=Identifiers.ID_DISPLAY_UML_INTERFACE)
-        # self.Bind(EVT_MENU, self._onDisplayElement, id=self._ID_DISPLAY_SEQUENCE_DIAGRAM)
 
     # def _onDisplayElement(self, event: CommandEvent):
     #
@@ -156,8 +114,6 @@ class DemoAppFrame(SizedFrame):
     #             relationshipCreator.displayRelationship(idReference=Identifiers.ID_DISPLAY_UML_INTERFACE)
     #         # case self._ID_DISPLAY_SEQUENCE_DIAGRAM:
     #         #     self._displaySequenceDiagram()
-    #         case _:
-    #             self.logger.error(f'WTH!  I am not handling that menu item')
 
     # noinspection PyUnusedLocal
     def _onLoadXmlFile(self, event: CommandEvent):
@@ -179,47 +135,82 @@ class DemoAppFrame(SizedFrame):
 
         umlProject: UmlProject = reader.readXmlFile(fileName=fileName)
 
-        self.logger.info(f'{umlProject=}')
+        self.logger.debug(f'{umlProject=}')
         # self._eventEngine.sendEvent(eventType=EventType.LoadOglProject, oglProject=oglProject)
 
-    def _createLollipopInterface(self, requestingUmlClass: UmlClass, perimeterPoint: UmlPosition):
+        self._loadNewProject(umlProject)
+
+    def _loadNewProject(self, umlProject: UmlProject):
+
+        if self._notebook is None:
+            self._createTheOverArchingNotebook()
+
+        projectPanel: ProjectPanel = ProjectPanel(self._notebook, umlEventEngine=self._umlEventEngine, umlProject=umlProject)
+        self._notebook.AddPage(page=projectPanel, text=umlProject.fileName.stem)
+        self._openProjects.append(umlProject)
+
+    def _createTheOverArchingNotebook(self):
         """
-
-        Args:
-            requestingUmlClass:
-            perimeterPoint:
+        Lazy UI creation
         """
+        sizedPanel: SizedPanel = self.GetContentsPane()
+        sizedPanel.SetSizerProps(expand=True, proportion=1)
+        sizedPanel.SetSizerType('vertical')
 
-        interfaceName: str = f'{self._preferences.defaultNameInterface}{self._pyutInterfaceCount}'
-        self._pyutInterfaceCount += 1
+        # self._notebook = Notebook(sizedPanel, size=Size(width=FRAME_WIDTH, height=FRAME_HEIGHT))
+        self._notebook = Notebook(sizedPanel)
+        self._notebook.SetSizerProps(expand=True, proportion=1)
+        CallLater(millis=200, callableObj=self._notebook.PostSizeEventToParent)
 
-        pyutInterface:        PyutInterface        = PyutInterface(interfaceName)
-        pyutInterface.addImplementor(ClassName(requestingUmlClass.pyutClass.name))
+    # noinspection PyUnusedLocal
+    def onPageClosing(self, event):
+        """
+        Event handler that is called when a page in the notebook is closing
+        """
+        page = self._notebook.GetCurrentPage()
+        page.Close()
+        if len(self._openProjects) == 0:
+            CallAfter(self._notebook.Destroy)
+            self._notebook = None
 
-        umlLollipopInterface: UmlLollipopInterface = UmlLollipopInterface(pyutInterface=pyutInterface)
-        umlLollipopInterface.attachedTo            = requestingUmlClass
-
-        attachmentSide: AttachmentSide      = UmlUtils.attachmentSide(x=perimeterPoint.x, y=perimeterPoint.y, rectangle=requestingUmlClass.rectangle)
-        umlLollipopInterface.attachmentSide = attachmentSide
-        umlLollipopInterface.lineCentum     = UmlUtils.computeLineCentum(attachmentSide=attachmentSide, umlPosition=perimeterPoint, rectangle=requestingUmlClass.rectangle)
-
-        self.logger.debug(f'{umlLollipopInterface.attachmentSide=} {umlLollipopInterface.lineCentum=}')
-
-        umlLollipopInterface.SetCanvas(self)
-        diagram: UmlDiagram = self._diagramFrame.umlDiagram
-
-        diagram.AddShape(umlLollipopInterface)
-        umlLollipopInterface.Show(show=True)
-        self.logger.info(f'UmlInterface added: {umlLollipopInterface}')
-
-        eventHandler: UmlLollipopInterfaceEventHandler = UmlLollipopInterfaceEventHandler(lollipopInterface=umlLollipopInterface)
-        eventHandler.SetPreviousHandler(umlLollipopInterface.GetEventHandler())
-        umlLollipopInterface.SetEventHandler(eventHandler)
-
-        umlFrame:       UmlClassDiagramFrame = self._diagramFrame
-        eventEngine:    UmlEventEngine       = umlFrame.eventEngine
-        pyutInterfaces: PyutInterfaces       = eventHandler.getDefinedInterfaces()
-
-        with DlgEditInterface(parent=umlFrame, oglInterface2=umlLollipopInterface, eventEngine=eventEngine, pyutInterfaces=pyutInterfaces) as dlg:
-            if dlg.ShowModal() == OK:
-                umlFrame.refresh()
+    # def _createLollipopInterface(self, requestingUmlClass: UmlClass, perimeterPoint: UmlPosition):
+    #     """
+    #
+    #     Args:
+    #         requestingUmlClass:
+    #         perimeterPoint:
+    #     """
+    #
+    #     interfaceName: str = f'{self._preferences.defaultNameInterface}{self._pyutInterfaceCount}'
+    #     self._pyutInterfaceCount += 1
+    #
+    #     pyutInterface:        PyutInterface        = PyutInterface(interfaceName)
+    #     pyutInterface.addImplementor(ClassName(requestingUmlClass.pyutClass.name))
+    #
+    #     umlLollipopInterface: UmlLollipopInterface = UmlLollipopInterface(pyutInterface=pyutInterface)
+    #     umlLollipopInterface.attachedTo            = requestingUmlClass
+    #
+    #     attachmentSide: AttachmentSide      = UmlUtils.attachmentSide(x=perimeterPoint.x, y=perimeterPoint.y, rectangle=requestingUmlClass.rectangle)
+    #     umlLollipopInterface.attachmentSide = attachmentSide
+    #     umlLollipopInterface.lineCentum     = UmlUtils.computeLineCentum(attachmentSide=attachmentSide, umlPosition=perimeterPoint, rectangle=requestingUmlClass.rectangle)
+    #
+    #     self.logger.debug(f'{umlLollipopInterface.attachmentSide=} {umlLollipopInterface.lineCentum=}')
+    #
+    #     umlLollipopInterface.SetCanvas(self)
+    #     diagram: UmlDiagram = self._diagramFrame.umlDiagram
+    #
+    #     diagram.AddShape(umlLollipopInterface)
+    #     umlLollipopInterface.Show(show=True)
+    #     self.logger.info(f'UmlInterface added: {umlLollipopInterface}')
+    #
+    #     eventHandler: UmlLollipopInterfaceEventHandler = UmlLollipopInterfaceEventHandler(lollipopInterface=umlLollipopInterface)
+    #     eventHandler.SetPreviousHandler(umlLollipopInterface.GetEventHandler())
+    #     umlLollipopInterface.SetEventHandler(eventHandler)
+    #
+    #     umlFrame:       UmlClassDiagramFrame = self._diagramFrame
+    #     eventEngine:    UmlEventEngine       = umlFrame.eventEngine
+    #     pyutInterfaces: PyutInterfaces       = eventHandler.getDefinedInterfaces()
+    #
+    #     with DlgEditInterface(parent=umlFrame, oglInterface2=umlLollipopInterface, eventEngine=eventEngine, pyutInterfaces=pyutInterfaces) as dlg:
+    #         if dlg.ShowModal() == OK:
+    #             umlFrame.refresh()

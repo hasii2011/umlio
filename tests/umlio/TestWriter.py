@@ -18,7 +18,7 @@ from tests.umlio.UmlIOBaseTest import EMPTY_DIAGRAMS_XML_PROJECT
 
 UNIT_TEST_DIAGRAM_DIRECTORY:       str = 'UmlDiagramProjects'
 
-EXPECTED_FILE_SIZE: int = 227
+EXPECTED_FILE_SIZE: int = 256
 
 
 class TestWriter(UmlIOBaseTest):
@@ -76,7 +76,7 @@ class TestWriter(UmlIOBaseTest):
 
         umlProject: UmlProject = UmlProject()
         umlProject.codePath = Path.home()
-        umlProject.fileName = emptyDiagramsFileName.as_posix()
+        umlProject.fileName = Path(emptyDiagramsFileName.as_posix())
 
         titleZero: UmlDiagramTitle = UmlDiagramTitle('Number Zero')
         titleOne:  UmlDiagramTitle = UmlDiagramTitle('Number One')

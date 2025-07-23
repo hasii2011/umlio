@@ -34,7 +34,10 @@
         "codeallybasic.UnitTestBase": {
             "level": "INFO",
             "propagate": "False"
+        },
+        "tests.demo": {
+            "level": "INFO",
+            "propagate": "False"
         }
-
     }
 }

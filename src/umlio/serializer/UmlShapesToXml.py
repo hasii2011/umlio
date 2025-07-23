@@ -29,11 +29,12 @@ class UmlShapesToXml:
     """
     The driver class to turn UML Shapes to XML
     """
-    def __init__(self, projectCodePath: Path):
+    def __init__(self, projectFileName: Path, projectCodePath: Path):
         """
         Set up the XML Tree and the top level element
 
         Args:
+            projectFileName:
             projectCodePath:
         """
 
@@ -42,6 +43,7 @@ class UmlShapesToXml:
 
         xmlProjectElement: Element = Element(XmlConstants.ELEMENT_UML_PROJECT)
 
+        xmlProjectElement.set(XmlConstants.ATTRIBUTE_FILENAME, str(projectFileName))
         xmlProjectElement.set(XmlConstants.ATTRIBUTE_VERSION, XML_VERSION)
         xmlProjectElement.set(XmlConstants.ATTRIBUTE_CODE_PATH, str(projectCodePath))
 

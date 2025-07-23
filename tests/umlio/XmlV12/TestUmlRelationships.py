@@ -3,13 +3,12 @@ from typing import cast
 
 from pathlib import Path
 
+from umlshapes.eventengine.UmlEventEngine import UmlEventEngine
 from wx.lib.ogl import OGLInitialize
 
 from codeallyadvanced.ui.UnitTestBaseW import UnitTestBaseW
 
 from pyutmodelv2.enumerations.PyutLinkType import PyutLinkType
-
-from umlshapes.IApplicationAdapter import IApplicationAdapter
 
 from umlshapes.frames.UmlClassDiagramFrame import CreateLollipopCallback
 from umlshapes.frames.UmlClassDiagramFrame import UmlClassDiagramFrame
@@ -53,7 +52,7 @@ DESTINATION_PYUT_CLASS_ID: str = str(INT_DESTINATION_PYUT_CLASS_ID)
 
 EXPECTED_BARE_ASSOCIATION_XML: str = (
     "<?xml version='1.0' encoding='iso-8859-1'?>\n"
-    '<UmlProject version="12.0" codePath="/users/hasii">\n'
+    '<UmlProject fileName="." version="12.0" codePath="/users/hasii">\n'
     '    <UMLDiagram diagramType="Class Diagram" title="Bare Association Class Diagram" scrollPositionX="1" scrollPositionY="1" pixelsPerUnitX="1" pixelsPerUnitY="1">\n'
     f'        <UmlClass id="{SOURCE_UML_CLASS_ID}" width="150" height="75" x="100" y="100">\n'
     f'            <PyutClass id="{SOURCE_PYUT_CLASS_ID}" name="GeneratedClass-0" displayMethods="True" displayParameters="Unspecified" displayConstructor="Unspecified" displayDunderMethods="Unspecified" displayFields="True" displayStereotype="True" fileName="" description="" />\n'
@@ -73,7 +72,7 @@ EXPECTED_BARE_ASSOCIATION_XML: str = (
 
 EXPECTED_INHERITANCE_XML: str = (
     "<?xml version='1.0' encoding='iso-8859-1'?>\n"
-    '<UmlProject version="12.0" codePath="/users/hasii">\n'
+    '<UmlProject fileName="." version="12.0" codePath="/users/hasii">\n'
     '    <UMLDiagram diagramType="Class Diagram" title="Inheritance Class Diagram" scrollPositionX="1" scrollPositionY="1" pixelsPerUnitX="1" pixelsPerUnitY="1">\n'
     f'        <UmlClass id="{SUBCLASS_UML_CLASS_ID}" width="150" height="75" x="200" y="300">\n'
     f'            <PyutClass id="{SUBCLASS_PYUT_ID}" name="{SUBCLASS_UML_CLASS_NAME}" displayMethods="True" displayParameters="Unspecified" displayConstructor="Unspecified" displayDunderMethods="Unspecified" displayFields="True" displayStereotype="True" fileName="" description="" />\n'
@@ -92,7 +91,7 @@ EXPECTED_INHERITANCE_XML: str = (
 
 EXPECTED_INTERFACE_XML: str = (
     "<?xml version='1.0' encoding='iso-8859-1'?>\n"
-    '<UmlProject version="12.0" codePath="/users/hasii">\n'
+    '<UmlProject fileName="." version="12.0" codePath="/users/hasii">\n'
     '    <UMLDiagram diagramType="Class Diagram" title="Interface Class Diagram" scrollPositionX="1" scrollPositionY="1" pixelsPerUnitX="1" pixelsPerUnitY="1">\n'
     '        <UmlClass id="valley.darkness.implementor" width="150" height="75" x="4444" y="4444">\n'
     '            <PyutClass id="4444" name="Implementor" displayMethods="True" displayParameters="Unspecified" displayConstructor="Unspecified" displayDunderMethods="Unspecified" displayFields="True" displayStereotype="True" fileName="" description="" />\n'
@@ -111,7 +110,7 @@ EXPECTED_INTERFACE_XML: str = (
 
 EXPECTED_LOLLIPOP_XML: str = (
     "<?xml version='1.0' encoding='iso-8859-1'?>\n"
-    f'<UmlProject version="12.0" codePath="/users/hasii">\n'
+    f'<UmlProject fileName="." version="12.0" codePath="/users/hasii">\n'
     f'    <UMLDiagram diagramType="Class Diagram" title="Lollipop Class Diagram" scrollPositionX="1" scrollPositionY="1" pixelsPerUnitX="1" pixelsPerUnitY="1">\n'
     f'        <UmlClass id="valley.darkness.implementor" width="150" height="75" x="3333" y="3333">\n'
     f'            <PyutClass id="4444" name="{IMPLEMENTING_UML_CLASS_NAME}" displayMethods="True" displayParameters="Unspecified" displayConstructor="Unspecified" displayDunderMethods="Unspecified" displayFields="True" displayStereotype="True" fileName="" description="" />\n'
@@ -141,11 +140,12 @@ class TestUmlRelationships(UnitTestBaseW):
     def setUp(self):
         super().setUp()
         OGLInitialize()
+        self._umlEventEngine: UmlEventEngine = UmlEventEngine()
         self._preferences: UmlPreferences = UmlPreferences()
 
         self._diagramFrame = UmlClassDiagramFrame(
             parent=self._topLevelWindow,
-            applicationAdapter=cast(IApplicationAdapter, None),
+            umlEventEngine=self._umlEventEngine,
             createLollipopCallback=cast(CreateLollipopCallback, None)
         )
 
@@ -227,7 +227,7 @@ class TestUmlRelationships(UnitTestBaseW):
 
     def _createXmlCreator(self) -> UmlShapesToXml:
 
-        umlShapesToXml: UmlShapesToXml = UmlShapesToXml(projectCodePath=Path('/users/hasii'))
+        umlShapesToXml: UmlShapesToXml = UmlShapesToXml(projectFileName=Path(''), projectCodePath=Path('/users/hasii'))
         return umlShapesToXml
 
     def _createUmlDiagram(self, diagramType: UmlDiagramType, diagramTitle: str) -> UmlDiagram:

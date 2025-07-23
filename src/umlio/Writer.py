@@ -27,13 +27,13 @@ class Writer:
         Writes to a compressed project file file
 
         Args:
-            umlProject:     The project we have to serialize
-            fileName:     Where to write the XML;  Should be a full qualified file name
+            umlProject: The project we have to serialize
+            fileName:   Where to write the XML;  Should be a full qualified file name
         """
         if fileName.suffix != PROJECT_SUFFIX:
             fileName = fileName / PROJECT_SUFFIX
 
-        umlShapesToXml: UmlShapesToXml = UmlShapesToXml(projectCodePath=umlProject.codePath)
+        umlShapesToXml: UmlShapesToXml = UmlShapesToXml(projectFileName=fileName, projectCodePath=umlProject.codePath)
 
         for umlDiagram in umlProject.umlDiagrams.values():
             umlShapesToXml.serialize(umlDiagram=umlDiagram)
@@ -56,7 +56,7 @@ class Writer:
         if fileName.suffix != XML_SUFFIX:
             fileName = fileName / XML_SUFFIX
 
-        umlToXml: UmlShapesToXml = UmlShapesToXml(projectCodePath=umlProject.codePath)
+        umlToXml: UmlShapesToXml = UmlShapesToXml(projectFileName=fileName, projectCodePath=umlProject.codePath)
 
         for umlDiagram in umlProject.umlDiagrams.values():
             umlToXml.serialize(umlDiagram=umlDiagram)

@@ -53,6 +53,7 @@ class XmlToUmlShapes:
         root:       Element = parse(xmlString)
         umlProject: Element = root.UmlProject
 
+        self._umlProject.fileName = fileName
         self._umlProject.version  = umlProject[XmlConstants.ATTRIBUTE_VERSION]
         self._umlProject.codePath = umlProject[XmlConstants.ATTRIBUTE_CODE_PATH]
 
@@ -78,6 +79,8 @@ class XmlToUmlShapes:
                 umlDiagram.umlNotes    = self._deserializeUmlNoteElements(umlDiagramElement=umlDiagramElement)
                 umlDiagram.umlActors   = self._deserializeUmlActorElements(umlDiagramElement=umlDiagramElement)
                 umlDiagram.umlUseCases = self._deserializeUmlUseCaseElements(umlDiagramElement=umlDiagramElement)
+            else:
+                umlDiagram.diagramType = UmlDiagramType.SEQUENCE_DIAGRAM
 
             self._umlProject.umlDiagrams[umlDiagram.diagramTitle] = umlDiagram
 

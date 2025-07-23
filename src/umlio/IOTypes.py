@@ -103,7 +103,7 @@ def createUmlDiagramsFactory() -> UmlDiagrams:
 
 @dataclass
 class ProjectInformation:
-    fileName:    str  = ''
+    fileName:    Path = Path('')
     version:     str  = XML_VERSION
     codePath:    Path = Path('')
 
