@@ -8,9 +8,9 @@ from codeallyadvanced.ui.UnitTestBaseW import UnitTestBaseW
 from codeallybasic.UnitTestBase import UnitTestBase
 
 from umlio.IOTypes import PROJECT_SUFFIX
-from umlio.IOTypes import UmlDiagram
-from umlio.IOTypes import UmlDiagramTitle
-from umlio.IOTypes import UmlDiagramType
+from umlio.IOTypes import UmlDocument
+from umlio.IOTypes import UmlDocumentTitle
+from umlio.IOTypes import UmlDocumentType
 from umlio.IOTypes import XML_SUFFIX
 
 EXTERNAL_DIFF_PROGRAM: str = 'diff'
@@ -38,11 +38,11 @@ class UmlIOBaseTest(UnitTestBaseW):
     def setUp(self):
         super().setUp()
 
-    def _createUmlDiagram(self, diagramType: UmlDiagramType, diagramTitle: str) -> UmlDiagram:
+    def _createUmlDiagram(self, diagramType: UmlDocumentType, diagramTitle: str) -> UmlDocument:
 
-        umlDiagram: UmlDiagram  = UmlDiagram()
-        umlDiagram.diagramType  = diagramType
-        umlDiagram.diagramTitle = UmlDiagramTitle(diagramTitle)
+        umlDiagram: UmlDocument  = UmlDocument()
+        umlDiagram.documentType  = diagramType
+        umlDiagram.documentTitle = UmlDocumentTitle(diagramTitle)
 
         return umlDiagram
 

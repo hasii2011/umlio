@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='iso-8859-1'?>
 <UmlProject fileName="" version="12.0" codePath="/users/hasii">
-    <UMLDiagram diagramType="Class Diagram" title="Uml Text Diagram" scrollPositionX="22" scrollPositionY="22" pixelsPerUnitX="1" pixelsPerUnitY="1">
+    <UMLDiagram documentType="Class Document" title="Uml Text Diagram" scrollPositionX="22" scrollPositionY="22" pixelsPerUnitX="1" pixelsPerUnitY="1">
         <UmlText id="remember.the.Alamo" width="150" height="50" x="1024" y="768">
             <PyutText id="1789" content="Soy el mejor texto americano" />
         </UmlText>

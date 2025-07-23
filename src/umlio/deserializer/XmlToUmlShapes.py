@@ -11,9 +11,9 @@ from codeallybasic.SecureConversions import SecureConversions
 
 from umlio.IOTypes import UmlActors
 from umlio.IOTypes import UmlClasses
-from umlio.IOTypes import UmlDiagram
-from umlio.IOTypes import UmlDiagramTitle
-from umlio.IOTypes import UmlDiagramType
+from umlio.IOTypes import UmlDocument
+from umlio.IOTypes import UmlDocumentTitle
+from umlio.IOTypes import UmlDocumentType
 from umlio.IOTypes import UmlNotes
 from umlio.IOTypes import UmlTexts
 from umlio.IOTypes import UmlProject
@@ -59,30 +59,30 @@ class XmlToUmlShapes:
 
         for umlDiagramElement in umlProject.UMLDiagram:
 
-            umlDiagram: UmlDiagram = UmlDiagram(
-                diagramTitle=umlDiagramElement[XmlConstants.ATTRIBUTE_TITLE],
+            umlDiagram: UmlDocument = UmlDocument(
+                documentTitle=umlDiagramElement[XmlConstants.ATTRIBUTE_TITLE],
                 scrollPositionX=SecureConversions.secureInteger(umlDiagramElement[XmlConstants.ATTRIBUTE_SCROLL_POSITION_X]),
                 scrollPositionY=SecureConversions.secureInteger(umlDiagramElement[XmlConstants.ATTRIBUTE_SCROLL_POSITION_Y]),
                 pixelsPerUnitX=SecureConversions.secureInteger(umlDiagramElement[XmlConstants.ATTRIBUTE_PIXELS_PER_UNIT_X]),
                 pixelsPerUnitY=SecureConversions.secureInteger(umlDiagramElement[XmlConstants.ATTRIBUTE_PIXELS_PER_UNIT_Y])
             )
-            umlDiagram.diagramTitle = UmlDiagramTitle(umlDiagramElement[XmlConstants.ATTRIBUTE_TITLE])
+            umlDiagram.documentTitle = UmlDocumentTitle(umlDiagramElement[XmlConstants.ATTRIBUTE_TITLE])
 
-            if umlDiagramElement[XmlConstants.ATTRIBUTE_DIAGRAM_TYPE] == UmlDiagramType.CLASS_DIAGRAM.value:
-                umlDiagram.diagramType = UmlDiagramType.CLASS_DIAGRAM
+            if umlDiagramElement[XmlConstants.ATTRIBUTE_DOCUMENT_TYPE] == UmlDocumentType.CLASS_DOCUMENT.value:
+                umlDiagram.documentType = UmlDocumentType.CLASS_DOCUMENT
                 # document.oglClasses = self._graphicClassesToOglClasses(pyutDocument=pyutDocument)
                 umlDiagram.umlClasses = self._deserializeUmlClassElements(umlDiagramElement=umlDiagramElement)
                 umlDiagram.umlNotes   = self._deserializeUmlNoteElements(umlDiagramElement=umlDiagramElement)
                 umlDiagram.umlTexts   = self._deserializeUmlTextElements(umlDiagramElement=umlDiagramElement)
-            elif umlDiagramElement[XmlConstants.ATTRIBUTE_DIAGRAM_TYPE] == UmlDiagramType.USE_CASE_DIAGRAM.value:
-                umlDiagram.diagramType = UmlDiagramType.USE_CASE_DIAGRAM
+            elif umlDiagramElement[XmlConstants.ATTRIBUTE_DOCUMENT_TYPE] == UmlDocumentType.USE_CASE_DOCUMENT.value:
+                umlDiagram.documentType = UmlDocumentType.USE_CASE_DOCUMENT
                 umlDiagram.umlNotes    = self._deserializeUmlNoteElements(umlDiagramElement=umlDiagramElement)
                 umlDiagram.umlActors   = self._deserializeUmlActorElements(umlDiagramElement=umlDiagramElement)
                 umlDiagram.umlUseCases = self._deserializeUmlUseCaseElements(umlDiagramElement=umlDiagramElement)
             else:
-                umlDiagram.diagramType = UmlDiagramType.SEQUENCE_DIAGRAM
+                umlDiagram.documentType = UmlDocumentType.SEQUENCE_DOCUMENT
 
-            self._umlProject.umlDiagrams[umlDiagram.diagramTitle] = umlDiagram
+            self._umlProject.umlDiagrams[umlDiagram.documentTitle] = umlDiagram
 
     def deserializeXml(self, rawXml: str):
         pass

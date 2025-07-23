@@ -33,13 +33,13 @@ from tests.RelationshipCreator import SOURCE_UML_CLASS_ID
 from tests.RelationshipCreator import DESTINATION_UML_CLASS_ID
 from tests.RelationshipCreator import UML_LINK_CANONICAL_MONIKER
 
-from umlio.IOTypes import UmlDiagramTitle
-from umlio.IOTypes import UmlDiagramType
+from umlio.IOTypes import UmlDocumentTitle
+from umlio.IOTypes import UmlDocumentType
 
 from tests.RelationshipCreator import CreatedAssociation
 from tests.RelationshipCreator import RelationshipCreator
 
-from umlio.IOTypes import UmlDiagram
+from umlio.IOTypes import UmlDocument
 
 from umlio.serializer.UmlShapesToXml import UmlShapesToXml
 
@@ -53,7 +53,7 @@ DESTINATION_PYUT_CLASS_ID: str = str(INT_DESTINATION_PYUT_CLASS_ID)
 EXPECTED_BARE_ASSOCIATION_XML: str = (
     "<?xml version='1.0' encoding='iso-8859-1'?>\n"
     '<UmlProject fileName="." version="12.0" codePath="/users/hasii">\n'
-    '    <UMLDiagram diagramType="Class Diagram" title="Bare Association Class Diagram" scrollPositionX="1" scrollPositionY="1" pixelsPerUnitX="1" pixelsPerUnitY="1">\n'
+    '    <UMLDiagram documentType="Class Document" title="Bare Association Class Diagram" scrollPositionX="1" scrollPositionY="1" pixelsPerUnitX="1" pixelsPerUnitY="1">\n'
     f'        <UmlClass id="{SOURCE_UML_CLASS_ID}" width="150" height="75" x="100" y="100">\n'
     f'            <PyutClass id="{SOURCE_PYUT_CLASS_ID}" name="GeneratedClass-0" displayMethods="True" displayParameters="Unspecified" displayConstructor="Unspecified" displayDunderMethods="Unspecified" displayFields="True" displayStereotype="True" fileName="" description="" />\n'
     '        </UmlClass>\n'
@@ -73,7 +73,7 @@ EXPECTED_BARE_ASSOCIATION_XML: str = (
 EXPECTED_INHERITANCE_XML: str = (
     "<?xml version='1.0' encoding='iso-8859-1'?>\n"
     '<UmlProject fileName="." version="12.0" codePath="/users/hasii">\n'
-    '    <UMLDiagram diagramType="Class Diagram" title="Inheritance Class Diagram" scrollPositionX="1" scrollPositionY="1" pixelsPerUnitX="1" pixelsPerUnitY="1">\n'
+    '    <UMLDiagram documentType="Class Document" title="Inheritance Class Diagram" scrollPositionX="1" scrollPositionY="1" pixelsPerUnitX="1" pixelsPerUnitY="1">\n'
     f'        <UmlClass id="{SUBCLASS_UML_CLASS_ID}" width="150" height="75" x="200" y="300">\n'
     f'            <PyutClass id="{SUBCLASS_PYUT_ID}" name="{SUBCLASS_UML_CLASS_NAME}" displayMethods="True" displayParameters="Unspecified" displayConstructor="Unspecified" displayDunderMethods="Unspecified" displayFields="True" displayStereotype="True" fileName="" description="" />\n'
     '        </UmlClass>\n'
@@ -92,7 +92,7 @@ EXPECTED_INHERITANCE_XML: str = (
 EXPECTED_INTERFACE_XML: str = (
     "<?xml version='1.0' encoding='iso-8859-1'?>\n"
     '<UmlProject fileName="." version="12.0" codePath="/users/hasii">\n'
-    '    <UMLDiagram diagramType="Class Diagram" title="Interface Class Diagram" scrollPositionX="1" scrollPositionY="1" pixelsPerUnitX="1" pixelsPerUnitY="1">\n'
+    '    <UMLDiagram documentType="Class Document" title="Interface Class Diagram" scrollPositionX="1" scrollPositionY="1" pixelsPerUnitX="1" pixelsPerUnitY="1">\n'
     '        <UmlClass id="valley.darkness.implementor" width="150" height="75" x="4444" y="4444">\n'
     '            <PyutClass id="4444" name="Implementor" displayMethods="True" displayParameters="Unspecified" displayConstructor="Unspecified" displayDunderMethods="Unspecified" displayFields="True" displayStereotype="True" fileName="" description="" />\n'
     '        </UmlClass>\n'
@@ -111,7 +111,7 @@ EXPECTED_INTERFACE_XML: str = (
 EXPECTED_LOLLIPOP_XML: str = (
     "<?xml version='1.0' encoding='iso-8859-1'?>\n"
     f'<UmlProject fileName="." version="12.0" codePath="/users/hasii">\n'
-    f'    <UMLDiagram diagramType="Class Diagram" title="Lollipop Class Diagram" scrollPositionX="1" scrollPositionY="1" pixelsPerUnitX="1" pixelsPerUnitY="1">\n'
+    f'    <UMLDiagram documentType="Class Document" title="Lollipop Class Diagram" scrollPositionX="1" scrollPositionY="1" pixelsPerUnitX="1" pixelsPerUnitY="1">\n'
     f'        <UmlClass id="valley.darkness.implementor" width="150" height="75" x="3333" y="3333">\n'
     f'            <PyutClass id="4444" name="{IMPLEMENTING_UML_CLASS_NAME}" displayMethods="True" displayParameters="Unspecified" displayConstructor="Unspecified" displayDunderMethods="Unspecified" displayFields="True" displayStereotype="True" fileName="" description="" />\n'
     f'        </UmlClass>\n'
@@ -203,7 +203,7 @@ class TestUmlRelationships(UnitTestBaseW):
             expectedXml:
         """
         umlShapesToXml:      UmlShapesToXml = self._createXmlCreator()
-        associationsDiagram: UmlDiagram     = self._createUmlDiagram(UmlDiagramType.CLASS_DIAGRAM, diagramName)
+        associationsDiagram: UmlDocument     = self._createUmlDiagram(UmlDocumentType.CLASS_DOCUMENT, diagramName)
 
         createdAssociation: CreatedAssociation = self._relationShipCreator.createRelationship(linkType)
 
@@ -230,11 +230,11 @@ class TestUmlRelationships(UnitTestBaseW):
         umlShapesToXml: UmlShapesToXml = UmlShapesToXml(projectFileName=Path(''), projectCodePath=Path('/users/hasii'))
         return umlShapesToXml
 
-    def _createUmlDiagram(self, diagramType: UmlDiagramType, diagramTitle: str) -> UmlDiagram:
+    def _createUmlDiagram(self, diagramType: UmlDocumentType, diagramTitle: str) -> UmlDocument:
 
-        umlDiagram: UmlDiagram  = UmlDiagram()
-        umlDiagram.diagramType  = diagramType
-        umlDiagram.diagramTitle = UmlDiagramTitle(diagramTitle)
+        umlDiagram: UmlDocument  = UmlDocument()
+        umlDiagram.documentType  = diagramType
+        umlDiagram.documentTitle = UmlDocumentTitle(diagramTitle)
 
         return umlDiagram
 

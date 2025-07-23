@@ -42,7 +42,7 @@ class TestDemoEventEngine(UnitTestBase):
         eventEngine.sendEvent(EventType.DIAGRAM_CHANGED, name='Bogus', data=[1, 2, 3])
 
     def _diagramChangedCallback(self, name: str, data: List[int]):
-        self.logger.info(f'{name}, {data}')
+        self.logger.debug(f'{name}, {data}')
 
 
 def suite() -> TestSuite:

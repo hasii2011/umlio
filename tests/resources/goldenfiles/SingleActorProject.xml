@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='iso-8859-1'?>
 <UmlProject fileName="" version="12.0" codePath="/users/hasii">
-    <UMLDiagram diagramType="Use Case Diagram" title="Use Case Actor Diagram" scrollPositionX="1" scrollPositionY="1" pixelsPerUnitX="1" pixelsPerUnitY="1">
+    <UMLDiagram documentType="Use Case Document" title="Use Case Actor Diagram" scrollPositionX="1" scrollPositionY="1" pixelsPerUnitX="1" pixelsPerUnitY="1">
         <UmlActor id="remember.central.issue.child" width="233" height="233" x="500" y="200">
             <PyutActor id="0" name="LoboMalo" fileName="" />
         </UmlActor>

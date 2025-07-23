@@ -13,7 +13,7 @@ from xml.etree.ElementTree import tostring as xmlToString
 from xml.etree.ElementTree import fromstring as xmlFromString
 
 from umlio.IOTypes import XML_VERSION
-from umlio.IOTypes import UmlDiagram
+from umlio.IOTypes import UmlDocument
 
 from umlio.serializer.UmlLinksToXml import UmlLinksToXml
 from umlio.serializer.UmlNotesToXml import UmlNotesToXml
@@ -74,7 +74,7 @@ class UmlShapesToXml:
         else:
             return self._toString(self._xmlProjectElement)
 
-    def serialize(self, umlDiagram: UmlDiagram):
+    def serialize(self, umlDiagram: UmlDocument):
         """
         Repeatedly call this method for each diagram in a UML project
 
@@ -106,7 +106,7 @@ class UmlShapesToXml:
         """
         fileName.write_text(self.xml)
 
-    def _umlDocumentAttributesToXml(self, umlDiagram: UmlDiagram) -> Element:
+    def _umlDocumentAttributesToXml(self, umlDiagram: UmlDocument) -> Element:
         """
         Create a document sub element under the project element
 
@@ -118,8 +118,8 @@ class UmlShapesToXml:
         """
 
         attributes = {
-            XmlConstants.ATTRIBUTE_DIAGRAM_TYPE:              umlDiagram.diagramType.value,
-            XmlConstants.ATTRIBUTE_TITLE:             umlDiagram.diagramTitle,
+            XmlConstants.ATTRIBUTE_DOCUMENT_TYPE:              umlDiagram.documentType.value,
+            XmlConstants.ATTRIBUTE_TITLE:             umlDiagram.documentTitle,
             XmlConstants.ATTRIBUTE_SCROLL_POSITION_X: str(umlDiagram.scrollPositionX),
             XmlConstants.ATTRIBUTE_SCROLL_POSITION_Y: str(umlDiagram.scrollPositionY),
             XmlConstants.ATTRIBUTE_PIXELS_PER_UNIT_X: str(umlDiagram.pixelsPerUnitX),

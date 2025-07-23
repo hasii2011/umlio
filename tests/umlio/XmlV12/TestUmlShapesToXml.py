@@ -37,8 +37,8 @@ from umlshapes.types.UmlPosition import UmlPosition
 
 from wx.lib.ogl import OGLInitialize
 
-from umlio.IOTypes import UmlDiagram
-from umlio.IOTypes import UmlDiagramType
+from umlio.IOTypes import UmlDocument
+from umlio.IOTypes import UmlDocumentType
 
 from umlio.serializer.UmlShapesToXml import UmlShapesToXml
 
@@ -49,14 +49,14 @@ EXPECTED_EMPTY_PROJECT: str = '<?xml version=\'1.0\' encoding=\'iso-8859-1\'?>\n
 EXPECTED_EMPTY_DIAGRAM: str = (
     "<?xml version='1.0' encoding='iso-8859-1'?>\n"
     '<UmlProject fileName="." version="12.0" codePath="/users/hasii">\n    '
-    '<UMLDiagram diagramType="Not Set" title="" scrollPositionX="1" scrollPositionY="1" pixelsPerUnitX="1" pixelsPerUnitY="1" />\n'
+    '<UMLDiagram documentType="Not Set" title="" scrollPositionX="1" scrollPositionY="1" pixelsPerUnitX="1" pixelsPerUnitY="1" />\n'
     '</UmlProject>'
 )
 
 EXPECTED_SINGLE_CLASS_XML: str = (
     "<?xml version='1.0' encoding='iso-8859-1'?>\n"
     '<UmlProject fileName="." version="12.0" codePath="/users/hasii">\n'
-    '    <UMLDiagram diagramType="Class Diagram" title="Unit Test Class Diagram" scrollPositionX="1" scrollPositionY="1" pixelsPerUnitX="1" pixelsPerUnitY="1">\n'
+    '    <UMLDiagram documentType="Class Document" title="Unit Test Class Diagram" scrollPositionX="1" scrollPositionY="1" pixelsPerUnitX="1" pixelsPerUnitY="1">\n'
     '        <UmlClass id="play.small.long.group" width="125" height="100" x="300" y="500">\n'
     '            <PyutClass id="0" name="ClassName1" displayMethods="True" displayParameters="Unspecified" displayConstructor="Unspecified" displayDunderMethods="Unspecified" displayFields="True" displayStereotype="True" fileName="" description="" />\n'
     '        </UmlClass>\n'
@@ -67,7 +67,7 @@ EXPECTED_SINGLE_CLASS_XML: str = (
 EXPECTED_SINGLE_USE_CASE_XML: str = (
     "<?xml version='1.0' encoding='iso-8859-1'?>\n"
     '<UmlProject fileName="." version="12.0" codePath="/users/hasii">\n'
-    '    <UMLDiagram diagramType="Use Case Diagram" title="Use Case Diagram" scrollPositionX="1" scrollPositionY="1" pixelsPerUnitX="1" pixelsPerUnitY="1">\n'
+    '    <UMLDiagram documentType="Use Case Document" title="Use Case Diagram" scrollPositionX="1" scrollPositionY="1" pixelsPerUnitX="1" pixelsPerUnitY="1">\n'
     '        <UmlUseCase id="remember.central.issue.child" width="125" height="100" x="300" y="500">\n'
     '            <PyutUseCase id="1" name="I am a lonely boy" fileName="" />\n'
     '        </UmlUseCase>\n'
@@ -78,7 +78,7 @@ EXPECTED_SINGLE_USE_CASE_XML: str = (
 EXPECTED_SINGLE_ACTOR: str = (
     "<?xml version='1.0' encoding='iso-8859-1'?>\n"
     '<UmlProject fileName="." version="12.0" codePath="/users/hasii">\n'
-    '    <UMLDiagram diagramType="Use Case Diagram" title="Use Case Actor Diagram" scrollPositionX="1" scrollPositionY="1" pixelsPerUnitX="1" pixelsPerUnitY="1">\n'
+    '    <UMLDiagram documentType="Use Case Document" title="Use Case Actor Diagram" scrollPositionX="1" scrollPositionY="1" pixelsPerUnitX="1" pixelsPerUnitY="1">\n'
     '        <UmlActor id="remember.central.issue.child" width="233" height="233" x="500" y="200">\n'
     '            <PyutActor id="0" name="LoboMalo" fileName="" />\n'
     '        </UmlActor>\n'
@@ -89,7 +89,7 @@ EXPECTED_SINGLE_ACTOR: str = (
 EXPECTED_SINGLE_NOTE: str = (
     "<?xml version='1.0' encoding='iso-8859-1'?>\n"
     '<UmlProject fileName="." version="12.0" codePath="/users/hasii">\n'
-    '    <UMLDiagram diagramType="Use Case Diagram" title="Uml Note Diagram" scrollPositionX="1" scrollPositionY="1" pixelsPerUnitX="1" pixelsPerUnitY="1">\n'
+    '    <UMLDiagram documentType="Use Case Document" title="Uml Note Diagram" scrollPositionX="1" scrollPositionY="1" pixelsPerUnitX="1" pixelsPerUnitY="1">\n'
     '        <UmlNote id="remember.the.Alamo" width="233" height="233" x="666" y="777">\n'
     '            <PyutNote id="777" content="I am the best MAGA Note" fileName="" />\n'
     '        </UmlNote>\n'
@@ -100,7 +100,7 @@ EXPECTED_SINGLE_NOTE: str = (
 EXPECTED_SINGLE_TEXT: str = (
     "<?xml version='1.0' encoding='iso-8859-1'?>\n"
     '<UmlProject fileName="." version="12.0" codePath="/users/hasii">\n'
-    '    <UMLDiagram diagramType="Class Diagram" title="Uml Text Diagram" scrollPositionX="1" scrollPositionY="1" pixelsPerUnitX="1" pixelsPerUnitY="1">\n'
+    '    <UMLDiagram documentType="Class Document" title="Uml Text Diagram" scrollPositionX="1" scrollPositionY="1" pixelsPerUnitX="1" pixelsPerUnitY="1">\n'
     '        <UmlText id="remember.the.Alamo" width="150" height="50" x="1024" y="768">\n'
     '            <PyutText id="1789" content="Soy el mejor texto americano" />\n'
     '        </UmlText>\n'
@@ -149,7 +149,7 @@ class TestUmlShapesToXml(UmlIOBaseTest):
     def testEmptyDiagram(self):
 
         umlShapesToXml: UmlShapesToXml = UmlShapesToXml(projectFileName=Path(''), projectCodePath=Path('/users/hasii'))
-        emptyDiagram:   UmlDiagram     = UmlDiagram()
+        emptyDiagram:   UmlDocument     = UmlDocument()
 
         umlShapesToXml.serialize(umlDiagram=emptyDiagram)
 
@@ -161,7 +161,7 @@ class TestUmlShapesToXml(UmlIOBaseTest):
     def testSingleUmlClass(self):
 
         umlShapesToXml:     UmlShapesToXml = self._createXmlCreator()
-        singleClassDiagram: UmlDiagram     = self._createUmlDiagram(UmlDiagramType.CLASS_DIAGRAM, 'Unit Test Class Diagram')
+        singleClassDiagram: UmlDocument     = self._createUmlDiagram(UmlDocumentType.CLASS_DOCUMENT, 'Unit Test Class Diagram')
         singleClass:        UmlClass       = self._createSingleClass()
 
         singleClass.id = 'play.small.long.group'        # So XML matches
@@ -181,7 +181,7 @@ class TestUmlShapesToXml(UmlIOBaseTest):
 
     def testSingleUseCase(self):
         umlShapesToXml:       UmlShapesToXml = self._createXmlCreator()
-        singleUseCaseDiagram: UmlDiagram     = self._createUmlDiagram(UmlDiagramType.USE_CASE_DIAGRAM, 'Use Case Diagram')
+        singleUseCaseDiagram: UmlDocument     = self._createUmlDiagram(UmlDocumentType.USE_CASE_DOCUMENT, 'Use Case Diagram')
 
         pyutUseCase: PyutUseCase = PyutUseCase(name='I am a lonely boy')
         pyutUseCase.id = 1
@@ -206,7 +206,7 @@ class TestUmlShapesToXml(UmlIOBaseTest):
 
     def testSingleActor(self):
         umlShapesToXml:     UmlShapesToXml = self._createXmlCreator()
-        singleActorDiagram: UmlDiagram     = self._createUmlDiagram(UmlDiagramType.USE_CASE_DIAGRAM, 'Use Case Actor Diagram')
+        singleActorDiagram: UmlDocument     = self._createUmlDiagram(UmlDocumentType.USE_CASE_DOCUMENT, 'Use Case Actor Diagram')
 
         pyutActor: PyutActor = PyutActor(actorName='LoboMalo')
         pyutActor.id = 0
@@ -232,7 +232,7 @@ class TestUmlShapesToXml(UmlIOBaseTest):
     def testSingleNote(self):
 
         umlShapesToXml:    UmlShapesToXml = self._createXmlCreator()
-        singleNoteDiagram: UmlDiagram     = self._createUmlDiagram(UmlDiagramType.USE_CASE_DIAGRAM, 'Uml Note Diagram')
+        singleNoteDiagram: UmlDocument     = self._createUmlDiagram(UmlDocumentType.USE_CASE_DOCUMENT, 'Uml Note Diagram')
 
         pyutNote: PyutNote = PyutNote(content='I am the best MAGA Note')
         pyutNote.id = 777
@@ -258,7 +258,7 @@ class TestUmlShapesToXml(UmlIOBaseTest):
     def testSingleText(self):
 
         umlShapesToXml:    UmlShapesToXml = self._createXmlCreator()
-        singleTextDiagram: UmlDiagram     = self._createUmlDiagram(UmlDiagramType.CLASS_DIAGRAM, 'Uml Text Diagram')
+        singleTextDiagram: UmlDocument     = self._createUmlDiagram(UmlDocumentType.CLASS_DOCUMENT, 'Uml Text Diagram')
 
         pyutText: PyutText = PyutText(content='Soy el mejor texto americano')
         pyutText.id = 1789
@@ -285,7 +285,7 @@ class TestUmlShapesToXml(UmlIOBaseTest):
     def testComplexClass(self):
 
         umlShapesToXml:       UmlShapesToXml = self._createXmlCreator()
-        multipleClassDiagram: UmlDiagram     = self._createUmlDiagram(UmlDiagramType.CLASS_DIAGRAM, 'Complex Class Diagram')
+        multipleClassDiagram: UmlDocument     = self._createUmlDiagram(UmlDocumentType.CLASS_DOCUMENT, 'Complex Class Diagram')
 
         classOne: UmlClass = self._createSingleClass(size=UmlDimensions(75, 75),   position=UmlPosition(333, 333))
         classTwo: UmlClass = self._createSingleClass(size=UmlDimensions(200, 100), position=UmlPosition(666, 666))
@@ -309,8 +309,8 @@ class TestUmlShapesToXml(UmlIOBaseTest):
         ]
         classOne.pyutClass.displayParameters = choice(displayParameterChoices)
         classTwo.pyutClass.displayParameters = choice(displayParameterChoices)
-        self.logger.info(f'{classOne.pyutClass.displayParameters=}')
-        self.logger.info(f'{classTwo.pyutClass.displayParameters=}')
+        self.logger.debug(f'{classOne.pyutClass.displayParameters=}')
+        self.logger.debug(f'{classTwo.pyutClass.displayParameters=}')
 
         multipleClassDiagram.umlClasses.append(classOne)
         multipleClassDiagram.umlClasses.append(classTwo)
@@ -386,7 +386,7 @@ class TestUmlShapesToXml(UmlIOBaseTest):
         typeList:      List[PyutType] = [PyutType(value='str'), PyutType(value='float'), PyutType(value='int')]
 
         pyutParameter.type = choice(typeList)
-        self.logger.info(f'{pyutParameter.type=}')
+        self.logger.debug(f'{pyutParameter.type=}')
 
         return pyutParameter
 

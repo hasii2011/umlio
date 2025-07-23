@@ -31,21 +31,21 @@ XML_VERSION: str = '12.0'
 PROJECT_SUFFIX: str = '.udt'        # UML Diagramming Tool
 XML_SUFFIX:     str = '.xml'
 
-UmlDiagramTitle = NewType('UmlDiagramTitle', str)
-UmlClasses      = NewType('UmlClasses',      List[UmlClass])
-UmlUseCases     = NewType('UmlUseCases',     List[UmlUseCase])
-UmlActors       = NewType('UmlActors',       List[UmlActor])
-UmlNotes        = NewType('UmlNotes',        List[UmlNote])
-UmlTexts        = NewType('UmlTexts',        List[UmlText])
-UmlLinks        = NewType('UmlLinks',        List[UmlLink | UmlLollipopInterface])
+UmlDocumentTitle = NewType('UmlDocumentTitle', str)
+UmlClasses       = NewType('UmlClasses',      List[UmlClass])
+UmlUseCases      = NewType('UmlUseCases',     List[UmlUseCase])
+UmlActors        = NewType('UmlActors',       List[UmlActor])
+UmlNotes         = NewType('UmlNotes',        List[UmlNote])
+UmlTexts         = NewType('UmlTexts',        List[UmlText])
+UmlLinks         = NewType('UmlLinks',        List[UmlLink | UmlLollipopInterface])
 
 ElementAttributes = NewType('ElementAttributes', Dict[str, str])
 
 
-class UmlDiagramType(Enum):
-    CLASS_DIAGRAM    = 'Class Diagram'
-    USE_CASE_DIAGRAM = 'Use Case Diagram'
-    SEQUENCE_DIAGRAM = 'Sequence Diagram'
+class UmlDocumentType(Enum):
+    CLASS_DOCUMENT    = 'Class Document'
+    USE_CASE_DOCUMENT = 'Use Case Document'
+    SEQUENCE_DOCUMENT = 'Sequence Document'
     NOT_SET          = 'Not Set'
 
 
@@ -79,9 +79,9 @@ def umlLinksFactory() -> UmlLinks:
 
 
 @dataclass
-class UmlDiagram:
-    diagramType:     UmlDiagramType  = UmlDiagramType.NOT_SET
-    diagramTitle:    UmlDiagramTitle = UmlDiagramTitle('')
+class UmlDocument:
+    documentType:    UmlDocumentType  = UmlDocumentType.NOT_SET
+    documentTitle:   UmlDocumentTitle = UmlDocumentTitle('')
     scrollPositionX: int = 1
     scrollPositionY: int = 1
     pixelsPerUnitX:  int = 1
@@ -94,11 +94,11 @@ class UmlDiagram:
     umlLinks:        UmlLinks    = field(default_factory=umlLinksFactory)
 
 
-UmlDiagrams = NewType('UmlDiagrams', Dict[UmlDiagramTitle, UmlDiagram])
+UmlDocuments = NewType('UmlDocuments', Dict[UmlDocumentTitle, UmlDocument])
 
 
-def createUmlDiagramsFactory() -> UmlDiagrams:
-    return UmlDiagrams({})
+def createUmlDocumentsFactory() -> UmlDocuments:
+    return UmlDocuments({})
 
 
 @dataclass
@@ -110,7 +110,7 @@ class ProjectInformation:
 
 @dataclass
 class UmlProject(ProjectInformation):
-    umlDiagrams: UmlDiagrams = field(default_factory=createUmlDiagramsFactory)
+    umlDiagrams: UmlDocuments = field(default_factory=createUmlDocumentsFactory)
 
 
 #

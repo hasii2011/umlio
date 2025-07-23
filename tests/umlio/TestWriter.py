@@ -6,9 +6,9 @@ from pathlib import Path
 
 from codeallybasic.UnitTestBase import UnitTestBase
 
-from umlio.IOTypes import UmlDiagram
-from umlio.IOTypes import UmlDiagramTitle
-from umlio.IOTypes import UmlDiagramType
+from umlio.IOTypes import UmlDocument
+from umlio.IOTypes import UmlDocumentTitle
+from umlio.IOTypes import UmlDocumentType
 from umlio.IOTypes import UmlProject
 from umlio.Writer import Writer
 
@@ -18,7 +18,7 @@ from tests.umlio.UmlIOBaseTest import EMPTY_DIAGRAMS_XML_PROJECT
 
 UNIT_TEST_DIAGRAM_DIRECTORY:       str = 'UmlDiagramProjects'
 
-EXPECTED_FILE_SIZE: int = 256
+EXPECTED_FILE_SIZE: int = 258
 
 
 class TestWriter(UmlIOBaseTest):
@@ -78,13 +78,13 @@ class TestWriter(UmlIOBaseTest):
         umlProject.codePath = Path.home()
         umlProject.fileName = Path(emptyDiagramsFileName.as_posix())
 
-        titleZero: UmlDiagramTitle = UmlDiagramTitle('Number Zero')
-        titleOne:  UmlDiagramTitle = UmlDiagramTitle('Number One')
-        titleTwo:  UmlDiagramTitle = UmlDiagramTitle('Number Two')
+        titleZero: UmlDocumentTitle = UmlDocumentTitle('Number Zero')
+        titleOne:  UmlDocumentTitle = UmlDocumentTitle('Number One')
+        titleTwo:  UmlDocumentTitle = UmlDocumentTitle('Number Two')
 
-        diagramZero: UmlDiagram = self._createUmlDiagram(diagramType=UmlDiagramType.CLASS_DIAGRAM,    diagramTitle=titleZero)
-        diagramOne:  UmlDiagram = self._createUmlDiagram(diagramType=UmlDiagramType.USE_CASE_DIAGRAM, diagramTitle=titleOne)
-        diagramTwo:  UmlDiagram = self._createUmlDiagram(diagramType=UmlDiagramType.SEQUENCE_DIAGRAM, diagramTitle=titleTwo)
+        diagramZero: UmlDocument = self._createUmlDiagram(diagramType=UmlDocumentType.CLASS_DOCUMENT, diagramTitle=titleZero)
+        diagramOne:  UmlDocument = self._createUmlDiagram(diagramType=UmlDocumentType.USE_CASE_DOCUMENT, diagramTitle=titleOne)
+        diagramTwo:  UmlDocument = self._createUmlDiagram(diagramType=UmlDocumentType.SEQUENCE_DOCUMENT, diagramTitle=titleTwo)
 
         umlProject.umlDiagrams[titleZero] = diagramZero
         umlProject.umlDiagrams[titleOne]  = diagramOne
