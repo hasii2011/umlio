@@ -49,4 +49,6 @@ jobs:
             name: run tests
             command: | 
               pip install buildlackey
+              pip install .
+              pip install .[test]
               unittests
