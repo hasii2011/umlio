@@ -11,6 +11,8 @@ Topic = NewType('Topic', str)
 class BaseEventEngine:
     """
     Wrapper class to hide underlying implementation
+
+    use the codeallybasic version when it becomes available
     """
     def _subscribe(self, topic: Topic, callback: Callable):
         """
