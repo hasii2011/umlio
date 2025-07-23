@@ -46,8 +46,9 @@ jobs:
           paths:
             - "venv"
       - run:
-        name: run tests
-        command: | 
-          pip install buildlackey
-          unittests
+          name: run tests
+          command: | 
+            . venv/bin/activate
+            pip install buildlackey
+            unittests
 
