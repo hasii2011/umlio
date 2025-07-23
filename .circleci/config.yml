@@ -41,6 +41,7 @@ jobs:
             pip install codeallyadvanced==1.4.2
             pip install umlshapes==0.7.0
             pip install Pypubsub==4.0.3
+            pip install buildlackey
       - save_cache:
           key: *deps1-cache
           paths:
@@ -48,7 +49,4 @@ jobs:
       - run:
             name: run tests
             command: | 
-              pip install buildlackey
-              pip install .
-              pip install .[test]
               unittests
