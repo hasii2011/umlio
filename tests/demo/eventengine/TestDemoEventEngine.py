@@ -4,8 +4,11 @@ from unittest import main as unitTestMain
 
 from codeallybasic.UnitTestBase import UnitTestBase
 
-from tests.demo.eventengine.EventEngine import EventEngine
-from tests.demo.eventengine.EventType import EventType
+from tests.demo.eventengine.DemoEventEngine import DemoEventEngine
+from tests.demo.eventengine.DemoEventType import DemoEventType
+from tests.demo.eventengine.IAppEventEngine import UniqueId
+
+UNIQUE_ID: UniqueId = UniqueId('DEADBEEF')
 
 
 class TestDemoEventEngine(UnitTestBase):
@@ -25,21 +28,12 @@ class TestDemoEventEngine(UnitTestBase):
     def tearDown(self):
         super().tearDown()
 
-    def testSingleton(self):
-        eventEngine1: EventEngine = EventEngine()
-        eventEngine2: EventEngine = EventEngine()
-
-        id1 = id(eventEngine1)
-        id2 = id(eventEngine2)
-
-        self.assertEqual(id1, id2, 'Not a singleton!!!')
-
     def testDiagramChanged(self):
 
-        eventEngine: EventEngine = EventEngine()
-        eventEngine.registerListener(EventType.DIAGRAM_CHANGED, callback=self._diagramChangedCallback)
+        eventEngine: DemoEventEngine = DemoEventEngine()
+        eventEngine.registerListener(DemoEventType.DIAGRAM_CHANGED, uniqueId=UNIQUE_ID, callback=self._diagramChangedCallback)
 
-        eventEngine.sendEvent(EventType.DIAGRAM_CHANGED, name='Bogus', data=[1, 2, 3])
+        eventEngine.sendEvent(DemoEventType.DIAGRAM_CHANGED, uniqueId=UNIQUE_ID, name='Bogus', data=[1, 2, 3])
 
     def _diagramChangedCallback(self, name: str, data: List[int]):
         self.logger.debug(f'{name}, {data}')

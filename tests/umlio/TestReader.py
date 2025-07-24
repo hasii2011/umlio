@@ -62,7 +62,7 @@ class TestReader(UnitTestBaseW):
 
         umlProject: UmlProject = reader.readXmlFile(Path(umlTextProject))
 
-        textDiagram: UmlDocument = umlProject.umlDiagrams[UmlDocumentTitle('Uml Text Diagram')]
+        textDiagram: UmlDocument = umlProject.umlDocuments[UmlDocumentTitle('Uml Text Diagram')]
 
         self.assertEqual(1, len(textDiagram.umlTexts), 'Not the correct Uml Text object count')
 
@@ -76,7 +76,7 @@ class TestReader(UnitTestBaseW):
 
         umlProject: UmlProject = reader.readXmlFile(Path(umlNoteProject))
 
-        noteDiagram: UmlDocument = umlProject.umlDiagrams[UmlDocumentTitle('Uml Note Diagram')]
+        noteDiagram: UmlDocument = umlProject.umlDocuments[UmlDocumentTitle('Uml Note Diagram')]
 
         self.assertEqual(1, len(noteDiagram.umlNotes), 'Not the correct Uml Note object count')
 
@@ -89,7 +89,7 @@ class TestReader(UnitTestBaseW):
         reader: Reader = Reader()
 
         umlProject: UmlProject = reader.readXmlFile(Path(umlActorProject))
-        noteDiagram: UmlDocument = umlProject.umlDiagrams[UmlDocumentTitle('Use Case Actor Diagram')]
+        noteDiagram: UmlDocument = umlProject.umlDocuments[UmlDocumentTitle('Use Case Actor Diagram')]
 
         self.assertEqual(1, len(noteDiagram.umlActors), 'Not the correct Uml Actor object count')
 
@@ -102,7 +102,7 @@ class TestReader(UnitTestBaseW):
         reader: Reader = Reader()
 
         umlProject:     UmlProject = reader.readXmlFile(Path(umlUseCaseProject))
-        useCaseDiagram: UmlDocument = umlProject.umlDiagrams[UmlDocumentTitle('Use Case Diagram')]
+        useCaseDiagram: UmlDocument = umlProject.umlDocuments[UmlDocumentTitle('Use Case Diagram')]
 
         self.assertEqual(1, len(useCaseDiagram.umlUseCases), 'Not the correct Uml Use Case object count')
 
@@ -115,7 +115,7 @@ class TestReader(UnitTestBaseW):
         reader:     Reader     = Reader()
         umlProject: UmlProject = reader.readXmlFile(Path(complexClassesProject))
 
-        complexClassesDiagram: UmlDocument = umlProject.umlDiagrams[UmlDocumentTitle('Full Fledge Class Diagram')]
+        complexClassesDiagram: UmlDocument = umlProject.umlDocuments[UmlDocumentTitle('Full Fledge Class Diagram')]
 
         self.assertEqual(2, len(complexClassesDiagram.umlClasses), 'Not the correct UML class object count')
 

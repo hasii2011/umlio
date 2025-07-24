@@ -110,7 +110,7 @@ class ProjectInformation:
 
 @dataclass
 class UmlProject(ProjectInformation):
-    umlDiagrams: UmlDocuments = field(default_factory=createUmlDocumentsFactory)
+    umlDocuments: UmlDocuments = field(default_factory=createUmlDocumentsFactory)
 
 
 #

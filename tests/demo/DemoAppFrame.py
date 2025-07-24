@@ -19,6 +19,7 @@ from wx import ID_EXIT
 
 from wx import Menu
 from wx import MenuBar
+from wx import NB_LEFT
 from wx import Notebook
 from wx.core import CallLater
 
@@ -28,6 +29,7 @@ from wx.lib.sized_controls import SizedPanel
 
 from umlshapes.preferences.UmlPreferences import UmlPreferences
 
+from tests.demo.eventengine.DemoEventEngine import DemoEventEngine
 from umlio.IOTypes import UmlProject
 from umlio.Reader import Reader
 
@@ -49,8 +51,9 @@ class DemoAppFrame(SizedFrame):
 
         self._notebook: Notebook = cast(Notebook, None)
 
-        self._openProjects:   List[UmlProject] = []
-        self._umlEventEngine: UmlEventEngine   = UmlEventEngine()
+        self._openProjects:    List[UmlProject] = []
+        self._demoEventEngine: DemoEventEngine  = DemoEventEngine()
+        self._umlEventEngine:  UmlEventEngine   = UmlEventEngine()
 
         self._createApplicationMenuBar()
 
@@ -145,7 +148,10 @@ class DemoAppFrame(SizedFrame):
         if self._notebook is None:
             self._createTheOverArchingNotebook()
 
-        projectPanel: ProjectPanel = ProjectPanel(self._notebook, umlEventEngine=self._umlEventEngine, umlProject=umlProject)
+        projectPanel: ProjectPanel = ProjectPanel(self._notebook,
+                                                  appEventEngine=self._demoEventEngine,
+                                                  umlEventEngine=self._umlEventEngine,
+                                                  umlProject=umlProject)
         self._notebook.AddPage(page=projectPanel, text=umlProject.fileName.stem)
         self._openProjects.append(umlProject)
 
@@ -157,8 +163,7 @@ class DemoAppFrame(SizedFrame):
         sizedPanel.SetSizerProps(expand=True, proportion=1)
         sizedPanel.SetSizerType('vertical')
 
-        # self._notebook = Notebook(sizedPanel, size=Size(width=FRAME_WIDTH, height=FRAME_HEIGHT))
-        self._notebook = Notebook(sizedPanel)
+        self._notebook = Notebook(sizedPanel, style=NB_LEFT)    # TODO: should be an application preference
         self._notebook.SetSizerProps(expand=True, proportion=1)
         CallLater(millis=200, callableObj=self._notebook.PostSizeEventToParent)
 

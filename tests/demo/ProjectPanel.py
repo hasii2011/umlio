@@ -2,31 +2,51 @@
 from logging import Logger
 from logging import getLogger
 
-from umlshapes.eventengine.UmlEventEngine import UmlEventEngine
 from wx import SplitterWindow
 from wx import Window
 
+from umlshapes.eventengine.UmlEventEngine import UmlEventEngine
+
 from tests.demo.DiagramManager import DiagramManager
 from tests.demo.ProjectTree import ProjectTree
+from tests.demo.ProjectTree import TreeData
+from tests.demo.ProjectTree import TreeNodeIDs
+from tests.demo.eventengine.DemoEventEngine import DemoEventEngine
+from tests.demo.eventengine.DemoEventType import DemoEventType
+from tests.demo.eventengine.IAppEventEngine import UniqueId
+
 from umlio.IOTypes import UmlProject
 
 
 class ProjectPanel(SplitterWindow):
-    def __init__(self, parent: Window, umlEventEngine: UmlEventEngine, umlProject: UmlProject):
+    def __init__(self, parent: Window, appEventEngine: DemoEventEngine, umlEventEngine: UmlEventEngine, umlProject: UmlProject):
         """
 
         Args:
             parent:
-            umlEventEngine:
+            appEventEngine:     The event engin that the demonstration applications uses to communicate within its UI components
+            umlEventEngine:     The event engine that UML Shapes uses to communicate within itself and the wrapper application
             umlProject:
         """
 
         self.logger: Logger = getLogger(__name__)
         super().__init__(parent=parent)
 
-        projectTree:    ProjectTree    = ProjectTree(parent=self, umlProject=umlProject)
-        diagramManager: DiagramManager = DiagramManager(parent=self, umlEventEngine=umlEventEngine, umlDiagrams=umlProject.umlDiagrams)
+        self.appEventEngine: DemoEventEngine = appEventEngine
+
+        self._projectTree:    ProjectTree    = ProjectTree(parent=self, appEventEngine=appEventEngine, umlProject=umlProject)
+        self._diagramManager: DiagramManager = DiagramManager(parent=self, umlEventEngine=umlEventEngine, umlDocuments=umlProject.umlDocuments)
 
         self.SetMinimumPaneSize(200)
 
-        self.SplitVertically(projectTree, diagramManager)
+        self.SplitVertically(self._projectTree, self._diagramManager)
+
+        treeNodeIDs: TreeNodeIDs = self._projectTree.treeNodeIDs
+        for treeNodeID in treeNodeIDs:
+            self.appEventEngine.registerListener(eventType=DemoEventType.DIAGRAM_CHANGED,
+                                                 uniqueId=UniqueId(treeNodeID),
+                                                 callback=self._onDiagramChanged)
+
+    def _onDiagramChanged(self, treeData: TreeData):
+        self.logger.debug(f'{treeData=}')
+        self._diagramManager.setPage(treeData.documentName)

@@ -82,7 +82,7 @@ class XmlToUmlShapes:
             else:
                 umlDiagram.documentType = UmlDocumentType.SEQUENCE_DOCUMENT
 
-            self._umlProject.umlDiagrams[umlDiagram.documentTitle] = umlDiagram
+            self._umlProject.umlDocuments[umlDiagram.documentTitle] = umlDiagram
 
     def deserializeXml(self, rawXml: str):
         pass

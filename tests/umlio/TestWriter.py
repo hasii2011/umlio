@@ -86,9 +86,9 @@ class TestWriter(UmlIOBaseTest):
         diagramOne:  UmlDocument = self._createUmlDiagram(diagramType=UmlDocumentType.USE_CASE_DOCUMENT, diagramTitle=titleOne)
         diagramTwo:  UmlDocument = self._createUmlDiagram(diagramType=UmlDocumentType.SEQUENCE_DOCUMENT, diagramTitle=titleTwo)
 
-        umlProject.umlDiagrams[titleZero] = diagramZero
-        umlProject.umlDiagrams[titleOne]  = diagramOne
-        umlProject.umlDiagrams[titleTwo]  = diagramTwo
+        umlProject.umlDocuments[titleZero] = diagramZero
+        umlProject.umlDocuments[titleOne]  = diagramOne
+        umlProject.umlDocuments[titleTwo]  = diagramTwo
 
         return umlProject
 

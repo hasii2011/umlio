@@ -35,7 +35,7 @@ class Writer:
 
         umlShapesToXml: UmlShapesToXml = UmlShapesToXml(projectFileName=fileName, projectCodePath=umlProject.codePath)
 
-        for umlDiagram in umlProject.umlDiagrams.values():
+        for umlDiagram in umlProject.umlDocuments.values():
             umlShapesToXml.serialize(umlDiagram=umlDiagram)
 
         rawXml: str = umlShapesToXml.xml
@@ -58,7 +58,7 @@ class Writer:
 
         umlToXml: UmlShapesToXml = UmlShapesToXml(projectFileName=fileName, projectCodePath=umlProject.codePath)
 
-        for umlDiagram in umlProject.umlDiagrams.values():
+        for umlDiagram in umlProject.umlDocuments.values():
             umlToXml.serialize(umlDiagram=umlDiagram)
 
         umlToXml.writeXml(fileName=fileName)
