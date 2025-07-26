@@ -11,15 +11,15 @@ from tests.demo.DiagramManager import DiagramManager
 from tests.demo.ProjectTree import ProjectTree
 from tests.demo.ProjectTree import TreeData
 from tests.demo.ProjectTree import TreeNodeIDs
-from tests.demo.eventengine.DemoEventEngine import DemoEventEngine
-from tests.demo.eventengine.DemoEventType import DemoEventType
-from tests.demo.eventengine.IAppEventEngine import UniqueId
+from tests.demo.eventengine.DemoAppPubSubEngine import DemoAppPubSubEngine
+from tests.demo.eventengine.DemoMessageType import DemoMessageType
+from tests.demo.eventengine.IAppPubSubEngine import UniqueId
 
 from umlio.IOTypes import UmlProject
 
 
 class ProjectPanel(SplitterWindow):
-    def __init__(self, parent: Window, appEventEngine: DemoEventEngine, umlPubSibEngine: UmlPubSubEngine, umlProject: UmlProject):
+    def __init__(self, parent: Window, appEventEngine: DemoAppPubSubEngine, umlPubSibEngine: UmlPubSubEngine, umlProject: UmlProject):
         """
 
         Args:
@@ -32,7 +32,7 @@ class ProjectPanel(SplitterWindow):
         self.logger: Logger = getLogger(__name__)
         super().__init__(parent=parent)
 
-        self.appEventEngine: DemoEventEngine = appEventEngine
+        self.appEventEngine: DemoAppPubSubEngine = appEventEngine
 
         self._projectTree:    ProjectTree    = ProjectTree(parent=self, appEventEngine=appEventEngine, umlProject=umlProject)
         self._diagramManager: DiagramManager = DiagramManager(parent=self, umlPubSubEngine=umlPubSibEngine, umlDocuments=umlProject.umlDocuments)
@@ -43,10 +43,10 @@ class ProjectPanel(SplitterWindow):
 
         treeNodeIDs: TreeNodeIDs = self._projectTree.treeNodeIDs
         for treeNodeID in treeNodeIDs:
-            self.appEventEngine.subscribe(eventType=DemoEventType.DIAGRAM_CHANGED,
+            self.appEventEngine.subscribe(eventType=DemoMessageType.DIAGRAM_SELECTION_CHANGED,
                                           uniqueId=UniqueId(treeNodeID),
-                                          callback=self._onDiagramChanged)
+                                          callback=self._onDiagramSelectionChanged)
 
-    def _onDiagramChanged(self, treeData: TreeData):
+    def _onDiagramSelectionChanged(self, treeData: TreeData):
         self.logger.debug(f'{treeData=}')
         self._diagramManager.setPage(treeData.documentName)

@@ -29,7 +29,7 @@ from umlshapes.preferences.UmlPreferences import UmlPreferences
 
 from umlshapes.pubsubengine.UmlPubSubEngine import UmlPubSubEngine
 
-from tests.demo.eventengine.DemoEventEngine import DemoEventEngine
+from tests.demo.eventengine.DemoAppPubSubEngine import DemoAppPubSubEngine
 
 from umlio.IOTypes import UmlProject
 from umlio.Reader import Reader
@@ -53,7 +53,7 @@ class DemoAppFrame(SizedFrame):
         self._notebook: Notebook = cast(Notebook, None)
 
         self._openProjects:    List[UmlProject] = []
-        self._demoEventEngine: DemoEventEngine  = DemoEventEngine()
+        self._demoEventEngine: DemoAppPubSubEngine  = DemoAppPubSubEngine()
         self._umlPubSubEngine: UmlPubSubEngine  = UmlPubSubEngine()
 
         self._createApplicationMenuBar()
