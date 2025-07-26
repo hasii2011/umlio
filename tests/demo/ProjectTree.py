@@ -15,9 +15,9 @@ from wx import TreeEvent
 from wx import TreeItemId
 from wx import Window
 
-from tests.demo.eventengine.DemoEventType import DemoEventType
-from tests.demo.eventengine.IAppEventEngine import IAppEventEngine
-from tests.demo.eventengine.IAppEventEngine import UniqueId
+from tests.demo.eventengine.DemoMessageType import DemoMessageType
+from tests.demo.eventengine.IAppPubSubEngine import IAppPubSubEngine
+from tests.demo.eventengine.IAppPubSubEngine import UniqueId
 
 from umlshapes.UmlUtils import UmlUtils
 
@@ -38,14 +38,14 @@ TreeNodeIDs = NewType('TreeNodeIDs', List[TreeNodeID])
 
 
 class ProjectTree(TreeCtrl):
-    def __init__(self, parent: Window, umlProject: UmlProject, appEventEngine: IAppEventEngine):
+    def __init__(self, parent: Window, umlProject: UmlProject, appEventEngine: IAppPubSubEngine):
 
         self.logger: Logger = getLogger(__name__)
 
         super().__init__(parent=parent, style=TR_HAS_BUTTONS)
 
         self._umlProject:     UmlProject      = umlProject
-        self._appEventEngine: IAppEventEngine = appEventEngine
+        self._appEventEngine: IAppPubSubEngine = appEventEngine
         self._treeNodeIDs:    TreeNodeIDs     = TreeNodeIDs([])
 
         self.root: TreeItemId = self.AddRoot(umlProject.fileName.stem)
@@ -84,6 +84,6 @@ class ProjectTree(TreeCtrl):
 
         self.logger.debug(f'{treeData=}')
 
-        self._appEventEngine.sendMessage(DemoEventType.DIAGRAM_CHANGED,
+        self._appEventEngine.sendMessage(DemoMessageType.DIAGRAM_SELECTION_CHANGED,
                                          uniqueId=UniqueId(treeData.treeNodeID),
                                          treeData=treeData)
