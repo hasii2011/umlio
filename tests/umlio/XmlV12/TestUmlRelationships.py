@@ -3,15 +3,15 @@ from typing import cast
 
 from pathlib import Path
 
-from umlshapes.eventengine.UmlEventEngine import UmlEventEngine
 from wx.lib.ogl import OGLInitialize
 
 from codeallyadvanced.ui.UnitTestBaseW import UnitTestBaseW
 
 from pyutmodelv2.enumerations.PyutLinkType import PyutLinkType
 
-from umlshapes.frames.UmlClassDiagramFrame import CreateLollipopCallback
-from umlshapes.frames.UmlClassDiagramFrame import UmlClassDiagramFrame
+from umlshapes.pubsubengine.UmlPubSubEngine import UmlPubSubEngine
+from umlshapes.frames.ClassDiagramFrame import ClassDiagramFrame
+from umlshapes.frames.ClassDiagramFrame import CreateLollipopCallback
 
 from umlshapes.preferences.UmlPreferences import UmlPreferences
 
@@ -140,12 +140,12 @@ class TestUmlRelationships(UnitTestBaseW):
     def setUp(self):
         super().setUp()
         OGLInitialize()
-        self._umlEventEngine: UmlEventEngine = UmlEventEngine()
+        self._umlPubSubEngine: UmlPubSubEngine = UmlPubSubEngine()
         self._preferences: UmlPreferences = UmlPreferences()
 
-        self._diagramFrame = UmlClassDiagramFrame(
+        self._diagramFrame = ClassDiagramFrame(
             parent=self._topLevelWindow,
-            umlEventEngine=self._umlEventEngine,
+            umlPubSubEngine=self._umlPubSubEngine,
             createLollipopCallback=cast(CreateLollipopCallback, None)
         )
 

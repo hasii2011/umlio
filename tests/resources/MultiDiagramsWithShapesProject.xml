@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='iso-8859-1'?>
 <UmlProject fileName="/Users/humberto.a.sanchez.ii/UmlDiagramProjects/EmptyDiagramsProject.xml" version="12.0" codePath="/Users/humberto.a.sanchez.ii">
-    <UMLDiagram documentType="Class Document" title="Number Zero" scrollPositionX="1" scrollPositionY="1" pixelsPerUnitX="1" pixelsPerUnitY="1">
+    <UMLDiagram documentType="Class Document" title="Class Diagram" scrollPositionX="1" scrollPositionY="1" pixelsPerUnitX="1" pixelsPerUnitY="1">
         <UmlClass id="cut.short.issue.business" width="75" height="75" x="100" y="100">
             <PyutClass id="77" name="Class111" displayMethods="True" displayParameters="DisplayParameters" displayConstructor="Do Not Display" displayDunderMethods="Display" displayFields="True" displayStereotype="True" fileName="Class111.oy" description="I am class 111">
                 <PyutMethod name="MethodName-222" visibility="PUBLIC" returnType="">
@@ -29,7 +29,21 @@
                 <PyutField name="FieldName-778" visibility="PROTECTED" fieldType="" defaultValue=""/>
             </PyutClass>
         </UmlClass>
+        <UmlNote id="remember.the.Alamo" width="100" height="75" x="300" y="300">
+            <PyutNote id="777" content="I am the best MAGA Note" fileName="" />
+        </UmlNote>
     </UMLDiagram>
-    <UMLDiagram documentType="Use Case Document" title="Number One" scrollPositionX="1" scrollPositionY="1" pixelsPerUnitX="1" pixelsPerUnitY="1" />
-    <UMLDiagram documentType="Sequence Document" title="Number Two" scrollPositionX="1" scrollPositionY="1" pixelsPerUnitX="1" pixelsPerUnitY="1" />
+    <UMLDiagram documentType="Use Case Document" title="Simple Use Case" scrollPositionX="1" scrollPositionY="1" pixelsPerUnitX="1" pixelsPerUnitY="1">
+        <UmlUseCase id="remember.central.issue.child" width="125" height="100" x="100" y="100">
+            <PyutUseCase id="44" name="I am a lonely boy" fileName="" />
+        </UmlUseCase>
+        <UmlActor id="remember.central.issue.kid" width="80" height="100" x="150" y="200">
+            <PyutActor id="066" name="LoboMalo" fileName="" />
+        </UmlActor>
+    </UMLDiagram>
+    <UMLDiagram documentType="Sequence Document" title="Sequence Diagram" scrollPositionX="1" scrollPositionY="1" pixelsPerUnitX="1" pixelsPerUnitY="1">
+        <UmlText id="will.potus.do.it" width="200" height="50" x="100" y="100">
+            <PyutText id="1789" content="I do not draw sequence diagrams yet" />
+        </UmlText>
+    </UMLDiagram>
 </UmlProject>

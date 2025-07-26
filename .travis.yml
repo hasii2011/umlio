@@ -32,13 +32,13 @@ install:
   - pip install html-testRunner~=1.2.1
   - pip install six==1.16.0
   - pip install attrdict3
-  - pip install codeallybasic==1.11.0
+  - pip install codeallybasic==1.12.0
   - pip install pyutmodelv2==2.2.4
   - pip install untangle==1.2.1
   - URL=https://extras.wxpython.org/wxPython4/extras/linux/gtk3/ubuntu-24.04
   - pip install -U -f $URL wxPython
   - pip install codeallyadvanced==1.4.2
-  - pip install umlshapes==0.7.5
+  - pip install umlshapes==0.8.4
 
 # command to run tests
 script:

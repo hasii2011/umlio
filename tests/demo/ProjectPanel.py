@@ -2,10 +2,10 @@
 from logging import Logger
 from logging import getLogger
 
+from umlshapes.pubsubengine.UmlPubSubEngine import UmlPubSubEngine
 from wx import SplitterWindow
 from wx import Window
 
-from umlshapes.eventengine.UmlEventEngine import UmlEventEngine
 
 from tests.demo.DiagramManager import DiagramManager
 from tests.demo.ProjectTree import ProjectTree
@@ -19,13 +19,13 @@ from umlio.IOTypes import UmlProject
 
 
 class ProjectPanel(SplitterWindow):
-    def __init__(self, parent: Window, appEventEngine: DemoEventEngine, umlEventEngine: UmlEventEngine, umlProject: UmlProject):
+    def __init__(self, parent: Window, appEventEngine: DemoEventEngine, umlPubSibEngine: UmlPubSubEngine, umlProject: UmlProject):
         """
 
         Args:
             parent:
             appEventEngine:     The event engin that the demonstration applications uses to communicate within its UI components
-            umlEventEngine:     The event engine that UML Shapes uses to communicate within itself and the wrapper application
+            umlPubSibEngine:    The pub sub engine that UML Shapes uses to communicate within itself and the wrapper application
             umlProject:
         """
 
@@ -35,7 +35,7 @@ class ProjectPanel(SplitterWindow):
         self.appEventEngine: DemoEventEngine = appEventEngine
 
         self._projectTree:    ProjectTree    = ProjectTree(parent=self, appEventEngine=appEventEngine, umlProject=umlProject)
-        self._diagramManager: DiagramManager = DiagramManager(parent=self, umlEventEngine=umlEventEngine, umlDocuments=umlProject.umlDocuments)
+        self._diagramManager: DiagramManager = DiagramManager(parent=self, umlPubSubEngine=umlPubSibEngine, umlDocuments=umlProject.umlDocuments)
 
         self.SetMinimumPaneSize(200)
 
@@ -43,9 +43,9 @@ class ProjectPanel(SplitterWindow):
 
         treeNodeIDs: TreeNodeIDs = self._projectTree.treeNodeIDs
         for treeNodeID in treeNodeIDs:
-            self.appEventEngine.registerListener(eventType=DemoEventType.DIAGRAM_CHANGED,
-                                                 uniqueId=UniqueId(treeNodeID),
-                                                 callback=self._onDiagramChanged)
+            self.appEventEngine.subscribe(eventType=DemoEventType.DIAGRAM_CHANGED,
+                                          uniqueId=UniqueId(treeNodeID),
+                                          callback=self._onDiagramChanged)
 
     def _onDiagramChanged(self, treeData: TreeData):
         self.logger.debug(f'{treeData=}')

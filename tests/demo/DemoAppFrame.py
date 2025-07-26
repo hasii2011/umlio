@@ -5,7 +5,6 @@ from pathlib import Path
 from typing import List
 from typing import cast
 
-from umlshapes.eventengine.UmlEventEngine import UmlEventEngine
 from wx import CallAfter
 from wx import CommandEvent
 from wx import DEFAULT_FRAME_STYLE
@@ -26,10 +25,12 @@ from wx.core import CallLater
 from wx.lib.sized_controls import SizedFrame
 from wx.lib.sized_controls import SizedPanel
 
-
 from umlshapes.preferences.UmlPreferences import UmlPreferences
 
+from umlshapes.pubsubengine.UmlPubSubEngine import UmlPubSubEngine
+
 from tests.demo.eventengine.DemoEventEngine import DemoEventEngine
+
 from umlio.IOTypes import UmlProject
 from umlio.Reader import Reader
 
@@ -53,7 +54,7 @@ class DemoAppFrame(SizedFrame):
 
         self._openProjects:    List[UmlProject] = []
         self._demoEventEngine: DemoEventEngine  = DemoEventEngine()
-        self._umlEventEngine:  UmlEventEngine   = UmlEventEngine()
+        self._umlPubSubEngine: UmlPubSubEngine  = UmlPubSubEngine()
 
         self._createApplicationMenuBar()
 
@@ -150,7 +151,7 @@ class DemoAppFrame(SizedFrame):
 
         projectPanel: ProjectPanel = ProjectPanel(self._notebook,
                                                   appEventEngine=self._demoEventEngine,
-                                                  umlEventEngine=self._umlEventEngine,
+                                                  umlPubSibEngine=self._umlPubSubEngine,
                                                   umlProject=umlProject)
         self._notebook.AddPage(page=projectPanel, text=umlProject.fileName.stem)
         self._openProjects.append(umlProject)

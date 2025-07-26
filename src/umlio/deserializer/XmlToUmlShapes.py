@@ -69,18 +69,22 @@ class XmlToUmlShapes:
             umlDiagram.documentTitle = UmlDocumentTitle(umlDiagramElement[XmlConstants.ATTRIBUTE_TITLE])
 
             if umlDiagramElement[XmlConstants.ATTRIBUTE_DOCUMENT_TYPE] == UmlDocumentType.CLASS_DOCUMENT.value:
+
                 umlDiagram.documentType = UmlDocumentType.CLASS_DOCUMENT
-                # document.oglClasses = self._graphicClassesToOglClasses(pyutDocument=pyutDocument)
                 umlDiagram.umlClasses = self._deserializeUmlClassElements(umlDiagramElement=umlDiagramElement)
                 umlDiagram.umlNotes   = self._deserializeUmlNoteElements(umlDiagramElement=umlDiagramElement)
                 umlDiagram.umlTexts   = self._deserializeUmlTextElements(umlDiagramElement=umlDiagramElement)
             elif umlDiagramElement[XmlConstants.ATTRIBUTE_DOCUMENT_TYPE] == UmlDocumentType.USE_CASE_DOCUMENT.value:
+
                 umlDiagram.documentType = UmlDocumentType.USE_CASE_DOCUMENT
                 umlDiagram.umlNotes    = self._deserializeUmlNoteElements(umlDiagramElement=umlDiagramElement)
                 umlDiagram.umlActors   = self._deserializeUmlActorElements(umlDiagramElement=umlDiagramElement)
                 umlDiagram.umlUseCases = self._deserializeUmlUseCaseElements(umlDiagramElement=umlDiagramElement)
             else:
+
                 umlDiagram.documentType = UmlDocumentType.SEQUENCE_DOCUMENT
+                umlDiagram.umlTexts   = self._deserializeUmlTextElements(umlDiagramElement=umlDiagramElement)
+                umlDiagram.umlNotes    = self._deserializeUmlNoteElements(umlDiagramElement=umlDiagramElement)
 
             self._umlProject.umlDocuments[umlDiagram.documentTitle] = umlDiagram
 

@@ -84,6 +84,6 @@ class ProjectTree(TreeCtrl):
 
         self.logger.debug(f'{treeData=}')
 
-        self._appEventEngine.sendEvent(DemoEventType.DIAGRAM_CHANGED,
-                                       uniqueId=UniqueId(treeData.treeNodeID),
-                                       treeData=treeData)
+        self._appEventEngine.sendMessage(DemoEventType.DIAGRAM_CHANGED,
+                                         uniqueId=UniqueId(treeData.treeNodeID),
+                                         treeData=treeData)

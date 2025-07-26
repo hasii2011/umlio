@@ -13,9 +13,9 @@ UniqueId = NewType('UniqueId', str)
 class IAppEventEngine(ABC):
 
     @abstractmethod
-    def registerListener(self, eventType: DemoEventType, uniqueId: UniqueId, callback: Callable):
+    def subscribe(self, eventType: DemoEventType, uniqueId: UniqueId, callback: Callable):
         pass
 
     @abstractmethod
-    def sendEvent(self, eventType: DemoEventType, uniqueId: UniqueId, **kwargs):
+    def sendMessage(self, eventType: DemoEventType, uniqueId: UniqueId, **kwargs):
         pass

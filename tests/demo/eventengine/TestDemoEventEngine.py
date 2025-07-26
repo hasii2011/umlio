@@ -31,9 +31,9 @@ class TestDemoEventEngine(UnitTestBase):
     def testDiagramChanged(self):
 
         eventEngine: DemoEventEngine = DemoEventEngine()
-        eventEngine.registerListener(DemoEventType.DIAGRAM_CHANGED, uniqueId=UNIQUE_ID, callback=self._diagramChangedCallback)
+        eventEngine.subscribe(DemoEventType.DIAGRAM_CHANGED, uniqueId=UNIQUE_ID, callback=self._diagramChangedCallback)
 
-        eventEngine.sendEvent(DemoEventType.DIAGRAM_CHANGED, uniqueId=UNIQUE_ID, name='Bogus', data=[1, 2, 3])
+        eventEngine.sendMessage(DemoEventType.DIAGRAM_CHANGED, uniqueId=UNIQUE_ID, name='Bogus', data=[1, 2, 3])
 
     def _diagramChangedCallback(self, name: str, data: List[int]):
         self.logger.debug(f'{name}, {data}')
