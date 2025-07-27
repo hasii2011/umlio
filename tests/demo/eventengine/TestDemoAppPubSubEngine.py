@@ -28,14 +28,14 @@ class TestDemoAppPubSubEngine(UnitTestBase):
     def tearDown(self):
         super().tearDown()
 
-    def testDiagramChanged(self):
+    def testDiagramSelectionChanged(self):
 
-        eventEngine: DemoAppPubSubEngine = DemoAppPubSubEngine()
-        eventEngine.subscribe(DemoMessageType.DIAGRAM_SELECTION_CHANGED, uniqueId=UNIQUE_ID, callback=self._diagramChangedCallback)
+        pubSubEngine: DemoAppPubSubEngine = DemoAppPubSubEngine()
+        pubSubEngine.subscribe(DemoMessageType.DIAGRAM_SELECTION_CHANGED, uniqueId=UNIQUE_ID, callback=self._diagramSelectionChangedCallback)
 
-        eventEngine.sendMessage(DemoMessageType.DIAGRAM_SELECTION_CHANGED, uniqueId=UNIQUE_ID, name='Bogus', data=[1, 2, 3])
+        pubSubEngine.sendMessage(DemoMessageType.DIAGRAM_SELECTION_CHANGED, uniqueId=UNIQUE_ID, name='Bogus', data=[1, 2, 3])
 
-    def _diagramChangedCallback(self, name: str, data: List[int]):
+    def _diagramSelectionChangedCallback(self, name: str, data: List[int]):
         self.logger.debug(f'{name}, {data}')
 
 

@@ -8,6 +8,8 @@ from logging import getLogger
 
 from os import linesep as osLineSep
 
+from pyutmodelv2.PyutLink import LinkDestination
+from pyutmodelv2.PyutLink import LinkSource
 from untangle import Element
 
 from codeallybasic.Common import XML_END_OF_LINE_MARKER
@@ -43,6 +45,7 @@ from pyutmodelv2.enumerations.PyutLinkType import PyutLinkType
 from pyutmodelv2.enumerations.PyutDisplayMethods import PyutDisplayMethods
 
 from umlio.IOTypes import Elements
+from umlio.IOTypes import LinkableModelClass
 
 from umlio.XMLConstants import XmlConstants
 
@@ -201,7 +204,7 @@ class XmlToPyut:
 
         return pyutUseCase
 
-    def linkToPyutLink(self, singleLink: Element, source: PyutClass, destination: PyutClass) -> PyutLink:
+    def linkToPyutLink(self, singleLink: Element, source: LinkSource, destination: LinkDestination) -> PyutLink:
 
         linkTypeStr:     str          = singleLink[XmlConstants.ATTRIBUTE_LINK_TYPE]
 

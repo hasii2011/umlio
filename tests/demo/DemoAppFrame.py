@@ -52,9 +52,9 @@ class DemoAppFrame(SizedFrame):
 
         self._notebook: Notebook = cast(Notebook, None)
 
-        self._openProjects:    List[UmlProject] = []
-        self._demoEventEngine: DemoAppPubSubEngine  = DemoAppPubSubEngine()
-        self._umlPubSubEngine: UmlPubSubEngine  = UmlPubSubEngine()
+        self._openProjects:        List[UmlProject]     = []
+        self._demoAppPubSubEngine: DemoAppPubSubEngine  = DemoAppPubSubEngine()
+        self._umlPubSubEngine:     UmlPubSubEngine      = UmlPubSubEngine()
 
         self._createApplicationMenuBar()
 
@@ -150,7 +150,7 @@ class DemoAppFrame(SizedFrame):
             self._createTheOverArchingNotebook()
 
         projectPanel: ProjectPanel = ProjectPanel(self._notebook,
-                                                  appEventEngine=self._demoEventEngine,
+                                                  appEventEngine=self._demoAppPubSubEngine,
                                                   umlPubSibEngine=self._umlPubSubEngine,
                                                   umlProject=umlProject)
         self._notebook.AddPage(page=projectPanel, text=umlProject.fileName.stem)

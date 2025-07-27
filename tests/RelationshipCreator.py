@@ -188,6 +188,7 @@ class RelationshipCreator:
         umlInheritance.SetCanvas(self._diagramFrame)
         umlInheritance.MakeLineControlPoints(n=2)       # Make this configurable
 
+        umlInheritance.SetEnds(x1=0, y1=0, x2=0, y2=0)
         umlInheritance.InsertLineControlPoint(point=Point(x=100, y=100))
         umlInheritance.InsertLineControlPoint(point=Point(x=200, y=200))
 

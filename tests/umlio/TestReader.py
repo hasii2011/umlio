@@ -23,6 +23,7 @@ SINGLE_NOTE_DIAGRAM_XML_PROJECT:     str = 'SingleNoteProject.xml'
 SINGLE_ACTOR_DIAGRAM_XML_PROJECT:    str = 'SingleActorProject.xml'
 SINGLE_USE_CASE_DIAGRAM_XML_PROJECT: str = 'SingleUseCaseProject.xml'
 COMPLEX_CLASSES_DIAGRAM_XML_PROJECT: str = 'ComplexClassesProject.xml'
+INHERITANCE_XML_PROJECT:             str = 'InheritanceProject.xml'
 
 
 class TestReader(UnitTestBaseW):
@@ -118,6 +119,18 @@ class TestReader(UnitTestBaseW):
         complexClassesDiagram: UmlDocument = umlProject.umlDocuments[UmlDocumentTitle('Full Fledge Class Diagram')]
 
         self.assertEqual(2, len(complexClassesDiagram.umlClasses), 'Not the correct UML class object count')
+
+    def testDeserializeInheritanceRelationship(self):
+        inheritanceProject: str = UnitTestBase.getFullyQualifiedResourceFileName(
+            package=UmlIOBaseTest.GOLDEN_FILES_PACKAGE_NAME,
+            fileName=INHERITANCE_XML_PROJECT)
+
+        reader:     Reader     = Reader()
+        umlProject: UmlProject = reader.readXmlFile(Path(inheritanceProject))
+
+        inheritanceDiagram: UmlDocument = umlProject.umlDocuments[UmlDocumentTitle('Inheritance Class Diagram')]
+
+        self.assertEqual(1, len(inheritanceDiagram.umlLinks), 'Not the correct # of links')
 
 
 def suite() -> TestSuite:

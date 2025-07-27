@@ -38,6 +38,10 @@
         "tests.demo": {
             "level": "INFO",
             "propagate": "False"
+        },
+        "umlio": {
+            "level": "INFO",
+            "propagate": "False"
         }
     }
 }
