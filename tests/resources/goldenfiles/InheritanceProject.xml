@@ -1,0 +1,16 @@
+<?xml version='1.0' encoding='iso-8859-1'?>
+<UmlProject fileName="Inheritance Project" version="12.0" codePath="/users/hasii">
+    <UMLDiagram documentType="Class Document" title="Inheritance Class Diagram" scrollPositionX="1" scrollPositionY="1" pixelsPerUnitX="1" pixelsPerUnitY="1">
+        <UmlClass id="speak.left.economic.change" width="150" height="75" x="200" y="300">
+            <PyutClass id="111" name="SubClass" displayMethods="True" displayParameters="Unspecified" displayConstructor="Unspecified" displayDunderMethods="Unspecified" displayFields="True" displayStereotype="True" fileName="" description="" />
+        </UmlClass>
+        <UmlClass id="call.lose.current.group" width="150" height="75" x="100" y="100">
+            <PyutClass id="999" name="BaseClass" displayMethods="True" displayParameters="Unspecified" displayConstructor="Unspecified" displayDunderMethods="Unspecified" displayFields="True" displayStereotype="True" fileName="" description="" />
+        </UmlClass>\n
+        <UmlLink id="die.free.open.point" fromX="248" fromY="300" toX="190" toY="174" spline="False">
+            <LineControlPoint x="100" y="100" />
+            <LineControlPoint x="200" y="200" />
+            <PyutLink name="" type="INHERITANCE" sourceId="111" destinationId="999" bidirectional="False" sourceCardinalityValue="" destinationCardinalityValue="" />
+        </UmlLink>
+    </UMLDiagram>
+</UmlProject>

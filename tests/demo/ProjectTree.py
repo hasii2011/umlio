@@ -9,6 +9,7 @@ from dataclasses import dataclass
 
 from wx import EVT_TREE_SEL_CHANGED
 from wx import TR_HAS_BUTTONS
+from wx import TR_HIDE_ROOT
 
 from wx import TreeCtrl
 from wx import TreeEvent
@@ -42,7 +43,7 @@ class ProjectTree(TreeCtrl):
 
         self.logger: Logger = getLogger(__name__)
 
-        super().__init__(parent=parent, style=TR_HAS_BUTTONS)
+        super().__init__(parent=parent, style=TR_HAS_BUTTONS | TR_HIDE_ROOT)
 
         self._umlProject:     UmlProject      = umlProject
         self._appEventEngine: IAppPubSubEngine = appEventEngine
@@ -51,8 +52,6 @@ class ProjectTree(TreeCtrl):
         self.root: TreeItemId = self.AddRoot(umlProject.fileName.stem)
 
         self._createDocumentNodes()
-
-        self.Expand(self.root)
 
         self.SelectItem(self.GetFirstChild(self.root)[0])
 
@@ -78,12 +77,13 @@ class ProjectTree(TreeCtrl):
 
     def _onDiagramSelectionChanged(self, treeEvent: TreeEvent):
 
-        item: TreeItemId = treeEvent.GetItem()
+        selectedItem: TreeItemId = treeEvent.GetItem()
 
-        treeData: TreeData = self.GetItemData(item)
+        if selectedItem != self.root:
+            treeData: TreeData = self.GetItemData(selectedItem)
 
-        self.logger.debug(f'{treeData=}')
+            self.logger.info(f'{treeData=}')
 
-        self._appEventEngine.sendMessage(DemoMessageType.DIAGRAM_SELECTION_CHANGED,
-                                         uniqueId=UniqueId(treeData.treeNodeID),
-                                         treeData=treeData)
+            self._appEventEngine.sendMessage(DemoMessageType.DIAGRAM_SELECTION_CHANGED,
+                                             uniqueId=UniqueId(treeData.treeNodeID),
+                                             treeData=treeData)
