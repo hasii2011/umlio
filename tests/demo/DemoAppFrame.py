@@ -29,7 +29,7 @@ from umlshapes.preferences.UmlPreferences import UmlPreferences
 
 from umlshapes.pubsubengine.UmlPubSubEngine import UmlPubSubEngine
 
-from tests.demo.eventengine.DemoAppPubSubEngine import DemoAppPubSubEngine
+from tests.demo.pubsubengine.DemoAppPubSubEngine import DemoAppPubSubEngine
 
 from umlio.IOTypes import UmlProject
 from umlio.Reader import Reader

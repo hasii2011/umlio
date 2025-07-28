@@ -14,9 +14,10 @@ from tests.demo.DiagramManager import DiagramManager
 from tests.demo.ProjectTree import ProjectTree
 from tests.demo.ProjectTree import TreeData
 from tests.demo.ProjectTree import TreeNodeIDs
-from tests.demo.eventengine.DemoAppPubSubEngine import DemoAppPubSubEngine
-from tests.demo.eventengine.DemoMessageType import DemoMessageType
-from tests.demo.eventengine.IAppPubSubEngine import UniqueId
+
+from tests.demo.pubsubengine.DemoAppPubSubEngine import DemoAppPubSubEngine
+from tests.demo.pubsubengine.DemoMessageType import DemoMessageType
+from tests.demo.pubsubengine.IAppPubSubEngine import UniqueId
 
 
 class ProjectPanel(SplitterWindow):

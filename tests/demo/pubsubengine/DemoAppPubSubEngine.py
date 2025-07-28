@@ -9,9 +9,9 @@ from enum import Enum
 from codeallybasic.BasePubSubEngine import BasePubSubEngine
 from codeallybasic.BasePubSubEngine import Topic
 
-from tests.demo.eventengine.DemoMessageType import DemoMessageType
-from tests.demo.eventengine.IAppPubSubEngine import IAppPubSubEngine
-from tests.demo.eventengine.IAppPubSubEngine import UniqueId
+from tests.demo.pubsubengine.DemoMessageType import DemoMessageType
+from tests.demo.pubsubengine.IAppPubSubEngine import IAppPubSubEngine
+from tests.demo.pubsubengine.IAppPubSubEngine import UniqueId
 
 
 class DemoAppPubSubEngine(IAppPubSubEngine, BasePubSubEngine):

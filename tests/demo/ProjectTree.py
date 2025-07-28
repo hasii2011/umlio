@@ -16,9 +16,9 @@ from wx import TreeEvent
 from wx import TreeItemId
 from wx import Window
 
-from tests.demo.eventengine.DemoMessageType import DemoMessageType
-from tests.demo.eventengine.IAppPubSubEngine import IAppPubSubEngine
-from tests.demo.eventengine.IAppPubSubEngine import UniqueId
+from tests.demo.pubsubengine.DemoMessageType import DemoMessageType
+from tests.demo.pubsubengine.IAppPubSubEngine import IAppPubSubEngine
+from tests.demo.pubsubengine.IAppPubSubEngine import UniqueId
 
 from umlshapes.UmlUtils import UmlUtils
 

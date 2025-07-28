@@ -5,7 +5,7 @@ from typing import NewType
 from abc import ABC
 from abc import abstractmethod
 
-from tests.demo.eventengine.DemoMessageType import DemoMessageType
+from tests.demo.pubsubengine.DemoMessageType import DemoMessageType
 
 UniqueId = NewType('UniqueId', str)
 

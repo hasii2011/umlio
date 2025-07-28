@@ -24,6 +24,10 @@ install:
   - echo $GLOBAL
   - PY_VERSION=${GLOBAL#* }
   - pyenv global ${PY_VERSION}
+  - sudo apt update
+  - sudo apt install libnotify-dev
+  - sudo apt install libgtk-3-dev
+  - sudo apt-get install -y  libsdl2-dev
   - pip install --upgrade pip
   - pip install wheel==0.45.1
   - pip install setuptools==75.8.0

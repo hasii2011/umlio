@@ -4,9 +4,9 @@ from unittest import main as unitTestMain
 
 from codeallybasic.UnitTestBase import UnitTestBase
 
-from tests.demo.eventengine.DemoAppPubSubEngine import DemoAppPubSubEngine
-from tests.demo.eventengine.DemoMessageType import DemoMessageType
-from tests.demo.eventengine.IAppPubSubEngine import UniqueId
+from tests.demo.pubsubengine.DemoAppPubSubEngine import DemoAppPubSubEngine
+from tests.demo.pubsubengine.DemoMessageType import DemoMessageType
+from tests.demo.pubsubengine.IAppPubSubEngine import UniqueId
 
 UNIQUE_ID: UniqueId = UniqueId('DEADBEEF')
 
