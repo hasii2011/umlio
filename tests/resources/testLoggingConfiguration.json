@@ -42,6 +42,10 @@
         "umlio": {
             "level": "INFO",
             "propagate": "False"
+        },
+        "umlshapes.frames.UmlFrame": {
+            "level": "WARNING",
+            "propagate": "False"
         }
     }
 }

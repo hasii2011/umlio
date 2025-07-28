@@ -8,9 +8,9 @@
             <PyutClass id="999" name="BaseClass" displayMethods="True" displayParameters="Unspecified" displayConstructor="Unspecified" displayDunderMethods="Unspecified" displayFields="True" displayStereotype="True" fileName="" description="" />
         </UmlClass>\n
         <UmlLink id="die.free.open.point" fromX="248" fromY="300" toX="190" toY="174" spline="False">
-            <LineControlPoint x="100" y="100" />
-            <LineControlPoint x="200" y="200" />
-            <PyutLink name="" type="INHERITANCE" sourceId="111" destinationId="999" bidirectional="False" sourceCardinalityValue="" destinationCardinalityValue="" />
+            <LineControlPoint x="72" y="261" />
+            <LineControlPoint x="44" y="197" />
+            <PyutLink name="InheritsFrom" type="INHERITANCE" sourceId="111" destinationId="999" bidirectional="False" sourceCardinalityValue="" destinationCardinalityValue="" />
         </UmlLink>
     </UMLDiagram>
 </UmlProject>
