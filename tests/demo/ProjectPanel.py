@@ -2,10 +2,13 @@
 from logging import Logger
 from logging import getLogger
 
-from umlshapes.pubsubengine.UmlPubSubEngine import UmlPubSubEngine
-from wx import SplitterWindow
+from wx import Size
 from wx import Window
+from wx import SplitterWindow
 
+from umlshapes.pubsubengine.UmlPubSubEngine import UmlPubSubEngine
+
+from umlio.IOTypes import UmlProject
 
 from tests.demo.DiagramManager import DiagramManager
 from tests.demo.ProjectTree import ProjectTree
@@ -14,8 +17,6 @@ from tests.demo.ProjectTree import TreeNodeIDs
 from tests.demo.eventengine.DemoAppPubSubEngine import DemoAppPubSubEngine
 from tests.demo.eventengine.DemoMessageType import DemoMessageType
 from tests.demo.eventengine.IAppPubSubEngine import UniqueId
-
-from umlio.IOTypes import UmlProject
 
 
 class ProjectPanel(SplitterWindow):
@@ -46,6 +47,12 @@ class ProjectPanel(SplitterWindow):
             self.appEventEngine.subscribe(eventType=DemoMessageType.DIAGRAM_SELECTION_CHANGED,
                                           uniqueId=UniqueId(treeNodeID),
                                           callback=self._onDiagramSelectionChanged)
+
+        windowSize: Size = parent.GetSize()
+
+        sashPosition: int = round(windowSize.width * 0.3)     # TODO:  This should be a preference
+        print(f'{sashPosition=}')
+        self.SetSashPosition(position=sashPosition, redraw=True)
 
     def _onDiagramSelectionChanged(self, treeData: TreeData):
         self.logger.debug(f'{treeData=}')

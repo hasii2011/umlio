@@ -6,7 +6,6 @@ from typing import cast
 from logging import Logger
 from logging import getLogger
 
-from umlshapes.pubsubengine.UmlPubSubEngine import UmlPubSubEngine
 from wx import SHOW_EFFECT_SLIDE_TO_RIGHT
 
 from wx import Simplebook
@@ -25,6 +24,7 @@ from umlshapes.shapes.eventhandlers.UmlActorEventHandler import UmlActorEventHan
 from umlshapes.shapes.eventhandlers.UmlNoteEventHandler import UmlNoteEventHandler
 from umlshapes.shapes.eventhandlers.UmlTextEventHandler import UmlTextEventHandler
 from umlshapes.shapes.eventhandlers.UmlUseCaseEventHandler import UmlUseCaseEventHandler
+from umlshapes.links.eventhandlers.UmlLinkEventHandler import UmlLinkEventHandler
 
 from umlshapes.shapes.UmlActor import UmlActor
 from umlshapes.shapes.UmlClass import UmlClass
@@ -32,7 +32,11 @@ from umlshapes.shapes.UmlNote import UmlNote
 from umlshapes.shapes.UmlText import UmlText
 from umlshapes.shapes.UmlUseCase import UmlUseCase
 
+from umlshapes.links.UmlInheritance import UmlInheritance
+
 from umlshapes.UmlDiagram import UmlDiagram
+
+from umlshapes.pubsubengine.UmlPubSubEngine import UmlPubSubEngine
 
 from umlio.IOTypes import UmlActors
 from umlio.IOTypes import UmlClasses
@@ -40,6 +44,7 @@ from umlio.IOTypes import UmlDocument
 from umlio.IOTypes import UmlDocumentTitle
 from umlio.IOTypes import UmlDocumentType
 from umlio.IOTypes import UmlDocuments
+from umlio.IOTypes import UmlLinks
 from umlio.IOTypes import UmlNotes
 from umlio.IOTypes import UmlTexts
 from umlio.IOTypes import UmlUseCases
@@ -70,6 +75,7 @@ class DiagramManager(Simplebook):
         self._diagramTitleToDiagram: FrameIdToUmlDocument = FrameIdToUmlDocument({})
         self._diagramTitleToPage:    UmlDocumentToPage    = UmlDocumentToPage({})
 
+        # doing any effect should be an application preference
         self.SetEffect(effect=SHOW_EFFECT_SLIDE_TO_RIGHT)               # TODO:  Should be an application preference
         self.SetEffectTimeout(timeout=200)                              # TODO:  Should be an application preference
 
@@ -118,6 +124,7 @@ class DiagramManager(Simplebook):
         self._layoutTexts(diagramFrame, umlDocument.umlTexts)
         self._layoutActors(diagramFrame, umlDocument.umlActors)
         self._layoutUseCases(diagramFrame, umlDocument.umlUseCases)
+        self._layoutLinks(diagramFrame, umlDocument.umlLinks)
 
     def _layoutClasses(self, diagramFrame: ClassDiagramFrame, umlClasses: UmlClasses):
         for umlClass in umlClasses:
@@ -161,6 +168,24 @@ class DiagramManager(Simplebook):
                 diagramFrame=diagramFrame,
                 eventHandlerClass=UmlUseCaseEventHandler
             )
+
+    def _layoutLinks(self, diagramFrame: ClassDiagramFrame | UseCaseDiagramFrame, umlLinks: UmlLinks):
+        for umlLink in umlLinks:
+            umlLink.umlFrame = diagramFrame
+            if isinstance(umlLink, UmlInheritance):
+                umInheritance: UmlInheritance = cast(UmlInheritance, umlLink)
+                subClass  = umInheritance.subClass
+                baseClass = umInheritance.baseClass
+
+                subClass.addLink(umlLink=umInheritance, destinationClass=baseClass)
+
+                diagramFrame.umlDiagram.AddShape(umInheritance)
+                umInheritance.Show(True)
+
+            eventHandler: UmlLinkEventHandler = UmlLinkEventHandler(umlLink=umlLink)
+            eventHandler.umlPubSubEngine = self._umlPubSubEngine
+            eventHandler.SetPreviousHandler(umlLink.GetEventHandler())
+            umlLink.SetEventHandler(eventHandler)
 
     def _layoutShape(self, umlShape: UmlShape, diagramFrame: ClassDiagramFrame | UseCaseDiagramFrame, eventHandlerClass: type[ShapeEvtHandler]):
         """
