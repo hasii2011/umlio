@@ -7,6 +7,7 @@ from logging import getLogger
 
 from dataclasses import dataclass
 
+from umlshapes.links.UmlAggregation import UmlAggregation
 from wx import Point
 
 from untangle import Element
@@ -230,5 +231,11 @@ class XmlLinksToUmlLinks:
             umlComposition.sourceShape      = srcShape
             umlComposition.destinationShape = destShape
             return umlComposition
+        elif pyutLink.linkType == PyutLinkType.AGGREGATION:
+            umlAggregation: UmlAggregation = UmlAggregation(pyutLink=pyutLink)
+
+            umlAggregation.sourceShape      = srcShape
+            umlAggregation.destinationShape = destShape
+            return umlAggregation
         else:
             assert False, f'Unknown link type, {pyutLink.linkType=}'
