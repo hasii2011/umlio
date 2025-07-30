@@ -9,7 +9,9 @@ from untangle import parse
 
 from codeallybasic.SecureConversions import SecureConversions
 
-from umlio.IOTypes import LinkableUmlShapes
+from umlshapes.ShapeTypes import LinkableUmlShapes
+from umlshapes.ShapeTypes import linkableUmlShapesFactory
+
 from umlio.IOTypes import UmlActors
 from umlio.IOTypes import UmlClasses
 from umlio.IOTypes import UmlDocument
@@ -20,16 +22,15 @@ from umlio.IOTypes import UmlNotes
 from umlio.IOTypes import UmlTexts
 from umlio.IOTypes import UmlProject
 from umlio.IOTypes import UmlUseCases
-from umlio.IOTypes import linkableUmlShapesFactory
 
 from umlio.deserializer.XmlActorsToUmlActors import XmlActorsToUmlActors
 from umlio.deserializer.XmlClassesToUmlClasses import XmlClassesToUmlClasses
 from umlio.deserializer.XmlLinksToUmlLinks import XmlLinksToUmlLinks
 from umlio.deserializer.XmlNotesToUmlNotes import XmlNotesToUmlNotes
 from umlio.deserializer.XmlTextsToUmlTexts import XmlTextsToUmlTexts
+from umlio.deserializer.XmlUseCasesToUmlUseCases import XmlUseCasesToUmlUseCases
 
 from umlio.XMLConstants import XmlConstants
-from umlio.deserializer.XmlUseCasesToUmlUseCases import XmlUseCasesToUmlUseCases
 
 
 class XmlToUmlShapes:

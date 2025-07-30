@@ -45,7 +45,6 @@ from pyutmodelv2.enumerations.PyutLinkType import PyutLinkType
 from pyutmodelv2.enumerations.PyutDisplayMethods import PyutDisplayMethods
 
 from umlio.IOTypes import Elements
-from umlio.IOTypes import LinkableModelClass
 
 from umlio.XMLConstants import XmlConstants
 

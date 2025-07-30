@@ -20,17 +20,19 @@ from pyutmodelv2.enumerations.PyutLinkType import PyutLinkType
 
 from umlshapes.types.Common import EndPoints
 
-from umlshapes.links.UmlInheritance import UmlInheritance
 from umlshapes.links.UmlLink import UmlLink
+from umlshapes.links.UmlAssociation import UmlAssociation
+from umlshapes.links.UmlInheritance import UmlInheritance
 
 from umlshapes.shapes.UmlClass import UmlClass
 from umlshapes.shapes.UmlNote import UmlNote
 from umlshapes.shapes.UmlText import UmlText
 from umlshapes.shapes.UmlUseCase import UmlUseCase
 
+from umlshapes.ShapeTypes import LinkableUmlShape
+from umlshapes.ShapeTypes import LinkableUmlShapes
+
 from umlio.IOTypes import Elements
-from umlio.IOTypes import LinkableUmlShape
-from umlio.IOTypes import LinkableUmlShapes
 from umlio.IOTypes import UmlLinkAttributes
 from umlio.IOTypes import UmlLinks
 from umlio.IOTypes import umlLinksFactory
@@ -205,10 +207,19 @@ class XmlLinksToUmlLinks:
 
         return controlPoints
 
-    def _umlLinkFactory(self, srcShape, pyutLink: PyutLink, destShape) -> UmlLink:
+    def _umlLinkFactory(self, srcShape: UmlClass, pyutLink: PyutLink, destShape: UmlClass) -> UmlLink:
 
         if pyutLink.linkType == PyutLinkType.INHERITANCE:
             # Note dest and source are reversed here
             return UmlInheritance(baseClass=destShape, pyutLink=pyutLink, subClass=srcShape)
+        elif pyutLink.linkType == PyutLinkType.ASSOCIATION:
+            umlAssociation: UmlAssociation = UmlAssociation(pyutLink=pyutLink)
+            #
+            # Need to do this because the shape is not yet on a canvas
+            #
+            umlAssociation.sourceShape      = srcShape
+            umlAssociation.destinationShape = destShape
+
+            return umlAssociation
         else:
             assert False, f'Unknown link type, {pyutLink.linkType=}'

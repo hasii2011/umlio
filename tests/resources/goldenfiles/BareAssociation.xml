@@ -1,0 +1,17 @@
+<?xml version='1.0' encoding='iso-8859-1'?>
+<UmlProject fileName="." version="12.0" codePath="/users/hasii">
+    <UMLDiagram documentType="Class Document" title="Bare Association Class Diagram" scrollPositionX="1" scrollPositionY="1" pixelsPerUnitX="1" pixelsPerUnitY="1">
+        <UmlClass id="provide.serious.hand.change" width="150" height="75" x="100" y="100">
+            <PyutClass id="666" name="GeneratedClass-0" displayMethods="True" displayParameters="Unspecified" displayConstructor="Unspecified" displayDunderMethods="Unspecified" displayFields="True" displayStereotype="True" fileName="" description="" />
+        </UmlClass>
+        <UmlClass id="believe.able.power.moment" width="150" height="75" x="200" y="300">
+            <PyutClass id="777" name="GeneratedClass-1" displayMethods="True" displayParameters="Unspecified" displayConstructor="Unspecified" displayDunderMethods="Unspecified" displayFields="True" displayStereotype="True" fileName="" description="" />
+       </UmlClass>
+        <UmlLink id="die.free.open.point" fromX="194" fromY="174" toX="256" toY="300" spline="False">
+            <AssociationName deltaX="0" deltaY="0" />
+            <SourceCardinality deltaX="0" deltaY="0" />
+            <DestinationCardinality deltaX="0" deltaY="0" />
+            <PyutLink name="BareAssociation" type="ASSOCIATION" sourceId="777" destinationId="666" bidirectional="False" sourceCardinalityValue="src Card" destinationCardinalityValue="dst Card" />
+        </UmlLink>
+    </UMLDiagram>
+</UmlProject>

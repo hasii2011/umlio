@@ -9,14 +9,8 @@ from dataclasses import dataclass
 from dataclasses import field
 
 from pathlib import Path
-from typing import Union
 
 from codeallybasic.SecureConversions import SecureConversions
-from pyutmodelv2.PyutActor import PyutActor
-from pyutmodelv2.PyutClass import PyutClass
-from pyutmodelv2.PyutNote import PyutNote
-from pyutmodelv2.PyutText import PyutText
-from pyutmodelv2.PyutUseCase import PyutUseCase
 
 from umlshapes.links.UmlLollipopInterface import UmlLollipopInterface
 from umlshapes.shapes.UmlActor import UmlActor
@@ -152,17 +146,6 @@ class GraphicInformation:
         return graphicInformation
 
 
-LinkableUmlShape = Union[UmlClass, UmlNote, UmlActor, UmlUseCase]
-
-LinkableUmlShapes = NewType('LinkableUmlShapes', Dict[int, LinkableUmlShape])
-
-LinkableModelClass = Union[PyutClass, PyutActor, PyutUseCase, PyutNote]
-
-
-def linkableUmlShapesFactory() -> LinkableUmlShapes:
-    return LinkableUmlShapes({})
-
-
 @dataclass
 class UmlLinkAttributes:
 
@@ -180,14 +163,14 @@ class UmlLinkAttributes:
         toY:   int = int(linkElement[XmlConstants.ATTRIBUTE_LINK_TO_X])
         toX:   int = int(linkElement[XmlConstants.ATTRIBUTE_LINK_TO_Y])
 
-        id:     str  = linkElement[XmlConstants.ATTRIBUTE_ID]
-        spline: bool = SecureConversions.secureBoolean(linkElement[XmlConstants.ATTRIBUTE_SPLINE])
+        shapeId: str  = linkElement[XmlConstants.ATTRIBUTE_ID]
+        spline:  bool = SecureConversions.secureBoolean(linkElement[XmlConstants.ATTRIBUTE_SPLINE])
 
         gla: UmlLinkAttributes = UmlLinkAttributes(
             fromPosition=UmlPosition(x=fromX, y=fromY),
             toPosition=UmlPosition(x=toX, y=toY),
             spline=spline,
-            id=id
+            id=shapeId
         )
 
         return gla

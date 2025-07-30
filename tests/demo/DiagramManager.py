@@ -8,10 +8,12 @@ from logging import getLogger
 
 from wx import SHOW_EFFECT_SLIDE_TO_RIGHT
 
-from wx import Simplebook
 from wx import Window
+from wx import Simplebook
 
 from wx.lib.ogl import ShapeEvtHandler
+
+from umlshapes.UmlDiagram import UmlDiagram
 
 from umlshapes.frames.DiagramFrame import FrameId
 from umlshapes.frames.ClassDiagramFrame import ClassDiagramFrame
@@ -24,7 +26,6 @@ from umlshapes.shapes.eventhandlers.UmlActorEventHandler import UmlActorEventHan
 from umlshapes.shapes.eventhandlers.UmlNoteEventHandler import UmlNoteEventHandler
 from umlshapes.shapes.eventhandlers.UmlTextEventHandler import UmlTextEventHandler
 from umlshapes.shapes.eventhandlers.UmlUseCaseEventHandler import UmlUseCaseEventHandler
-from umlshapes.links.eventhandlers.UmlLinkEventHandler import UmlLinkEventHandler
 
 from umlshapes.shapes.UmlActor import UmlActor
 from umlshapes.shapes.UmlClass import UmlClass
@@ -32,9 +33,11 @@ from umlshapes.shapes.UmlNote import UmlNote
 from umlshapes.shapes.UmlText import UmlText
 from umlshapes.shapes.UmlUseCase import UmlUseCase
 
+from umlshapes.links.UmlAssociation import UmlAssociation
 from umlshapes.links.UmlInheritance import UmlInheritance
 
-from umlshapes.UmlDiagram import UmlDiagram
+from umlshapes.links.eventhandlers.UmlLinkEventHandler import UmlLinkEventHandler
+from umlshapes.links.eventhandlers.UmlAssociationEventHandler import UmlAssociationEventHandler
 
 from umlshapes.pubsubengine.UmlPubSubEngine import UmlPubSubEngine
 
@@ -182,10 +185,24 @@ class DiagramManager(Simplebook):
                 diagramFrame.umlDiagram.AddShape(umInheritance)
                 umInheritance.Show(True)
 
-            eventHandler: UmlLinkEventHandler = UmlLinkEventHandler(umlLink=umlLink)
-            eventHandler.umlPubSubEngine = self._umlPubSubEngine
-            eventHandler.SetPreviousHandler(umlLink.GetEventHandler())
-            umlLink.SetEventHandler(eventHandler)
+                umlLinkEventHandler: UmlLinkEventHandler = UmlLinkEventHandler(umlLink=umlLink)
+                umlLinkEventHandler.umlPubSubEngine = self._umlPubSubEngine
+                umlLinkEventHandler.SetPreviousHandler(umlLink.GetEventHandler())
+                umlLink.SetEventHandler(umlLinkEventHandler)
+
+            elif isinstance(umlLink, UmlAssociation):
+                umlAssociation: UmlAssociation = cast(UmlAssociation, umlLink)
+                source = umlAssociation.GetFrom()
+                dest   = umlAssociation.GetTo()
+                source.addLink(umlLink=umlAssociation, destinationClass=dest)
+
+                diagramFrame.umlDiagram.AddShape(umlAssociation)
+                umlAssociation.Show(True)
+
+                umlAssociationEventHandler: UmlAssociationEventHandler = UmlAssociationEventHandler(umlAssociation=umlLink)
+                umlAssociationEventHandler.umlPubSubEngine = self._umlPubSubEngine
+                umlAssociationEventHandler.SetPreviousHandler(umlAssociation.GetEventHandler())
+                umlAssociation.SetEventHandler(umlAssociationEventHandler)
 
     def _layoutShape(self, umlShape: UmlShape, diagramFrame: ClassDiagramFrame | UseCaseDiagramFrame, eventHandlerClass: type[ShapeEvtHandler]):
         """

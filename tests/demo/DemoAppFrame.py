@@ -140,7 +140,6 @@ class DemoAppFrame(SizedFrame):
         umlProject: UmlProject = reader.readXmlFile(fileName=fileName)
 
         self.logger.debug(f'{umlProject=}')
-        # self._eventEngine.sendEvent(eventType=EventType.LoadOglProject, oglProject=oglProject)
 
         self._loadNewProject(umlProject)
 
