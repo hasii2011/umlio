@@ -35,6 +35,7 @@ from umlshapes.shapes.UmlUseCase import UmlUseCase
 
 from umlshapes.links.UmlAssociation import UmlAssociation
 from umlshapes.links.UmlInheritance import UmlInheritance
+from umlshapes.links.UmlComposition import UmlComposition
 
 from umlshapes.links.eventhandlers.UmlLinkEventHandler import UmlLinkEventHandler
 from umlshapes.links.eventhandlers.UmlAssociationEventHandler import UmlAssociationEventHandler
@@ -192,17 +193,32 @@ class DiagramManager(Simplebook):
 
             elif isinstance(umlLink, UmlAssociation):
                 umlAssociation: UmlAssociation = cast(UmlAssociation, umlLink)
-                source = umlAssociation.GetFrom()
-                dest   = umlAssociation.GetTo()
+                source = umlAssociation.sourceShape
+                dest   = umlAssociation.destinationShape
                 source.addLink(umlLink=umlAssociation, destinationClass=dest)
 
                 diagramFrame.umlDiagram.AddShape(umlAssociation)
                 umlAssociation.Show(True)
 
-                umlAssociationEventHandler: UmlAssociationEventHandler = UmlAssociationEventHandler(umlAssociation=umlLink)
+                umlAssociationEventHandler: UmlAssociationEventHandler = UmlAssociationEventHandler(umlAssociation=umlAssociation)
                 umlAssociationEventHandler.umlPubSubEngine = self._umlPubSubEngine
                 umlAssociationEventHandler.SetPreviousHandler(umlAssociation.GetEventHandler())
                 umlAssociation.SetEventHandler(umlAssociationEventHandler)
+
+            elif isinstance(umlLink, UmlComposition):
+                umlComposition: UmlComposition = cast(UmlComposition, umlLink)
+                source      = umlComposition.sourceShape
+                destination = umlComposition.destinationShape
+
+                source.addLink(umlLink=umlComposition, destinationClass=destination)
+
+                diagramFrame.umlDiagram.AddShape(umlComposition)
+                umlComposition.Show(True)
+
+                umlAssociationEventHandler: UmlAssociationEventHandler = UmlAssociationEventHandler(umlAssociation=umlComposition)
+                umlAssociationEventHandler.umlPubSubEngine = self._umlPubSubEngine
+                umlAssociationEventHandler.SetPreviousHandler(umlComposition.GetEventHandler())
+                umlComposition.SetEventHandler(umlAssociationEventHandler)
 
     def _layoutShape(self, umlShape: UmlShape, diagramFrame: ClassDiagramFrame | UseCaseDiagramFrame, eventHandlerClass: type[ShapeEvtHandler]):
         """

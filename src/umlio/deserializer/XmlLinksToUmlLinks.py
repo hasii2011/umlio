@@ -23,6 +23,7 @@ from umlshapes.types.Common import EndPoints
 from umlshapes.links.UmlLink import UmlLink
 from umlshapes.links.UmlAssociation import UmlAssociation
 from umlshapes.links.UmlInheritance import UmlInheritance
+from umlshapes.links.UmlComposition import UmlComposition
 
 from umlshapes.shapes.UmlClass import UmlClass
 from umlshapes.shapes.UmlNote import UmlNote
@@ -221,5 +222,13 @@ class XmlLinksToUmlLinks:
             umlAssociation.destinationShape = destShape
 
             return umlAssociation
+        elif pyutLink.linkType == PyutLinkType.COMPOSITION:
+            umlComposition: UmlComposition = UmlComposition(pyutLink=pyutLink)
+            #
+            # Need to do this because the shape is not yet on a canvas
+            #
+            umlComposition.sourceShape      = srcShape
+            umlComposition.destinationShape = destShape
+            return umlComposition
         else:
             assert False, f'Unknown link type, {pyutLink.linkType=}'
