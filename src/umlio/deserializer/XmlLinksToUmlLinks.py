@@ -1,5 +1,8 @@
 
+from typing import Dict
 from typing import List
+from typing import NewType
+from typing import Union
 from typing import cast
 
 from logging import Logger
@@ -7,7 +10,6 @@ from logging import getLogger
 
 from dataclasses import dataclass
 
-from umlshapes.links.UmlAggregation import UmlAggregation
 from wx import Point
 
 from untangle import Element
@@ -25,6 +27,7 @@ from umlshapes.links.UmlLink import UmlLink
 from umlshapes.links.UmlAssociation import UmlAssociation
 from umlshapes.links.UmlInheritance import UmlInheritance
 from umlshapes.links.UmlComposition import UmlComposition
+from umlshapes.links.UmlAggregation import UmlAggregation
 
 from umlshapes.shapes.UmlClass import UmlClass
 from umlshapes.shapes.UmlNote import UmlNote
@@ -48,6 +51,24 @@ from umlio.deserializer.XmlToPyut import XmlToPyut
 class ConnectedShapes:
     sourceShape:        LinkableUmlShape
     destinationShape:   LinkableUmlShape
+
+
+UmlAssociationClasses = Union[UmlAssociation, UmlComposition, UmlAggregation]
+
+# AssociationClassDescriptor = type[UmlAssociationClasses] = cast(type[LinkEventHandler], None)
+
+LinkTypeToClass = NewType('LinkTypeToClass', Dict[PyutLinkType, type[UmlAssociationClasses]])
+
+CLASSMAP: LinkTypeToClass = LinkTypeToClass(
+    {
+        PyutLinkType.ASSOCIATION: UmlAssociation,
+        PyutLinkType.AGGREGATION: UmlAggregation,
+        PyutLinkType.COMPOSITION: UmlComposition
+    }
+)
+ASSOCIATION_LINK_TYPES: List[PyutLinkType] = [
+    PyutLinkType.COMPOSITION, PyutLinkType.AGGREGATION, PyutLinkType.ASSOCIATION
+]
 
 
 class XmlLinksToUmlLinks:
@@ -210,32 +231,27 @@ class XmlLinksToUmlLinks:
         return controlPoints
 
     def _umlLinkFactory(self, srcShape: UmlClass, pyutLink: PyutLink, destShape: UmlClass) -> UmlLink:
+        """
 
+        Args:
+            srcShape:
+            pyutLink:
+            destShape:
+
+        Returns:  The appropriate UML Link shape
+
+        """
         if pyutLink.linkType == PyutLinkType.INHERITANCE:
             # Note dest and source are reversed here
             return UmlInheritance(baseClass=destShape, pyutLink=pyutLink, subClass=srcShape)
-        elif pyutLink.linkType == PyutLinkType.ASSOCIATION:
-            umlAssociation: UmlAssociation = UmlAssociation(pyutLink=pyutLink)
+        elif pyutLink.linkType in ASSOCIATION_LINK_TYPES:
+            umlAssociation = CLASSMAP[pyutLink.linkType](pyutLink)
             #
             # Need to do this because the shape is not yet on a canvas
             #
             umlAssociation.sourceShape      = srcShape
             umlAssociation.destinationShape = destShape
-
             return umlAssociation
-        elif pyutLink.linkType == PyutLinkType.COMPOSITION:
-            umlComposition: UmlComposition = UmlComposition(pyutLink=pyutLink)
-            #
-            # Need to do this because the shape is not yet on a canvas
-            #
-            umlComposition.sourceShape      = srcShape
-            umlComposition.destinationShape = destShape
-            return umlComposition
-        elif pyutLink.linkType == PyutLinkType.AGGREGATION:
-            umlAggregation: UmlAggregation = UmlAggregation(pyutLink=pyutLink)
 
-            umlAggregation.sourceShape      = srcShape
-            umlAggregation.destinationShape = destShape
-            return umlAggregation
         else:
             assert False, f'Unknown link type, {pyutLink.linkType=}'

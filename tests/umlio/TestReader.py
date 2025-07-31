@@ -4,13 +4,13 @@ from unittest import main as unitTestMain
 
 from pathlib import Path
 
-from wx.lib.ogl import OGLInitialize
-
 from codeallyadvanced.ui.UnitTestBaseW import UnitTestBaseW
 from codeallybasic.UnitTestBase import UnitTestBase
 
 from tests.umlio.UmlIOBaseTest import EMPTY_DIAGRAMS_XML_PROJECT
 from tests.umlio.UmlIOBaseTest import UmlIOBaseTest
+
+from umlshapes.lib.ogl import OGLInitialize
 
 from umlio.IOTypes import UmlDocument
 from umlio.IOTypes import UmlDocumentTitle

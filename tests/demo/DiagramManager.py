@@ -11,7 +11,7 @@ from wx import SHOW_EFFECT_SLIDE_TO_RIGHT
 from wx import Window
 from wx import Simplebook
 
-from wx.lib.ogl import ShapeEvtHandler
+from umlshapes.lib.ogl import ShapeEvtHandler
 
 from umlshapes.UmlDiagram import UmlDiagram
 
@@ -196,7 +196,7 @@ class DiagramManager(Simplebook):
 
                 source = umlLink.sourceShape
                 dest   = umlLink.destinationShape
-                source.addLink(umlLink=umlLink, destinationClass=dest)
+                source.addLink(umlLink=umlLink, destinationClass=dest)  # type: ignore
 
                 diagramFrame.umlDiagram.AddShape(umlLink)
                 umlLink.Show(True)

@@ -35,7 +35,7 @@ from umlshapes.shapes.UmlUseCase import UmlUseCase
 from umlshapes.types.UmlDimensions import UmlDimensions
 from umlshapes.types.UmlPosition import UmlPosition
 
-from wx.lib.ogl import OGLInitialize
+from umlshapes.lib.ogl import OGLInitialize
 
 from umlio.IOTypes import UmlDocument
 from umlio.IOTypes import UmlDocumentType

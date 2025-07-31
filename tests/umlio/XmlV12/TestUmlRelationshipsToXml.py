@@ -3,8 +3,6 @@ from typing import cast
 
 from pathlib import Path
 
-from wx.lib.ogl import OGLInitialize
-
 from codeallyadvanced.ui.UnitTestBaseW import UnitTestBaseW
 
 from pyutmodelv2.enumerations.PyutLinkType import PyutLinkType
@@ -38,6 +36,8 @@ from umlio.IOTypes import UmlDocumentType
 
 from tests.RelationshipCreator import CreatedAssociation
 from tests.RelationshipCreator import RelationshipCreator
+
+from umlshapes.lib.ogl import OGLInitialize
 
 from umlio.IOTypes import UmlDocument
 
