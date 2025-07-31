@@ -126,8 +126,9 @@ class TestUmlShapesToXml(UmlIOBaseTest):
     def setUpClass(cls):
         super().setUpClass()
 
-        TestUmlShapesToXml.TEMPORARY_PATH = Path(f'{osSep}{Path.home()}{osSep}tmp')
-        TestUmlShapesToXml.deleteDirectory(path=TestUmlShapesToXml.TEMPORARY_PATH)
+        TestUmlShapesToXml.TEMPORARY_PATH = Path(f'{Path.home()}{osSep}tmp')
+        if TestUmlShapesToXml.TEMPORARY_PATH.exists():
+            TestUmlShapesToXml.deleteDirectory(path=TestUmlShapesToXml.TEMPORARY_PATH)
         TestUmlShapesToXml.TEMPORARY_PATH.mkdir(exist_ok=True)
 
     def setUp(self):
