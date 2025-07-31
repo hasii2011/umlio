@@ -71,7 +71,7 @@ class TestWriter(UmlIOBaseTest):
         actualFileSize: int = emptyDiagramsFileName.stat().st_size
 
         # self.assertEqual(EXPECTED_FILE_SIZE, actualFileSize, 'Hmm.  Maybe zlib changed')
-        self.assertGreater(actualFileSize, 0, 'Looks like it is empty')
+        self.assertTrue(actualFileSize > 0, 'Looks like it is empty')
 
     def _createEmptyDiagramsProject(self, emptyDiagramsFileName: Path) -> UmlProject:
 

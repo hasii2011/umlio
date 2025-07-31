@@ -51,4 +51,7 @@ class UmlIOBaseTest(UnitTestBaseW):
         command: str = f'{diffProgram} {goldenFile} {generatedFile}'
         completedProcess: CompletedProcess = subProcessRun([command], shell=True, capture_output=True, text=True, check=False)
 
+        if completedProcess.returncode != 0:
+            self.clsLogger.error(f'{completedProcess.stdout=}')
+            self.clsLogger.error(f'{completedProcess.stderr=}')
         return completedProcess.returncode
