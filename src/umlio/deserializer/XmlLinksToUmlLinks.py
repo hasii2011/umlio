@@ -83,7 +83,7 @@ class XmlLinksToUmlLinks:
         linkElements: Elements = cast(Elements, umlDiagramElement.get_elements(XmlConstants.ELEMENT_UML_LINK))
 
         for linkElement in linkElements:
-            self.logger.info(f'{linkElement=}')
+            self.logger.debug(f'{linkElement=}')
             umlLink: UmlLink = self._umlLinkElementToUmlLink(umlLinkElement=linkElement, linkableUmlShapes=linkableUmlShapes)
 
             umlLinks.append(umlLink)
@@ -114,7 +114,7 @@ class XmlLinksToUmlLinks:
                                                 )
 
         umlLinkAttributes: UmlLinkAttributes = UmlLinkAttributes.fromGraphicLink(linkElement=umlLinkElement)
-        self.logger.info(f'{umlLinkAttributes}=')
+        self.logger.debug(f'{umlLinkAttributes}=')
 
         umlLink.id        = umlLinkAttributes.id
         umlLink.spline    = umlLinkAttributes.spline
@@ -147,7 +147,7 @@ class XmlLinksToUmlLinks:
             source=self._getLinkSourceModelClass(connectedShapes.sourceShape),
             destination=self._getLinkDestinationModelClass(connectedShapes.destinationShape)
         )
-        self.logger.info(f'{pyutLink=}')
+        self.logger.debug(f'{pyutLink=}')
 
         return pyutLink
 
