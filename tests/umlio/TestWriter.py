@@ -70,14 +70,14 @@ class TestWriter(UmlIOBaseTest):
 
         actualFileSize: int = emptyDiagramsFileName.stat().st_size
 
-        # self.assertEqual(EXPECTED_FILE_SIZE, actualFileSize, 'Hmm.  Maybe zlib changed')
-        self.assertTrue(actualFileSize > 0, 'Looks like it is empty')
+        self.assertEqual(EXPECTED_FILE_SIZE, actualFileSize, 'Hmm.  Maybe zlib changed')
+        # self.assertTrue(actualFileSize > 0, 'Looks like it is empty')
 
     def _createEmptyDiagramsProject(self, emptyDiagramsFileName: Path) -> UmlProject:
 
         umlProject: UmlProject = UmlProject()
-        umlProject.codePath = Path.home()
-        umlProject.fileName = Path(emptyDiagramsFileName.as_posix())
+        umlProject.codePath = Path('/Users/humberto.a.sanchez.ii')
+        umlProject.fileName = Path('/Users/humberto.a.sanchez.ii/SampleProject.udt')
 
         titleZero: UmlDocumentTitle = UmlDocumentTitle('Number Zero')
         titleOne:  UmlDocumentTitle = UmlDocumentTitle('Number One')

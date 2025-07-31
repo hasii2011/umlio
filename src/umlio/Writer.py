@@ -56,7 +56,7 @@ class Writer:
         if fileName.suffix != XML_SUFFIX:
             fileName = fileName / XML_SUFFIX
 
-        umlToXml: UmlShapesToXml = UmlShapesToXml(projectFileName=fileName, projectCodePath=umlProject.codePath)
+        umlToXml: UmlShapesToXml = UmlShapesToXml(projectFileName=umlProject.fileName, projectCodePath=umlProject.codePath)
 
         for umlDiagram in umlProject.umlDocuments.values():
             umlToXml.serialize(umlDiagram=umlDiagram)
