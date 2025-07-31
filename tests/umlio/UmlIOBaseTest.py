@@ -52,6 +52,7 @@ class UmlIOBaseTest(UnitTestBaseW):
         completedProcess: CompletedProcess = subProcessRun([command], shell=True, capture_output=True, text=True, check=False)
 
         if completedProcess.returncode != 0:
+            self.clsLogger.error(f'{completedProcess.args=}')
             self.clsLogger.error(f'{completedProcess.stdout=}')
             self.clsLogger.error(f'{completedProcess.stderr=}')
         return completedProcess.returncode
