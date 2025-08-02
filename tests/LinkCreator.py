@@ -60,7 +60,7 @@ PYUT_INTERFACE_CANONICAL_ID: int            = 0xDEADBEEF
 
 @dataclass
 class LinkDescription:
-    associationClass:   type[UmlLink] | type[UmlLollipopInterface]
+    associationClass:   type[UmlAssociation]
     linkType:           PyutLinkType  = PyutLinkType.ASSOCIATION
     associationCounter: int = 0
     classCounter:       int = 0
@@ -76,7 +76,7 @@ class CreatedLink:
     destinationUmlClass: UmlClass             = cast(UmlClass, None)
 
 
-class RelationshipCreator:
+class LinkCreator:
     def __init__(self, diagramFrame: DiagramFrame):
         self.logger: Logger = getLogger(__name__)
 
@@ -86,19 +86,10 @@ class RelationshipCreator:
             linkType=PyutLinkType.ASSOCIATION,
             associationClass=UmlAssociation
         )
-        inheritance: LinkDescription = LinkDescription(
-            linkType=PyutLinkType.INHERITANCE,
-            associationClass=UmlInheritance
-        )
-        interface: LinkDescription = LinkDescription(
-            linkType=PyutLinkType.INTERFACE,
-            associationClass=UmlInterface
-        )
+
         self._relationShips: LinkDescriptions = LinkDescriptions(
             {
                 PyutLinkType.ASSOCIATION: association,
-                PyutLinkType.INHERITANCE: inheritance,
-                PyutLinkType.INTERFACE:   interface,
                 # Identifiers.ID_DISPLAY_UML_COMPOSITION: composition,
                 # Identifiers.ID_DISPLAY_UML_AGGREGATION: aggregation,
             }
@@ -109,12 +100,7 @@ class RelationshipCreator:
 
         associationDescription: LinkDescription = self._relationShips[linkType]
 
-        if associationDescription.linkType == PyutLinkType.INHERITANCE:
-            return self._createUmlInheritance(associationDescription=associationDescription)
-        elif associationDescription.linkType == PyutLinkType.INTERFACE:
-            return self._createUmlInterface()
-        else:
-            return self._createAssociation(associationDescription=associationDescription)
+        return self._createAssociation(associationDescription=associationDescription)
 
     def _createAssociation(self, associationDescription: LinkDescription) -> CreatedLink:
         """
@@ -134,12 +120,12 @@ class RelationshipCreator:
 
         associationDescription.associationCounter += 1
 
-        umlAssociation = associationDescription.associationClass(pyutLink)      # type: ignore
+        umlAssociation = associationDescription.associationClass(pyutLink)
 
         umlAssociation.id = UML_LINK_CANONICAL_MONIKER
         umlAssociation.SetCanvas(self._diagramFrame)
         if pyutLink.linkType != PyutLinkType.LOLLIPOP:
-            umlAssociation.MakeLineControlPoints(n=2)       # type: ignore
+            umlAssociation.MakeLineControlPoints(n=2)
 
         sourceUmlClass.addLink(umlLink=umlAssociation, destinationClass=destinationUmlClass)
 
@@ -149,11 +135,10 @@ class RelationshipCreator:
             association=umlAssociation
         )
 
-    def _createUmlInheritance(self, associationDescription: LinkDescription) -> CreatedLink:
+    def createUmlInheritance(self) -> CreatedLink:
 
         basePyutClass: PyutClass = PyutClass(name=f'{BASE_UML_CLASS_NAME}')
-        associationDescription.classCounter += 1
-        subPyutClass: PyutClass = PyutClass(name=f'{SUBCLASS_UML_CLASS_NAME}')
+        subPyutClass:  PyutClass = PyutClass(name=f'{SUBCLASS_UML_CLASS_NAME}')
 
         basePyutClass.id = BASE_CLASS_PYUT_ID
         subPyutClass.id  = SUBCLASS_PYUT_ID
@@ -192,7 +177,7 @@ class RelationshipCreator:
             association=umlInheritance
         )
 
-    def _createUmlInterface(self) -> CreatedLink:
+    def createUmlInterface(self) -> CreatedLink:
 
         interfacePyutClass:    PyutClass = PyutClass(name=f'{INTERFACE_UML_CLASS_NAME}')
         implementingPyutClass: PyutClass = PyutClass(name=f'{IMPLEMENTING_UML_CLASS_NAME}')

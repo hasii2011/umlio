@@ -13,29 +13,29 @@ from umlshapes.frames.ClassDiagramFrame import CreateLollipopCallback
 
 from umlshapes.preferences.UmlPreferences import UmlPreferences
 
-from tests.RelationshipCreator import BASE_CLASS_PYUT_ID
-from tests.RelationshipCreator import BASE_UML_CLASS_ID
-from tests.RelationshipCreator import BASE_UML_CLASS_NAME
-from tests.RelationshipCreator import CANONICAl_LOLLIPOP_NAME
-from tests.RelationshipCreator import IMPLEMENTING_UML_CLASS_ID
-from tests.RelationshipCreator import IMPLEMENTING_UML_CLASS_NAME
-from tests.RelationshipCreator import PYUT_INTERFACE_CANONICAL_ID
-from tests.RelationshipCreator import SUBCLASS_PYUT_ID
-from tests.RelationshipCreator import SUBCLASS_UML_CLASS_ID
-from tests.RelationshipCreator import SUBCLASS_UML_CLASS_NAME
+from tests.LinkCreator import BASE_CLASS_PYUT_ID
+from tests.LinkCreator import BASE_UML_CLASS_ID
+from tests.LinkCreator import BASE_UML_CLASS_NAME
+from tests.LinkCreator import CANONICAl_LOLLIPOP_NAME
+from tests.LinkCreator import IMPLEMENTING_UML_CLASS_ID
+from tests.LinkCreator import IMPLEMENTING_UML_CLASS_NAME
+from tests.LinkCreator import PYUT_INTERFACE_CANONICAL_ID
+from tests.LinkCreator import SUBCLASS_PYUT_ID
+from tests.LinkCreator import SUBCLASS_UML_CLASS_ID
+from tests.LinkCreator import SUBCLASS_UML_CLASS_NAME
 
-from tests.RelationshipCreator import SOURCE_PYUT_CLASS_ID as INT_SOURCE_PYUT_CLASS_ID
-from tests.RelationshipCreator import DESTINATION_PYUT_CLASS_ID as INT_DESTINATION_PYUT_CLASS_ID
+from tests.LinkCreator import SOURCE_PYUT_CLASS_ID as INT_SOURCE_PYUT_CLASS_ID
+from tests.LinkCreator import DESTINATION_PYUT_CLASS_ID as INT_DESTINATION_PYUT_CLASS_ID
 
-from tests.RelationshipCreator import SOURCE_UML_CLASS_ID
-from tests.RelationshipCreator import DESTINATION_UML_CLASS_ID
-from tests.RelationshipCreator import UML_LINK_CANONICAL_MONIKER
+from tests.LinkCreator import SOURCE_UML_CLASS_ID
+from tests.LinkCreator import DESTINATION_UML_CLASS_ID
+from tests.LinkCreator import UML_LINK_CANONICAL_MONIKER
 
 from umlio.IOTypes import UmlDocumentTitle
 from umlio.IOTypes import UmlDocumentType
 
-from tests.RelationshipCreator import CreatedLink
-from tests.RelationshipCreator import RelationshipCreator
+from tests.LinkCreator import CreatedLink
+from tests.LinkCreator import LinkCreator
 
 from umlshapes.lib.ogl import OGLInitialize
 
@@ -149,7 +149,7 @@ class TestUmlRelationshipsToXml(UnitTestBaseW):
             createLollipopCallback=cast(CreateLollipopCallback, None)
         )
 
-        self._relationShipCreator: RelationshipCreator = RelationshipCreator(diagramFrame=self._diagramFrame)
+        self._linkCreator: LinkCreator = LinkCreator(diagramFrame=self._diagramFrame)
 
     def tearDown(self):
         super().tearDown()
@@ -166,31 +166,58 @@ class TestUmlRelationshipsToXml(UnitTestBaseW):
 
     def testInheritance(self):
 
-        self._runAssociationTest(
-            linkType=PyutLinkType.INHERITANCE,
-            fileName='Inheritance.xml',
-            diagramName='Inheritance Class Diagram',
-            failMessage='Inheritance serialization changed',
-            expectedXml=EXPECTED_INHERITANCE_XML
-        )
+        umlShapesToXml:      UmlShapesToXml = self._createXmlCreator()
+        inheritanceDiagram: UmlDocument     = self._createUmlDiagram(UmlDocumentType.CLASS_DOCUMENT, 'Inheritance Class Diagram')
+
+        createdLink: CreatedLink = self._linkCreator.createUmlInheritance()
+
+        inheritanceDiagram.umlClasses.append(createdLink.sourceUmlClass)
+        inheritanceDiagram.umlClasses.append(createdLink.destinationUmlClass)
+        inheritanceDiagram.umlLinks.append(createdLink.association)
+
+        umlShapesToXml.serialize(umlDiagram=inheritanceDiagram)
+
+        inheritanceXML: str = umlShapesToXml.xml
+
+        self._debugWriteToFile('Inheritance.xml', xml=inheritanceXML)
+
+        self.maxDiff = None
+        self.assertEqual(EXPECTED_INHERITANCE_XML, inheritanceXML, 'Inheritance serialization changed')
 
     def testInterface(self):
-        self._runAssociationTest(
-            linkType=PyutLinkType.INTERFACE,
-            fileName='Interface.xml',
-            diagramName='Interface Class Diagram',
-            failMessage='Interface serialization changed',
-            expectedXml=EXPECTED_INTERFACE_XML
-        )
+        umlShapesToXml:   UmlShapesToXml = self._createXmlCreator()
+        interfaceDiagram: UmlDocument    = self._createUmlDiagram(UmlDocumentType.CLASS_DOCUMENT, 'Interface Class Diagram')
+        createdLink: CreatedLink = self._linkCreator.createUmlInterface()
+
+        interfaceDiagram.umlClasses.append(createdLink.sourceUmlClass)
+        interfaceDiagram.umlClasses.append(createdLink.destinationUmlClass)
+        interfaceDiagram.umlLinks.append(createdLink.association)
+
+        umlShapesToXml.serialize(umlDiagram=interfaceDiagram)
+
+        interfaceXml: str = umlShapesToXml.xml
+
+        self._debugWriteToFile('Interface.xml', xml=interfaceXml)
+
+        self.maxDiff = None
+        self.assertEqual(EXPECTED_INTERFACE_XML, interfaceXml, 'Interface serialization changed')
 
     def testLollipop(self):
-        self._runAssociationTest(
-            linkType=PyutLinkType.LOLLIPOP,
-            fileName='Lollipop.xml',
-            diagramName='Lollipop Class Diagram',
-            failMessage='Lollipop serialization changed',
-            expectedXml=EXPECTED_LOLLIPOP_XML
-        )
+        umlShapesToXml:  UmlShapesToXml = self._createXmlCreator()
+        lollipopDiagram: UmlDocument    = self._createUmlDiagram(UmlDocumentType.CLASS_DOCUMENT, 'Lollipop Class Diagram')
+
+        umlLollipopInterface, implementingUmlClass = self._linkCreator.createLollipop()
+
+        lollipopDiagram.umlClasses.append(implementingUmlClass)
+        lollipopDiagram.umlLinks.append(umlLollipopInterface)
+        umlShapesToXml.serialize(umlDiagram=lollipopDiagram)
+
+        lollipopXml: str = umlShapesToXml.xml
+
+        self._debugWriteToFile('Lollipop.xml', xml=lollipopXml)
+
+        self.maxDiff = None
+        self.assertEqual(EXPECTED_LOLLIPOP_XML, lollipopXml, 'Lollipop serialization changed')
 
     def _runAssociationTest(self, linkType: PyutLinkType, fileName: str, diagramName: str, failMessage: str, expectedXml: str):
         """
@@ -205,10 +232,10 @@ class TestUmlRelationshipsToXml(UnitTestBaseW):
         umlShapesToXml:      UmlShapesToXml = self._createXmlCreator()
         associationsDiagram: UmlDocument     = self._createUmlDiagram(UmlDocumentType.CLASS_DOCUMENT, diagramName)
 
-        createdLink: CreatedLink = self._relationShipCreator.createAssociation(linkType)
+        createdLink: CreatedLink = self._linkCreator.createAssociation(linkType)
 
         if linkType == PyutLinkType.LOLLIPOP:
-            umlLollipopInterface, implementingUmlClass = self._relationShipCreator.createLollipop()
+            umlLollipopInterface, implementingUmlClass = self._linkCreator.createLollipop()
 
             associationsDiagram.umlClasses.append(implementingUmlClass)
             associationsDiagram.umlLinks.append(umlLollipopInterface)
