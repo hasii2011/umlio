@@ -59,22 +59,21 @@ PYUT_INTERFACE_CANONICAL_ID: int            = 0xDEADBEEF
 
 
 @dataclass
-class AssociationDescription:
+class LinkDescription:
     associationClass:   type[UmlLink] | type[UmlLollipopInterface]
     linkType:           PyutLinkType  = PyutLinkType.ASSOCIATION
     associationCounter: int = 0
     classCounter:       int = 0
 
 
-RelationshipDescription = NewType('RelationshipDescription', Dict[PyutLinkType, AssociationDescription])
+LinkDescriptions = NewType('LinkDescriptions', Dict[PyutLinkType, LinkDescription])
 
 
 @dataclass
-class CreatedAssociation:
+class CreatedLink:
     sourceUmlClass:      UmlClass             = cast(UmlClass, None)
     association:         UmlLink              = cast(UmlLink, None)
     destinationUmlClass: UmlClass             = cast(UmlClass, None)
-    lollipopInterface:   UmlLollipopInterface = cast(UmlLollipopInterface, None)
 
 
 class RelationshipCreator:
@@ -83,48 +82,41 @@ class RelationshipCreator:
 
         self._diagramFrame: DiagramFrame = diagramFrame
 
-        association: AssociationDescription = AssociationDescription(
+        association: LinkDescription = LinkDescription(
             linkType=PyutLinkType.ASSOCIATION,
             associationClass=UmlAssociation
         )
-        inheritance: AssociationDescription = AssociationDescription(
+        inheritance: LinkDescription = LinkDescription(
             linkType=PyutLinkType.INHERITANCE,
             associationClass=UmlInheritance
         )
-        interface: AssociationDescription = AssociationDescription(
+        interface: LinkDescription = LinkDescription(
             linkType=PyutLinkType.INTERFACE,
             associationClass=UmlInterface
         )
-        lollipop: AssociationDescription = AssociationDescription(
-            linkType=PyutLinkType.LOLLIPOP,
-            associationClass=UmlLollipopInterface
-        )
-        self._relationShips: RelationshipDescription = RelationshipDescription(
+        self._relationShips: LinkDescriptions = LinkDescriptions(
             {
                 PyutLinkType.ASSOCIATION: association,
                 PyutLinkType.INHERITANCE: inheritance,
                 PyutLinkType.INTERFACE:   interface,
-                PyutLinkType.LOLLIPOP:    lollipop,
                 # Identifiers.ID_DISPLAY_UML_COMPOSITION: composition,
                 # Identifiers.ID_DISPLAY_UML_AGGREGATION: aggregation,
             }
         )
 
     # noinspection PyTypeChecker
-    def createRelationship(self, linkType: PyutLinkType) -> CreatedAssociation:
+    def createAssociation(self, linkType: PyutLinkType) -> CreatedLink:
 
-        associationDescription: AssociationDescription = self._relationShips[linkType]
+        associationDescription: LinkDescription = self._relationShips[linkType]
 
         if associationDescription.linkType == PyutLinkType.INHERITANCE:
             return self._createUmlInheritance(associationDescription=associationDescription)
         elif associationDescription.linkType == PyutLinkType.INTERFACE:
             return self._createUmlInterface()
-        elif associationDescription.linkType == PyutLinkType.LOLLIPOP:
-            return self._createLollipop()
         else:
             return self._createAssociation(associationDescription=associationDescription)
 
-    def _createAssociation(self, associationDescription: AssociationDescription) -> CreatedAssociation:
+    def _createAssociation(self, associationDescription: LinkDescription) -> CreatedLink:
         """
 
         Args:
@@ -146,17 +138,18 @@ class RelationshipCreator:
 
         umlAssociation.id = UML_LINK_CANONICAL_MONIKER
         umlAssociation.SetCanvas(self._diagramFrame)
-        umlAssociation.MakeLineControlPoints(n=2)       # Make this configurable
+        if pyutLink.linkType != PyutLinkType.LOLLIPOP:
+            umlAssociation.MakeLineControlPoints(n=2)       # type: ignore
 
         sourceUmlClass.addLink(umlLink=umlAssociation, destinationClass=destinationUmlClass)
 
-        return CreatedAssociation(
+        return CreatedLink(
             sourceUmlClass=sourceUmlClass,
             destinationUmlClass=destinationUmlClass,
             association=umlAssociation
         )
 
-    def _createUmlInheritance(self, associationDescription: AssociationDescription) -> CreatedAssociation:
+    def _createUmlInheritance(self, associationDescription: LinkDescription) -> CreatedLink:
 
         basePyutClass: PyutClass = PyutClass(name=f'{BASE_UML_CLASS_NAME}')
         associationDescription.classCounter += 1
@@ -168,8 +161,6 @@ class RelationshipCreator:
         baseUmlClass:     UmlClass = UmlClass(pyutClass=basePyutClass)
         subClassUmlClass: UmlClass = UmlClass(pyutClass=subPyutClass)
 
-        baseUmlClass.name     = BASE_UML_CLASS_NAME
-        subClassUmlClass.name = SUBCLASS_UML_CLASS_NAME
         baseUmlClass.id       = BASE_UML_CLASS_ID
         subClassUmlClass.id   = SUBCLASS_UML_CLASS_ID
 
@@ -195,13 +186,13 @@ class RelationshipCreator:
         # REMEMBER:   from subclass to base class
         subClassUmlClass.addLink(umlLink=umlInheritance, destinationClass=baseUmlClass)
 
-        return CreatedAssociation(
+        return CreatedLink(
             sourceUmlClass=subClassUmlClass,
             destinationUmlClass=baseUmlClass,
             association=umlInheritance
         )
 
-    def _createUmlInterface(self) -> CreatedAssociation:
+    def _createUmlInterface(self) -> CreatedLink:
 
         interfacePyutClass:    PyutClass = PyutClass(name=f'{INTERFACE_UML_CLASS_NAME}')
         implementingPyutClass: PyutClass = PyutClass(name=f'{IMPLEMENTING_UML_CLASS_NAME}')
@@ -236,13 +227,13 @@ class RelationshipCreator:
         # REMEMBER:   from subclass to base class
         implementingUmlClass.addLink(umlLink=umlInterface, destinationClass=interfaceUmlClass)
 
-        return CreatedAssociation(
+        return CreatedLink(
             sourceUmlClass=implementingUmlClass,
             destinationUmlClass=interfaceUmlClass,
             association=umlInterface
         )
 
-    def _createLollipop(self) -> CreatedAssociation:
+    def createLollipop(self):
 
         # Need them model
         implementingPyutClass: PyutClass = PyutClass(name=f'{IMPLEMENTING_UML_CLASS_NAME}')
@@ -262,10 +253,8 @@ class RelationshipCreator:
         umlLollipopInterface: UmlLollipopInterface = UmlLollipopInterface(pyutInterface=pyutInterface)
         umlLollipopInterface.attachedTo     = implementingUmlClass
         umlLollipopInterface.attachmentSide = LOLLIPOP_ATTACHMENT_SIDE
-        return CreatedAssociation(
-            destinationUmlClass=implementingUmlClass,
-            lollipopInterface=umlLollipopInterface
-        )
+
+        return umlLollipopInterface, implementingUmlClass
 
     def _createClassPair(self, classCounter: int) -> Tuple[UmlClass, UmlClass]:
 

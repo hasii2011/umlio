@@ -230,7 +230,7 @@ class XmlLinksToUmlLinks:
 
         return controlPoints
 
-    def _umlLinkFactory(self, srcShape: UmlClass, pyutLink: PyutLink, destShape: UmlClass) -> UmlLink:
+    def _umlLinkFactory(self, srcShape: LinkableUmlShape, pyutLink: PyutLink, destShape: LinkableUmlShape) -> UmlLink:
         """
 
         Args:
@@ -243,7 +243,7 @@ class XmlLinksToUmlLinks:
         """
         if pyutLink.linkType == PyutLinkType.INHERITANCE:
             # Note dest and source are reversed here
-            return UmlInheritance(baseClass=destShape, pyutLink=pyutLink, subClass=srcShape)
+            return UmlInheritance(baseClass=cast(UmlClass, destShape), pyutLink=pyutLink, subClass=cast(UmlClass, srcShape))
         elif pyutLink.linkType in ASSOCIATION_LINK_TYPES:
             umlAssociation = CLASSMAP[pyutLink.linkType](pyutLink)
             #

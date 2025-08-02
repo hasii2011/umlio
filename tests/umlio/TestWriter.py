@@ -43,7 +43,7 @@ class TestWriter(UmlIOBaseTest):
         directory:             Path = Path.home() / UNIT_TEST_DIAGRAM_DIRECTORY
         emptyDiagramsFileName: Path = directory / EMPTY_DIAGRAMS_XML_PROJECT
 
-        umlProject: UmlProject = self._createEmptyDiagramsProject(emptyDiagramsFileName)
+        umlProject: UmlProject = self._createEmptyDiagramsProject()
         directory.mkdir(parents=True, exist_ok=True)
         emptyDiagramsFileName.touch()
         writer: Writer = Writer()
@@ -61,7 +61,7 @@ class TestWriter(UmlIOBaseTest):
         directory:             Path = Path.home() / UNIT_TEST_DIAGRAM_DIRECTORY
         emptyDiagramsFileName: Path = directory / EMPTY_DIAGRAMS_COMPRESSED_PROJECT
 
-        umlProject: UmlProject = self._createEmptyDiagramsProject(emptyDiagramsFileName)
+        umlProject: UmlProject = self._createEmptyDiagramsProject()
         directory.mkdir(parents=True, exist_ok=True)
         emptyDiagramsFileName.touch()
 
@@ -73,7 +73,7 @@ class TestWriter(UmlIOBaseTest):
         # self.assertEqual(EXPECTED_FILE_SIZE, actualFileSize, 'Hmm.  Maybe zlib changed')
         self.assertTrue(actualFileSize > 0, 'Looks like it is empty')
 
-    def _createEmptyDiagramsProject(self, emptyDiagramsFileName: Path) -> UmlProject:
+    def _createEmptyDiagramsProject(self) -> UmlProject:
 
         umlProject: UmlProject = UmlProject()
         umlProject.codePath = Path('/Users/humberto.a.sanchez.ii')

@@ -34,7 +34,7 @@ from tests.RelationshipCreator import UML_LINK_CANONICAL_MONIKER
 from umlio.IOTypes import UmlDocumentTitle
 from umlio.IOTypes import UmlDocumentType
 
-from tests.RelationshipCreator import CreatedAssociation
+from tests.RelationshipCreator import CreatedLink
 from tests.RelationshipCreator import RelationshipCreator
 
 from umlshapes.lib.ogl import OGLInitialize
@@ -205,15 +205,17 @@ class TestUmlRelationshipsToXml(UnitTestBaseW):
         umlShapesToXml:      UmlShapesToXml = self._createXmlCreator()
         associationsDiagram: UmlDocument     = self._createUmlDiagram(UmlDocumentType.CLASS_DOCUMENT, diagramName)
 
-        createdAssociation: CreatedAssociation = self._relationShipCreator.createRelationship(linkType)
+        createdLink: CreatedLink = self._relationShipCreator.createAssociation(linkType)
 
         if linkType == PyutLinkType.LOLLIPOP:
-            associationsDiagram.umlClasses.append(createdAssociation.destinationUmlClass)
-            associationsDiagram.umlLinks.append(createdAssociation.lollipopInterface)
+            umlLollipopInterface, implementingUmlClass = self._relationShipCreator.createLollipop()
+
+            associationsDiagram.umlClasses.append(implementingUmlClass)
+            associationsDiagram.umlLinks.append(umlLollipopInterface)
         else:
-            associationsDiagram.umlClasses.append(createdAssociation.sourceUmlClass)
-            associationsDiagram.umlClasses.append(createdAssociation.destinationUmlClass)
-            associationsDiagram.umlLinks.append(createdAssociation.association)
+            associationsDiagram.umlClasses.append(createdLink.sourceUmlClass)
+            associationsDiagram.umlClasses.append(createdLink.destinationUmlClass)
+            associationsDiagram.umlLinks.append(createdLink.association)
 
         umlShapesToXml.serialize(umlDiagram=associationsDiagram)
 
