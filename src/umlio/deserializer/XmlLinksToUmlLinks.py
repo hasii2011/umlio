@@ -24,6 +24,7 @@ from pyutmodelv2.enumerations.PyutLinkType import PyutLinkType
 from umlshapes.types.Common import EndPoints
 
 from umlshapes.links.UmlLink import UmlLink
+from umlshapes.links.UmlNoteLink import UmlNoteLink
 from umlshapes.links.UmlAssociation import UmlAssociation
 from umlshapes.links.UmlInheritance import UmlInheritance
 from umlshapes.links.UmlComposition import UmlComposition
@@ -252,6 +253,10 @@ class XmlLinksToUmlLinks:
             umlAssociation.sourceShape      = srcShape
             umlAssociation.destinationShape = destShape
             return umlAssociation
-
+        elif pyutLink.linkType == PyutLinkType.NOTELINK:
+            umlNoteLink: UmlNoteLink = UmlNoteLink(pyutLink=pyutLink)
+            umlNoteLink.sourceNote       = cast(UmlNote, srcShape)
+            umlNoteLink.destinationClass = cast(UmlClass, destShape)
+            return umlNoteLink
         else:
             assert False, f'Unknown link type, {pyutLink.linkType=}'

@@ -11,7 +11,10 @@ from dataclasses import dataclass
 
 from pyutmodelv2.PyutInterface import PyutInterface
 from pyutmodelv2.PyutModelTypes import ClassName
+from pyutmodelv2.PyutNote import PyutNote
 from umlshapes.links.UmlLollipopInterface import UmlLollipopInterface
+from umlshapes.links.UmlNoteLink import UmlNoteLink
+from umlshapes.shapes.UmlNote import UmlNote
 from umlshapes.types.Common import AttachmentSide
 
 from wx import Point
@@ -57,6 +60,9 @@ CANONICAl_LOLLIPOP_NAME:     str            = 'IFake'
 LOLLIPOP_ATTACHMENT_SIDE:    AttachmentSide = AttachmentSide.RIGHT
 PYUT_INTERFACE_CANONICAL_ID: int            = 0xDEADBEEF
 
+DESTINATION_UML_CLASS_NAME: str = 'DestinationClass'
+PYUT_NOTE_ID:               int = 6262
+
 
 @dataclass
 class LinkDescription:
@@ -74,6 +80,13 @@ class CreatedLink:
     sourceUmlClass:      UmlClass             = cast(UmlClass, None)
     association:         UmlLink              = cast(UmlLink, None)
     destinationUmlClass: UmlClass             = cast(UmlClass, None)
+
+
+@dataclass
+class CreatedNoteLink:
+    sourceNote:          UmlNote     = cast(UmlNote, None)
+    destinationUmlClass: UmlClass    = cast(UmlClass, None)
+    umlNoteLink:         UmlNoteLink = cast(UmlNoteLink, None)
 
 
 class LinkCreator:
@@ -220,7 +233,7 @@ class LinkCreator:
 
     def createLollipop(self):
 
-        # Need them model
+        # Need the model
         implementingPyutClass: PyutClass = PyutClass(name=f'{IMPLEMENTING_UML_CLASS_NAME}')
         implementingPyutClass.id = IMPLEMENTING_PYUT_CLASS_ID
 
@@ -240,6 +253,39 @@ class LinkCreator:
         umlLollipopInterface.attachmentSide = LOLLIPOP_ATTACHMENT_SIDE
 
         return umlLollipopInterface, implementingUmlClass
+
+    def createNoteLink(self) -> CreatedNoteLink:
+
+        # Need the model
+        destinationPyutClass: PyutClass = PyutClass(name=f'{DESTINATION_UML_CLASS_NAME}')
+        destinationPyutClass.id = DESTINATION_PYUT_CLASS_ID
+
+        # Need the attached to UI Shapes
+        destinationUmlClass: UmlClass = UmlClass(pyutClass=destinationPyutClass)
+        destinationUmlClass.id        = DESTINATION_UML_CLASS_ID
+        destinationUmlClass.position  = UmlPosition(x=300, y=100)
+
+        pyutNote:      PyutNote = PyutNote(content='I am a note')
+        pyutNote.id = PYUT_NOTE_ID
+
+        sourceUmlNote: UmlNote  = UmlNote(pyutNote=pyutNote)
+        sourceUmlNote.position = UmlPosition(x=300, y=200)
+
+        sourceUmlNote.pyutNote = pyutNote
+
+        pyutLink: PyutLink = PyutLink(linkType=PyutLinkType.NOTELINK)
+        pyutLink.source      = pyutNote
+        pyutLink.destination = destinationPyutClass
+
+        umlNoteLink: UmlNoteLink = UmlNoteLink(pyutLink=pyutLink)
+        umlNoteLink.sourceNote       = sourceUmlNote
+        umlNoteLink.destinationClass = destinationUmlClass
+
+        return CreatedNoteLink(
+            destinationUmlClass=destinationUmlClass,
+            sourceNote=sourceUmlNote,
+            umlNoteLink=umlNoteLink
+        )
 
     def _createClassPair(self, classCounter: int) -> Tuple[UmlClass, UmlClass]:
 

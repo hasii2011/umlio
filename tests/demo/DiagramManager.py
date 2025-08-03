@@ -33,12 +33,14 @@ from umlshapes.shapes.UmlNote import UmlNote
 from umlshapes.shapes.UmlText import UmlText
 from umlshapes.shapes.UmlUseCase import UmlUseCase
 
+from umlshapes.links.UmlNoteLink import UmlNoteLink
 from umlshapes.links.UmlAssociation import UmlAssociation
 from umlshapes.links.UmlInheritance import UmlInheritance
 from umlshapes.links.UmlComposition import UmlComposition
 from umlshapes.links.UmlAggregation import UmlAggregation
 
 from umlshapes.links.eventhandlers.UmlLinkEventHandler import UmlLinkEventHandler
+from umlshapes.links.eventhandlers.UmlNoteLinkEventHandler import UmlNoteLinkEventHandler
 from umlshapes.links.eventhandlers.UmlAssociationEventHandler import UmlAssociationEventHandler
 
 from umlshapes.pubsubengine.UmlPubSubEngine import UmlPubSubEngine
@@ -192,6 +194,19 @@ class DiagramManager(Simplebook):
                 umlLinkEventHandler.SetPreviousHandler(umlLink.GetEventHandler())
                 umlLink.SetEventHandler(umlLinkEventHandler)
 
+            elif isinstance(umlLink, UmlNoteLink):
+                umlNoteLink: UmlNoteLink = cast(UmlNoteLink, umlLink)
+                sourceNote:       UmlNote  = umlNoteLink.sourceNote
+                destinationClass: UmlClass = umlNoteLink.destinationClass
+
+                sourceNote.addLink(umlNoteLink=umlNoteLink, umlClass=destinationClass)
+
+                diagramFrame.umlDiagram.AddShape(umlNoteLink)
+                umlNoteLink.Show(True)
+                eventHandler: UmlNoteLinkEventHandler = UmlNoteLinkEventHandler(umlNoteLink=umlNoteLink)
+                eventHandler.umlPubSubEngine = self._umlPubSubEngine
+                eventHandler.SetPreviousHandler(umlLink.GetEventHandler())
+                umlNoteLink.SetEventHandler(eventHandler)
             elif isinstance(umlLink, (UmlAssociation, UmlComposition, UmlAggregation)):
 
                 source = umlLink.sourceShape

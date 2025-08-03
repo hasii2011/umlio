@@ -4,14 +4,14 @@
         <UmlClass id="provide.serious.hand.change" width="150" height="75" x="100" y="100">
             <PyutClass id="666" name="GeneratedClass-0" displayMethods="True" displayParameters="Unspecified" displayConstructor="Unspecified" displayDunderMethods="Unspecified" displayFields="True" displayStereotype="True" fileName="" description="" />
         </UmlClass>
-        <UmlNote id="remember.the.Alamo" width="233" height="233" x="666" y="777">
+        <UmlNote id="remember.the.Alamo" width="150" height="50" x="366" y="150">
             <PyutNote id="777" content="I associate with classes" fileName="" />
         </UmlNote>
         <UmlLink id="die.free.open.point" fromX="194" fromY="174" toX="256" toY="300" spline="False">
             <AssociationName deltaX="0" deltaY="0" />
             <SourceCardinality deltaX="0" deltaY="0" />
             <DestinationCardinality deltaX="0" deltaY="0" />
-            <PyutLink name="NoteAssociation" type="ASSOCIATION" sourceId="777" destinationId="666" bidirectional="False" sourceCardinalityValue="src Card" destinationCardinalityValue="dst Card" />
+            <PyutLink name="NoteLink" type="NOTELINK" sourceId="777" destinationId="666" bidirectional="False" sourceCardinalityValue="src Card" destinationCardinalityValue="dst Card" />
         </UmlLink>
     </UMLDiagram>
 </UmlProject>
