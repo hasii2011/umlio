@@ -1,0 +1,13 @@
+<?xml version='1.0' encoding='iso-8859-1'?>
+<UmlProject fileName="." version="12.0" codePath="/users/hasii">
+    <UMLDiagram documentType="Class Document" title="Lollipop Class Diagram" scrollPositionX="1" scrollPositionY="1" pixelsPerUnitX="1" pixelsPerUnitY="1">
+        <UmlClass id="valley.darkness.implementor" width="150" height="75" x="133" y="133">
+            <PyutClass id="4444" name="Implementor" displayMethods="True" displayParameters="Unspecified" displayConstructor="Unspecified" displayDunderMethods="Unspecified" displayFields="True" displayStereotype="True" fileName="" description="" />
+        </UmlClass>
+        <UmlLollipopInterface lineCentum="0.2" attachmentSide="Right" attachedToId="valley.darkness.implementor">
+            <PyutInterface id="3735928559" name="IFake" description="">
+                <Implementor implementingClassName="Implementor" />
+            </PyutInterface>
+        </UmlLollipopInterface>
+    </UMLDiagram>
+</UmlProject>

@@ -151,9 +151,9 @@ class XmlToPyut:
 
         return pyutNote
 
-    def interfaceToPyutInterface(self, oglInterface2: Element) -> PyutInterface:
+    def interfaceToPyutInterface(self, umlInterfaceElement: Element) -> PyutInterface:
 
-        pyutInterfaceElement: Element = oglInterface2.PyutInterface
+        pyutInterfaceElement: Element = umlInterfaceElement.PyutInterface
 
         interfaceId: int = int(pyutInterfaceElement['id'])
         name:        str = pyutInterfaceElement[XmlConstants.ATTRIBUTE_NAME]

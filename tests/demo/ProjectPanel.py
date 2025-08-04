@@ -52,7 +52,7 @@ class ProjectPanel(SplitterWindow):
         windowSize: Size = parent.GetSize()
 
         sashPosition: int = round(windowSize.width * 0.3)     # TODO:  This should be a preference
-        print(f'{sashPosition=}')
+        self.logger.info(f'{sashPosition=}')
         self.SetSashPosition(position=sashPosition, redraw=True)
 
     def _onDiagramSelectionChanged(self, treeData: TreeData):

@@ -123,7 +123,6 @@ EXPECTED_LOLLIPOP_XML: str = (
     f'        </UmlLollipopInterface>\n'
     f'    </UMLDiagram>\n'
     f'</UmlProject>'
-
 )
 
 

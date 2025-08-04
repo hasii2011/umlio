@@ -6,6 +6,8 @@ from typing import cast
 from logging import Logger
 from logging import getLogger
 
+from umlshapes.links.UmlLollipopInterface import UmlLollipopInterface
+from umlshapes.links.eventhandlers.UmlLollipopInterfaceEventHandler import UmlLollipopInterfaceEventHandler
 from wx import SHOW_EFFECT_SLIDE_TO_RIGHT
 
 from wx import Window
@@ -220,6 +222,16 @@ class DiagramManager(Simplebook):
                 umlAssociationEventHandler.umlPubSubEngine = self._umlPubSubEngine
                 umlAssociationEventHandler.SetPreviousHandler(umlLink.GetEventHandler())
                 umlLink.SetEventHandler(umlAssociationEventHandler)
+            elif isinstance(umlLink, UmlLollipopInterface):
+                umlLollipopInterface: UmlLollipopInterface = cast(UmlLollipopInterface, umlLink)
+                self.logger.info(f'{umlLollipopInterface}')
+
+                diagramFrame.umlDiagram.AddShape(umlLollipopInterface)
+                umlLollipopInterface.Show(True)
+                lollipopEventHandler: UmlLollipopInterfaceEventHandler = UmlLollipopInterfaceEventHandler(lollipopInterface=umlLollipopInterface)
+                lollipopEventHandler.umlPubSubEngine = self._umlPubSubEngine
+                lollipopEventHandler.SetPreviousHandler(umlLollipopInterface.GetEventHandler())
+                umlLollipopInterface.SetEventHandler(lollipopEventHandler)
 
     def _layoutShape(self, umlShape: UmlShape, diagramFrame: ClassDiagramFrame | UseCaseDiagramFrame, eventHandlerClass: type[ShapeEvtHandler]):
         """
