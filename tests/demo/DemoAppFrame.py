@@ -32,6 +32,9 @@ from umlshapes.pubsubengine.UmlPubSubEngine import UmlPubSubEngine
 from tests.demo.pubsubengine.DemoAppPubSubEngine import DemoAppPubSubEngine
 
 from umlio.IOTypes import UmlProject
+from umlio.IOTypes import XML_SUFFIX
+from umlio.IOTypes import PROJECT_SUFFIX
+
 from umlio.Reader import Reader
 
 from tests.demo.DemoCommon import Identifiers
@@ -39,6 +42,9 @@ from tests.demo.ProjectPanel import ProjectPanel
 
 FRAME_WIDTH:  int = 800
 FRAME_HEIGHT: int = 400
+
+PROJECT_WILDCARD: str = f'UML Diagrammer files (*.{PROJECT_SUFFIX})|*{PROJECT_SUFFIX}'
+XML_WILDCARD:     str = f'Extensible Markup Language (*.{XML_SUFFIX})|*{XML_SUFFIX}'
 
 
 class DemoAppFrame(SizedFrame):
@@ -72,7 +78,8 @@ class DemoAppFrame(SizedFrame):
         menuBar:  MenuBar = MenuBar()
         fileMenu: Menu    = Menu()
 
-        fileMenu.Append(Identifiers.ID_OPEN_XML_FILE, 'Load Xml Diagram')
+        fileMenu.Append(Identifiers.ID_OPEN_PROJECT_FILE, 'Open Project')
+        fileMenu.Append(Identifiers.ID_OPEN_XML_FILE,     'Open Xml Diagram')
         fileMenu.AppendSeparator()
         fileMenu.Append(ID_EXIT, '&Quit', "Quit Application")
         fileMenu.AppendSeparator()
@@ -83,55 +90,28 @@ class DemoAppFrame(SizedFrame):
         self.SetMenuBar(menuBar)
 
         # self.Bind(EVT_MENU, self._onOglPreferences, id=ID_PREFERENCES)
+        self.Bind(EVT_MENU, self._onLoadProject, id=Identifiers.ID_OPEN_PROJECT_FILE)
         self.Bind(EVT_MENU, self._onLoadXmlFile, id=Identifiers.ID_OPEN_XML_FILE)
 
-    # def _onDisplayElement(self, event: CommandEvent):
-    #
-    #     menuId:              int                 = event.GetId()
-    #     shapeCreator:        ShapeCreator        = self._shapeCreator
-    #     relationshipCreator: RelationshipCreator = self._relationshipCreator
-    #
-    #     # noinspection PyUnreachableCode
-    #     match menuId:
-    #         case Identifiers.ID_DISPLAY_UML_CLASS:
-    #             shapeCreator.displayShape(Identifiers.ID_DISPLAY_UML_CLASS)
-    #             self.SetStatusText('See the shape !!')
-    #         case Identifiers.ID_DISPLAY_UML_TEXT:
-    #             shapeCreator.displayShape(Identifiers.ID_DISPLAY_UML_TEXT)
-    #         case Identifiers.ID_DISPLAY_UML_NOTE:
-    #             shapeCreator.displayShape(Identifiers.ID_DISPLAY_UML_NOTE)
-    #         case Identifiers.ID_DISPLAY_UML_USE_CASE:
-    #             shapeCreator.displayShape(Identifiers.ID_DISPLAY_UML_USE_CASE)
-    #         case Identifiers.ID_DISPLAY_UML_ACTOR:
-    #             shapeCreator.displayShape(Identifiers.ID_DISPLAY_UML_ACTOR)
-    #
-    #         case Identifiers.ID_DISPLAY_UML_ASSOCIATION:
-    #             relationshipCreator.displayRelationship(idReference=Identifiers.ID_DISPLAY_UML_ASSOCIATION)
-    #         case Identifiers.ID_DISPLAY_UML_COMPOSITION:
-    #             relationshipCreator.displayRelationship(idReference=Identifiers.ID_DISPLAY_UML_COMPOSITION)
-    #         case Identifiers.ID_DISPLAY_UML_AGGREGATION:
-    #             relationshipCreator.displayRelationship(idReference=Identifiers.ID_DISPLAY_UML_AGGREGATION)
-    #
-    #         case Identifiers.ID_DISPLAY_UML_INHERITANCE:
-    #             relationshipCreator.displayRelationship(idReference=Identifiers.ID_DISPLAY_UML_INHERITANCE)
-    #         case Identifiers.ID_DISPLAY_UML_INTERFACE:
-    #             relationshipCreator.displayRelationship(idReference=Identifiers.ID_DISPLAY_UML_INTERFACE)
-    #         # case self._ID_DISPLAY_SEQUENCE_DIAGRAM:
-    #         #     self._displaySequenceDiagram()
+    # noinspection PyUnusedLocal
+    def _onLoadProject(self, event: CommandEvent):
+
+        selectedFile: str = FileSelector("Choose a project file to load", wildcard=PROJECT_WILDCARD, flags=FD_OPEN | FD_FILE_MUST_EXIST | FD_CHANGE_DIR)
+        if selectedFile != '':
+            self._loadProjectFile(Path(selectedFile))
 
     # noinspection PyUnusedLocal
     def _onLoadXmlFile(self, event: CommandEvent):
 
-        wildcard: str = (
-            f'Extended Markup Language '
-            f' (*, xml '
-            f'|*.xml'
-        )
-
-        selectedFile: str = FileSelector("Choose a XML file to load", wildcard=wildcard, flags=FD_OPEN | FD_FILE_MUST_EXIST | FD_CHANGE_DIR)
-
+        selectedFile: str = FileSelector("Choose a XML file to load", wildcard=XML_WILDCARD, flags=FD_OPEN | FD_FILE_MUST_EXIST | FD_CHANGE_DIR)
         if selectedFile != '':
             self._loadXmlFile(Path(selectedFile))
+
+    def _loadProjectFile(self, fileName: Path):
+        reader: Reader = Reader()
+
+        umlProject: UmlProject = reader.readProjectFile(fileName=fileName)
+        self._loadNewProject(umlProject)
 
     def _loadXmlFile(self, fileName: Path):
 

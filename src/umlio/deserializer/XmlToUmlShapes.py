@@ -54,7 +54,9 @@ class XmlToUmlShapes:
         """
 
         xmlString: str = fileName.read_text()
+        self.deserializeXml(xmlString=xmlString, fileName=fileName)
 
+    def deserializeXml(self, xmlString: str, fileName: Path):
         root:       Element = parse(xmlString)
         umlProject: Element = root.UmlProject
 
@@ -102,9 +104,6 @@ class XmlToUmlShapes:
                 umlDocument.umlNotes    = self._deserializeUmlNoteElements(umlDiagramElement=umlDiagramElement)
 
             self._umlProject.umlDocuments[umlDocument.documentTitle] = umlDocument
-
-    def deserializeXml(self, rawXml: str):
-        pass
 
     def _deserializeUmlClassElements(self, umlDiagramElement: Element) -> UmlClasses:
 

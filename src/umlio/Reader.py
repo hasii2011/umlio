@@ -36,7 +36,7 @@ class Reader:
 
         xmlToUmlShapes: XmlToUmlShapes = XmlToUmlShapes()
 
-        xmlToUmlShapes.deserializeXml(rawXml=rawXmlString)
+        xmlToUmlShapes.deserializeXml(xmlString=rawXmlString, fileName=fileName)
 
         return xmlToUmlShapes.umlProject
 
