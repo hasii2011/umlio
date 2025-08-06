@@ -1,0 +1,21 @@
+<?xml version='1.0' encoding='iso-8859-1'?>
+<UmlProject fileName="/Users/humberto.a.sanchez.ii/SampleProject.udt" version="12.0" codePath="/Users/humberto.a.sanchez.ii">
+    <UMLDiagram documentType="Use Case Document" title="Simple Use Case Diagram" scrollPositionX="1" scrollPositionY="1" pixelsPerUnitX="1" pixelsPerUnitY="1">
+
+        <UmlActor id="remember.central.issue.child" width="80" height="100" x="100" y="100">
+            <PyutActor id="23" name="LoboMalo" fileName="" />
+        </UmlActor>
+
+        <UmlUseCase id="remember.central.issue.child" width="125" height="100" x="200" y="200">
+            <PyutUseCase id="46" name="I am a lonely boy" fileName="" />
+        </UmlUseCase>
+
+        <UmlLink id="die.free.open.point" fromX="100" fromY="100" toX="200" toY="200" spline="False">
+            <AssociationName deltaX="0" deltaY="0" />
+            <SourceCardinality deltaX="0" deltaY="0" />
+            <DestinationCardinality deltaX="0" deltaY="0" />
+            <PyutLink name="states" type="ASSOCIATION" sourceId="23" destinationId="46" bidirectional="False" sourceCardinalityValue="" destinationCardinalityValue=""/>
+        </UmlLink>
+
+    </UMLDiagram>
+</UmlProject>

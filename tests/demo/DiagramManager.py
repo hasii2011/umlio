@@ -213,7 +213,7 @@ class DiagramManager(Simplebook):
 
                 source = umlLink.sourceShape
                 dest   = umlLink.destinationShape
-                source.addLink(umlLink=umlLink, destinationClass=dest)  # type: ignore
+                source.addLink(umlLink, dest)  # type: ignore
 
                 diagramFrame.umlDiagram.AddShape(umlLink)
                 umlLink.Show(True)

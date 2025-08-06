@@ -14,10 +14,10 @@ keywords = ['pyut,graphical shapes,python']
 
 dependencies = [
     'untangle==1.2.1',
-    'codeallybasic>=1.12.0',
+    'codeallybasic>=1.15.0',
     'codeallyadvanced>=1.4.2',
-    'pyutmodelv2>=2.2.4',
-    'umlshapes>=0.9.15',
+    'pyutmodelv2>=2.2.6',
+    'umlshapes>=0.9.20',
     'Pypubsub==4.0.3',
 ]
 
@@ -31,9 +31,9 @@ test = [
 
 deploy = [
     "wheel==0.45.1",
-    "setuptools==75.8.0",
-    "twine==6.0.1",
-    "build==1.2.2.post1",
+    "setuptools==80.9.0",
+    "twine==6.1.0",
+    "build==1.3.0",
 ]
 
 [project.urls]

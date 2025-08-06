@@ -36,6 +36,7 @@ from umlshapes.shapes.UmlClass import UmlClass
 from umlshapes.shapes.UmlNote import UmlNote
 from umlshapes.shapes.UmlText import UmlText
 from umlshapes.shapes.UmlUseCase import UmlUseCase
+from umlshapes.shapes.UmlActor import UmlActor
 
 from umlshapes.types.Common import AttachmentSide
 
@@ -203,6 +204,8 @@ class XmlLinksToUmlLinks:
             return linkableUmlShape.pyutNote
         elif isinstance(linkableUmlShape, UmlText):
             return linkableUmlShape.pyutText
+        elif isinstance(linkableUmlShape, UmlActor):
+            return linkableUmlShape.pyutActor
         else:
             assert False, f'{linkableUmlShape=} is not a source linkable UML Shape'
 
@@ -217,7 +220,7 @@ class XmlLinksToUmlLinks:
 
         if isinstance(linkableUmlShape, UmlClass):
             return linkableUmlShape.pyutClass
-        elif isinstance(LinkableUmlShape, UmlUseCase):
+        elif isinstance(linkableUmlShape, UmlUseCase):
             return linkableUmlShape.pyutUseCase
         else:
             assert False, f'{linkableUmlShape=} is not a destination linkable UML Shape'
