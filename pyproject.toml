@@ -45,6 +45,7 @@ where = ['src']
 
 [tool.setuptools.package-data]
 'umlio.resources' = ['loggingConfiguration.json']
+umlio = ['py.typed']
 
 [tool.setuptools.dynamic]
 version = {attr = 'umlio.__version__'}
