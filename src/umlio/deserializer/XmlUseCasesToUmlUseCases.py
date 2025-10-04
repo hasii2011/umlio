@@ -45,13 +45,13 @@ class XmlUseCasesToUmlUseCases:
             self.logger.debug(f'{useCaseElement}')
 
             graphicInformation: GraphicInformation = GraphicInformation.toGraphicInfo(graphicElement=useCaseElement)
-            pyutActor:          PyutUseCase        = self._xmlToPyut.useCaseToPyutUseCase(umlUseCaseElement=useCaseElement)
-            umlActor:           UmlUseCase         = UmlUseCase(pyutUseCase=pyutActor)
+            pyutUseCase:        PyutUseCase        = self._xmlToPyut.useCaseToPyutUseCase(umlUseCaseElement=useCaseElement)
+            umlUseCase:         UmlUseCase         = UmlUseCase(pyutUseCase=pyutUseCase)
 
-            umlActor.id       = graphicInformation.id
-            umlActor.size     = graphicInformation.size
-            umlActor.position = graphicInformation.position
+            umlUseCase.id       = graphicInformation.id
+            umlUseCase.size     = graphicInformation.size
+            umlUseCase.position = graphicInformation.position
 
-            umlUseCases.append(umlActor)
+            umlUseCases.append(umlUseCase)
 
         return umlUseCases

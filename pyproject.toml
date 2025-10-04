@@ -14,10 +14,10 @@ keywords = ['pyut,graphical shapes,python']
 
 dependencies = [
     'untangle==1.2.1',
-    'codeallybasic>=1.15.0',
-    'codeallyadvanced>=1.4.3',
+    'codeallybasic>=1.30.0',
+    'codeallyadvanced>=2.2.0',
     'pyutmodelv2>=2.2.6',
-    'umlshapes>=0.9.50',
+    'umlshapes>=0.9.220',
     'Pypubsub==4.0.3',
 ]
 

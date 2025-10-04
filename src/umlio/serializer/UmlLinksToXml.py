@@ -4,12 +4,12 @@ from typing import cast
 from logging import Logger
 from logging import getLogger
 
+from umlshapes.types.DeltaXY import DeltaXY
 from wx import Point
 
 from xml.etree.ElementTree import Element
 from xml.etree.ElementTree import SubElement
 
-from umlshapes.links.DeltaXY import DeltaXY
 from umlshapes.links.UmlLink import UmlLink
 from umlshapes.links.UmlAssociation import UmlAssociation
 from umlshapes.links.UmlAssociationLabel import UmlAssociationLabel

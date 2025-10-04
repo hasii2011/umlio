@@ -47,7 +47,7 @@ class ProjectPanel(SplitterWindow):
         for treeNodeID in treeNodeIDs:
             self.appEventEngine.subscribe(eventType=DemoMessageType.DIAGRAM_SELECTION_CHANGED,
                                           uniqueId=UniqueId(treeNodeID),
-                                          callback=self._onDiagramSelectionChanged)
+                                          listener=self._diagramSelectionChangedListener)
 
         windowSize: Size = parent.GetSize()
 
@@ -55,6 +55,6 @@ class ProjectPanel(SplitterWindow):
         self.logger.info(f'{sashPosition=}')
         self.SetSashPosition(position=sashPosition, redraw=True)
 
-    def _onDiagramSelectionChanged(self, treeData: TreeData):
+    def _diagramSelectionChangedListener(self, treeData: TreeData):
         self.logger.debug(f'{treeData=}')
         self._diagramManager.setPage(treeData.documentName)

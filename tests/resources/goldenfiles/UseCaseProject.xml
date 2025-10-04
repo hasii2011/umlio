@@ -2,11 +2,11 @@
 <UmlProject fileName="/Users/humberto.a.sanchez.ii/SampleProject.udt" version="12.0" codePath="/Users/humberto.a.sanchez.ii">
     <UMLDiagram documentType="Use Case Document" title="Simple Use Case Diagram" scrollPositionX="1" scrollPositionY="1" pixelsPerUnitX="1" pixelsPerUnitY="1">
 
-        <UmlActor id="remember.central.issue.child" width="80" height="100" x="100" y="100">
+        <UmlActor id="remember.central.issue.actor" width="80" height="100" x="100" y="100">
             <PyutActor id="23" name="LoboMalo" fileName="" />
         </UmlActor>
 
-        <UmlUseCase id="remember.central.issue.child" width="125" height="100" x="200" y="200">
+        <UmlUseCase id="remember.central.issue.usecase" width="125" height="100" x="200" y="200">
             <PyutUseCase id="46" name="I am a lonely boy" fileName="" />
         </UmlUseCase>
 

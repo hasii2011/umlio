@@ -97,18 +97,21 @@ class XmlToUmlShapes:
 
                 umlDocument.umlLinks = self._deserializeUmlLinkElements(umlDiagramElement=umlDiagramElement, linkableUmlShapes=linkableUmlShapes)
 
-            else:
+            elif umlDiagramElement[XmlConstants.ATTRIBUTE_DOCUMENT_TYPE] == UmlDocumentType.SEQUENCE_DOCUMENT.value:
 
                 umlDocument.documentType = UmlDocumentType.SEQUENCE_DOCUMENT
                 umlDocument.umlTexts   = self._deserializeUmlTextElements(umlDiagramElement=umlDiagramElement)
                 umlDocument.umlNotes    = self._deserializeUmlNoteElements(umlDiagramElement=umlDiagramElement)
+
+            else:
+                assert False, 'Unknown diagram Type - Perhaps corrupted fle'
 
             self._umlProject.umlDocuments[umlDocument.documentTitle] = umlDocument
 
     def _deserializeUmlClassElements(self, umlDiagramElement: Element) -> UmlClasses:
 
         umlClassesDeSerializer: XmlClassesToUmlClasses = XmlClassesToUmlClasses()
-        umlClasses:            UmlClasses              = umlClassesDeSerializer.deserialize(umlDiagramElement=umlDiagramElement)
+        umlClasses:             UmlClasses             = umlClassesDeSerializer.deserialize(umlDiagramElement=umlDiagramElement)
 
         return umlClasses
 

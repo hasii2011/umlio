@@ -18,9 +18,10 @@ class DemoAppPubSubEngine(IAppPubSubEngine, BasePubSubEngine):
 
     def __init__(self):
         self.logger: Logger = getLogger(__name__)
+        super().__init__()
 
-    def subscribe(self, eventType: DemoMessageType, uniqueId: UniqueId, callback: Callable):
-        self._subscribe(topic=self._toTopic(eventType, uniqueId), callback=callback)
+    def subscribe(self, eventType: DemoMessageType, uniqueId: UniqueId, listener: Callable):
+        self._subscribe(topic=self._toTopic(eventType, uniqueId), listener=listener)
 
     def sendMessage(self, eventType: DemoMessageType, uniqueId: UniqueId, **kwargs):
         self._sendMessage(topic=self._toTopic(eventType, uniqueId), **kwargs)

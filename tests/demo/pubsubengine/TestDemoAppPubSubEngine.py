@@ -31,11 +31,11 @@ class TestDemoAppPubSubEngine(UnitTestBase):
     def testDiagramSelectionChanged(self):
 
         pubSubEngine: DemoAppPubSubEngine = DemoAppPubSubEngine()
-        pubSubEngine.subscribe(DemoMessageType.DIAGRAM_SELECTION_CHANGED, uniqueId=UNIQUE_ID, callback=self._diagramSelectionChangedCallback)
+        pubSubEngine.subscribe(DemoMessageType.DIAGRAM_SELECTION_CHANGED, uniqueId=UNIQUE_ID, listener=self._diagramSelectionChangedListener)
 
         pubSubEngine.sendMessage(DemoMessageType.DIAGRAM_SELECTION_CHANGED, uniqueId=UNIQUE_ID, name='Bogus', data=[1, 2, 3])
 
-    def _diagramSelectionChangedCallback(self, name: str, data: List[int]):
+    def _diagramSelectionChangedListener(self, name: str, data: List[int]):
         self.logger.debug(f'{name}, {data}')
 
 

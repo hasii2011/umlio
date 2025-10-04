@@ -6,14 +6,10 @@ from typing import cast
 from logging import Logger
 from logging import getLogger
 
-from umlshapes.links.UmlLollipopInterface import UmlLollipopInterface
-from umlshapes.links.eventhandlers.UmlLollipopInterfaceEventHandler import UmlLollipopInterfaceEventHandler
 from wx import SHOW_EFFECT_SLIDE_TO_RIGHT
 
 from wx import Window
 from wx import Simplebook
-
-from umlshapes.lib.ogl import ShapeEvtHandler
 
 from umlshapes.UmlDiagram import UmlDiagram
 
@@ -40,10 +36,13 @@ from umlshapes.links.UmlAssociation import UmlAssociation
 from umlshapes.links.UmlInheritance import UmlInheritance
 from umlshapes.links.UmlComposition import UmlComposition
 from umlshapes.links.UmlAggregation import UmlAggregation
+from umlshapes.links.UmlLollipopInterface import UmlLollipopInterface
 
+from umlshapes.UmlBaseEventHandler import UmlBaseEventHandler
 from umlshapes.links.eventhandlers.UmlLinkEventHandler import UmlLinkEventHandler
 from umlshapes.links.eventhandlers.UmlNoteLinkEventHandler import UmlNoteLinkEventHandler
 from umlshapes.links.eventhandlers.UmlAssociationEventHandler import UmlAssociationEventHandler
+from umlshapes.links.eventhandlers.UmlLollipopInterfaceEventHandler import UmlLollipopInterfaceEventHandler
 
 from umlshapes.pubsubengine.UmlPubSubEngine import UmlPubSubEngine
 
@@ -85,8 +84,8 @@ class DiagramManager(Simplebook):
         self._diagramTitleToPage:    UmlDocumentToPage    = UmlDocumentToPage({})
 
         # doing any effect should be an application preference
-        self.SetEffect(effect=SHOW_EFFECT_SLIDE_TO_RIGHT)               # TODO:  Should be an application preference
-        self.SetEffectTimeout(timeout=200)                              # TODO:  Should be an application preference
+        # self.SetEffect(effect=SHOW_EFFECT_SLIDE_TO_RIGHT)               # TODO:  Should be an application preference
+        # self.SetEffectTimeout(timeout=200)                              # TODO:  Should be an application preference
 
         self._createPages()
 
@@ -233,7 +232,7 @@ class DiagramManager(Simplebook):
                 lollipopEventHandler.SetPreviousHandler(umlLollipopInterface.GetEventHandler())
                 umlLollipopInterface.SetEventHandler(lollipopEventHandler)
 
-    def _layoutShape(self, umlShape: UmlShape, diagramFrame: ClassDiagramFrame | UseCaseDiagramFrame, eventHandlerClass: type[ShapeEvtHandler]):
+    def _layoutShape(self, umlShape: UmlShape, diagramFrame: ClassDiagramFrame | UseCaseDiagramFrame, eventHandlerClass: type[UmlBaseEventHandler]):
         """
 
         Args:
@@ -245,8 +244,10 @@ class DiagramManager(Simplebook):
         umlShape.umlFrame = diagramFrame
         diagram: UmlDiagram = diagramFrame.umlDiagram
 
-        eventHandler: ShapeEvtHandler = eventHandlerClass()
+        eventHandler: UmlBaseEventHandler = eventHandlerClass()
         eventHandler.SetShape(umlShape)
+        eventHandler.umlPubSubEngine = self._umlPubSubEngine
+
         eventHandler.SetPreviousHandler(umlShape.GetEventHandler())
         umlShape.SetEventHandler(eventHandler)
 
