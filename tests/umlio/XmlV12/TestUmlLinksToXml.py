@@ -218,14 +218,17 @@ class TestUmlLinksToXml(UnitTestBaseW):
         self.assertEqual(EXPECTED_INTERFACE_XML, interfaceXml, 'Interface serialization changed')
 
     def testLollipop(self):
+        """
+        TODO:  Move this to its own test class
+        """
         umlShapesToXml:  UmlShapesToXml = self._createXmlCreator()
-        lollipopDiagram: UmlDocument    = self._createUmlDiagram(UmlDocumentType.CLASS_DOCUMENT, 'Lollipop Class Diagram')
+        lollipopDocument: UmlDocument   = self._createUmlDiagram(UmlDocumentType.CLASS_DOCUMENT, 'Lollipop Class Diagram')
 
         umlLollipopInterface, implementingUmlClass = self._linkCreator.createLollipop()
 
-        lollipopDiagram.umlClasses.append(implementingUmlClass)
-        lollipopDiagram.umlLinks.append(umlLollipopInterface)
-        umlShapesToXml.serialize(umlDiagram=lollipopDiagram)
+        lollipopDocument.umlClasses.append(implementingUmlClass)
+        lollipopDocument.umlLollipopInterfaces.append(umlLollipopInterface)
+        umlShapesToXml.serialize(umlDiagram=lollipopDocument)
 
         lollipopXml: str = umlShapesToXml.xml
 

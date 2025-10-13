@@ -4,16 +4,16 @@ from typing import cast
 from logging import Logger
 from logging import getLogger
 
-from umlshapes.types.DeltaXY import DeltaXY
 from wx import Point
+
 
 from xml.etree.ElementTree import Element
 from xml.etree.ElementTree import SubElement
 
+from umlshapes.types.DeltaXY import DeltaXY
 from umlshapes.links.UmlLink import UmlLink
 from umlshapes.links.UmlAssociation import UmlAssociation
 from umlshapes.links.UmlAssociationLabel import UmlAssociationLabel
-from umlshapes.links.UmlLollipopInterface import UmlLollipopInterface
 
 from umlshapes.links.eventhandlers.UmlLinkEventHandler import LineControlPoints
 
@@ -24,9 +24,9 @@ from umlio.IOTypes import ElementAttributes
 from umlio.IOTypes import UmlLinks
 
 from umlio.serializer.PyutToXml import PyutToXml
+from umlio.serializer.BaseUmlToXml import BaseUmlToXml
 
 from umlio.XMLConstants import XmlConstants
-from umlio.serializer.BaseUmlToXml import BaseUmlToXml
 
 
 class UmlLinksToXml(BaseUmlToXml):
@@ -39,10 +39,7 @@ class UmlLinksToXml(BaseUmlToXml):
     def serialize(self, documentTop: Element, umlLinks: UmlLinks) -> Element:
 
         for umlLink in umlLinks:
-            if isinstance(umlLink, UmlLollipopInterface):
-                self.umlLollipopInterfaceToXml(documentElement=documentTop, umlLollipopInterface=umlLink)
-            else:
-                self._umlLinkToXml(documentElement=documentTop, umlLink=umlLink)
+            self._umlLinkToXml(documentElement=documentTop, umlLink=umlLink)
 
         return documentTop
 
@@ -86,27 +83,6 @@ class UmlLinksToXml(BaseUmlToXml):
         self._pyutToXml.pyutLinkToXml(pyutLink=umlLink.pyutLink, umlLinkElement=oglLinkSubElement)
 
         return oglLinkSubElement
-
-    def umlLollipopInterfaceToXml(self, documentElement: Element, umlLollipopInterface: UmlLollipopInterface) -> Element:
-        """
-
-        Args:
-            documentElement:        Xml Element
-            umlLollipopInterface:   Lollipop to serialize
-
-        Returns: A new Element
-        """
-        attachedToId: str = umlLollipopInterface.attachedTo.id
-        attributes: ElementAttributes = ElementAttributes({
-            XmlConstants.ATTRIBUTE_LINE_CENTUM:     str(umlLollipopInterface.lineCentum),
-            XmlConstants.ATTRIBUTE_ATTACHMENT_SIDE: umlLollipopInterface.attachmentSide.value,
-            XmlConstants.ATTRIBUTE_ATTACHED_TO_ID:     attachedToId,
-        })
-        lollipopElement: Element = SubElement(documentElement, XmlConstants.ELEMENT_LOLLIPOP, attrib=attributes)
-
-        self._pyutToXml.pyutInterfaceToXml(umlLollipopInterface.pyutInterface, lollipopElement)
-
-        return lollipopElement
 
     def _umlLinkAttributes(self, umlLink: UmlLink) -> ElementAttributes:
 

@@ -19,7 +19,6 @@ from codeallybasic.SecureConversions import SecureConversions
 from pyutmodelv2.PyutLink import LinkDestination
 from pyutmodelv2.PyutLink import LinkSource
 from pyutmodelv2.PyutLink import PyutLink
-from pyutmodelv2.PyutInterface import PyutInterface
 from pyutmodelv2.enumerations.PyutLinkType import PyutLinkType
 
 from umlshapes.types.Common import EndPoints
@@ -30,7 +29,6 @@ from umlshapes.links.UmlAssociation import UmlAssociation
 from umlshapes.links.UmlInheritance import UmlInheritance
 from umlshapes.links.UmlComposition import UmlComposition
 from umlshapes.links.UmlAggregation import UmlAggregation
-from umlshapes.links.UmlLollipopInterface import UmlLollipopInterface
 
 from umlshapes.shapes.UmlClass import UmlClass
 from umlshapes.shapes.UmlNote import UmlNote
@@ -38,7 +36,6 @@ from umlshapes.shapes.UmlText import UmlText
 from umlshapes.shapes.UmlUseCase import UmlUseCase
 from umlshapes.shapes.UmlActor import UmlActor
 
-from umlshapes.types.Common import AttachmentSide
 
 from umlshapes.ShapeTypes import LinkableUmlShape
 from umlshapes.ShapeTypes import LinkableUmlShapes
@@ -93,14 +90,6 @@ class XmlLinksToUmlLinks:
             umlLink: UmlLink = self._umlLinkElementToUmlLink(umlLinkElement=linkElement, linkableUmlShapes=linkableUmlShapes)
 
             umlLinks.append(umlLink)
-
-        lollipopElements: Elements = cast(Elements, umlDiagramElement.get_elements(XmlConstants.ELEMENT_LOLLIPOP))
-
-        for lollipopElement in lollipopElements:
-            self.logger.info(f'{lollipopElement}')
-            umlLollipopInterface: UmlLollipopInterface = self._getLollipop(lollipopElement=lollipopElement, linkableUmlShapes=linkableUmlShapes)
-
-            umlLinks.append(umlLollipopInterface)
 
         return umlLinks
 
@@ -276,52 +265,3 @@ class XmlLinksToUmlLinks:
             return umlNoteLink
         else:
             assert False, f'Unknown link type, {pyutLink.linkType=}'
-
-    def _getLollipop(self, lollipopElement: Element, linkableUmlShapes: LinkableUmlShapes) -> UmlLollipopInterface:
-        """
-        <UmlLollipopInterface lineCentum="0.1" attachmentSide="Right" attachedToId="valley.darkness.implementor">
-
-        Args:
-            lollipopElement:
-            linkableUmlShapes:
-
-        Returns:
-
-        """
-        pyutInterface: PyutInterface = self._xmlToPyut.interfaceToPyutInterface(lollipopElement)
-
-        umlLollipopInterface: UmlLollipopInterface = UmlLollipopInterface(pyutInterface=pyutInterface)
-
-        attachmentSideStr: str      = lollipopElement[XmlConstants.ATTRIBUTE_ATTACHMENT_SIDE]
-        attachedToId:      str      = lollipopElement[XmlConstants.ATTRIBUTE_ATTACHED_TO_ID]
-        attachedTo:        UmlClass = self._findAttachedToClass(attachedToId=attachedToId, linkableUmlShapes=linkableUmlShapes)
-
-        umlLollipopInterface.lineCentum     = SecureConversions.secureFloat(lollipopElement[XmlConstants.ATTRIBUTE_LINE_CENTUM])
-        umlLollipopInterface.attachmentSide = AttachmentSide.toEnum(attachmentSideStr)
-
-        umlLollipopInterface.attachedTo = attachedTo
-
-        return umlLollipopInterface
-
-    def _findAttachedToClass(self, attachedToId: str, linkableUmlShapes: LinkableUmlShapes) -> UmlClass:
-        """
-        This method is necessary because the linkable shapes dictionary is index by the PyutClass ID
-        However, the pointer to the attached class is a UmlClass id.  All this came about because
-        lollipops reused the PyutInterface class
-
-        Args:
-            attachedToId:
-            linkableUmlShapes:
-
-        Returns:  The appropriate UmlClass
-
-        """
-        foundClass: UmlClass = cast(UmlClass, None)
-        for uc in linkableUmlShapes.values():
-            umlClass: UmlClass = cast(UmlClass, uc)
-            if umlClass.id == attachedToId:
-                foundClass = umlClass
-                break
-
-        assert foundClass is not None, 'Developer error, missing class in linkableUmlShapes'
-        return foundClass

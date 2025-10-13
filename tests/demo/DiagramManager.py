@@ -6,7 +6,6 @@ from typing import cast
 from logging import Logger
 from logging import getLogger
 
-from wx import SHOW_EFFECT_SLIDE_TO_RIGHT
 
 from wx import Window
 from wx import Simplebook
@@ -48,14 +47,15 @@ from umlshapes.pubsubengine.UmlPubSubEngine import UmlPubSubEngine
 
 from umlio.IOTypes import UmlActors
 from umlio.IOTypes import UmlClasses
-from umlio.IOTypes import UmlDocument
-from umlio.IOTypes import UmlDocumentTitle
-from umlio.IOTypes import UmlDocumentType
-from umlio.IOTypes import UmlDocuments
 from umlio.IOTypes import UmlLinks
 from umlio.IOTypes import UmlNotes
 from umlio.IOTypes import UmlTexts
 from umlio.IOTypes import UmlUseCases
+from umlio.IOTypes import UmlDocument
+from umlio.IOTypes import UmlDocumentTitle
+from umlio.IOTypes import UmlDocumentType
+from umlio.IOTypes import UmlDocuments
+from umlio.IOTypes import UmlLollipopInterfaces
 
 FrameIdToUmlDocument = NewType('FrameIdToUmlDocument', Dict[FrameId, UmlDocument])
 UmlDocumentToPage    = NewType('UmlDocumentToPage', Dict[UmlDocumentTitle, int])
@@ -133,6 +133,7 @@ class DiagramManager(Simplebook):
         self._layoutActors(diagramFrame, umlDocument.umlActors)
         self._layoutUseCases(diagramFrame, umlDocument.umlUseCases)
         self._layoutLinks(diagramFrame, umlDocument.umlLinks)
+        self._layoutLollipops(diagramFrame, umlDocument.umlLollipopInterfaces)
 
     def _layoutClasses(self, diagramFrame: ClassDiagramFrame, umlClasses: UmlClasses):
         for umlClass in umlClasses:
@@ -176,6 +177,18 @@ class DiagramManager(Simplebook):
                 diagramFrame=diagramFrame,
                 eventHandlerClass=UmlUseCaseEventHandler
             )
+
+    def _layoutLollipops(self, diagramFrame: ClassDiagramFrame, umlLollipops: UmlLollipopInterfaces):
+        for umlLollipop in umlLollipops:
+            umlLollipopInterface: UmlLollipopInterface = cast(UmlLollipopInterface, umlLollipop)
+            self.logger.info(f'{umlLollipopInterface}')
+
+            diagramFrame.umlDiagram.AddShape(umlLollipopInterface)
+            umlLollipopInterface.Show(True)
+            lollipopEventHandler: UmlLollipopInterfaceEventHandler = UmlLollipopInterfaceEventHandler(lollipopInterface=umlLollipopInterface)
+            lollipopEventHandler.umlPubSubEngine = self._umlPubSubEngine
+            lollipopEventHandler.SetPreviousHandler(umlLollipopInterface.GetEventHandler())
+            umlLollipopInterface.SetEventHandler(lollipopEventHandler)
 
     def _layoutLinks(self, diagramFrame: ClassDiagramFrame | UseCaseDiagramFrame, umlLinks: UmlLinks):
         for umlLink in umlLinks:
@@ -221,16 +234,6 @@ class DiagramManager(Simplebook):
                 umlAssociationEventHandler.umlPubSubEngine = self._umlPubSubEngine
                 umlAssociationEventHandler.SetPreviousHandler(umlLink.GetEventHandler())
                 umlLink.SetEventHandler(umlAssociationEventHandler)
-            elif isinstance(umlLink, UmlLollipopInterface):
-                umlLollipopInterface: UmlLollipopInterface = cast(UmlLollipopInterface, umlLink)
-                self.logger.info(f'{umlLollipopInterface}')
-
-                diagramFrame.umlDiagram.AddShape(umlLollipopInterface)
-                umlLollipopInterface.Show(True)
-                lollipopEventHandler: UmlLollipopInterfaceEventHandler = UmlLollipopInterfaceEventHandler(lollipopInterface=umlLollipopInterface)
-                lollipopEventHandler.umlPubSubEngine = self._umlPubSubEngine
-                lollipopEventHandler.SetPreviousHandler(umlLollipopInterface.GetEventHandler())
-                umlLollipopInterface.SetEventHandler(lollipopEventHandler)
 
     def _layoutShape(self, umlShape: UmlShape, diagramFrame: ClassDiagramFrame | UseCaseDiagramFrame, eventHandlerClass: type[UmlBaseEventHandler]):
         """

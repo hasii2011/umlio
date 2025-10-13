@@ -18,9 +18,11 @@ from umlio.IOTypes import UmlDocument
 from umlio.serializer.UmlLinksToXml import UmlLinksToXml
 from umlio.serializer.UmlNotesToXml import UmlNotesToXml
 from umlio.serializer.UmlTextsToXml import UmlTextsToXml
-from umlio.serializer.UmlUseCasesToXml import UmlUseCasesToXml
-from umlio.XMLConstants import XmlConstants
 from umlio.serializer.UmlClassToXml import UmlClassToXml
+from umlio.serializer.UmlUseCasesToXml import UmlUseCasesToXml
+from umlio.serializer.UmlLollipopsToXmlLollipops import UmlLollipopsToXmlLollipops
+
+from umlio.XMLConstants import XmlConstants
 
 INDENT_SPACES: str = '    '     # TODO: Make this configurable
 
@@ -87,6 +89,7 @@ class UmlShapesToXml:
         umlNotesToXml:   UmlNotesToXml    = UmlNotesToXml()
         umlTextsToXml:   UmlTextsToXml    = UmlTextsToXml()
         umlLinksToXml:   UmlLinksToXml    = UmlLinksToXml()
+        umlLollipopsToXml: UmlLollipopsToXmlLollipops = UmlLollipopsToXmlLollipops()
 
         documentElement: Element       = self._umlDocumentAttributesToXml(umlDiagram=umlDiagram)
 
@@ -96,6 +99,8 @@ class UmlShapesToXml:
         umlNotesToXml.serialize(documentTop=documentElement, umlNotes=umlDiagram.umlNotes)
         umlTextsToXml.serialize(documentTop=documentElement, umlTexts=umlDiagram.umlTexts)
         umlLinksToXml.serialize(documentTop=documentElement, umlLinks=umlDiagram.umlLinks)
+
+        umlLollipopsToXml.serialize(documentTop=documentElement, umlLollipops=umlDiagram.umlLollipopInterfaces)
 
     def writeXml(self, fileName: Path):
         """

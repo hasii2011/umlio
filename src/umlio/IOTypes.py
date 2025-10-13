@@ -12,12 +12,12 @@ from pathlib import Path
 
 from codeallybasic.SecureConversions import SecureConversions
 
-from umlshapes.links.UmlLollipopInterface import UmlLollipopInterface
 from umlshapes.shapes.UmlActor import UmlActor
 from umlshapes.shapes.UmlClass import UmlClass
 from umlshapes.shapes.UmlNote import UmlNote
 from umlshapes.shapes.UmlText import UmlText
 from umlshapes.shapes.UmlUseCase import UmlUseCase
+from umlshapes.links.UmlLollipopInterface import UmlLollipopInterface
 
 from umlshapes.links.UmlLink import UmlLink
 from umlshapes.types.UmlDimensions import UmlDimensions
@@ -31,13 +31,16 @@ XML_VERSION: str = '12.0'
 PROJECT_SUFFIX: str = '.udt'        # UML Diagramming Tool
 XML_SUFFIX:     str = '.xml'
 
+
 UmlDocumentTitle = NewType('UmlDocumentTitle', str)
 UmlClasses       = NewType('UmlClasses',      List[UmlClass])
 UmlUseCases      = NewType('UmlUseCases',     List[UmlUseCase])
 UmlActors        = NewType('UmlActors',       List[UmlActor])
 UmlNotes         = NewType('UmlNotes',        List[UmlNote])
 UmlTexts         = NewType('UmlTexts',        List[UmlText])
-UmlLinks         = NewType('UmlLinks',        List[UmlLink | UmlLollipopInterface])
+UmlLinks         = NewType('UmlLinks',        List[UmlLink])
+
+UmlLollipopInterfaces = NewType('UmlLollipopInterfaces', List[UmlLollipopInterface])
 
 ElementAttributes = NewType('ElementAttributes', Dict[str, str])
 
@@ -78,6 +81,10 @@ def umlLinksFactory() -> UmlLinks:
     return UmlLinks([])
 
 
+def umlLollipopInterfacesFactory() -> UmlLollipopInterfaces:
+    return UmlLollipopInterfaces([])
+
+
 @dataclass
 class UmlDocument:
     documentType:    UmlDocumentType  = UmlDocumentType.NOT_SET
@@ -93,6 +100,8 @@ class UmlDocument:
     umlTexts:        UmlTexts    = field(default_factory=umlTextsFactory)
     umlLinks:        UmlLinks    = field(default_factory=umlLinksFactory)
 
+    umlLollipopInterfaces: UmlLollipopInterfaces = field(default_factory=umlLollipopInterfacesFactory)
+
 
 UmlDocuments = NewType('UmlDocuments', Dict[UmlDocumentTitle, UmlDocument])
 
@@ -100,6 +109,9 @@ UmlDocuments = NewType('UmlDocuments', Dict[UmlDocumentTitle, UmlDocument])
 def createUmlDocumentsFactory() -> UmlDocuments:
     return UmlDocuments({})
 
+
+DEFAULT_PROJECT_TITLE: UmlDocumentTitle = UmlDocumentTitle('NewProject')
+DEFAULT_PROJECT_PATH:  Path             = Path(f'{DEFAULT_PROJECT_TITLE}{PROJECT_SUFFIX}')
 
 @dataclass
 class ProjectInformation:
@@ -111,6 +123,17 @@ class ProjectInformation:
 @dataclass
 class UmlProject(ProjectInformation):
     umlDocuments: UmlDocuments = field(default_factory=createUmlDocumentsFactory)
+
+    @classmethod
+    def emptyProject(cls) -> 'UmlProject':
+        umlProject:  UmlProject  = UmlProject(DEFAULT_PROJECT_PATH)
+        umlDocument: UmlDocument = UmlDocument(
+            documentType=UmlDocumentType.CLASS_DOCUMENT,
+            documentTitle=DEFAULT_PROJECT_TITLE
+        )
+        umlProject.umlDocuments[DEFAULT_PROJECT_TITLE] = umlDocument
+
+        return umlProject
 
 
 #

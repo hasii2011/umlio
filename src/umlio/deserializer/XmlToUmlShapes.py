@@ -18,6 +18,7 @@ from umlio.IOTypes import UmlDocument
 from umlio.IOTypes import UmlDocumentTitle
 from umlio.IOTypes import UmlDocumentType
 from umlio.IOTypes import UmlLinks
+from umlio.IOTypes import UmlLollipopInterfaces
 from umlio.IOTypes import UmlNotes
 from umlio.IOTypes import UmlTexts
 from umlio.IOTypes import UmlProject
@@ -26,6 +27,7 @@ from umlio.IOTypes import UmlUseCases
 from umlio.deserializer.XmlActorsToUmlActors import XmlActorsToUmlActors
 from umlio.deserializer.XmlClassesToUmlClasses import XmlClassesToUmlClasses
 from umlio.deserializer.XmlLinksToUmlLinks import XmlLinksToUmlLinks
+from umlio.deserializer.XmlLollipopsToUmlLollipops import XmlLollipopsToUmlLollipops
 from umlio.deserializer.XmlNotesToUmlNotes import XmlNotesToUmlNotes
 from umlio.deserializer.XmlTextsToUmlTexts import XmlTextsToUmlTexts
 from umlio.deserializer.XmlUseCasesToUmlUseCases import XmlUseCasesToUmlUseCases
@@ -84,7 +86,8 @@ class XmlToUmlShapes:
 
                 linkableUmlShapes: LinkableUmlShapes = self._buildLinkableUmlShapes(umlDocument=umlDocument)
 
-                umlDocument.umlLinks  = self._deserializeUmlLinkElements(umlDiagramElement=umlDiagramElement, linkableUmlShapes=linkableUmlShapes)
+                umlDocument.umlLinks              = self._deserializeUmlLinkElements(umlDiagramElement=umlDiagramElement, linkableUmlShapes=linkableUmlShapes)
+                umlDocument.umlLollipopInterfaces = self._deserializeLollipopInterfaces(umlDiagramElement=umlDiagramElement, linkableUmlShapes=linkableUmlShapes)
 
             elif umlDiagramElement[XmlConstants.ATTRIBUTE_DOCUMENT_TYPE] == UmlDocumentType.USE_CASE_DOCUMENT.value:
 
@@ -177,6 +180,15 @@ class XmlToUmlShapes:
         umlLinks: UmlLinks = xmlLinksToUmlLinks.deserialize(umlDiagramElement=umlDiagramElement, linkableUmlShapes=linkableUmlShapes)
 
         return umlLinks
+
+    def _deserializeLollipopInterfaces(self, umlDiagramElement: Element, linkableUmlShapes: LinkableUmlShapes) -> UmlLollipopInterfaces:
+
+        xmlLollipopsToUmLollipops: XmlLollipopsToUmlLollipops = XmlLollipopsToUmlLollipops()
+
+        lollipopInterfaces: UmlLollipopInterfaces = xmlLollipopsToUmLollipops.deserialize(umlDiagramElement=umlDiagramElement,
+                                                                                          linkableUmlShapes=linkableUmlShapes
+                                                                                          )
+        return lollipopInterfaces
 
     def _buildLinkableUmlShapes(self, umlDocument: UmlDocument) -> LinkableUmlShapes:
         """
