@@ -10,6 +10,8 @@ from dataclasses import field
 
 from pathlib import Path
 
+from untangle import Element
+
 from codeallybasic.SecureConversions import SecureConversions
 
 from umlshapes.shapes.UmlActor import UmlActor
@@ -22,7 +24,6 @@ from umlshapes.links.UmlLollipopInterface import UmlLollipopInterface
 from umlshapes.links.UmlLink import UmlLink
 from umlshapes.types.UmlDimensions import UmlDimensions
 from umlshapes.types.UmlPosition import UmlPosition
-from untangle import Element
 
 from umlio.XMLConstants import XmlConstants
 
@@ -85,6 +86,13 @@ def umlLollipopInterfacesFactory() -> UmlLollipopInterfaces:
     return UmlLollipopInterfaces([])
 
 
+DEFAULT_PROJECT_TITLE:         UmlDocumentTitle = UmlDocumentTitle('NewProject')
+DEFAULT_CLASS_DIAGRAM_NAME:    UmlDocumentTitle = UmlDocumentTitle('Class Diagram')
+DEFAULT_USE_CASE_DIAGRAM_NAME: UmlDocumentTitle = UmlDocumentTitle('Use Case Diagram')
+DEFAULT_SEQUENCE_DIAGRAM_NAME: UmlDocumentTitle = UmlDocumentTitle('Sequence Diagram')
+
+DEFAULT_PROJECT_PATH:       Path             = Path(f'{DEFAULT_PROJECT_TITLE}{PROJECT_SUFFIX}')
+
 @dataclass
 class UmlDocument:
     documentType:    UmlDocumentType  = UmlDocumentType.NOT_SET
@@ -102,17 +110,33 @@ class UmlDocument:
 
     umlLollipopInterfaces: UmlLollipopInterfaces = field(default_factory=umlLollipopInterfacesFactory)
 
+    @classmethod
+    def classDocument(cls) -> 'UmlDocument':
+        return UmlDocument(
+            documentType=UmlDocumentType.CLASS_DOCUMENT,
+            documentTitle=DEFAULT_CLASS_DIAGRAM_NAME
+        )
+
+    @classmethod
+    def useCaseDocument(cls) -> 'UmlDocument':
+        return UmlDocument(
+            documentType=UmlDocumentType.USE_CASE_DOCUMENT,
+            documentTitle=DEFAULT_USE_CASE_DIAGRAM_NAME
+        )
+
+    @classmethod
+    def sequenceDocument(cls) -> 'UmlDocument':
+        return UmlDocument(
+            documentType=UmlDocumentType.SEQUENCE_DOCUMENT,
+            documentTitle=DEFAULT_SEQUENCE_DIAGRAM_NAME
+        )
+
 
 UmlDocuments = NewType('UmlDocuments', Dict[UmlDocumentTitle, UmlDocument])
 
 
 def createUmlDocumentsFactory() -> UmlDocuments:
     return UmlDocuments({})
-
-
-DEFAULT_PROJECT_TITLE:      UmlDocumentTitle = UmlDocumentTitle('NewProject')
-DEFAULT_CLASS_DIAGRAM_NAME: UmlDocumentTitle = UmlDocumentTitle('Class Diagram')
-DEFAULT_PROJECT_PATH:       Path             = Path(f'{DEFAULT_PROJECT_TITLE}{PROJECT_SUFFIX}')
 
 @dataclass
 class ProjectInformation:
