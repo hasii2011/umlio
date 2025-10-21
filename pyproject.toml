@@ -17,13 +17,13 @@ dependencies = [
     'codeallybasic>=1.30.0',
     'codeallyadvanced>=2.2.0',
     'pyutmodelv2>=2.2.6',
-    'umlshapes>=0.9.250',
+    'umlshapes>=0.9.310',
     'Pypubsub==4.0.3',
 ]
 
 [project.optional-dependencies]
 test = [
-  'mypy==1.15.0',
+  'mypy==1.18.2',
   'mypy-extensions==1.0.0',
   'types-Deprecated==1.2.9.20240311',
   'html-testRunner~=1.2.1',

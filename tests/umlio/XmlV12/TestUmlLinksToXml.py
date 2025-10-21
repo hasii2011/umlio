@@ -1,6 +1,4 @@
 
-from typing import cast
-
 from pathlib import Path
 
 from codeallyadvanced.ui.UnitTestBaseW import UnitTestBaseW
@@ -9,7 +7,6 @@ from pyutmodelv2.enumerations.PyutLinkType import PyutLinkType
 
 from umlshapes.pubsubengine.UmlPubSubEngine import UmlPubSubEngine
 from umlshapes.frames.ClassDiagramFrame import ClassDiagramFrame
-from umlshapes.frames.ClassDiagramFrame import CreateLollipopCallback
 
 from umlshapes.preferences.UmlPreferences import UmlPreferences
 
@@ -145,8 +142,7 @@ class TestUmlLinksToXml(UnitTestBaseW):
 
         self._diagramFrame = ClassDiagramFrame(
             parent=self._topLevelWindow,
-            umlPubSubEngine=self._umlPubSubEngine,
-            createLollipopCallback=cast(CreateLollipopCallback, None)
+            umlPubSubEngine=self._umlPubSubEngine
         )
 
         self._linkCreator: LinkCreator = LinkCreator(diagramFrame=self._diagramFrame)

@@ -14,7 +14,6 @@ from umlshapes.UmlDiagram import UmlDiagram
 
 from umlshapes.frames.DiagramFrame import FrameId
 from umlshapes.frames.ClassDiagramFrame import ClassDiagramFrame
-from umlshapes.frames.ClassDiagramFrame import CreateLollipopCallback
 from umlshapes.frames.SequenceDiagramFrame import SequenceDiagramFrame
 from umlshapes.frames.UseCaseDiagramFrame import UseCaseDiagramFrame
 
@@ -103,8 +102,7 @@ class DiagramManager(Simplebook):
             if documentType == UmlDocumentType.CLASS_DOCUMENT:
                 diagramFrame = ClassDiagramFrame(
                     parent=self,
-                    umlPubSubEngine=self._umlPubSubEngine,
-                    createLollipopCallback=cast(CreateLollipopCallback, None)       # TODO:  Where is this
+                    umlPubSubEngine=self._umlPubSubEngine
                 )
             elif documentType == UmlDocumentType.USE_CASE_DOCUMENT:
                 diagramFrame = UseCaseDiagramFrame(

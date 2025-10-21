@@ -110,8 +110,9 @@ def createUmlDocumentsFactory() -> UmlDocuments:
     return UmlDocuments({})
 
 
-DEFAULT_PROJECT_TITLE: UmlDocumentTitle = UmlDocumentTitle('NewProject')
-DEFAULT_PROJECT_PATH:  Path             = Path(f'{DEFAULT_PROJECT_TITLE}{PROJECT_SUFFIX}')
+DEFAULT_PROJECT_TITLE:      UmlDocumentTitle = UmlDocumentTitle('NewProject')
+DEFAULT_CLASS_DIAGRAM_NAME: UmlDocumentTitle = UmlDocumentTitle('Class Diagram')
+DEFAULT_PROJECT_PATH:       Path             = Path(f'{DEFAULT_PROJECT_TITLE}{PROJECT_SUFFIX}')
 
 @dataclass
 class ProjectInformation:
@@ -129,7 +130,7 @@ class UmlProject(ProjectInformation):
         umlProject:  UmlProject  = UmlProject(DEFAULT_PROJECT_PATH)
         umlDocument: UmlDocument = UmlDocument(
             documentType=UmlDocumentType.CLASS_DOCUMENT,
-            documentTitle=DEFAULT_PROJECT_TITLE
+            documentTitle=DEFAULT_CLASS_DIAGRAM_NAME,
         )
         umlProject.umlDocuments[DEFAULT_PROJECT_TITLE] = umlDocument
 
