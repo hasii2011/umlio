@@ -132,7 +132,7 @@ class UmlProject(ProjectInformation):
             documentType=UmlDocumentType.CLASS_DOCUMENT,
             documentTitle=DEFAULT_CLASS_DIAGRAM_NAME,
         )
-        umlProject.umlDocuments[DEFAULT_PROJECT_TITLE] = umlDocument
+        umlProject.umlDocuments[DEFAULT_CLASS_DIAGRAM_NAME] = umlDocument
 
         return umlProject
 
