@@ -347,9 +347,9 @@ class XmlToPyut:
 
         untangledPyutMethodParameters: PyutParameters = PyutParameters([])
         for parameterElement in parameterElements:
-            name:           str = parameterElement['name']
-            defaultValue:   str = parameterElement['defaultValue']
-            parameterType:  PyutType = PyutType(parameterElement['type'])
+            name:           str = parameterElement[XmlConstants.ATTRIBUTE_NAME]
+            defaultValue:   str = parameterElement[XmlConstants.ATTRIBUTE_DEFAULT_VALUE]
+            parameterType:  PyutType = PyutType(parameterElement[XmlConstants.ATTRIBUTE_PARAMETER_TYPE])
 
             pyutParameter: PyutParameter = PyutParameter(name=name, type=parameterType, defaultValue=defaultValue)
 
