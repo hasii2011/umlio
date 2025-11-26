@@ -17,14 +17,14 @@ from umlio.IOTypes import umlNotesFactory
 
 from umlio.XMLConstants import XmlConstants
 
-from umlio.deserializer.XmlToPyut import XmlToPyut
+from umlio.deserializer.XmlToUmlModel import XmlToUmlModel
 
 
 class XmlNotesToUmlNotes:
     def __init__(self):
         self.logger: Logger = getLogger(__name__)
 
-        self._xmlToPyut: XmlToPyut = XmlToPyut()
+        self._xmlToPyut: XmlToUmlModel = XmlToUmlModel()
 
     def deserialize(self, umlDiagramElement: Element) -> UmlNotes:
         """

@@ -15,7 +15,7 @@ from umlio.IOTypes import GraphicInformation
 from umlio.IOTypes import UmlTexts
 from umlio.IOTypes import umlTextsFactory
 
-from umlio.deserializer.XmlToPyut import XmlToPyut
+from umlio.deserializer.XmlToUmlModel import XmlToUmlModel
 
 from umlio.XMLConstants import XmlConstants
 
@@ -30,7 +30,7 @@ class XmlTextsToUmlTexts:
 
         self.logger: Logger = getLogger(__name__)
 
-        self._xmlToPyut: XmlToPyut = XmlToPyut()
+        self._xmlToPyut: XmlToUmlModel = XmlToUmlModel()
 
     def deserialize(self, umlDiagramElement: Element) -> UmlTexts:
         """

@@ -16,14 +16,14 @@ from umlio.IOTypes import umlClassesFactory
 
 from umlio.XMLConstants import XmlConstants
 
-from umlio.deserializer.XmlToPyut import XmlToPyut
+from umlio.deserializer.XmlToUmlModel import XmlToUmlModel
 
 
 class XmlClassesToUmlClasses:
     def __init__(self):
         self.logger: Logger = getLogger(__name__)
 
-        self._xmlToUmlModel: XmlToPyut = XmlToPyut()
+        self._xmlToUmlModel: XmlToUmlModel = XmlToUmlModel()
 
     def deserialize(self, umlDiagramElement: Element) -> UmlClasses:
         """

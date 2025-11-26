@@ -62,7 +62,7 @@ class ConvolutedModelSDMessageInformation:
     destinationId: str           = '-1'
 
 
-class XmlToPyut:
+class XmlToUmlModel:
     """
     Converts Uml Model Version 14 XML to Uml Model instance
     """
@@ -392,8 +392,8 @@ class XmlToPyut:
         umlModelBase.fileName = modelElement[XmlConstants.ATTRIBUTE_FILENAME]
 
         if umlModelBase.name is None:
-            XmlToPyut.noteCounter += 1
-            umlModelBase.name = f'{XmlToPyut.NOTE_NAME}-{XmlToPyut.noteCounter}'
+            XmlToUmlModel.noteCounter += 1
+            umlModelBase.name = f'{XmlToUmlModel.NOTE_NAME}-{XmlToUmlModel.noteCounter}'
         return umlModelBase
 
     def _secureDisplayMethods(self, displayStr: str) -> DisplayMethods:
