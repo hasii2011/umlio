@@ -74,7 +74,7 @@ class XmlToUmlModel:
         self.logger: Logger = getLogger(__name__)
 
     def classToModelClass(self, umlClassElement: Element) -> Class:
-        classElement: Element = umlClassElement.PyutClass
+        classElement: Element = umlClassElement.ModelClass
 
         modelClass: Class = Class()
 
@@ -120,7 +120,7 @@ class XmlToUmlModel:
 
         Returns: A model text Object
         """
-        textElement: Element = umlTextElement.PyutText
+        textElement: Element = umlTextElement.ModelText
         text:        Text    = Text()
 
         text.id  = textElement[XmlConstants.ATTRIBUTE_ID]
@@ -140,7 +140,7 @@ class XmlToUmlModel:
 
         Returns: A model note object
         """
-        noteElement = umlNoteElement.PyutNote
+        noteElement = umlNoteElement.ModelNote
 
         note: Note = Note()
 
@@ -155,7 +155,7 @@ class XmlToUmlModel:
 
     def interfaceToModelInterface(self, umlInterfaceElement: Element) -> Interface:
 
-        interfaceElement: Element = umlInterfaceElement.PyutInterface
+        interfaceElement: Element = umlInterfaceElement.ModelInterface
 
         interfaceId: str = interfaceElement[XmlConstants.ATTRIBUTE_ID]
         name:        str = interfaceElement[XmlConstants.ATTRIBUTE_NAME]
@@ -181,7 +181,7 @@ class XmlToUmlModel:
 
         Returns:   A model Actor
         """
-        actorElement: Element = umlActorElement.PyutActor
+        actorElement: Element = umlActorElement.ModelActor
         actor:        Actor   = Actor()
 
         actor = cast(Actor, self._addUmlBaseAttributes(modelElement=actorElement, umlModelBase=actor))
@@ -196,7 +196,7 @@ class XmlToUmlModel:
 
         Returns:  Model Use Case
         """
-        useCaseElement: Element = umlUseCaseElement.PyutUseCase
+        useCaseElement: Element = umlUseCaseElement.ModelUseCase
         useCase:    UseCase = UseCase()
 
         useCase = cast(UseCase, self._addUmlBaseAttributes(modelElement=useCaseElement, umlModelBase=useCase))
@@ -225,7 +225,7 @@ class XmlToUmlModel:
 
     def sdInstanceToModelSDInstance(self, umlSDInstanceElement: Element) -> SDInstance:
 
-        instanceElement: Element    = umlSDInstanceElement.PyutSDInstance
+        instanceElement: Element    = umlSDInstanceElement.ModelSDInstance
         sdInstance:  SDInstance = SDInstance()
 
         sdInstance.id                     = instanceElement[XmlConstants.ATTRIBUTE_ID]
@@ -242,7 +242,7 @@ class XmlToUmlModel:
 
         Returns:  Bogus data class
         """
-        messageElement: Element = umlSDMessageElement.PyutSDMessage
+        messageElement: Element = umlSDMessageElement.ModelSDMessage
 
         sdMessage:  SDMessage = SDMessage()
 

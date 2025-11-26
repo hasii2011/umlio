@@ -1,32 +1,32 @@
 <UmlProject fileName="" version="12.0" codePath="/users/hasii">
     <UMLDiagram documentType="Class Document" title="Full Fledge Class Diagram" scrollPositionX="23" scrollPositionY="23" pixelsPerUnitX="1" pixelsPerUnitY="1">
         <UmlClass id="cut.short.issue.business" width="75" height="75" x="333" y="333">
-            <PyutClass id="77" name="Class111" displayMethods="True" displayParameters="Display Parameters" displayConstructor="Do Not Display" displayDunderMethods="Display" displayFields="True" displayStereotype="True" fileName="Class111.oy" description="I am class 111">
-                <PyutMethod name="MethodName-222" visibility="PUBLIC" returnType="">
+            <ModelClass id="77" name="Class111" displayMethods="True" displayParameters="Display Parameters" displayConstructor="Do Not Display" displayDunderMethods="Display" displayFields="True" displayStereotype="True" fileName="Class111.oy" description="I am class 111">
+                <ModelMethod name="MethodName-222" visibility="PUBLIC" returnType="">
                     <SourceCode/>
-                    <PyutParameter name="ParameterName-333" parameterType="int" defaultValue="42"/>
-                </PyutMethod>
-                <PyutMethod name="MethodName-223" visibility="PUBLIC" returnType="">
+                    <ModelParameter name="ParameterName-333" parameterType="int" defaultValue="42"/>
+                </ModelMethod>
+                <ModelMethod name="MethodName-223" visibility="PUBLIC" returnType="">
                     <SourceCode/>
-                    <PyutParameter name="ParameterName-334" parameterType="str" defaultValue="I am a string"/>
-                </PyutMethod>
-                <PyutField name="FieldName-711" visibility="PRIVATE" fieldType="str" defaultValue="bogus"/>
-                <PyutField name="FieldName-700" visibility="PROTECTED" fieldType="float" defaultValue="22.0"/>
-            </PyutClass>
+                    <ModelParameter name="ParameterName-334" parameterType="str" defaultValue="I am a string"/>
+                </ModelMethod>
+                <ModelField name="FieldName-711" visibility="PRIVATE" fieldType="str" defaultValue="bogus"/>
+                <ModelField name="FieldName-700" visibility="PROTECTED" fieldType="float" defaultValue="22.0"/>
+            </ModelClass>
         </UmlClass>
         <UmlClass id="will.fine.woman.state" width="200" height="100" x="666" y="666">
-            <PyutClass id="1" name="Class222" displayMethods="True" displayParameters="Do Not Display Parameters" displayConstructor="Display" displayDunderMethods="Do Not Display" displayFields="True" displayStereotype="True" fileName="Class222.py" description="I am class 222">
-                <PyutMethod name="MethodName-224" visibility="PUBLIC" returnType="">
+            <ModelClass id="1" name="Class222" displayMethods="True" displayParameters="Do Not Display Parameters" displayConstructor="Display" displayDunderMethods="Do Not Display" displayFields="True" displayStereotype="True" fileName="Class222.py" description="I am class 222">
+                <ModelMethod name="MethodName-224" visibility="PUBLIC" returnType="">
                     <SourceCode/>
-                    <PyutParameter name="ParameterName-335" parameterType="int" defaultValue="2"/>
-                </PyutMethod>
-                <PyutMethod name="MethodName-225" visibility="PUBLIC" returnType="">
+                    <ModelParameter name="ParameterName-335" parameterType="int" defaultValue="2"/>
+                </ModelMethod>
+                <ModelMethod name="MethodName-225" visibility="PUBLIC" returnType="">
                     <SourceCode/>
-                    <PyutParameter name="ParameterName-336" parameterType="float" defaultValue="1.0"/>
-                </PyutMethod>
-                <PyutField name="FieldName-777" visibility="PUBLIC" fieldType="int" defaultValue="777"/>
-                <PyutField name="FieldName-778" visibility="PROTECTED" fieldType="" defaultValue=""/>
-            </PyutClass>
+                    <ModelParameter name="ParameterName-336" parameterType="float" defaultValue="1.0"/>
+                </ModelMethod>
+                <ModelField name="FieldName-777" visibility="PUBLIC" fieldType="int" defaultValue="777"/>
+                <ModelField name="FieldName-778" visibility="PROTECTED" fieldType="" defaultValue=""/>
+            </ModelClass>
         </UmlClass>
     </UMLDiagram>
 </UmlProject>
