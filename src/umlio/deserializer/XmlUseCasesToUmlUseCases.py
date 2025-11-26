@@ -6,7 +6,7 @@ from logging import getLogger
 
 from untangle import Element
 
-from pyutmodelv2.PyutUseCase import PyutUseCase
+from umlmodel.UseCase import UseCase
 
 from umlshapes.shapes.UmlUseCase import UmlUseCase
 
@@ -45,8 +45,8 @@ class XmlUseCasesToUmlUseCases:
             self.logger.debug(f'{useCaseElement}')
 
             graphicInformation: GraphicInformation = GraphicInformation.toGraphicInfo(graphicElement=useCaseElement)
-            pyutUseCase:        PyutUseCase        = self._xmlToPyut.useCaseToPyutUseCase(umlUseCaseElement=useCaseElement)
-            umlUseCase:         UmlUseCase         = UmlUseCase(pyutUseCase=pyutUseCase)
+            pyutUseCase:        UseCase            = self._xmlToPyut.useCaseToModelUseCase(umlUseCaseElement=useCaseElement)
+            umlUseCase:         UmlUseCase         = UmlUseCase(useCase=pyutUseCase)
 
             umlUseCase.id       = graphicInformation.id
             umlUseCase.size     = graphicInformation.size

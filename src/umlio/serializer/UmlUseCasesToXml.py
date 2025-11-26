@@ -24,19 +24,19 @@ class UmlUseCasesToXml(BaseUmlToXml):
         super().__init__()
         self.logger: Logger = getLogger(__name__)
 
-        self._pyutToXml: PyutToXml = PyutToXml()
+        self._modelToXml: PyutToXml = PyutToXml()
 
     def serialize(self, documentTop: Element, umlUseCases: UmlUseCases, umlActors: UmlActors) -> Element:
 
         for actor in umlActors:
             umlActor:        UmlActor = cast(UmlActor, actor)
             umlActorElement: Element  = self._umlActorToXml(documentTop=documentTop, umlActor=umlActor)
-            self._pyutToXml.pyutActorToXml(pyutActor=umlActor.pyutActor, umlActorElement=umlActorElement)
+            self._modelToXml.actorToXml(actor=umlActor.modelActor, umlActorElement=umlActorElement)
 
         for useCase in umlUseCases:
             umlUseCase:        UmlUseCase = cast(UmlUseCase, useCase)
             umlUseCaseElement: Element    = self._umlUseCaseToXml(documentTop=documentTop, umlUseCase=umlUseCase)
-            self._pyutToXml.pyutUseCaseToXml(pyutUseCase=umlUseCase.pyutUseCase, umlUseCaseElement=umlUseCaseElement)
+            self._modelToXml.useCaseToXml(useCase=umlUseCase.modelUseCase, umlUseCaseElement=umlUseCaseElement)
 
         return documentTop
 

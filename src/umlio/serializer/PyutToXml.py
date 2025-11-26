@@ -9,291 +9,263 @@ from xml.etree.ElementTree import SubElement
 
 from codeallybasic.Common import XML_END_OF_LINE_MARKER
 
+from umlmodel.Actor import Actor
+from umlmodel.Class import Class
+from umlmodel.ClassCommon import ClassCommon
+from umlmodel.Field import Field
+from umlmodel.Interface import Interface
+from umlmodel.Link import Link
+from umlmodel.Link import LinkDestination
+from umlmodel.Link import LinkSource
+from umlmodel.Method import Method
+from umlmodel.Method import SourceCode
+from umlmodel.ModelTypes import ClassName
+from umlmodel.Note import Note
+from umlmodel.Parameter import Parameter
+from umlmodel.SDInstance import SDInstance
+from umlmodel.SDMessage import SDMessage
+from umlmodel.Text import Text
+from umlmodel.UseCase import UseCase
+
 from umlio.IOTypes import ElementAttributes
-
-from pyutmodelv2.PyutLink import LinkDestination
-from pyutmodelv2.PyutLink import LinkSource
-from pyutmodelv2.PyutLink import PyutLink
-
-from pyutmodelv2.PyutModelTypes import ClassName
-from pyutmodelv2.PyutActor import PyutActor
-from pyutmodelv2.PyutClass import PyutClass
-from pyutmodelv2.PyutClassCommon import PyutClassCommon
-from pyutmodelv2.PyutField import PyutField
-from pyutmodelv2.PyutInterface import PyutInterface
-from pyutmodelv2.PyutMethod import PyutMethod
-from pyutmodelv2.PyutMethod import SourceCode
-from pyutmodelv2.PyutNote import PyutNote
-from pyutmodelv2.PyutParameter import PyutParameter
-from pyutmodelv2.PyutSDInstance import PyutSDInstance
-from pyutmodelv2.PyutSDMessage import PyutSDMessage
-from pyutmodelv2.PyutText import PyutText
-from pyutmodelv2.PyutUseCase import PyutUseCase
 
 from umlio.XMLConstants import XmlConstants
 
 
 class PyutToXml:
     """
-    Serializes Pyut Model classes to DOM
+    Serializes Um Model classes to DOM
     """
 
     def __init__(self):
         super().__init__()
         self.logger: Logger = getLogger(__name__)
 
-    def pyutClassToXml(self, pyutClass: PyutClass, umlClassElement: Element) -> Element:
+    def classToXml(self, modelClass: Class, umlClassElement: Element) -> Element:
         """
-        Exporting a PyutClass to a miniDom Element.
+        Exporting a model class to a miniDom Element.
 
         Args:
-            pyutClass:        The pyut class to serialize
+            modelClass:       The model class to serialize
             umlClassElement:  The xml element to update
 
         Returns:
             A new updated element
         """
 
-        commonAttributes = self._pyutClassCommonAttributes(pyutClass)
+        commonAttributes = self._classCommonAttributes(modelClass)
         attributes = {
-            XmlConstants.ATTRIBUTE_ID:                     str(pyutClass.id),
-            XmlConstants.ATTRIBUTE_NAME:                   pyutClass.name,
-            XmlConstants.ATTRIBUTE_DISPLAY_METHODS:        str(pyutClass.showMethods),
-            XmlConstants.ATTRIBUTE_DISPLAY_PARAMETERS:     pyutClass.displayParameters.value,
-            XmlConstants.ATTRIBUTE_DISPLAY_CONSTRUCTOR:    pyutClass.displayConstructor.value,
-            XmlConstants.ATTRIBUTE_DISPLAY_DUNDER_METHODS: pyutClass.displayDunderMethods.value,
-            XmlConstants.ATTRIBUTE_DISPLAY_FIELDS:         str(pyutClass.showFields),
-            XmlConstants.ATTRIBUTE_DISPLAY_STEREOTYPE:     str(pyutClass.displayStereoType),
-            XmlConstants.ATTRIBUTE_FILENAME:               pyutClass.fileName,
+            XmlConstants.ATTRIBUTE_ID:                     modelClass.id,
+            XmlConstants.ATTRIBUTE_NAME:                   modelClass.name,
+            XmlConstants.ATTRIBUTE_DISPLAY_METHODS:        str(modelClass.showMethods),
+            XmlConstants.ATTRIBUTE_DISPLAY_PARAMETERS:     modelClass.displayParameters.value,
+            XmlConstants.ATTRIBUTE_DISPLAY_CONSTRUCTOR:    modelClass.displayConstructor.value,
+            XmlConstants.ATTRIBUTE_DISPLAY_DUNDER_METHODS: modelClass.displayDunderMethods.value,
+            XmlConstants.ATTRIBUTE_DISPLAY_FIELDS:         str(modelClass.showFields),
+            XmlConstants.ATTRIBUTE_DISPLAY_STEREOTYPE:     str(modelClass.displayStereoType),
+            XmlConstants.ATTRIBUTE_FILENAME:               modelClass.fileName,
         }
 
         attributes = attributes | commonAttributes
 
-        pyutClassElement: Element = SubElement(umlClassElement, XmlConstants.ELEMENT_MODEL_CLASS, attrib=attributes)
+        classElement: Element = SubElement(umlClassElement, XmlConstants.ELEMENT_MODEL_CLASS, attrib=attributes)
 
-        for method in pyutClass.methods:
-            self._pyutMethodToXml(pyutMethod=method, pyutClassElement=pyutClassElement)
+        for method in modelClass.methods:
+            self._methodToXml(method=method, classElement=classElement)
 
-        for pyutField in pyutClass.fields:
-            self._pyutFieldToXml(pyutField=pyutField, pyutClassElement=pyutClassElement)
-        return pyutClassElement
+        for field in modelClass.fields:
+            self._fieldToXml(field=field, classElement=classElement)
+        return classElement
 
-    def pyutLinkToXml(self, pyutLink: PyutLink, umlLinkElement: Element) -> Element:
+    def linkToXml(self, link: Link, umlLinkElement: Element) -> Element:
         """
-        Exporting a PyutLink to an Element.
+        Serialize a link to an Element.
 
         Args:
-            pyutLink:   Link to save
-            umlLinkElement:     xml document
+            link:           The model link to serialize
+            umlLinkElement: xml document
 
         Returns:
             A new minidom element
         """
-        src: LinkSource      = pyutLink.source
-        dst: LinkDestination = pyutLink.destination
+        src: LinkSource      = link.source
+        dst: LinkDestination = link.destination
 
-        srcLinkId:  int = src.id
-        destLinkId: int = dst.id
+        srcLinkId:  str = src.id
+        destLinkId: str = dst.id
 
         attributes: ElementAttributes = ElementAttributes({
-            XmlConstants.ATTRIBUTE_NAME:           pyutLink.name,
-            XmlConstants.ATTRIBUTE_LINK_TYPE:      pyutLink.linkType.name,
+            XmlConstants.ATTRIBUTE_NAME:           link.name,
+            XmlConstants.ATTRIBUTE_LINK_TYPE:      link.linkType.name,
             XmlConstants.ATTRIBUTE_SOURCE_ID:      str(srcLinkId),
             XmlConstants.ATTRIBUTE_DESTINATION_ID: str(destLinkId),
-            XmlConstants.ATTRIBUTE_BIDIRECTIONAL:  str(pyutLink.bidirectional),
-            XmlConstants.ATTRIBUTE_SOURCE_CARDINALITY_VALUE:      pyutLink.sourceCardinality,
-            XmlConstants.ATTRIBUTE_DESTINATION_CARDINALITY_VALUE: pyutLink.destinationCardinality,
+            XmlConstants.ATTRIBUTE_BIDIRECTIONAL:  str(link.bidirectional),
+            XmlConstants.ATTRIBUTE_SOURCE_CARDINALITY_VALUE:      link.sourceCardinality,
+            XmlConstants.ATTRIBUTE_DESTINATION_CARDINALITY_VALUE: link.destinationCardinality,
         })
-        pyutLinkElement: Element = SubElement(umlLinkElement, XmlConstants.ELEMENT_MODEL_LINK, attrib=attributes)
+        linkElement: Element = SubElement(umlLinkElement, XmlConstants.ELEMENT_MODEL_LINK, attrib=attributes)
 
-        return pyutLinkElement
+        return linkElement
 
-    def pyutInterfaceToXml(self, pyutInterface: PyutInterface, interface2Element: Element) -> Element:
+    def interfaceToXml(self, interface: Interface, interface2Element: Element) -> Element:
 
-        classId: int = pyutInterface.id
+        classId: str = interface.id
 
         attributes: ElementAttributes = ElementAttributes({
-            XmlConstants.ATTRIBUTE_ID:          str(classId),
-            XmlConstants.ATTRIBUTE_NAME:        pyutInterface.name,
-            XmlConstants.ATTRIBUTE_DESCRIPTION: pyutInterface.description
+            XmlConstants.ATTRIBUTE_ID:          classId,
+            XmlConstants.ATTRIBUTE_NAME:        interface.name,
+            XmlConstants.ATTRIBUTE_DESCRIPTION: interface.description
         })
-        pyutInterfaceElement: Element = SubElement(interface2Element, XmlConstants.ELEMENT_MODEL_INTERFACE, attrib=attributes)
+        interfaceElement: Element = SubElement(interface2Element, XmlConstants.ELEMENT_MODEL_INTERFACE, attrib=attributes)
 
-        for method in pyutInterface.methods:
-            self._pyutMethodToXml(pyutMethod=method, pyutClassElement=pyutInterfaceElement)
+        for method in interface.methods:
+            self._methodToXml(method=method, classElement=interfaceElement)
 
-        for className in pyutInterface.implementors:
+        for className in interface.implementors:
             self.logger.debug(f'implementing className: {className}')
-            self._pyutImplementorToXml(className, pyutInterfaceElement)
+            self._implementorToXml(className, interfaceElement)
 
-        return pyutInterfaceElement
+        return interfaceElement
 
-    def pyutNoteToXml(self, pyutNote: PyutNote, umlNoteElement: Element) -> Element:
+    def noteToXml(self, note: Note, umlNoteElement: Element) -> Element:
 
-        noteId:       int = pyutNote.id
-        content:      str = pyutNote.content
-        fixedContent: str  = content.replace(osLineSep, XML_END_OF_LINE_MARKER)
-        if pyutNote.fileName is None:
-            pyutNote.fileName = ''
+        noteId:       str = note.id
+        content:      str = note.content
+        fixedContent: str = content.replace(osLineSep, XML_END_OF_LINE_MARKER)
+        if note.fileName is None:
+            note.fileName = ''
 
         attributes: ElementAttributes = ElementAttributes({
             XmlConstants.ATTRIBUTE_ID:       str(noteId),
             XmlConstants.ATTRIBUTE_CONTENT:  fixedContent,
-            XmlConstants.ATTRIBUTE_FILENAME: pyutNote.fileName,
+            XmlConstants.ATTRIBUTE_FILENAME: note.fileName,
         })
-        pyutNoteElement: Element = SubElement(umlNoteElement, XmlConstants.ELEMENT_MODEL_NOTE, attrib=attributes)
+        noteElement: Element = SubElement(umlNoteElement, XmlConstants.ELEMENT_MODEL_NOTE, attrib=attributes)
 
-        return pyutNoteElement
+        return noteElement
 
-    def pyutTextToXml(self, pyutText: PyutText, umlTextElement: Element) -> Element:
+    def textToXml(self, text: Text, umlTextElement: Element) -> Element:
 
-        textId:       int = pyutText.id
-        content:      str = pyutText.content
-        fixedContent: str  = content.replace(osLineSep, XML_END_OF_LINE_MARKER)
+        textId:       str = text.id
+        content:      str = text.content
+        fixedContent: str = content.replace(osLineSep, XML_END_OF_LINE_MARKER)
 
         attributes: ElementAttributes = ElementAttributes({
-            XmlConstants.ATTRIBUTE_ID:       str(textId),
+            XmlConstants.ATTRIBUTE_ID:       textId,
             XmlConstants.ATTRIBUTE_CONTENT:  fixedContent,
         })
-        pyutTextElement: Element = SubElement(umlTextElement, XmlConstants.ELEMENT_MODEL_TEXT, attrib=attributes)
+        textElement: Element = SubElement(umlTextElement, XmlConstants.ELEMENT_MODEL_TEXT, attrib=attributes)
 
-        return pyutTextElement
+        return textElement
 
-    def pyutActorToXml(self, pyutActor: PyutActor, umlActorElement: Element) -> Element:
+    def actorToXml(self, actor: Actor, umlActorElement: Element) -> Element:
 
-        actorId:  int = pyutActor.id
-        fileName: str = pyutActor.fileName
+        actorId:  str = actor.id
+        fileName: str = actor.fileName
         if fileName is None:
             fileName = ''
 
         attributes: ElementAttributes = ElementAttributes({
-            XmlConstants.ATTRIBUTE_ID:       str(actorId),
-            XmlConstants.ATTRIBUTE_NAME:     pyutActor.name,
+            XmlConstants.ATTRIBUTE_ID:       actorId,
+            XmlConstants.ATTRIBUTE_NAME:     actor.name,
             XmlConstants.ATTRIBUTE_FILENAME: fileName,
         })
-        pyutActorElement: Element = SubElement(umlActorElement, XmlConstants.ELEMENT_MODEL_ACTOR, attributes)
+        actorElement: Element = SubElement(umlActorElement, XmlConstants.ELEMENT_MODEL_ACTOR, attributes)
 
-        return pyutActorElement
+        return actorElement
 
-    def pyutUseCaseToXml(self, pyutUseCase: PyutUseCase, umlUseCaseElement: Element) -> Element:
+    def useCaseToXml(self, useCase: UseCase, umlUseCaseElement: Element) -> Element:
 
-        useCaseId: int = pyutUseCase.id
-        fileName:  str = pyutUseCase.fileName
+        useCaseId: str = useCase.id
+        fileName:  str = useCase.fileName
         if fileName is None:
             fileName = ''
 
         attributes: ElementAttributes = ElementAttributes({
-            XmlConstants.ATTRIBUTE_ID:       str(useCaseId),
-            XmlConstants.ATTRIBUTE_NAME:     pyutUseCase.name,
+            XmlConstants.ATTRIBUTE_ID:       useCaseId,
+            XmlConstants.ATTRIBUTE_NAME:     useCase.name,
             XmlConstants.ATTRIBUTE_FILENAME: fileName
         })
-        pyutUseCaseElement: Element = SubElement(umlUseCaseElement, XmlConstants.ELEMENT_MODEL_USE_CASE, attributes)
+        useCaseElement: Element = SubElement(umlUseCaseElement, XmlConstants.ELEMENT_MODEL_USE_CASE, attributes)
 
-        return pyutUseCaseElement
+        return useCaseElement
 
-    def pyutSDInstanceToXml(self, pyutSDInstance: PyutSDInstance, oglSDInstanceElement: Element) -> Element:
+    def sdInstanceToXml(self, sdInstance: SDInstance, sdInstanceElement: Element) -> Element:
 
-        sdInstanceId: int = pyutSDInstance.id
-
-        attributes: ElementAttributes = ElementAttributes({
-            XmlConstants.ATTRIBUTE_ID:               str(sdInstanceId),
-            XmlConstants.ATTRIBUTE_INSTANCE_NAME:    pyutSDInstance.instanceName,
-            XmlConstants.ATTRIBUTE_LIFE_LINE_LENGTH: str(pyutSDInstance.instanceLifeLineLength),
-        })
-
-        pyutSDInstanceElement: Element = SubElement(oglSDInstanceElement, XmlConstants.ELEMENT_MODEL_SD_INSTANCE, attrib=attributes)
-
-        return pyutSDInstanceElement
-
-    def pyutSDMessageToXml(self, pyutSDMessage: PyutSDMessage, oglSDMessageElement: Element) -> Element:
-
-        sdMessageId: int = pyutSDMessage.id
-
-        # srcInstance: PyutSDInstance = pyutSDMessage.getSource()
-        # dstInstance: PyutSDInstance = pyutSDMessage.getDestination()
-        srcInstance: LinkSource      = pyutSDMessage.source
-        dstInstance: LinkDestination = pyutSDMessage.destination
-
-        idSrc: int = srcInstance.id
-        idDst: int = dstInstance.id
+        sdInstanceId: str = sdInstance.id
 
         attributes: ElementAttributes = ElementAttributes({
-            XmlConstants.ATTRIBUTE_ID:                        str(sdMessageId),
-            XmlConstants.ATTRIBUTE_MESSAGE:                   pyutSDMessage.message,
-            XmlConstants.ATTRIBUTE_SOURCE_TIME:               str(pyutSDMessage.sourceY),
-            XmlConstants.ATTRIBUTE_DESTINATION_TIME:          str(pyutSDMessage.destinationY),
-            XmlConstants.ATTRIBUTE_SD_MESSAGE_SOURCE_ID:      str(idSrc),
-            XmlConstants.ATTRIBUTE_SD_MESSAGE_DESTINATION_ID: str(idDst),
+            XmlConstants.ATTRIBUTE_ID:               sdInstanceId,
+            XmlConstants.ATTRIBUTE_INSTANCE_NAME:    sdInstance.instanceName,
+            XmlConstants.ATTRIBUTE_LIFE_LINE_LENGTH: str(sdInstance.instanceLifeLineLength),
         })
 
-        pyutSDMessageElement: Element = SubElement(oglSDMessageElement, XmlConstants.ELEMENT_MODEL_SD_MESSAGE, attrib=attributes)
+        modelSDInstanceElement: Element = SubElement(sdInstanceElement, XmlConstants.ELEMENT_MODEL_SD_INSTANCE, attrib=attributes)
 
-        return pyutSDMessageElement
+        return modelSDInstanceElement
 
-    def _pyutMethodToXml(self, pyutMethod: PyutMethod, pyutClassElement: Element) -> Element:
+    def sdMessageToXml(self, sdMessage: SDMessage, sdMessageElement: Element) -> Element:
+
+        sdMessageId: str = sdMessage.id
+
+        srcInstance: LinkSource      = sdMessage.source
+        dstInstance: LinkDestination = sdMessage.destination
+
+        idSrc: str = srcInstance.id
+        idDst: str = dstInstance.id
+
+        attributes: ElementAttributes = ElementAttributes({
+            XmlConstants.ATTRIBUTE_ID:                        sdMessageId,
+            XmlConstants.ATTRIBUTE_MESSAGE:                   sdMessage.message,
+            XmlConstants.ATTRIBUTE_SOURCE_TIME:               str(sdMessage.sourceY),
+            XmlConstants.ATTRIBUTE_DESTINATION_TIME:          str(sdMessage.destinationY),
+            XmlConstants.ATTRIBUTE_SD_MESSAGE_SOURCE_ID:      idSrc,
+            XmlConstants.ATTRIBUTE_SD_MESSAGE_DESTINATION_ID: idDst,
+        })
+
+        modelSDMessageElement: Element = SubElement(sdMessageElement, XmlConstants.ELEMENT_MODEL_SD_MESSAGE, attrib=attributes)
+
+        return modelSDMessageElement
+
+    def _methodToXml(self, method: Method, classElement: Element) -> Element:
         """
-        Exporting a PyutMethod to an Element
+        Exporting a model Method to an Element
 
         Args:
-            pyutMethod:        Method to serialize
-            pyutClassElement:  xml document
+            method:        Method to serialize
+            classElement:  xml document
 
         Returns:
             The new updated element
         """
         attributes = {
-            XmlConstants.ATTRIBUTE_NAME:               pyutMethod.name,
-            XmlConstants.ATTRIBUTE_VISIBILITY:         pyutMethod.visibility.name,
-            XmlConstants.ATTRIBUTE_METHOD_RETURN_TYPE: pyutMethod.returnType.value,
+            XmlConstants.ATTRIBUTE_NAME:               method.name,
+            XmlConstants.ATTRIBUTE_VISIBILITY:         method.visibility.name,
+            XmlConstants.ATTRIBUTE_METHOD_RETURN_TYPE: method.returnType.value,
         }
-        pyutMethodElement: Element = SubElement(pyutClassElement, XmlConstants.ELEMENT_MODEL_METHOD, attrib=attributes)
-        for modifier in pyutMethod.modifiers:
+        methodElement: Element = SubElement(classElement, XmlConstants.ELEMENT_MODEL_METHOD, attrib=attributes)
+        for modifier in method.modifiers:
             attributes = {
                 XmlConstants.ATTRIBUTE_NAME: modifier.name,
             }
-            SubElement(pyutMethodElement, XmlConstants.ELEMENT_MODEL_MODIFIER, attrib=attributes)
-        self._pyutSourceCodeToXml(pyutMethod.sourceCode, pyutMethodElement)
+            SubElement(methodElement, XmlConstants.ELEMENT_MODEL_MODIFIER, attrib=attributes)
+        self._sourceCodeToXml(method.sourceCode, methodElement)
 
-        for pyutParameter in pyutMethod.parameters:
-            self._pyutParameterToXml(pyutParameter, pyutMethodElement)
-        # pyutMethodElement: Element = xmlDoc.createElement(XmlConstants.ELEMENT_MODEL_METHOD)
-        #
-        # pyutMethodElement.setAttribute(XmlConstants.ATTR_NAME, pyutMethod.name)
-        #
-        # visibility: PyutVisibilityEnum = pyutMethod.getVisibility()
-        # visName:    str                = self.__safeVisibilityToName(visibility)
-        #
-        # if visibility is not None:
-        #     pyutMethodElement.setAttribute(XmlConstants.ATTR_VISIBILITY, visName)
-        #
-        # for modifier in pyutMethod.modifiers:
-        #     xmlModifier: Element = xmlDoc.createElement(XmlConstants.ELEMENT_MODEL_MODIFIER)
-        #     xmlModifier.setAttribute(XmlConstants.ATTR_NAME, modifier.name)
-        #     pyutMethodElement.appendChild(xmlModifier)
-        #
-        # if pyutMethod.returnType is not None:
-        #     xmlReturnType: Element = xmlDoc.createElement(XmlConstants.ELEMENT_MODEL_RETURN)
-        #     xmlReturnType.setAttribute(XmlConstants.ATTR_TYPE, str(pyutMethod.returnType))
-        #     pyutMethodElement.appendChild(xmlReturnType)
-        #
-        # for param in pyutMethod.parameters:
-        #     pyutMethodElement.appendChild(self._pyutParamToDom(param, xmlDoc))
-        #
-        # codeRoot: Element = self._pyutSourceCodeToDom(pyutMethod.sourceCode, xmlDoc)
-        # pyutMethodElement.appendChild(codeRoot)
-        # return pyutMethodElement
-        return pyutMethodElement
+        for parameter in method.parameters:
+            self._parameterToXml(parameter, methodElement)
 
-    def _pyutClassCommonAttributes(self, classCommon: PyutClassCommon):
+        return methodElement
+
+    def _classCommonAttributes(self, classCommon: ClassCommon):
 
         attributes = {
             XmlConstants.ATTRIBUTE_DESCRIPTION: classCommon.description
         }
         return attributes
 
-    def _pyutSourceCodeToXml(self, sourceCode: SourceCode, pyutMethodElement: Element):
+    def _sourceCodeToXml(self, sourceCode: SourceCode, methodElement: Element):
 
-        codeRoot: Element = SubElement(pyutMethodElement, XmlConstants.ELEMENT_MODEL_SOURCE_CODE)
+        codeRoot: Element = SubElement(methodElement, XmlConstants.ELEMENT_MODEL_SOURCE_CODE)
 
         for code in sourceCode:
             codeElement: Element = SubElement(codeRoot, XmlConstants.ELEMENT_MODEL_CODE)
@@ -301,46 +273,46 @@ class PyutToXml:
 
         return codeRoot
 
-    def _pyutParameterToXml(self, pyutParameter: PyutParameter, pyutMethodElement: Element) -> Element:
+    def _parameterToXml(self, parameter: Parameter, methodElement: Element) -> Element:
 
         attributes = {
-            XmlConstants.ATTRIBUTE_NAME:           pyutParameter.name,
-            XmlConstants.ATTRIBUTE_PARAMETER_TYPE: pyutParameter.type.value,
+            XmlConstants.ATTRIBUTE_NAME:           parameter.name,
+            XmlConstants.ATTRIBUTE_PARAMETER_TYPE: parameter.type.value,
         }
 
-        defaultValue = pyutParameter.defaultValue
+        defaultValue = parameter.defaultValue
         if defaultValue is not None:
-            attributes[XmlConstants.ATTRIBUTE_DEFAULT_VALUE] = pyutParameter.defaultValue
+            attributes[XmlConstants.ATTRIBUTE_DEFAULT_VALUE] = parameter.defaultValue
 
-        pyutParameterElement: Element = SubElement(pyutMethodElement, XmlConstants.ELEMENT_MODEL_PARAMETER, attrib=attributes)
+        parameterElement: Element = SubElement(methodElement, XmlConstants.ELEMENT_MODEL_PARAMETER, attrib=attributes)
 
-        return pyutParameterElement
+        return parameterElement
 
-    def _pyutFieldToXml(self, pyutField: PyutField, pyutClassElement: Element) -> Element:
+    def _fieldToXml(self, field: Field, classElement: Element) -> Element:
         """
-        Serialize a PyutField to an Element
+        Serialize a model field to an Element
 
         Args:
-            pyutField:         The PyutField to serialize
-            pyutClassElement: The Pyut Class element to update
+            field:        The model field to serialize
+            classElement: The Model Class element to update
 
         Returns:
             The new updated element
         """
         attributes = {
-            XmlConstants.ATTRIBUTE_NAME:          pyutField.name,
-            XmlConstants.ATTRIBUTE_VISIBILITY:    pyutField.visibility.name,
-            XmlConstants.ATTRIBUTE_FIELD_TYPE:    pyutField.type.value,
-            XmlConstants.ATTRIBUTE_DEFAULT_VALUE: pyutField.defaultValue,
+            XmlConstants.ATTRIBUTE_NAME:          field.name,
+            XmlConstants.ATTRIBUTE_VISIBILITY:    field.visibility.name,
+            XmlConstants.ATTRIBUTE_FIELD_TYPE:    field.type.value,
+            XmlConstants.ATTRIBUTE_DEFAULT_VALUE: field.defaultValue,
         }
-        pyutFieldElement: Element = SubElement(pyutClassElement, XmlConstants.ELEMENT_MODEL_FIELD, attrib=attributes)
+        fieldElement: Element = SubElement(classElement, XmlConstants.ELEMENT_MODEL_FIELD, attrib=attributes)
 
-        return pyutFieldElement
+        return fieldElement
 
-    def _pyutImplementorToXml(self, className: ClassName, pyutInterfaceElement: Element) -> Element:
+    def _implementorToXml(self, className: ClassName, interfaceElement: Element) -> Element:
 
         attributes: ElementAttributes = ElementAttributes({
             XmlConstants.ATTRIBUTE_IMPLEMENTING_CLASS_NAME: className,
         })
-        implementorElement: Element = SubElement(pyutInterfaceElement, XmlConstants.ELEMENT_MODEL_IMPLEMENTOR, attrib=attributes)
+        implementorElement: Element = SubElement(interfaceElement, XmlConstants.ELEMENT_MODEL_IMPLEMENTOR, attrib=attributes)
         return implementorElement

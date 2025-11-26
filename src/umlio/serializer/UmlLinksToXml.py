@@ -80,7 +80,7 @@ class UmlLinksToXml(BaseUmlToXml):
             })
             SubElement(oglLinkSubElement, XmlConstants.ELEMENT_MODEL_LINE_CONTROL_POINT, attrib=controlPointAttributes)
 
-        self._pyutToXml.pyutLinkToXml(pyutLink=umlLink.pyutLink, umlLinkElement=oglLinkSubElement)
+        self._pyutToXml.linkToXml(link=umlLink.modelLink, umlLinkElement=oglLinkSubElement)
 
         return oglLinkSubElement
 

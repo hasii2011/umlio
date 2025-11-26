@@ -18,7 +18,7 @@ class UmlLollipopsToXmlLollipops:
 
         self.logger: Logger = getLogger(__name__)
 
-        self._pyutToXml: PyutToXml = PyutToXml()
+        self._modelToXml: PyutToXml = PyutToXml()
 
     def serialize(self, documentTop: Element, umlLollipops: UmlLollipopInterfaces) -> Element:
 
@@ -44,6 +44,6 @@ class UmlLollipopsToXmlLollipops:
         })
         lollipopElement: Element = SubElement(documentElement, XmlConstants.ELEMENT_LOLLIPOP, attrib=attributes)
 
-        self._pyutToXml.pyutInterfaceToXml(umlLollipopInterface.pyutInterface, lollipopElement)
+        self._modelToXml.interfaceToXml(umlLollipopInterface.modelInterface, lollipopElement)
 
         return lollipopElement

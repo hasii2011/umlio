@@ -16,17 +16,18 @@ dependencies = [
     'untangle==1.2.1',
     'codeallybasic>=1.30.0',
     'codeallyadvanced>=2.2.0',
-    'pyutmodelv2>=2.2.6',
-    'umlshapes>=0.9.310',
+    'umlmodel>=3.3.0',
+    'umlshapes>=1.0.0',
     'Pypubsub==4.0.3',
 ]
 
 [project.optional-dependencies]
 test = [
-  'mypy==1.18.2',
-  'mypy-extensions==1.0.0',
-  'types-Deprecated==1.2.9.20240311',
-  'html-testRunner~=1.2.1',
+    'mypy==1.18.2',
+    'mypy-extensions==1.0.0',
+    'types-Deprecated==1.2.9.20240311',
+    'html-testRunner~=1.2.1',
+    'human_id==0.2.0',
 ]
 
 deploy = [

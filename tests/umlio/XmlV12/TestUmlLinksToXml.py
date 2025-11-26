@@ -2,8 +2,7 @@
 from pathlib import Path
 
 from codeallyadvanced.ui.UnitTestBaseW import UnitTestBaseW
-
-from pyutmodelv2.enumerations.PyutLinkType import PyutLinkType
+from umlmodel.enumerations.LinkType import LinkType
 
 from umlshapes.pubsubengine.UmlPubSubEngine import UmlPubSubEngine
 from umlshapes.frames.ClassDiagramFrame import ClassDiagramFrame
@@ -168,7 +167,7 @@ class TestUmlLinksToXml(UnitTestBaseW):
     def testBareAssociation(self):
 
         self._runAssociationTest(
-            linkType=PyutLinkType.ASSOCIATION,
+            linkType=LinkType.ASSOCIATION,
             fileName='Association.xml',
             diagramName='Bare Association Class Diagram',
             failMessage='Association serialization changed',
@@ -233,7 +232,7 @@ class TestUmlLinksToXml(UnitTestBaseW):
         self.maxDiff = None
         self.assertEqual(EXPECTED_LOLLIPOP_XML, lollipopXml, 'Lollipop serialization changed')
 
-    def _runAssociationTest(self, linkType: PyutLinkType, fileName: str, diagramName: str, failMessage: str, expectedXml: str):
+    def _runAssociationTest(self, linkType: LinkType, fileName: str, diagramName: str, failMessage: str, expectedXml: str):
         """
 
         Args:
@@ -248,7 +247,7 @@ class TestUmlLinksToXml(UnitTestBaseW):
 
         createdLink: CreatedLink = self._linkCreator.createAssociation(linkType)
 
-        if linkType == PyutLinkType.LOLLIPOP:
+        if linkType == LinkType.LOLLIPOP:
             umlLollipopInterface, implementingUmlClass = self._linkCreator.createLollipop()
 
             associationsDiagram.umlClasses.append(implementingUmlClass)

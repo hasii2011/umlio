@@ -21,14 +21,14 @@ class UmlNotesToXml(BaseUmlToXml):
         super().__init__()
         self.logger: Logger = getLogger(__name__)
 
-        self._pyutToXml: PyutToXml = PyutToXml()
+        self._modelToXml: PyutToXml = PyutToXml()
 
     def serialize(self, documentTop: Element, umlNotes: UmlNotes) -> Element:
 
         for note in umlNotes:
             umlNote: UmlNote = cast (UmlNote, note)
             umlNoteElement: Element = self._umlNoteToXml(documentTop=documentTop, umlNote=umlNote)
-            self._pyutToXml.pyutNoteToXml(pyutNote=umlNote.pyutNote, umlNoteElement=umlNoteElement)
+            self._modelToXml.noteToXml(note=umlNote.modelNote, umlNoteElement=umlNoteElement)
 
         return documentTop
 

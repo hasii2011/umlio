@@ -16,10 +16,11 @@ from untangle import Element
 
 from codeallybasic.SecureConversions import SecureConversions
 
-from pyutmodelv2.PyutLink import LinkDestination
-from pyutmodelv2.PyutLink import LinkSource
-from pyutmodelv2.PyutLink import PyutLink
-from pyutmodelv2.enumerations.PyutLinkType import PyutLinkType
+from umlmodel.Link import Link
+from umlmodel.Link import LinkDestination
+from umlmodel.Link import LinkSource
+
+from umlmodel.enumerations.LinkType import LinkType
 
 from umlshapes.types.Common import EndPoints
 
@@ -32,7 +33,6 @@ from umlshapes.links.UmlAggregation import UmlAggregation
 
 from umlshapes.shapes.UmlClass import UmlClass
 from umlshapes.shapes.UmlNote import UmlNote
-from umlshapes.shapes.UmlText import UmlText
 from umlshapes.shapes.UmlUseCase import UmlUseCase
 from umlshapes.shapes.UmlActor import UmlActor
 
@@ -60,17 +60,17 @@ UmlAssociationClasses = Union[UmlAssociation, UmlComposition, UmlAggregation]
 
 # AssociationClassDescriptor = type[UmlAssociationClasses] = cast(type[LinkEventHandler], None)
 
-LinkTypeToClass = NewType('LinkTypeToClass', Dict[PyutLinkType, type[UmlAssociationClasses]])
+LinkTypeToClass = NewType('LinkTypeToClass', Dict[LinkType, type[UmlAssociationClasses]])
 
 CLASSMAP: LinkTypeToClass = LinkTypeToClass(
     {
-        PyutLinkType.ASSOCIATION: UmlAssociation,
-        PyutLinkType.AGGREGATION: UmlAggregation,
-        PyutLinkType.COMPOSITION: UmlComposition
+        LinkType.ASSOCIATION: UmlAssociation,
+        LinkType.AGGREGATION: UmlAggregation,
+        LinkType.COMPOSITION: UmlComposition
     }
 )
-ASSOCIATION_LINK_TYPES: List[PyutLinkType] = [
-    PyutLinkType.COMPOSITION, PyutLinkType.AGGREGATION, PyutLinkType.ASSOCIATION
+ASSOCIATION_LINK_TYPES: List[LinkType] = [
+    LinkType.COMPOSITION, LinkType.AGGREGATION, LinkType.ASSOCIATION
 ]
 
 
@@ -110,10 +110,10 @@ class XmlLinksToUmlLinks:
     def _getUmlLink(self, umlLinkElement: Element, singlePyutLinkElement: Element, linkableUmlShapes: LinkableUmlShapes) -> UmlLink:
 
         connectedShapes: ConnectedShapes = self._getConnectedShapes(singlePyutLinkElement, linkableUmlShapes)
-        pyutLink:        PyutLink        = self._getPyutLink(singlePyutLinkElement, connectedShapes)
+        link:            Link            = self._getPyutLink(singlePyutLinkElement, connectedShapes)
 
         umlLink: UmlLink = self._umlLinkFactory(srcShape=connectedShapes.sourceShape,
-                                                pyutLink=pyutLink,
+                                                link=link,
                                                 destShape=connectedShapes.destinationShape,
                                                 )
 
@@ -135,7 +135,7 @@ class XmlLinksToUmlLinks:
 
         return umlLink
 
-    def _getPyutLink(self, pyutLinkElement: Element, connectedShapes: ConnectedShapes) -> PyutLink:
+    def _getPyutLink(self, pyutLinkElement: Element, connectedShapes: ConnectedShapes) -> Link:
         """
 
         Args:
@@ -146,33 +146,33 @@ class XmlLinksToUmlLinks:
         """
 
         # noinspection PyUnresolvedReferences
-        pyutLink: PyutLink = self._xmlToPyut.linkToPyutLink(
+        link: Link = self._xmlToPyut.linkToModelLink(
             singleLink=pyutLinkElement,
             source=self._getLinkSourceModelClass(connectedShapes.sourceShape),
             destination=self._getLinkDestinationModelClass(connectedShapes.destinationShape)
         )
-        self.logger.debug(f'{pyutLink=}')
+        self.logger.debug(f'{link=}')
 
-        return pyutLink
+        return link
 
-    def _getConnectedShapes(self, pyutLinkElement: Element, linkableUmlShapes: LinkableUmlShapes) -> ConnectedShapes:
+    def _getConnectedShapes(self, linkElement: Element, linkableUmlShapes: LinkableUmlShapes) -> ConnectedShapes:
         """
 
         Args:
-            pyutLinkElement:
+            linkElement:
             linkableUmlShapes:   The dictionary of potential shapes
 
         Returns:  The connected shapes;  Will assert if it cannot find them
         """
-        sourceId: int = int(pyutLinkElement[XmlConstants.ATTRIBUTE_SOURCE_ID])
-        dstId:    int = int(pyutLinkElement[XmlConstants.ATTRIBUTE_DESTINATION_ID])
+        sourceId: str = linkElement[XmlConstants.ATTRIBUTE_SOURCE_ID]
+        dstId:    str = linkElement[XmlConstants.ATTRIBUTE_DESTINATION_ID]
 
         try:
             sourceShape:      LinkableUmlShape = linkableUmlShapes[sourceId]
             destinationShape: LinkableUmlShape = linkableUmlShapes[dstId]
         except KeyError as ke:
             self.logger.error(f'{linkableUmlShapes=}')
-            self.logger.error(f'Developer Error -- {pyutLinkElement=}')
+            self.logger.error(f'Developer Error -- {linkElement=}')
             self.logger.error(f'Developer Error -- {sourceId=} {dstId=}  KeyError index: {ke}')
             assert False, 'Developer error'
 
@@ -188,13 +188,13 @@ class XmlLinksToUmlLinks:
         """
 
         if isinstance(linkableUmlShape, UmlClass):
-            return linkableUmlShape.pyutClass
+            return linkableUmlShape.modelClass
         elif isinstance(linkableUmlShape, UmlNote):
-            return linkableUmlShape.pyutNote
-        elif isinstance(linkableUmlShape, UmlText):
-            return linkableUmlShape.pyutText
+            return linkableUmlShape.modelNote
+        # elif isinstance(linkableUmlShape, UmlText):
+        #     return linkableUmlShape.modelText
         elif isinstance(linkableUmlShape, UmlActor):
-            return linkableUmlShape.pyutActor
+            return linkableUmlShape.modelActor
         else:
             assert False, f'{linkableUmlShape=} is not a source linkable UML Shape'
 
@@ -208,9 +208,9 @@ class XmlLinksToUmlLinks:
         """
 
         if isinstance(linkableUmlShape, UmlClass):
-            return linkableUmlShape.pyutClass
+            return linkableUmlShape.modelClass
         elif isinstance(linkableUmlShape, UmlUseCase):
-            return linkableUmlShape.pyutUseCase
+            return linkableUmlShape.modelUseCase
         else:
             assert False, f'{linkableUmlShape=} is not a destination linkable UML Shape'
 
@@ -236,32 +236,32 @@ class XmlLinksToUmlLinks:
 
         return controlPoints
 
-    def _umlLinkFactory(self, srcShape: LinkableUmlShape, pyutLink: PyutLink, destShape: LinkableUmlShape) -> UmlLink:
+    def _umlLinkFactory(self, srcShape: LinkableUmlShape, link: Link, destShape: LinkableUmlShape) -> UmlLink:
         """
 
         Args:
             srcShape:
-            pyutLink:
+            link:
             destShape:
 
         Returns:  The appropriate UML Link shape
 
         """
-        if pyutLink.linkType == PyutLinkType.INHERITANCE:
+        if link.linkType == LinkType.INHERITANCE:
             # Note dest and source are reversed here
-            return UmlInheritance(baseClass=cast(UmlClass, destShape), pyutLink=pyutLink, subClass=cast(UmlClass, srcShape))
-        elif pyutLink.linkType in ASSOCIATION_LINK_TYPES:
-            umlAssociation = CLASSMAP[pyutLink.linkType](pyutLink)
+            return UmlInheritance(baseClass=cast(UmlClass, destShape), link=link, subClass=cast(UmlClass, srcShape))
+        elif link.linkType in ASSOCIATION_LINK_TYPES:
+            umlAssociation = CLASSMAP[link.linkType](link)
             #
             # Need to do this because the shape is not yet on a canvas
             #
             umlAssociation.sourceShape      = srcShape
             umlAssociation.destinationShape = destShape
             return umlAssociation
-        elif pyutLink.linkType == PyutLinkType.NOTELINK:
-            umlNoteLink: UmlNoteLink = UmlNoteLink(pyutLink=pyutLink)
+        elif link.linkType == LinkType.NOTELINK:
+            umlNoteLink: UmlNoteLink = UmlNoteLink(link=link)
             umlNoteLink.sourceNote       = cast(UmlNote, srcShape)
             umlNoteLink.destinationClass = cast(UmlClass, destShape)
             return umlNoteLink
         else:
-            assert False, f'Unknown link type, {pyutLink.linkType=}'
+            assert False, f'Unknown link type, {link.linkType=}'

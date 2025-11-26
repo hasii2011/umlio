@@ -1,14 +1,18 @@
 
-from logging import Logger
-from logging import getLogger
 from typing import cast
 
+from logging import Logger
+from logging import getLogger
+
+from untangle import Element
+
 from codeallybasic.SecureConversions import SecureConversions
-from pyutmodelv2.PyutInterface import PyutInterface
+
+from umlmodel.Interface import Interface
+
 from umlshapes.links.UmlLollipopInterface import UmlLollipopInterface
 from umlshapes.shapes.UmlClass import UmlClass
 from umlshapes.types.Common import AttachmentSide
-from untangle import Element
 
 from umlshapes.ShapeTypes import LinkableUmlShapes
 
@@ -51,9 +55,9 @@ class XmlLollipopsToUmlLollipops:
 
         Returns:   A UML Lollipop interface class
         """
-        pyutInterface: PyutInterface = self._xmlToPyut.interfaceToPyutInterface(lollipopElement)
+        pyutInterface: Interface = self._xmlToPyut.interfaceToModelInterface(lollipopElement)
 
-        umlLollipopInterface: UmlLollipopInterface = UmlLollipopInterface(pyutInterface=pyutInterface)
+        umlLollipopInterface: UmlLollipopInterface = UmlLollipopInterface(interface=pyutInterface)
 
         attachmentSideStr: str      = lollipopElement[XmlConstants.ATTRIBUTE_ATTACHMENT_SIDE]
         attachedToId:      str      = lollipopElement[XmlConstants.ATTRIBUTE_ATTACHED_TO_ID]

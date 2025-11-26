@@ -202,15 +202,15 @@ class XmlToUmlShapes:
         linkableUmlShapes: LinkableUmlShapes = linkableUmlShapesFactory()
 
         for umlClass in umlDocument.umlClasses:
-            linkableUmlShapes[umlClass.pyutClass.id] = umlClass
+            linkableUmlShapes[umlClass.modelClass.id] = umlClass
 
         for umlNote in umlDocument.umlNotes:
-            linkableUmlShapes[umlNote.pyutNote.id] = umlNote
+            linkableUmlShapes[umlNote.modelNote.id] = umlNote
 
         for umlUseCase in umlDocument.umlUseCases:
-            linkableUmlShapes[umlUseCase.pyutUseCase.id] = umlUseCase
+            linkableUmlShapes[umlUseCase.modelUseCase.id] = umlUseCase
 
         for umlActor in umlDocument.umlActors:
-            linkableUmlShapes[umlActor.pyutActor.id] = umlActor
+            linkableUmlShapes[umlActor.modelActor.id] = umlActor
 
         return linkableUmlShapes

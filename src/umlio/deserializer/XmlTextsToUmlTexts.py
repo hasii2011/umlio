@@ -6,7 +6,7 @@ from logging import getLogger
 
 from untangle import Element
 
-from pyutmodelv2.PyutText import PyutText
+from umlmodel.Text import Text
 
 from umlshapes.shapes.UmlText import UmlText
 
@@ -48,8 +48,8 @@ class XmlTextsToUmlTexts:
             self.logger.debug(f'{textElement}')
 
             graphicInformation: GraphicInformation = GraphicInformation.toGraphicInfo(graphicElement=textElement)
-            pyutText:           PyutText           = self._xmlToPyut.textToPyutText(umlTextElement=textElement)
-            umlText:            UmlText            = UmlText(pyutText=pyutText)
+            pyutText:           Text               = self._xmlToPyut.textToModelText(umlTextElement=textElement)
+            umlText:            UmlText            = UmlText(text=pyutText)
 
             umlText.id       = graphicInformation.id
             umlText.size     = graphicInformation.size

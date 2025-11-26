@@ -8,41 +8,42 @@ from logging import getLogger
 
 from os import linesep as osLineSep
 
-from pyutmodelv2.PyutLink import LinkDestination
-from pyutmodelv2.PyutLink import LinkSource
 from untangle import Element
+
+from umlmodel.BaseAttributes import BaseAttributes
+from umlmodel.Field import Field
+from umlmodel.Field import Fields
+from umlmodel.FieldType import FieldType
+from umlmodel.Method import Method
+from umlmodel.Method import Methods
+from umlmodel.Method import Modifiers
+from umlmodel.Method import Parameters
+from umlmodel.Method import SourceCode
+from umlmodel.Modifier import Modifier
+from umlmodel.Parameter import Parameter
+from umlmodel.ParameterType import ParameterType
+from umlmodel.ReturnType import ReturnType
+from umlmodel.SDInstance import SDInstance
+from umlmodel.enumerations.Visibility import Visibility
+
+from umlmodel.Actor import Actor
+from umlmodel.Class import Class
+from umlmodel.Link import Link
+from umlmodel.Note import Note
+from umlmodel.Text import Text
+from umlmodel.Link import LinkSource
+from umlmodel.UseCase import UseCase
+from umlmodel.Interface import Interface
+from umlmodel.SDMessage import SDMessage
+from umlmodel.Link import LinkDestination
+
+from umlmodel.enumerations.LinkType import LinkType
+from umlmodel.enumerations.Stereotype import Stereotype
+from umlmodel.enumerations.DisplayMethods import DisplayMethods
+from umlmodel.enumerations.DisplayParameters import DisplayParameters
 
 from codeallybasic.Common import XML_END_OF_LINE_MARKER
 from codeallybasic.SecureConversions import SecureConversions
-
-from pyutmodelv2.PyutField import PyutField
-from pyutmodelv2.PyutField import PyutFields
-
-from pyutmodelv2.PyutObject import PyutObject
-from pyutmodelv2.PyutUseCase import PyutUseCase
-from pyutmodelv2.PyutActor import PyutActor
-from pyutmodelv2.PyutInterface import PyutInterface
-from pyutmodelv2.PyutLink import PyutLink
-from pyutmodelv2.PyutMethod import PyutMethods
-from pyutmodelv2.PyutMethod import PyutParameters
-from pyutmodelv2.PyutMethod import SourceCode
-from pyutmodelv2.PyutParameter import PyutParameter
-from pyutmodelv2.PyutMethod import PyutMethod
-from pyutmodelv2.PyutMethod import PyutModifiers
-from pyutmodelv2.PyutModifier import PyutModifier
-from pyutmodelv2.PyutType import PyutType
-from pyutmodelv2.PyutClass import PyutClass
-from pyutmodelv2.PyutNote import PyutNote
-from pyutmodelv2.PyutText import PyutText
-
-from pyutmodelv2.PyutSDInstance import PyutSDInstance
-from pyutmodelv2.PyutSDMessage import PyutSDMessage
-
-from pyutmodelv2.enumerations.PyutStereotype import PyutStereotype
-from pyutmodelv2.enumerations.PyutVisibility import PyutVisibility
-from pyutmodelv2.enumerations.PyutDisplayParameters import PyutDisplayParameters
-from pyutmodelv2.enumerations.PyutLinkType import PyutLinkType
-from pyutmodelv2.enumerations.PyutDisplayMethods import PyutDisplayMethods
 
 from umlio.IOTypes import Elements
 
@@ -50,20 +51,20 @@ from umlio.XMLConstants import XmlConstants
 
 
 @dataclass
-class ConvolutedPyutSDMessageInformation:
+class ConvolutedModelSDMessageInformation:
     """
-    This class is necessary because I do not want to mix Ogl and pyutmodel code;  Unfortunately,
-    the IDs of the PyutSDInstance are buried and require a lookup
+    This class is necessary because I do not want to mix UML Shapes and UML mode code;  Unfortunately,
+    the IDs of the SDInstance are buried and require a lookup
 
     """
-    pyutSDMessage: PyutSDMessage = cast(PyutSDMessage, None)
-    sourceId:      int           = -1
-    destinationId: int           = -1
+    sdMessage:     SDMessage = cast(SDMessage, None)
+    sourceId:      str           = '-1'
+    destinationId: str           = '-1'
 
 
 class XmlToPyut:
     """
-    Converts pyutmodel Version 11 XML to Pyut Objects
+    Converts Uml Model Version 14 XML to Uml Model instance
     """
     NOTE_NAME:   str = 'Note'
     noteCounter: int = 0
@@ -72,20 +73,20 @@ class XmlToPyut:
 
         self.logger: Logger = getLogger(__name__)
 
-    def classToPyutClass(self, umlClassElement: Element) -> PyutClass:
+    def classToModelClass(self, umlClassElement: Element) -> Class:
         classElement: Element = umlClassElement.PyutClass
 
-        pyutClass: PyutClass = PyutClass()
+        modelClass: Class = Class()
 
-        pyutClass = cast(PyutClass, self._addPyutObjectAttributes(pyutElement=classElement, pyutObject=pyutClass))
+        modelClass = cast(Class, self._addUmlBaseAttributes(modelElement=classElement, umlBase=modelClass))
 
-        displayStr:              str                   = classElement[XmlConstants.ATTRIBUTE_DISPLAY_PARAMETERS]
-        displayParameters:       PyutDisplayParameters = PyutDisplayParameters(displayStr)
-        displayConstructorStr:   str                   = classElement[XmlConstants.ATTRIBUTE_DISPLAY_CONSTRUCTOR]
-        displayDunderMethodsStr: str                   = classElement[XmlConstants.ATTRIBUTE_DISPLAY_DUNDER_METHODS]
+        displayStr:              str               = classElement[XmlConstants.ATTRIBUTE_DISPLAY_PARAMETERS]
+        displayParameters:       DisplayParameters = DisplayParameters(displayStr)
+        displayConstructorStr:   str               = classElement[XmlConstants.ATTRIBUTE_DISPLAY_CONSTRUCTOR]
+        displayDunderMethodsStr: str               = classElement[XmlConstants.ATTRIBUTE_DISPLAY_DUNDER_METHODS]
 
-        displayConstructor:   PyutDisplayMethods = self._securePyutDisplayMethods(displayStr=displayConstructorStr)
-        displayDunderMethods: PyutDisplayMethods = self._securePyutDisplayMethods(displayStr=displayDunderMethodsStr)
+        displayConstructor:   DisplayMethods = self._secureDisplayMethods(displayStr=displayConstructorStr)
+        displayDunderMethods: DisplayMethods = self._secureDisplayMethods(displayStr=displayDunderMethodsStr)
 
         showStereotype:     bool = bool(classElement[XmlConstants.ATTRIBUTE_DISPLAY_STEREOTYPE])
         showFields:         bool = bool(classElement[XmlConstants.ATTRIBUTE_DISPLAY_FIELDS])
@@ -93,147 +94,147 @@ class XmlToPyut:
         stereotypeStr:      str  = classElement[XmlConstants.ATTRIBUTE_STEREOTYPE]
         fileName:           str  = classElement[XmlConstants.ATTRIBUTE_FILENAME]
 
-        pyutClass.displayParameters    = displayParameters
-        pyutClass.displayConstructor   = displayConstructor
-        pyutClass.displayDunderMethods = displayDunderMethods
+        modelClass.displayParameters    = displayParameters
+        modelClass.displayConstructor   = displayConstructor
+        modelClass.displayDunderMethods = displayDunderMethods
 
-        pyutClass.displayStereoType = showStereotype
-        pyutClass.showFields        = showFields
-        pyutClass.showMethods       = showMethods
+        modelClass.displayStereoType = showStereotype
+        modelClass.showFields        = showFields
+        modelClass.showMethods       = showMethods
 
-        pyutClass.description = classElement['description']
-        pyutClass.stereotype  = PyutStereotype.toEnum(stereotypeStr)
-        pyutClass.fileName    = fileName
+        modelClass.description = classElement[XmlConstants.ATTRIBUTE_DESCRIPTION]
+        modelClass.stereotype  = Stereotype.toEnum(stereotypeStr)
+        modelClass.fileName    = fileName
 
-        pyutClass.methods = self._methodToPyutMethods(classElement=classElement)
-        pyutClass.fields  = self._fieldToPyutFields(classElement=classElement)
+        modelClass.methods = self._methodToModelMethods(classElement=classElement)
+        modelClass.fields  = self._fieldToModelFields(classElement=classElement)
 
-        return pyutClass
+        return modelClass
 
-    def textToPyutText(self, umlTextElement: Element) -> PyutText:
+    def textToModelText(self, umlTextElement: Element) -> Text:
         """
         Parses the Text elements
+
         Args:
             umlTextElement:   Of the form:   <UmlText id="xx.xx.xx"/>
 
-        Returns: A PyutText Object
+        Returns: A model text Object
         """
-        pyutTextElement: Element  = umlTextElement.PyutText
-        pyutText:    PyutText = PyutText()
+        textElement: Element = umlTextElement.PyutText
+        text:        Text    = Text()
 
-        pyutText.id  = int(pyutTextElement[XmlConstants.ATTRIBUTE_ID])
+        text.id  = textElement[XmlConstants.ATTRIBUTE_ID]
 
-        rawContent:   str = pyutTextElement['content']
+        rawContent:   str = textElement['content']
         cleanContent: str = rawContent.replace(XML_END_OF_LINE_MARKER, osLineSep)
-        pyutText.content = cleanContent
+        text.content = cleanContent
 
-        return pyutText
+        return text
 
-    def noteToPyutNote(self, umlNoteElement: Element) -> PyutNote:
+    def noteToModelNote(self, umlNoteElement: Element) -> Note:
         """
         Parse Note element
 
         Args:
             umlNoteElement: of the form:  <UmlNote id="xx.xx.xx"/>
 
-        Returns: A PyutNote Object
+        Returns: A model note object
         """
-        pyutNoteElement = umlNoteElement.PyutNote
+        noteElement = umlNoteElement.PyutNote
 
-        pyutNote: PyutNote = PyutNote()
+        note: Note = Note()
 
         # fix line feeds
-        pyutNote = cast(PyutNote, self._addPyutObjectAttributes(pyutElement=pyutNoteElement, pyutObject=pyutNote))
+        note = cast(Note, self._addUmlBaseAttributes(modelElement=noteElement, umlBase=note))
 
-        rawContent:   str = pyutNoteElement[XmlConstants.ATTRIBUTE_CONTENT]
+        rawContent:   str = noteElement[XmlConstants.ATTRIBUTE_CONTENT]
         cleanContent: str = rawContent.replace(XML_END_OF_LINE_MARKER, osLineSep)
-        pyutNote.content = cleanContent
+        note.content = cleanContent
 
-        return pyutNote
+        return note
 
-    def interfaceToPyutInterface(self, umlInterfaceElement: Element) -> PyutInterface:
+    def interfaceToModelInterface(self, umlInterfaceElement: Element) -> Interface:
 
-        pyutInterfaceElement: Element = umlInterfaceElement.PyutInterface
+        interfaceElement: Element = umlInterfaceElement.PyutInterface
 
-        interfaceId: int = int(pyutInterfaceElement['id'])
-        name:        str = pyutInterfaceElement[XmlConstants.ATTRIBUTE_NAME]
-        description: str = pyutInterfaceElement[XmlConstants.ATTRIBUTE_DESCRIPTION]
+        interfaceId: str = interfaceElement[XmlConstants.ATTRIBUTE_ID]
+        name:        str = interfaceElement[XmlConstants.ATTRIBUTE_NAME]
+        description: str = interfaceElement[XmlConstants.ATTRIBUTE_DESCRIPTION]
 
-        pyutInterface: PyutInterface = PyutInterface(name=name)
-        pyutInterface.id          = interfaceId
-        pyutInterface.description = description
+        interface: Interface  = Interface(name=name)
+        interface.id          = interfaceId
+        interface.description = description
 
-        implementors: Elements = cast(Elements, pyutInterfaceElement.get_elements(XmlConstants.ELEMENT_MODEL_IMPLEMENTOR))
+        implementors: Elements = cast(Elements, interfaceElement.get_elements(XmlConstants.ELEMENT_MODEL_IMPLEMENTOR))
         for implementor in implementors:
-            pyutInterface.addImplementor(implementor[XmlConstants.ELEMENT_MODEL_IMPLEMENTING_CLASS_NAME])
+            interface.addImplementor(implementor[XmlConstants.ELEMENT_MODEL_IMPLEMENTING_CLASS_NAME])
 
-        pyutInterface.methods = self._interfaceMethodsToPyutMethods(interface=pyutInterfaceElement)
+        interface.methods = self._interfaceMethodsToMethods(interface=interfaceElement)
 
-        return pyutInterface
+        return interface
 
-    def actorToPyutActor(self, umlActorElement: Element) -> PyutActor:
+    def actorToModelActor(self, umlActorElement: Element) -> Actor:
         """
 
         Args:
             umlActorElement:   untangle Element in the above format
 
-        Returns:   PyutActor
+        Returns:   A model Actor
         """
-        pyutActorElement: Element   = umlActorElement.PyutActor
+        actorElement: Element = umlActorElement.PyutActor
+        actor:        Actor   = Actor()
 
-        pyutActor: PyutActor = PyutActor()
+        actor = cast(Actor, self._addUmlBaseAttributes(modelElement=actorElement, umlBase=actor))
 
-        pyutActor = cast(PyutActor, self._addPyutObjectAttributes(pyutElement=pyutActorElement, pyutObject=pyutActor))
+        return actor
 
-        return pyutActor
-
-    def useCaseToPyutUseCase(self, umlUseCaseElement: Element) -> PyutUseCase:
+    def useCaseToModelUseCase(self, umlUseCaseElement: Element) -> UseCase:
         """
 
         Args:
             umlUseCaseElement:  An `untangle` Element in the above format
 
-        Returns:  PyutUseCase
+        Returns:  Model Use Case
         """
-        useCaseElement: Element     = umlUseCaseElement.PyutUseCase
+        useCaseElement: Element = umlUseCaseElement.PyutUseCase
+        useCase:    UseCase = UseCase()
 
-        pyutUseCase:    PyutUseCase = PyutUseCase()
+        useCase = cast(UseCase, self._addUmlBaseAttributes(modelElement=useCaseElement, umlBase=useCase))
 
-        pyutUseCase = cast(PyutUseCase, self._addPyutObjectAttributes(pyutElement=useCaseElement, pyutObject=pyutUseCase))
+        return useCase
 
-        return pyutUseCase
-
-    def linkToPyutLink(self, singleLink: Element, source: LinkSource, destination: LinkDestination) -> PyutLink:
+    def linkToModelLink(self, singleLink: Element, source: LinkSource, destination: LinkDestination) -> Link:
 
         linkTypeStr:     str          = singleLink[XmlConstants.ATTRIBUTE_LINK_TYPE]
 
-        linkType:        PyutLinkType = PyutLinkType.toEnum(linkTypeStr)
-        cardSrc:         str          = singleLink[XmlConstants.ATTRIBUTE_SOURCE_CARDINALITY_VALUE]
-        cardDest:        str          = singleLink[XmlConstants.ATTRIBUTE_DESTINATION_CARDINALITY_VALUE]
-        bidir:           bool         = SecureConversions.secureBoolean(singleLink[XmlConstants.ATTRIBUTE_BIDIRECTIONAL])
-        linkDescription: str          = singleLink['name']
+        linkType:        LinkType = LinkType.toEnum(linkTypeStr)
+        cardSrc:         str      = singleLink[XmlConstants.ATTRIBUTE_SOURCE_CARDINALITY_VALUE]
+        cardDest:        str      = singleLink[XmlConstants.ATTRIBUTE_DESTINATION_CARDINALITY_VALUE]
+        bidir:           bool     = SecureConversions.secureBoolean(singleLink[XmlConstants.ATTRIBUTE_BIDIRECTIONAL])
+        linkDescription: str      = singleLink['name']
 
-        pyutLink: PyutLink = PyutLink(name=linkDescription,
-                                      linkType=linkType,
-                                      cardinalitySource=cardSrc, cardinalityDestination=cardDest,
-                                      bidirectional=bidir,
-                                      source=source,
-                                      destination=destination)
+        link: Link = Link(name=linkDescription,
+                          linkType=linkType,
+                          cardinalitySource=cardSrc, cardinalityDestination=cardDest,
+                          bidirectional=bidir,
+                          source=source,
+                          destination=destination
+                          )
 
-        return pyutLink
+        return link
 
-    def sdInstanceToPyutSDInstance(self, oglSDInstanceElement: Element) -> PyutSDInstance:
+    def sdInstanceToModelSDInstance(self, oglSDInstanceElement: Element) -> SDInstance:
 
-        instanceElement: Element = oglSDInstanceElement.PyutSDInstance
-        pyutSDInstance:  PyutSDInstance = PyutSDInstance()
+        instanceElement: Element    = oglSDInstanceElement.PyutSDInstance
+        sdInstance:  SDInstance = SDInstance()
 
-        pyutSDInstance.id                     = int(instanceElement[XmlConstants.ATTRIBUTE_ID])
-        pyutSDInstance.instanceName           = instanceElement[XmlConstants.ATTRIBUTE_INSTANCE_NAME]
-        pyutSDInstance.instanceLifeLineLength = SecureConversions.secureInteger(instanceElement[XmlConstants.ATTRIBUTE_LIFE_LINE_LENGTH])
+        sdInstance.id                     = instanceElement[XmlConstants.ATTRIBUTE_ID]
+        sdInstance.instanceName           = instanceElement[XmlConstants.ATTRIBUTE_INSTANCE_NAME]
+        sdInstance.instanceLifeLineLength = SecureConversions.secureInteger(instanceElement[XmlConstants.ATTRIBUTE_LIFE_LINE_LENGTH])
 
-        return pyutSDInstance
+        return sdInstance
 
-    def sdMessageToPyutSDMessage(self, oglSDMessageElement: Element) -> ConvolutedPyutSDMessageInformation:
+    def sdMessageToModelSDMessage(self, oglSDMessageElement: Element) -> ConvolutedModelSDMessageInformation:
         """
         TODO:  Need to fix how SD Messages are created
         Args:
@@ -243,79 +244,80 @@ class XmlToPyut:
         """
         messageElement: Element = oglSDMessageElement.PyutSDMessage
 
-        pyutSDMessage:  PyutSDMessage = PyutSDMessage()
+        sdMessage:  SDMessage = SDMessage()
 
-        pyutSDMessage.id = int(messageElement['id'])
-        pyutSDMessage.message = messageElement['message']
-        pyutSDMessage.linkType = PyutLinkType.SD_MESSAGE
+        sdMessage.id = messageElement[XmlConstants.ATTRIBUTE_ID]
+        sdMessage.message = messageElement[XmlConstants.ATTRIBUTE_MESSAGE]
+        sdMessage.linkType = LinkType.SD_MESSAGE
 
-        srcID: int = int(messageElement[XmlConstants.ATTRIBUTE_SD_MESSAGE_SOURCE_ID])
-        dstID: int = int(messageElement[XmlConstants.ATTRIBUTE_SD_MESSAGE_DESTINATION_ID])
+        srcID: str = messageElement[XmlConstants.ATTRIBUTE_SD_MESSAGE_SOURCE_ID]
+        dstID: str = messageElement[XmlConstants.ATTRIBUTE_SD_MESSAGE_DESTINATION_ID]
 
         srcTime: int = int(messageElement[XmlConstants.ATTRIBUTE_SOURCE_TIME])
         dstTime: int = int(messageElement[XmlConstants.ATTRIBUTE_DESTINATION_TIME])
 
-        pyutSDMessage.sourceY      = srcTime
-        pyutSDMessage.destinationY = dstTime
+        sdMessage.sourceY      = srcTime
+        sdMessage.destinationY = dstTime
 
-        bogus: ConvolutedPyutSDMessageInformation = ConvolutedPyutSDMessageInformation()
+        bogus: ConvolutedModelSDMessageInformation = ConvolutedModelSDMessageInformation()
 
-        bogus.pyutSDMessage = pyutSDMessage
+        bogus.sdMessage = sdMessage
         bogus.sourceId      = srcID
         bogus.destinationId = dstID
 
         return bogus
 
-    def _methodToPyutMethods(self, classElement: Element) -> PyutMethods:
+    def _methodToModelMethods(self, classElement: Element) -> Methods:
         """
-        The pyutClass may not have methods;
+        The model class may not have methods;
+
         Args:
-            classElement:  The pyutClassElement
+            classElement:  The model class element
 
         Returns:  May return an empty list
         """
-        untangledPyutMethods: PyutMethods = PyutMethods([])
+        untangledModelMethods: Methods = Methods([])
 
         methodElements: Elements = cast(Elements, classElement.get_elements(XmlConstants.ELEMENT_MODEL_METHOD))
 
         for methodElement in methodElements:
-            methodName: str            = methodElement['name']
-            visibility: PyutVisibility = PyutVisibility.toEnum(methodElement[XmlConstants.ATTRIBUTE_VISIBILITY])
+            methodName: str        = methodElement['name']
+            visibility: Visibility = Visibility.toEnum(methodElement[XmlConstants.ATTRIBUTE_VISIBILITY])
             self.logger.debug(f"{methodName=} - {visibility=}")
 
-            pyutMethod: PyutMethod = PyutMethod(name=methodName, visibility=visibility)
+            method: Method = Method(name=methodName, visibility=visibility)
 
-            pyutMethod.modifiers = self._modifierToPyutMethodModifiers(methodElement=methodElement)
+            method.modifiers = self._modifierToModelMethodModifiers(methodElement=methodElement)
 
             returnAttribute = methodElement[XmlConstants.ATTRIBUTE_METHOD_RETURN_TYPE]
-            pyutMethod.returnType = PyutType(returnAttribute)
+            method.returnType = ReturnType(returnAttribute)
 
-            parameters = self._paramToPyutParameters(methodElement)
-            pyutMethod.parameters = parameters
-            pyutMethod.sourceCode = self._sourceCodeToPyutSourceCode(methodElement=methodElement)
+            parameters = self._paramToModelParameters(methodElement)
+            method.parameters = parameters
+            method.sourceCode = self._sourceCodeToModelSourceCode(methodElement=methodElement)
 
-            untangledPyutMethods.append(pyutMethod)
+            untangledModelMethods.append(method)
 
-        return untangledPyutMethods
+        return untangledModelMethods
 
-    def _fieldToPyutFields(self, classElement: Element) -> PyutFields:
-        untangledPyutFields: PyutFields = PyutFields([])
+    def _fieldToModelFields(self, classElement: Element) -> Fields:
+        untangledFields: Fields = Fields([])
 
         fieldElements: Elements = cast(Elements, classElement.get_elements(XmlConstants.ELEMENT_MODEL_FIELD))
 
         for fieldElement in fieldElements:
-            visibility: PyutVisibility = PyutVisibility.toEnum(fieldElement['visibility'])
+            visibility: Visibility = Visibility.toEnum(fieldElement[XmlConstants.ATTRIBUTE_VISIBILITY])
             fieldName    = fieldElement[XmlConstants.ATTRIBUTE_NAME]
-            pyutType     = PyutType(fieldElement[XmlConstants.ATTRIBUTE_FIELD_TYPE])
+            fieldType    = FieldType(fieldElement[XmlConstants.ATTRIBUTE_FIELD_TYPE])
             defaultValue = fieldElement[XmlConstants.ATTRIBUTE_DEFAULT_VALUE]
 
-            pyutField: PyutField = PyutField(name=fieldName, visibility=visibility, type=pyutType, defaultValue=defaultValue)
+            field: Field = Field(name=fieldName, visibility=visibility, type=fieldType, defaultValue=defaultValue)
 
-            untangledPyutFields.append(pyutField)
+            untangledFields.append(field)
 
-        return untangledPyutFields
+        return untangledFields
 
-    def _modifierToPyutMethodModifiers(self, methodElement: Element) -> PyutModifiers:
+    def _modifierToModelMethodModifiers(self, methodElement: Element) -> Modifiers:
         """
         Should be in this form:
 
@@ -327,37 +329,38 @@ class XmlToPyut:
         Args:
             methodElement:
 
-        Returns:   A PyutModifiers object that may be empty.
+        Returns:   A Modifiers list that may be empty.
         """
 
         modifierElements = methodElement.get_elements('Modifier')
 
-        pyutModifiers: PyutModifiers = PyutModifiers([])
+        modifiers: Modifiers = Modifiers([])
         if len(modifierElements) > 0:
             for modifierElement in modifierElements:
                 modifierName:           str       = modifierElement['name']
-                pyutModifier: PyutModifier = PyutModifier(name=modifierName)
-                pyutModifiers.append(pyutModifier)
+                modifier: Modifier = Modifier(name=modifierName)
+                modifiers.append(modifier)
 
-        return pyutModifiers
+        return modifiers
 
-    def _paramToPyutParameters(self, methodElement: Element) -> PyutParameters:
+    def _paramToModelParameters(self, methodElement: Element) -> Parameters:
 
         parameterElements = methodElement.get_elements(XmlConstants.ELEMENT_MODEL_PARAMETER)
 
-        untangledPyutMethodParameters: PyutParameters = PyutParameters([])
+        untangledModelMethodParameters: Parameters = Parameters([])
         for parameterElement in parameterElements:
             name:           str = parameterElement[XmlConstants.ATTRIBUTE_NAME]
             defaultValue:   str = parameterElement[XmlConstants.ATTRIBUTE_DEFAULT_VALUE]
-            parameterType:  PyutType = PyutType(parameterElement[XmlConstants.ATTRIBUTE_PARAMETER_TYPE])
 
-            pyutParameter: PyutParameter = PyutParameter(name=name, type=parameterType, defaultValue=defaultValue)
+            parameterType:  ParameterType = ParameterType(parameterElement[XmlConstants.ATTRIBUTE_PARAMETER_TYPE])
 
-            untangledPyutMethodParameters.append(pyutParameter)
+            parameter: Parameter = Parameter(name=name, type=parameterType, defaultValue=defaultValue)
 
-        return untangledPyutMethodParameters
+            untangledModelMethodParameters.append(parameter)
 
-    def _sourceCodeToPyutSourceCode(self, methodElement: Element) -> SourceCode:
+        return untangledModelMethodParameters
+
+    def _sourceCodeToModelSourceCode(self, methodElement: Element) -> SourceCode:
 
         sourceCodeElements = methodElement.get_elements(XmlConstants.ELEMENT_MODEL_SOURCE_CODE)
         codeElements = sourceCodeElements[0].get_elements(XmlConstants.ELEMENT_MODEL_CODE)
@@ -368,36 +371,36 @@ class XmlToPyut:
             sourceCode.append(codeLine)
         return sourceCode
 
-    def _interfaceMethodsToPyutMethods(self, interface: Element) -> PyutMethods:
+    def _interfaceMethodsToMethods(self, interface: Element) -> Methods:
 
-        pyutMethods: PyutMethods = self._methodToPyutMethods(interface)
+        methods: Methods = self._methodToModelMethods(interface)
 
-        return pyutMethods
+        return methods
 
-    def _addPyutObjectAttributes(self, pyutElement: Element, pyutObject: PyutObject) -> PyutObject:
+    def _addUmlBaseAttributes(self, modelElement: Element, umlBase: BaseAttributes) -> BaseAttributes:
         """
 
         Args:
-            pyutElement:    pyutElement XML with common keys
-            pyutObject:     The PyutObject to update
+            modelElement: The model Element XML with common keys
+            umlBase:      The base UML Attributes to update
 
-        Returns:  The updated pyutObject as
+        Returns:  The updated UML instance as
         """
 
-        pyutObject.id       = int(pyutElement[XmlConstants.ATTRIBUTE_ID])    # TODO revisit this when we start using UUIDs
-        pyutObject.name     = pyutElement[XmlConstants.ATTRIBUTE_NAME]
-        pyutObject.fileName = pyutElement[XmlConstants.ATTRIBUTE_FILENAME]
+        umlBase.id       = modelElement[XmlConstants.ATTRIBUTE_ID]
+        umlBase.name     = modelElement[XmlConstants.ATTRIBUTE_NAME]
+        umlBase.fileName = modelElement[XmlConstants.ATTRIBUTE_FILENAME]
 
-        if pyutObject.name is None:
+        if umlBase.name is None:
             XmlToPyut.noteCounter += 1
-            pyutObject.name = f'{XmlToPyut.NOTE_NAME}-{XmlToPyut.noteCounter}'
-        return pyutObject
+            umlBase.name = f'{XmlToPyut.NOTE_NAME}-{XmlToPyut.noteCounter}'
+        return umlBase
 
-    def _securePyutDisplayMethods(self, displayStr: str) -> PyutDisplayMethods:
+    def _secureDisplayMethods(self, displayStr: str) -> DisplayMethods:
 
         if displayStr is not None:
-            pyutDisplayMethods: PyutDisplayMethods = PyutDisplayMethods(displayStr)
+            displayMethods: DisplayMethods = DisplayMethods(displayStr)
         else:
-            pyutDisplayMethods = PyutDisplayMethods.UNSPECIFIED
+            displayMethods = DisplayMethods.UNSPECIFIED
 
-        return pyutDisplayMethods
+        return displayMethods

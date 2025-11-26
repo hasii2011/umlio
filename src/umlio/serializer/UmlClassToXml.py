@@ -43,6 +43,6 @@ class UmlClassToXml(BaseUmlToXml):
         attributes = self._umlBaseAttributes(umlShape=umlClass)
         umlClassSubElement: Element = SubElement(documentTop, XmlConstants.ELEMENT_UML_CLASS, attrib=attributes)
 
-        self._pyutToXml.pyutClassToXml(umlClassElement=umlClassSubElement, pyutClass=umlClass.pyutClass)
+        self._pyutToXml.classToXml(umlClassElement=umlClassSubElement, modelClass=umlClass.modelClass)
 
         return umlClassSubElement

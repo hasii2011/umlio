@@ -9,19 +9,18 @@ from logging import getLogger
 
 from dataclasses import dataclass
 
-from pyutmodelv2.PyutInterface import PyutInterface
-from pyutmodelv2.PyutModelTypes import ClassName
-from pyutmodelv2.PyutNote import PyutNote
+from umlmodel.Class import Class
+from umlmodel.Interface import Interface
+from umlmodel.Link import Link
+from umlmodel.ModelTypes import ClassName
+from umlmodel.Note import Note
+from umlmodel.enumerations.LinkType import LinkType
 from umlshapes.links.UmlLollipopInterface import UmlLollipopInterface
 from umlshapes.links.UmlNoteLink import UmlNoteLink
 from umlshapes.shapes.UmlNote import UmlNote
 from umlshapes.types.Common import AttachmentSide
 
 from wx import Point
-
-from pyutmodelv2.PyutClass import PyutClass
-from pyutmodelv2.PyutLink import PyutLink
-from pyutmodelv2.enumerations.PyutLinkType import PyutLinkType
 
 from umlshapes.links.UmlInterface import UmlInterface
 from umlshapes.links.UmlInheritance import UmlInheritance
@@ -38,11 +37,11 @@ BASE_UML_CLASS_NAME:     str = 'BaseClass'
 SUBCLASS_UML_CLASS_NAME: str = 'SubClass'
 BASE_UML_CLASS_ID:       str = 'call.lose.current.group'
 SUBCLASS_UML_CLASS_ID:   str = 'speak.left.economic.change'
-BASE_CLASS_PYUT_ID:      int = 999
-SUBCLASS_PYUT_ID:        int = 111
+BASE_CLASS_PYUT_ID:      str = '999'
+SUBCLASS_PYUT_ID:        str = '111'
 
-SOURCE_PYUT_CLASS_ID:      int = 666
-DESTINATION_PYUT_CLASS_ID: int = 777
+SOURCE_PYUT_CLASS_ID:      str = '666'
+DESTINATION_PYUT_CLASS_ID: str = '777'
 
 SOURCE_UML_CLASS_ID:      str = 'provide.serious.hand.change'
 DESTINATION_UML_CLASS_ID: str = 'believe.able.power.moment'
@@ -51,28 +50,28 @@ INTERFACE_UML_CLASS_NAME:    str = 'Interface'
 IMPLEMENTING_UML_CLASS_NAME: str = 'Implementor'
 INTERFACE_UML_CLASS_ID:      str = 'card.carrying.interface'
 IMPLEMENTING_UML_CLASS_ID:   str = 'valley.darkness.implementor'
-INTERFACE_PYUT_CLASS_ID:     int = 2222
-IMPLEMENTING_PYUT_CLASS_ID:  int = 4444
+INTERFACE_PYUT_CLASS_ID:     str = '2222'
+IMPLEMENTING_PYUT_CLASS_ID:  str = '4444'
 
 UML_LINK_CANONICAL_MONIKER: str = 'die.free.open.point'
 
 CANONICAl_LOLLIPOP_NAME:     str            = 'IFake'
 LOLLIPOP_ATTACHMENT_SIDE:    AttachmentSide = AttachmentSide.RIGHT
-PYUT_INTERFACE_CANONICAL_ID: int            = 0xDEADBEEF
+PYUT_INTERFACE_CANONICAL_ID: str            = '0xDEADBEEF'
 
 DESTINATION_UML_CLASS_NAME: str = 'DestinationClass'
-PYUT_NOTE_ID:               int = 6262
+PYUT_NOTE_ID:               str = '6262'
 
 
 @dataclass
 class LinkDescription:
     associationClass:   type[UmlAssociation]
-    linkType:           PyutLinkType  = PyutLinkType.ASSOCIATION
+    linkType:           LinkType = LinkType.ASSOCIATION
     associationCounter: int = 0
     classCounter:       int = 0
 
 
-LinkDescriptions = NewType('LinkDescriptions', Dict[PyutLinkType, LinkDescription])
+LinkDescriptions = NewType('LinkDescriptions', Dict[LinkType, LinkDescription])
 
 
 @dataclass
@@ -96,20 +95,20 @@ class LinkCreator:
         self._diagramFrame: DiagramFrame = diagramFrame
 
         association: LinkDescription = LinkDescription(
-            linkType=PyutLinkType.ASSOCIATION,
+            linkType=LinkType.ASSOCIATION,
             associationClass=UmlAssociation
         )
 
         self._relationShips: LinkDescriptions = LinkDescriptions(
             {
-                PyutLinkType.ASSOCIATION: association,
+                LinkType.ASSOCIATION: association,
                 # Identifiers.ID_DISPLAY_UML_COMPOSITION: composition,
                 # Identifiers.ID_DISPLAY_UML_AGGREGATION: aggregation,
             }
         )
 
     # noinspection PyTypeChecker
-    def createAssociation(self, linkType: PyutLinkType) -> CreatedLink:
+    def createAssociation(self, linkType: LinkType) -> CreatedLink:
 
         associationDescription: LinkDescription = self._relationShips[linkType]
 
@@ -126,8 +125,8 @@ class LinkCreator:
 
         self.logger.info(f'{sourceUmlClass.id=} {destinationUmlClass.id=}')
 
-        pyutLink = self._createAssociationPyutLink(pyutSource=sourceUmlClass.pyutClass,
-                                                   pyutDestination=destinationUmlClass.pyutClass,
+        pyutLink = self._createAssociationPyutLink(pyutSource=sourceUmlClass.modelClass,
+                                                   pyutDestination=destinationUmlClass.modelClass,
                                                    associationCounter=associationDescription.associationCounter
                                                    )
 
@@ -137,7 +136,7 @@ class LinkCreator:
 
         umlAssociation.id = UML_LINK_CANONICAL_MONIKER
         umlAssociation.SetCanvas(self._diagramFrame)
-        if pyutLink.linkType != PyutLinkType.LOLLIPOP:
+        if pyutLink.linkType != LinkType.LOLLIPOP:
             umlAssociation.MakeLineControlPoints(n=2)
 
         sourceUmlClass.addLink(umlLink=umlAssociation, destinationClass=destinationUmlClass)
@@ -150,14 +149,14 @@ class LinkCreator:
 
     def createUmlInheritance(self) -> CreatedLink:
 
-        basePyutClass: PyutClass = PyutClass(name=f'{BASE_UML_CLASS_NAME}')
-        subPyutClass:  PyutClass = PyutClass(name=f'{SUBCLASS_UML_CLASS_NAME}')
+        basePyutClass: Class = Class(name=f'{BASE_UML_CLASS_NAME}')
+        subPyutClass:  Class = Class(name=f'{SUBCLASS_UML_CLASS_NAME}')
 
         basePyutClass.id = BASE_CLASS_PYUT_ID
         subPyutClass.id  = SUBCLASS_PYUT_ID
 
-        baseUmlClass:     UmlClass = UmlClass(pyutClass=basePyutClass)
-        subClassUmlClass: UmlClass = UmlClass(pyutClass=subPyutClass)
+        baseUmlClass:     UmlClass = UmlClass(modelClass=basePyutClass)
+        subClassUmlClass: UmlClass = UmlClass(modelClass=subPyutClass)
 
         baseUmlClass.id       = BASE_UML_CLASS_ID
         subClassUmlClass.id   = SUBCLASS_UML_CLASS_ID
@@ -168,9 +167,9 @@ class LinkCreator:
         baseUmlClass.SetCanvas(self._diagramFrame)
         subClassUmlClass.SetCanvas(self._diagramFrame)
 
-        pyutInheritance: PyutLink = PyutLink(linkType=PyutLinkType.INHERITANCE, source=subPyutClass, destination=basePyutClass)
+        pyutInheritance: Link = Link(linkType=LinkType.INHERITANCE, source=subPyutClass, destination=basePyutClass)
 
-        umlInheritance: UmlInheritance = UmlInheritance(pyutLink=pyutInheritance, baseClass=baseUmlClass, subClass=subClassUmlClass)
+        umlInheritance: UmlInheritance = UmlInheritance(link=pyutInheritance, baseClass=baseUmlClass, subClass=subClassUmlClass)
 
         umlInheritance.id = UML_LINK_CANONICAL_MONIKER
 
@@ -192,14 +191,14 @@ class LinkCreator:
 
     def createUmlInterface(self) -> CreatedLink:
 
-        interfacePyutClass:    PyutClass = PyutClass(name=f'{INTERFACE_UML_CLASS_NAME}')
-        implementingPyutClass: PyutClass = PyutClass(name=f'{IMPLEMENTING_UML_CLASS_NAME}')
+        interfacePyutClass:    Class = Class(name=f'{INTERFACE_UML_CLASS_NAME}')
+        implementingPyutClass: Class = Class(name=f'{IMPLEMENTING_UML_CLASS_NAME}')
 
         interfacePyutClass.id    = INTERFACE_PYUT_CLASS_ID
         implementingPyutClass.id = IMPLEMENTING_PYUT_CLASS_ID
 
-        interfaceUmlClass:    UmlClass = UmlClass(pyutClass=interfacePyutClass)
-        implementingUmlClass: UmlClass = UmlClass(pyutClass=implementingPyutClass)
+        interfaceUmlClass:    UmlClass = UmlClass(modelClass=interfacePyutClass)
+        implementingUmlClass: UmlClass = UmlClass(modelClass=implementingPyutClass)
 
         interfaceUmlClass.id    = INTERFACE_UML_CLASS_ID
         implementingUmlClass.id = IMPLEMENTING_UML_CLASS_ID
@@ -210,9 +209,9 @@ class LinkCreator:
         interfaceUmlClass.SetCanvas(self._diagramFrame)
         implementingUmlClass.SetCanvas(self._diagramFrame)
 
-        pyutInterface: PyutLink = PyutLink(linkType=PyutLinkType.INTERFACE, source=implementingPyutClass, destination=interfacePyutClass)     # TODO use PyutInterface
+        pyutInterface: Link = Link(linkType=LinkType.INTERFACE, source=implementingPyutClass, destination=interfacePyutClass)     # TODO use PyutInterface
 
-        umlInterface: UmlInterface = UmlInterface(pyutLink=pyutInterface, interfaceClass=interfaceUmlClass, implementingClass=implementingUmlClass)
+        umlInterface: UmlInterface = UmlInterface(link=pyutInterface, interfaceClass=interfaceUmlClass, implementingClass=implementingUmlClass)
 
         umlInterface.id = UML_LINK_CANONICAL_MONIKER
 
@@ -234,21 +233,21 @@ class LinkCreator:
     def createLollipop(self):
 
         # Need the model
-        implementingPyutClass: PyutClass = PyutClass(name=f'{IMPLEMENTING_UML_CLASS_NAME}')
+        implementingPyutClass: Class = Class(name=f'{IMPLEMENTING_UML_CLASS_NAME}')
         implementingPyutClass.id = IMPLEMENTING_PYUT_CLASS_ID
 
         # Need the attached to UI Shape
-        implementingUmlClass: UmlClass = UmlClass(pyutClass=implementingPyutClass)
+        implementingUmlClass: UmlClass = UmlClass(modelClass=implementingPyutClass)
         implementingUmlClass.id       = IMPLEMENTING_UML_CLASS_ID
         implementingUmlClass.position = UmlPosition(x=3333, y=3333)
 
         # fill out the model
-        pyutInterface: PyutInterface = PyutInterface(name=CANONICAl_LOLLIPOP_NAME)
+        pyutInterface: Interface = Interface(name=CANONICAl_LOLLIPOP_NAME)
         pyutInterface.id = PYUT_INTERFACE_CANONICAL_ID
         pyutInterface.addImplementor(ClassName(implementingPyutClass.name))
 
         # Need the lollipop
-        umlLollipopInterface: UmlLollipopInterface = UmlLollipopInterface(pyutInterface=pyutInterface)
+        umlLollipopInterface: UmlLollipopInterface = UmlLollipopInterface(interface=pyutInterface)
         umlLollipopInterface.attachedTo     = implementingUmlClass
         umlLollipopInterface.attachmentSide = LOLLIPOP_ATTACHMENT_SIDE
 
@@ -257,27 +256,27 @@ class LinkCreator:
     def createNoteLink(self) -> CreatedNoteLink:
 
         # Need the model
-        destinationPyutClass: PyutClass = PyutClass(name=f'{DESTINATION_UML_CLASS_NAME}')
+        destinationPyutClass: Class = Class(name=f'{DESTINATION_UML_CLASS_NAME}')
         destinationPyutClass.id = DESTINATION_PYUT_CLASS_ID
 
         # Need the attached to UI Shapes
-        destinationUmlClass: UmlClass = UmlClass(pyutClass=destinationPyutClass)
+        destinationUmlClass: UmlClass = UmlClass(modelClass=destinationPyutClass)
         destinationUmlClass.id        = DESTINATION_UML_CLASS_ID
         destinationUmlClass.position  = UmlPosition(x=300, y=100)
 
-        pyutNote:      PyutNote = PyutNote(content='I am a note')
+        pyutNote: Note = Note(content='I am a note')
         pyutNote.id = PYUT_NOTE_ID
 
-        sourceUmlNote: UmlNote  = UmlNote(pyutNote=pyutNote)
+        sourceUmlNote: UmlNote  = UmlNote(note=pyutNote)
         sourceUmlNote.position = UmlPosition(x=300, y=200)
 
-        sourceUmlNote.pyutNote = pyutNote
+        sourceUmlNote.modelNote = pyutNote
 
-        pyutLink: PyutLink = PyutLink(linkType=PyutLinkType.NOTELINK)
-        pyutLink.source      = pyutNote
-        pyutLink.destination = destinationPyutClass
+        link: Link = Link(linkType=LinkType.NOTELINK)
+        link.source      = pyutNote
+        link.destination = destinationPyutClass
 
-        umlNoteLink: UmlNoteLink = UmlNoteLink(pyutLink=pyutLink)
+        umlNoteLink: UmlNoteLink = UmlNoteLink(link=link)
         umlNoteLink.sourceNote       = sourceUmlNote
         umlNoteLink.destinationClass = destinationUmlClass
 
@@ -289,15 +288,15 @@ class LinkCreator:
 
     def _createClassPair(self, classCounter: int) -> Tuple[UmlClass, UmlClass]:
 
-        sourcePyutClass:      PyutClass = self._createSimplePyutClass(classCounter=classCounter)
+        sourcePyutClass:      Class = self._createSimplePyutClass(classCounter=classCounter)
         classCounter += 1
-        destinationPyutClass: PyutClass = self._createSimplePyutClass(classCounter=classCounter)
+        destinationPyutClass: Class = self._createSimplePyutClass(classCounter=classCounter)
 
         sourcePyutClass.id      = SOURCE_PYUT_CLASS_ID
         destinationPyutClass.id = DESTINATION_PYUT_CLASS_ID
 
-        sourceUmlClass:      UmlClass = UmlClass(pyutClass=sourcePyutClass)
-        destinationUmlClass: UmlClass = UmlClass(pyutClass=destinationPyutClass)
+        sourceUmlClass:      UmlClass = UmlClass(modelClass=sourcePyutClass)
+        destinationUmlClass: UmlClass = UmlClass(modelClass=destinationPyutClass)
 
         sourceUmlClass.position      = UmlPosition(x=100, y=100)
         destinationUmlClass.position = UmlPosition(x=200, y=300)
@@ -310,18 +309,18 @@ class LinkCreator:
 
         return sourceUmlClass, destinationUmlClass
 
-    def _createSimplePyutClass(self, classCounter: int) -> PyutClass:
+    def _createSimplePyutClass(self, classCounter: int) -> Class:
 
-        className: str = f'GeneratedClass-{classCounter}'
-        pyutClass: PyutClass  = PyutClass(name=className)
+        className:  str   = f'GeneratedClass-{classCounter}'
+        modelClass: Class = Class(name=className)
 
-        return pyutClass
+        return modelClass
 
-    def _createAssociationPyutLink(self, pyutSource: PyutClass, pyutDestination: PyutClass, associationCounter: int) -> PyutLink:
+    def _createAssociationPyutLink(self, pyutSource: Class, pyutDestination: Class, associationCounter: int) -> Link:
 
         name: str = f'Association-{associationCounter}'
 
-        pyutLink: PyutLink = PyutLink(name=name, linkType=PyutLinkType.ASSOCIATION)
+        pyutLink: Link = Link(name=name, linkType=LinkType.ASSOCIATION)
 
         pyutLink.sourceCardinality      = 'src Card'
         pyutLink.destinationCardinality = 'dst Card'
@@ -331,13 +330,13 @@ class LinkCreator:
 
         return pyutLink
 
-    def _createInheritancePyutLink(self, inheritanceCounter: int, baseUmlClass: UmlClass, subUmlClass: UmlClass) -> PyutLink:
+    def _createInheritancePyutLink(self, inheritanceCounter: int, baseUmlClass: UmlClass, subUmlClass: UmlClass) -> Link:
 
         name: str = f'Inheritance {inheritanceCounter}'
 
-        pyutInheritance: PyutLink = PyutLink(name=name, linkType=PyutLinkType.INHERITANCE)
+        pyutInheritance: Link = Link(name=name, linkType=LinkType.INHERITANCE)
 
-        pyutInheritance.destination  = baseUmlClass.pyutClass
-        pyutInheritance.source       = subUmlClass.pyutClass
+        pyutInheritance.destination  = baseUmlClass.modelClass
+        pyutInheritance.source       = subUmlClass.modelClass
 
         return pyutInheritance
