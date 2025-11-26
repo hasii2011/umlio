@@ -8,9 +8,9 @@ from logging import getLogger
 
 from os import linesep as osLineSep
 
+from umlmodel.UmlModelBase import UmlModelBase
 from untangle import Element
 
-from umlmodel.BaseAttributes import BaseAttributes
 from umlmodel.Field import Field
 from umlmodel.Field import Fields
 from umlmodel.FieldType import FieldType
@@ -78,7 +78,7 @@ class XmlToPyut:
 
         modelClass: Class = Class()
 
-        modelClass = cast(Class, self._addUmlBaseAttributes(modelElement=classElement, umlBase=modelClass))
+        modelClass = cast(Class, self._addUmlBaseAttributes(modelElement=classElement, umlModelBase=modelClass))
 
         displayStr:              str               = classElement[XmlConstants.ATTRIBUTE_DISPLAY_PARAMETERS]
         displayParameters:       DisplayParameters = DisplayParameters(displayStr)
@@ -145,7 +145,7 @@ class XmlToPyut:
         note: Note = Note()
 
         # fix line feeds
-        note = cast(Note, self._addUmlBaseAttributes(modelElement=noteElement, umlBase=note))
+        note = cast(Note, self._addUmlBaseAttributes(modelElement=noteElement, umlModelBase=note))
 
         rawContent:   str = noteElement[XmlConstants.ATTRIBUTE_CONTENT]
         cleanContent: str = rawContent.replace(XML_END_OF_LINE_MARKER, osLineSep)
@@ -184,7 +184,7 @@ class XmlToPyut:
         actorElement: Element = umlActorElement.PyutActor
         actor:        Actor   = Actor()
 
-        actor = cast(Actor, self._addUmlBaseAttributes(modelElement=actorElement, umlBase=actor))
+        actor = cast(Actor, self._addUmlBaseAttributes(modelElement=actorElement, umlModelBase=actor))
 
         return actor
 
@@ -199,7 +199,7 @@ class XmlToPyut:
         useCaseElement: Element = umlUseCaseElement.PyutUseCase
         useCase:    UseCase = UseCase()
 
-        useCase = cast(UseCase, self._addUmlBaseAttributes(modelElement=useCaseElement, umlBase=useCase))
+        useCase = cast(UseCase, self._addUmlBaseAttributes(modelElement=useCaseElement, umlModelBase=useCase))
 
         return useCase
 
@@ -377,24 +377,24 @@ class XmlToPyut:
 
         return methods
 
-    def _addUmlBaseAttributes(self, modelElement: Element, umlBase: BaseAttributes) -> BaseAttributes:
+    def _addUmlBaseAttributes(self, modelElement: Element, umlModelBase: UmlModelBase) -> UmlModelBase:
         """
 
         Args:
             modelElement: The model Element XML with common keys
-            umlBase:      The base UML Attributes to update
+            umlModelBase: The base UML Attributes to update
 
         Returns:  The updated UML instance as
         """
 
-        umlBase.id       = modelElement[XmlConstants.ATTRIBUTE_ID]
-        umlBase.name     = modelElement[XmlConstants.ATTRIBUTE_NAME]
-        umlBase.fileName = modelElement[XmlConstants.ATTRIBUTE_FILENAME]
+        umlModelBase.id       = modelElement[XmlConstants.ATTRIBUTE_ID]
+        umlModelBase.name     = modelElement[XmlConstants.ATTRIBUTE_NAME]
+        umlModelBase.fileName = modelElement[XmlConstants.ATTRIBUTE_FILENAME]
 
-        if umlBase.name is None:
+        if umlModelBase.name is None:
             XmlToPyut.noteCounter += 1
-            umlBase.name = f'{XmlToPyut.NOTE_NAME}-{XmlToPyut.noteCounter}'
-        return umlBase
+            umlModelBase.name = f'{XmlToPyut.NOTE_NAME}-{XmlToPyut.noteCounter}'
+        return umlModelBase
 
     def _secureDisplayMethods(self, displayStr: str) -> DisplayMethods:
 

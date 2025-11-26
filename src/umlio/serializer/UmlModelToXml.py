@@ -32,7 +32,7 @@ from umlio.IOTypes import ElementAttributes
 from umlio.XMLConstants import XmlConstants
 
 
-class PyutToXml:
+class UmlModelToXml:
     """
     Serializes Um Model classes to DOM
     """

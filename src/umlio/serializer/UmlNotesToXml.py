@@ -12,7 +12,7 @@ from umlshapes.shapes.UmlNote import UmlNote
 from umlio.IOTypes import UmlNotes
 
 from umlio.serializer.BaseUmlToXml import BaseUmlToXml
-from umlio.serializer.PyutToXml import PyutToXml
+from umlio.serializer.UmlModelToXml import UmlModelToXml
 from umlio.XMLConstants import XmlConstants
 
 
@@ -21,7 +21,7 @@ class UmlNotesToXml(BaseUmlToXml):
         super().__init__()
         self.logger: Logger = getLogger(__name__)
 
-        self._modelToXml: PyutToXml = PyutToXml()
+        self._modelToXml: UmlModelToXml = UmlModelToXml()
 
     def serialize(self, documentTop: Element, umlNotes: UmlNotes) -> Element:
 

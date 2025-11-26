@@ -13,7 +13,7 @@ from umlio.IOTypes import UmlActors
 from umlio.IOTypes import UmlUseCases
 
 from umlio.serializer.BaseUmlToXml import BaseUmlToXml
-from umlio.serializer.PyutToXml import PyutToXml
+from umlio.serializer.UmlModelToXml import UmlModelToXml
 from umlio.XMLConstants import XmlConstants
 
 
@@ -24,7 +24,7 @@ class UmlUseCasesToXml(BaseUmlToXml):
         super().__init__()
         self.logger: Logger = getLogger(__name__)
 
-        self._modelToXml: PyutToXml = PyutToXml()
+        self._modelToXml: UmlModelToXml = UmlModelToXml()
 
     def serialize(self, documentTop: Element, umlUseCases: UmlUseCases, umlActors: UmlActors) -> Element:
 

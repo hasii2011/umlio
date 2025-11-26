@@ -10,7 +10,7 @@ from umlshapes.shapes.UmlClass import UmlClass
 from umlio.IOTypes import UmlClasses
 
 from umlio.serializer.BaseUmlToXml import BaseUmlToXml
-from umlio.serializer.PyutToXml import PyutToXml
+from umlio.serializer.UmlModelToXml import UmlModelToXml
 from umlio.XMLConstants import XmlConstants
 
 
@@ -20,7 +20,7 @@ class UmlClassToXml(BaseUmlToXml):
         super().__init__()
 
         self.logger:     Logger    = getLogger(__name__)
-        self._pyutToXml: PyutToXml = PyutToXml()
+        self._pyutToXml: UmlModelToXml = UmlModelToXml()
 
     def serialize(self, documentTop: Element, umlClasses: UmlClasses) -> Element:
 

@@ -10,7 +10,7 @@ from umlshapes.links.UmlLollipopInterface import UmlLollipopInterface
 from umlio.IOTypes import ElementAttributes
 from umlio.IOTypes import UmlLollipopInterfaces
 from umlio.XMLConstants import XmlConstants
-from umlio.serializer.PyutToXml import PyutToXml
+from umlio.serializer.UmlModelToXml import UmlModelToXml
 
 
 class UmlLollipopsToXmlLollipops:
@@ -18,7 +18,7 @@ class UmlLollipopsToXmlLollipops:
 
         self.logger: Logger = getLogger(__name__)
 
-        self._modelToXml: PyutToXml = PyutToXml()
+        self._modelToXml: UmlModelToXml = UmlModelToXml()
 
     def serialize(self, documentTop: Element, umlLollipops: UmlLollipopInterfaces) -> Element:
 

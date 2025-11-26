@@ -23,7 +23,7 @@ from umlshapes.types.UmlPosition import UmlPosition
 from umlio.IOTypes import ElementAttributes
 from umlio.IOTypes import UmlLinks
 
-from umlio.serializer.PyutToXml import PyutToXml
+from umlio.serializer.UmlModelToXml import UmlModelToXml
 from umlio.serializer.BaseUmlToXml import BaseUmlToXml
 
 from umlio.XMLConstants import XmlConstants
@@ -34,7 +34,7 @@ class UmlLinksToXml(BaseUmlToXml):
         super().__init__()
         self.logger: Logger = getLogger(__name__)
 
-        self._pyutToXml: PyutToXml = PyutToXml()
+        self._pyutToXml: UmlModelToXml = UmlModelToXml()
 
     def serialize(self, documentTop: Element, umlLinks: UmlLinks) -> Element:
 
