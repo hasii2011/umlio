@@ -30,7 +30,7 @@ class XmlLollipopsToUmlLollipops:
 
         self.logger: Logger = getLogger(__name__)
 
-        self._xmlToPyut: XmlToUmlModel = XmlToUmlModel()
+        self._xmlToUmlMode: XmlToUmlModel = XmlToUmlModel()
 
     def deserialize(self, umlDiagramElement: Element, linkableUmlShapes: LinkableUmlShapes) -> UmlLollipopInterfaces:
 
@@ -55,9 +55,9 @@ class XmlLollipopsToUmlLollipops:
 
         Returns:   A UML Lollipop interface class
         """
-        pyutInterface: Interface = self._xmlToPyut.interfaceToModelInterface(lollipopElement)
+        interface: Interface = self._xmlToUmlMode.interfaceToModelInterface(lollipopElement)
 
-        umlLollipopInterface: UmlLollipopInterface = UmlLollipopInterface(interface=pyutInterface)
+        umlLollipopInterface: UmlLollipopInterface = UmlLollipopInterface(interface=interface)
 
         attachmentSideStr: str      = lollipopElement[XmlConstants.ATTRIBUTE_ATTACHMENT_SIDE]
         attachedToId:      str      = lollipopElement[XmlConstants.ATTRIBUTE_ATTACHED_TO_ID]
@@ -72,9 +72,9 @@ class XmlLollipopsToUmlLollipops:
 
     def _findAttachedToClass(self, attachedToId: str, linkableUmlShapes: LinkableUmlShapes) -> UmlClass:
         """
-        This method is necessary because the linkable shapes dictionary is indexed by the PyutClass ID
+        This method is necessary because the linkable shapes dictionary is indexed by the model class ID
         However, the pointer to the attached class is a UmlClass id.  All this came about because
-        lollipops reused the PyutInterface class
+        lollipops reused the model Interface class
 
         Args:
             attachedToId:

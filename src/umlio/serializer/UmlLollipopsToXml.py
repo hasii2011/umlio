@@ -13,7 +13,7 @@ from umlio.XMLConstants import XmlConstants
 from umlio.serializer.UmlModelToXml import UmlModelToXml
 
 
-class UmlLollipopsToXmlLollipops:
+class UmlLollipopsToXml:
     def __init__(self):
 
         self.logger: Logger = getLogger(__name__)

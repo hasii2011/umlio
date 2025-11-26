@@ -27,7 +27,7 @@ class XmlUseCasesToUmlUseCases:
     def __init__(self):
         self.logger: Logger = getLogger(__name__)
 
-        self._xmlToPyut: XmlToUmlModel = XmlToUmlModel()
+        self._xmlToUmlModel: XmlToUmlModel = XmlToUmlModel()
 
     def deserialize(self, umlDiagramElement: Element) -> UmlUseCases:
 
@@ -45,8 +45,8 @@ class XmlUseCasesToUmlUseCases:
             self.logger.debug(f'{useCaseElement}')
 
             graphicInformation: GraphicInformation = GraphicInformation.toGraphicInfo(graphicElement=useCaseElement)
-            pyutUseCase:        UseCase            = self._xmlToPyut.useCaseToModelUseCase(umlUseCaseElement=useCaseElement)
-            umlUseCase:         UmlUseCase         = UmlUseCase(useCase=pyutUseCase)
+            useCase:            UseCase            = self._xmlToUmlModel.useCaseToModelUseCase(umlUseCaseElement=useCaseElement)
+            umlUseCase:         UmlUseCase         = UmlUseCase(useCase=useCase)
 
             umlUseCase.id       = graphicInformation.id
             umlUseCase.size     = graphicInformation.size

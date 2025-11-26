@@ -19,8 +19,8 @@ class UmlClassToXml(BaseUmlToXml):
 
         super().__init__()
 
-        self.logger:     Logger    = getLogger(__name__)
-        self._pyutToXml: UmlModelToXml = UmlModelToXml()
+        self.logger:         Logger        = getLogger(__name__)
+        self._umlModelToXml: UmlModelToXml = UmlModelToXml()
 
     def serialize(self, documentTop: Element, umlClasses: UmlClasses) -> Element:
 
@@ -43,6 +43,6 @@ class UmlClassToXml(BaseUmlToXml):
         attributes = self._umlBaseAttributes(umlShape=umlClass)
         umlClassSubElement: Element = SubElement(documentTop, XmlConstants.ELEMENT_UML_CLASS, attrib=attributes)
 
-        self._pyutToXml.classToXml(umlClassElement=umlClassSubElement, modelClass=umlClass.modelClass)
+        self._umlModelToXml.classToXml(umlClassElement=umlClassSubElement, modelClass=umlClass.modelClass)
 
         return umlClassSubElement

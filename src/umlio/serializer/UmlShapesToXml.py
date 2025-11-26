@@ -20,7 +20,7 @@ from umlio.serializer.UmlNotesToXml import UmlNotesToXml
 from umlio.serializer.UmlTextsToXml import UmlTextsToXml
 from umlio.serializer.UmlClassToXml import UmlClassToXml
 from umlio.serializer.UmlUseCasesToXml import UmlUseCasesToXml
-from umlio.serializer.UmlLollipopsToXmlLollipops import UmlLollipopsToXmlLollipops
+from umlio.serializer.UmlLollipopsToXml import UmlLollipopsToXml
 
 from umlio.XMLConstants import XmlConstants
 
@@ -89,7 +89,7 @@ class UmlShapesToXml:
         umlNotesToXml:   UmlNotesToXml    = UmlNotesToXml()
         umlTextsToXml:   UmlTextsToXml    = UmlTextsToXml()
         umlLinksToXml:   UmlLinksToXml    = UmlLinksToXml()
-        umlLollipopsToXml: UmlLollipopsToXmlLollipops = UmlLollipopsToXmlLollipops()
+        umlLollipopsToXml: UmlLollipopsToXml = UmlLollipopsToXml()
 
         documentElement: Element       = self._umlDocumentAttributesToXml(umlDiagram=umlDiagram)
 

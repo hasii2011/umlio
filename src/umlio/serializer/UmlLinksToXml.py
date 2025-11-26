@@ -34,7 +34,7 @@ class UmlLinksToXml(BaseUmlToXml):
         super().__init__()
         self.logger: Logger = getLogger(__name__)
 
-        self._pyutToXml: UmlModelToXml = UmlModelToXml()
+        self._umlModelToXml: UmlModelToXml = UmlModelToXml()
 
     def serialize(self, documentTop: Element, umlLinks: UmlLinks) -> Element:
 
@@ -80,7 +80,7 @@ class UmlLinksToXml(BaseUmlToXml):
             })
             SubElement(oglLinkSubElement, XmlConstants.ELEMENT_MODEL_LINE_CONTROL_POINT, attrib=controlPointAttributes)
 
-        self._pyutToXml.linkToXml(link=umlLink.modelLink, umlLinkElement=oglLinkSubElement)
+        self._umlModelToXml.linkToXml(link=umlLink.modelLink, umlLinkElement=oglLinkSubElement)
 
         return oglLinkSubElement
 

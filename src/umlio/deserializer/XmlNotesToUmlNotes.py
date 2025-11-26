@@ -24,7 +24,7 @@ class XmlNotesToUmlNotes:
     def __init__(self):
         self.logger: Logger = getLogger(__name__)
 
-        self._xmlToPyut: XmlToUmlModel = XmlToUmlModel()
+        self._xmlToUmlModel: XmlToUmlModel = XmlToUmlModel()
 
     def deserialize(self, umlDiagramElement: Element) -> UmlNotes:
         """
@@ -41,8 +41,8 @@ class XmlNotesToUmlNotes:
             self.logger.debug(f'{noteElement}')
 
             graphicInformation: GraphicInformation = GraphicInformation.toGraphicInfo(graphicElement=noteElement)
-            pyutNote:           Note               = self._xmlToPyut.noteToModelNote(umlNoteElement=noteElement)
-            umlNote:            UmlNote            = UmlNote(note=pyutNote)
+            note:               Note               = self._xmlToUmlModel.noteToModelNote(umlNoteElement=noteElement)
+            umlNote:            UmlNote            = UmlNote(note=note)
 
             umlNote.id       = graphicInformation.id
             umlNote.size     = graphicInformation.size

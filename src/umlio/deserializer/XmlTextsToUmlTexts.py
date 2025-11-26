@@ -30,7 +30,7 @@ class XmlTextsToUmlTexts:
 
         self.logger: Logger = getLogger(__name__)
 
-        self._xmlToPyut: XmlToUmlModel = XmlToUmlModel()
+        self._xmlToUmlModel: XmlToUmlModel = XmlToUmlModel()
 
     def deserialize(self, umlDiagramElement: Element) -> UmlTexts:
         """
@@ -48,8 +48,8 @@ class XmlTextsToUmlTexts:
             self.logger.debug(f'{textElement}')
 
             graphicInformation: GraphicInformation = GraphicInformation.toGraphicInfo(graphicElement=textElement)
-            pyutText:           Text               = self._xmlToPyut.textToModelText(umlTextElement=textElement)
-            umlText:            UmlText            = UmlText(text=pyutText)
+            text:               Text               = self._xmlToUmlModel.textToModelText(umlTextElement=textElement)
+            umlText:            UmlText            = UmlText(text=text)
 
             umlText.id       = graphicInformation.id
             umlText.size     = graphicInformation.size

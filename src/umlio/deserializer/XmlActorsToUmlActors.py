@@ -24,7 +24,7 @@ class XmlActorsToUmlActors:
     def __init__(self):
         self.logger: Logger = getLogger(__name__)
 
-        self._xmlToPyut: XmlToUmlModel = XmlToUmlModel()
+        self._xmlToUmlModel: XmlToUmlModel = XmlToUmlModel()
 
     def deserialize(self, umlDiagramElement: Element) -> UmlActors:
         """
@@ -41,7 +41,7 @@ class XmlActorsToUmlActors:
             self.logger.debug(f'{actorElement}')
 
             graphicInformation: GraphicInformation = GraphicInformation.toGraphicInfo(graphicElement=actorElement)
-            actor:              Actor               = self._xmlToPyut.actorToModelActor(umlActorElement=actorElement)
+            actor:              Actor               = self._xmlToUmlModel.actorToModelActor(umlActorElement=actorElement)
             umlActor:           UmlActor            = UmlActor(actor=actor)
 
             umlActor.id       = graphicInformation.id

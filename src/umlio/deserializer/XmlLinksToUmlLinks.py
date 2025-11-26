@@ -78,7 +78,7 @@ class XmlLinksToUmlLinks:
     def __init__(self):
         self.logger: Logger = getLogger(__name__)
 
-        self._xmlToPyut: XmlToUmlModel = XmlToUmlModel()
+        self._xmlToUmlModel: XmlToUmlModel = XmlToUmlModel()
 
     def deserialize(self, umlDiagramElement: Element, linkableUmlShapes: LinkableUmlShapes) -> UmlLinks:
 
@@ -95,22 +95,22 @@ class XmlLinksToUmlLinks:
 
     def _umlLinkElementToUmlLink(self, umlLinkElement: Element, linkableUmlShapes: LinkableUmlShapes) -> UmlLink:
 
-        pyutLinkElements: Elements = cast(Elements, umlLinkElement.get_elements(XmlConstants.ELEMENT_MODEL_LINK))
-        assert len(pyutLinkElements) == 1, 'There can only be one'
+        linkElements: Elements = cast(Elements, umlLinkElement.get_elements(XmlConstants.ELEMENT_MODEL_LINK))
+        assert len(linkElements) == 1, 'There can only be one'
 
-        singlePyutLinkElement: Element = pyutLinkElements[0]        # I hate this short cut
+        singleLinkElement: Element = linkElements[0]        # I hate this short cut
 
         umlLink: UmlLink = self._getUmlLink(umlLinkElement=umlLinkElement,
-                                            singlePyutLinkElement=singlePyutLinkElement,
+                                            singleLinkElement=singleLinkElement,
                                             linkableUmlShapes=linkableUmlShapes
                                             )
 
         return umlLink
 
-    def _getUmlLink(self, umlLinkElement: Element, singlePyutLinkElement: Element, linkableUmlShapes: LinkableUmlShapes) -> UmlLink:
+    def _getUmlLink(self, umlLinkElement: Element, singleLinkElement: Element, linkableUmlShapes: LinkableUmlShapes) -> UmlLink:
 
-        connectedShapes: ConnectedShapes = self._getConnectedShapes(singlePyutLinkElement, linkableUmlShapes)
-        link:            Link            = self._getPyutLink(singlePyutLinkElement, connectedShapes)
+        connectedShapes: ConnectedShapes = self._getConnectedShapes(singleLinkElement, linkableUmlShapes)
+        link:            Link            = self._getLink(singleLinkElement, connectedShapes)
 
         umlLink: UmlLink = self._umlLinkFactory(srcShape=connectedShapes.sourceShape,
                                                 link=link,
@@ -135,19 +135,19 @@ class XmlLinksToUmlLinks:
 
         return umlLink
 
-    def _getPyutLink(self, pyutLinkElement: Element, connectedShapes: ConnectedShapes) -> Link:
+    def _getLink(self, modelLinkElement: Element, connectedShapes: ConnectedShapes) -> Link:
         """
 
         Args:
-            pyutLinkElement:    The Xml Elements
+            modelLinkElement:   The Xml Elements
             connectedShapes:    The shapes at the ends of the link
 
         Returns:    A data model link
         """
 
         # noinspection PyUnresolvedReferences
-        link: Link = self._xmlToPyut.linkToModelLink(
-            singleLink=pyutLinkElement,
+        link: Link = self._xmlToUmlModel.linkToModelLink(
+            singleLink=modelLinkElement,
             source=self._getLinkSourceModelClass(connectedShapes.sourceShape),
             destination=self._getLinkDestinationModelClass(connectedShapes.destinationShape)
         )

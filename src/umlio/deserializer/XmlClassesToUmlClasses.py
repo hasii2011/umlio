@@ -40,8 +40,8 @@ class XmlClassesToUmlClasses:
             self.logger.debug(f'{classElement}')
 
             graphicInformation: GraphicInformation = GraphicInformation.toGraphicInfo(graphicElement=classElement)
-            pyutClass:          Class              = self._xmlToUmlModel.classToModelClass(umlClassElement=classElement)
-            umlClass:           UmlClass           = UmlClass(modelClass=pyutClass)
+            modelClass:         Class              = self._xmlToUmlModel.classToModelClass(umlClassElement=classElement)
+            umlClass:           UmlClass           = UmlClass(modelClass=modelClass)
 
             umlClass.id       = graphicInformation.id
             umlClass.size     = graphicInformation.size

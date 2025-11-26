@@ -223,9 +223,9 @@ class XmlToUmlModel:
 
         return link
 
-    def sdInstanceToModelSDInstance(self, oglSDInstanceElement: Element) -> SDInstance:
+    def sdInstanceToModelSDInstance(self, umlSDInstanceElement: Element) -> SDInstance:
 
-        instanceElement: Element    = oglSDInstanceElement.PyutSDInstance
+        instanceElement: Element    = umlSDInstanceElement.PyutSDInstance
         sdInstance:  SDInstance = SDInstance()
 
         sdInstance.id                     = instanceElement[XmlConstants.ATTRIBUTE_ID]
@@ -234,15 +234,15 @@ class XmlToUmlModel:
 
         return sdInstance
 
-    def sdMessageToModelSDMessage(self, oglSDMessageElement: Element) -> ConvolutedModelSDMessageInformation:
+    def sdMessageToModelSDMessage(self, umlSDMessageElement: Element) -> ConvolutedModelSDMessageInformation:
         """
         TODO:  Need to fix how SD Messages are created
         Args:
-            oglSDMessageElement:
+            umlSDMessageElement:
 
         Returns:  Bogus data class
         """
-        messageElement: Element = oglSDMessageElement.PyutSDMessage
+        messageElement: Element = umlSDMessageElement.PyutSDMessage
 
         sdMessage:  SDMessage = SDMessage()
 
