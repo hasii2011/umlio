@@ -12,7 +12,7 @@ from umlshapes.shapes.UmlText import UmlText
 from umlio.IOTypes import UmlTexts
 
 from umlio.serializer.BaseUmlToXml import BaseUmlToXml
-from umlio.serializer.PyutToXml import PyutToXml
+from umlio.serializer.UmlModelToXml import UmlModelToXml
 from umlio.XMLConstants import XmlConstants
 
 
@@ -21,14 +21,14 @@ class UmlTextsToXml(BaseUmlToXml):
         super().__init__()
         self.logger: Logger = getLogger(__name__)
 
-        self._pyutToXml: PyutToXml = PyutToXml()
+        self._modelToXml: UmlModelToXml = UmlModelToXml()
 
     def serialize(self, documentTop: Element, umlTexts: UmlTexts) -> Element:
 
         for text in umlTexts:
             umlText: UmlText = cast(UmlText, text)
             umlTextElement: Element = self._umlTextToXml(documentTop=documentTop, umlText=umlText)
-            self._pyutToXml.pyutTextToXml(pyutText=umlText.pyutText, umlTextElement=umlTextElement)
+            self._modelToXml.textToXml(text=umlText.modelText, umlTextElement=umlTextElement)
 
         return documentTop
 

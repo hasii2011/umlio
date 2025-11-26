@@ -2,7 +2,7 @@
 <UmlProject fileName="." version="12.0" codePath="/users/hasii">
     <UMLDiagram documentType="Class Document" title="Aggregation Class Diagram" scrollPositionX="1" scrollPositionY="1" pixelsPerUnitX="1" pixelsPerUnitY="1">
         <UmlClass id="source.class.id" width="150" height="75" x="100" y="100">
-            <PyutClass id="222" name="Book Shop"
+            <ModelClass id="222" name="Book Shop"
                        displayMethods="True"
                        displayParameters="Unspecified"
                        displayConstructor="Unspecified"
@@ -11,7 +11,7 @@
                        displayStereotype="True" fileName="" description="" />
         </UmlClass>
         <UmlClass id="destination.class.id" width="150" height="75" x="200" y="300">
-            <PyutClass id="444" name="Book"
+            <ModelClass id="444" name="Book"
                        displayMethods="True"
                        displayParameters="Unspecified"
                        displayConstructor="Unspecified"
@@ -23,7 +23,7 @@
             <AssociationName deltaX="0" deltaY="0" />
             <SourceCardinality deltaX="0" deltaY="0" />
             <DestinationCardinality deltaX="0" deltaY="0" />
-            <PyutLink name="has many" type="AGGREGATION"
+            <ModelLink name="has many" type="AGGREGATION"
                       sourceId="222" destinationId="444"
                       bidirectional="False"
                       sourceCardinalityValue="1" destinationCardinalityValue="*" />

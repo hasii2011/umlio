@@ -2,7 +2,7 @@
 <UmlProject fileName="" version="12.0" codePath="/users/hasii">
     <UMLDiagram documentType="Use Case Document" title="Uml Note Diagram" scrollPositionX="1" scrollPositionY="1" pixelsPerUnitX="1" pixelsPerUnitY="1">
         <UmlNote id="remember.the.Alamo" width="233" height="233" x="666" y="777">
-            <PyutNote id="777" content="I am the best MAGA Note" fileName="" />
+            <ModelNote id="777" content="I am the best MAGA Note" fileName="" />
         </UmlNote>
     </UMLDiagram>
 </UmlProject>

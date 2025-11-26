@@ -4,9 +4,8 @@ from typing import cast
 from logging import Logger
 from logging import getLogger
 
+from umlmodel.Class import Class
 from untangle import Element
-
-from pyutmodelv2.PyutClass import PyutClass
 
 from umlshapes.shapes.UmlClass import UmlClass
 
@@ -17,14 +16,14 @@ from umlio.IOTypes import umlClassesFactory
 
 from umlio.XMLConstants import XmlConstants
 
-from umlio.deserializer.XmlToPyut import XmlToPyut
+from umlio.deserializer.XmlToUmlModel import XmlToUmlModel
 
 
 class XmlClassesToUmlClasses:
     def __init__(self):
         self.logger: Logger = getLogger(__name__)
 
-        self._xmlToPyut: XmlToPyut = XmlToPyut()
+        self._xmlToUmlModel: XmlToUmlModel = XmlToUmlModel()
 
     def deserialize(self, umlDiagramElement: Element) -> UmlClasses:
         """
@@ -41,8 +40,8 @@ class XmlClassesToUmlClasses:
             self.logger.debug(f'{classElement}')
 
             graphicInformation: GraphicInformation = GraphicInformation.toGraphicInfo(graphicElement=classElement)
-            pyutClass:          PyutClass          = self._xmlToPyut.classToPyutClass(umlClassElement=classElement)
-            umlClass:           UmlClass           = UmlClass(pyutClass=pyutClass)
+            modelClass:         Class              = self._xmlToUmlModel.classToModelClass(umlClassElement=classElement)
+            umlClass:           UmlClass           = UmlClass(modelClass=modelClass)
 
             umlClass.id       = graphicInformation.id
             umlClass.size     = graphicInformation.size

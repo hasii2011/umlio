@@ -6,7 +6,8 @@ from logging import getLogger
 
 from untangle import Element
 
-from pyutmodelv2.PyutNote import PyutNote
+from umlmodel.Note import Note
+
 from umlshapes.shapes.UmlNote import UmlNote
 
 from umlio.IOTypes import Elements
@@ -16,14 +17,14 @@ from umlio.IOTypes import umlNotesFactory
 
 from umlio.XMLConstants import XmlConstants
 
-from umlio.deserializer.XmlToPyut import XmlToPyut
+from umlio.deserializer.XmlToUmlModel import XmlToUmlModel
 
 
 class XmlNotesToUmlNotes:
     def __init__(self):
         self.logger: Logger = getLogger(__name__)
 
-        self._xmlToPyut: XmlToPyut = XmlToPyut()
+        self._xmlToUmlModel: XmlToUmlModel = XmlToUmlModel()
 
     def deserialize(self, umlDiagramElement: Element) -> UmlNotes:
         """
@@ -40,8 +41,8 @@ class XmlNotesToUmlNotes:
             self.logger.debug(f'{noteElement}')
 
             graphicInformation: GraphicInformation = GraphicInformation.toGraphicInfo(graphicElement=noteElement)
-            pyutNote:           PyutNote           = self._xmlToPyut.noteToPyutNote(umlNoteElement=noteElement)
-            umlNote:            UmlNote            = UmlNote(pyutNote=pyutNote)
+            note:               Note               = self._xmlToUmlModel.noteToModelNote(umlNoteElement=noteElement)
+            umlNote:            UmlNote            = UmlNote(note=note)
 
             umlNote.id       = graphicInformation.id
             umlNote.size     = graphicInformation.size

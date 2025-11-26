@@ -1,14 +1,18 @@
 
-from logging import Logger
-from logging import getLogger
 from typing import cast
 
+from logging import Logger
+from logging import getLogger
+
+from untangle import Element
+
 from codeallybasic.SecureConversions import SecureConversions
-from pyutmodelv2.PyutInterface import PyutInterface
+
+from umlmodel.Interface import Interface
+
 from umlshapes.links.UmlLollipopInterface import UmlLollipopInterface
 from umlshapes.shapes.UmlClass import UmlClass
 from umlshapes.types.Common import AttachmentSide
-from untangle import Element
 
 from umlshapes.ShapeTypes import LinkableUmlShapes
 
@@ -18,7 +22,7 @@ from umlio.IOTypes import umlLollipopInterfacesFactory
 
 from umlio.XMLConstants import XmlConstants
 
-from umlio.deserializer.XmlToPyut import XmlToPyut
+from umlio.deserializer.XmlToUmlModel import XmlToUmlModel
 
 
 class XmlLollipopsToUmlLollipops:
@@ -26,7 +30,7 @@ class XmlLollipopsToUmlLollipops:
 
         self.logger: Logger = getLogger(__name__)
 
-        self._xmlToPyut: XmlToPyut = XmlToPyut()
+        self._xmlToUmlMode: XmlToUmlModel = XmlToUmlModel()
 
     def deserialize(self, umlDiagramElement: Element, linkableUmlShapes: LinkableUmlShapes) -> UmlLollipopInterfaces:
 
@@ -51,9 +55,9 @@ class XmlLollipopsToUmlLollipops:
 
         Returns:   A UML Lollipop interface class
         """
-        pyutInterface: PyutInterface = self._xmlToPyut.interfaceToPyutInterface(lollipopElement)
+        interface: Interface = self._xmlToUmlMode.interfaceToModelInterface(lollipopElement)
 
-        umlLollipopInterface: UmlLollipopInterface = UmlLollipopInterface(pyutInterface=pyutInterface)
+        umlLollipopInterface: UmlLollipopInterface = UmlLollipopInterface(interface=interface)
 
         attachmentSideStr: str      = lollipopElement[XmlConstants.ATTRIBUTE_ATTACHMENT_SIDE]
         attachedToId:      str      = lollipopElement[XmlConstants.ATTRIBUTE_ATTACHED_TO_ID]
@@ -68,9 +72,9 @@ class XmlLollipopsToUmlLollipops:
 
     def _findAttachedToClass(self, attachedToId: str, linkableUmlShapes: LinkableUmlShapes) -> UmlClass:
         """
-        This method is necessary because the linkable shapes dictionary is indexed by the PyutClass ID
+        This method is necessary because the linkable shapes dictionary is indexed by the model class ID
         However, the pointer to the attached class is a UmlClass id.  All this came about because
-        lollipops reused the PyutInterface class
+        lollipops reused the model Interface class
 
         Args:
             attachedToId:

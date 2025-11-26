@@ -4,9 +4,11 @@ from typing import cast
 from logging import Logger
 from logging import getLogger
 
-from pyutmodelv2.PyutActor import PyutActor
-from umlshapes.shapes.UmlActor import UmlActor
 from untangle import Element
+
+from umlmodel.Actor import Actor
+
+from umlshapes.shapes.UmlActor import UmlActor
 
 from umlio.IOTypes import Elements
 from umlio.IOTypes import GraphicInformation
@@ -15,14 +17,14 @@ from umlio.IOTypes import umlActorsFactory
 
 from umlio.XMLConstants import XmlConstants
 
-from umlio.deserializer.XmlToPyut import XmlToPyut
+from umlio.deserializer.XmlToUmlModel import XmlToUmlModel
 
 
 class XmlActorsToUmlActors:
     def __init__(self):
         self.logger: Logger = getLogger(__name__)
 
-        self._xmlToPyut: XmlToPyut = XmlToPyut()
+        self._xmlToUmlModel: XmlToUmlModel = XmlToUmlModel()
 
     def deserialize(self, umlDiagramElement: Element) -> UmlActors:
         """
@@ -39,8 +41,8 @@ class XmlActorsToUmlActors:
             self.logger.debug(f'{actorElement}')
 
             graphicInformation: GraphicInformation = GraphicInformation.toGraphicInfo(graphicElement=actorElement)
-            pyutActor:          PyutActor           = self._xmlToPyut.actorToPyutActor(umlActorElement=actorElement)
-            umlActor:           UmlActor            = UmlActor(pyutActor=pyutActor)
+            actor:              Actor               = self._xmlToUmlModel.actorToModelActor(umlActorElement=actorElement)
+            umlActor:           UmlActor            = UmlActor(actor=actor)
 
             umlActor.id       = graphicInformation.id
             umlActor.size     = graphicInformation.size

@@ -6,7 +6,7 @@ from logging import getLogger
 
 from untangle import Element
 
-from pyutmodelv2.PyutText import PyutText
+from umlmodel.Text import Text
 
 from umlshapes.shapes.UmlText import UmlText
 
@@ -15,7 +15,7 @@ from umlio.IOTypes import GraphicInformation
 from umlio.IOTypes import UmlTexts
 from umlio.IOTypes import umlTextsFactory
 
-from umlio.deserializer.XmlToPyut import XmlToPyut
+from umlio.deserializer.XmlToUmlModel import XmlToUmlModel
 
 from umlio.XMLConstants import XmlConstants
 
@@ -30,7 +30,7 @@ class XmlTextsToUmlTexts:
 
         self.logger: Logger = getLogger(__name__)
 
-        self._xmlToPyut: XmlToPyut = XmlToPyut()
+        self._xmlToUmlModel: XmlToUmlModel = XmlToUmlModel()
 
     def deserialize(self, umlDiagramElement: Element) -> UmlTexts:
         """
@@ -48,8 +48,8 @@ class XmlTextsToUmlTexts:
             self.logger.debug(f'{textElement}')
 
             graphicInformation: GraphicInformation = GraphicInformation.toGraphicInfo(graphicElement=textElement)
-            pyutText:           PyutText           = self._xmlToPyut.textToPyutText(umlTextElement=textElement)
-            umlText:            UmlText            = UmlText(pyutText=pyutText)
+            text:               Text               = self._xmlToUmlModel.textToModelText(umlTextElement=textElement)
+            umlText:            UmlText            = UmlText(text=text)
 
             umlText.id       = graphicInformation.id
             umlText.size     = graphicInformation.size

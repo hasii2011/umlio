@@ -23,7 +23,7 @@ from umlshapes.types.UmlPosition import UmlPosition
 from umlio.IOTypes import ElementAttributes
 from umlio.IOTypes import UmlLinks
 
-from umlio.serializer.PyutToXml import PyutToXml
+from umlio.serializer.UmlModelToXml import UmlModelToXml
 from umlio.serializer.BaseUmlToXml import BaseUmlToXml
 
 from umlio.XMLConstants import XmlConstants
@@ -34,7 +34,7 @@ class UmlLinksToXml(BaseUmlToXml):
         super().__init__()
         self.logger: Logger = getLogger(__name__)
 
-        self._pyutToXml: PyutToXml = PyutToXml()
+        self._umlModelToXml: UmlModelToXml = UmlModelToXml()
 
     def serialize(self, documentTop: Element, umlLinks: UmlLinks) -> Element:
 
@@ -80,7 +80,7 @@ class UmlLinksToXml(BaseUmlToXml):
             })
             SubElement(oglLinkSubElement, XmlConstants.ELEMENT_MODEL_LINE_CONTROL_POINT, attrib=controlPointAttributes)
 
-        self._pyutToXml.pyutLinkToXml(pyutLink=umlLink.pyutLink, umlLinkElement=oglLinkSubElement)
+        self._umlModelToXml.linkToXml(link=umlLink.modelLink, umlLinkElement=oglLinkSubElement)
 
         return oglLinkSubElement
 

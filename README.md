@@ -2,6 +2,7 @@
 
 [![CircleCI](https://dl.circleci.com/status-badge/img/gh/hasii2011/umlio/tree/master.svg?style=shield)](https://dl.circleci.com/status-badge/redirect/gh/hasii2011/umlio/tree/master)
 [![Build Status](https://app.travis-ci.com/hasii2011/umlio.svg?token=xLRFkv8yzJS4p9oSFs49&branch=master)](https://app.travis-ci.com/hasii2011/umlio)
+[![Build Status](https://app.travis-ci.com/hasii2011/umlio.svg?token=xLRFkv8yzJS4p9oSFs49&branch=master)](https://app.travis-ci.com/hasii2011/umlio)
 [![PyPI version](https://badge.fury.io/py/umlio.svg)](https://badge.fury.io/py/umlio)
 [![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://GitHub.com/Naereen/StrapDown.js/graphs/commit-activity)
 
