@@ -2,6 +2,7 @@
 from pathlib import Path
 
 from codeallyadvanced.ui.UnitTestBaseW import UnitTestBaseW
+
 from umlmodel.enumerations.LinkType import LinkType
 
 from umlshapes.pubsubengine.UmlPubSubEngine import UmlPubSubEngine
@@ -9,20 +10,23 @@ from umlshapes.frames.ClassDiagramFrame import ClassDiagramFrame
 
 from umlshapes.preferences.UmlPreferences import UmlPreferences
 
+from umlio.IOTypes import UmlDocument
+
+from umlio.serializer.UmlShapesToXml import UmlShapesToXml
+
 from tests.LinkCreator import BASE_CLASS_MODEL_ID
 from tests.LinkCreator import BASE_UML_CLASS_ID
 from tests.LinkCreator import BASE_UML_CLASS_NAME
 from tests.LinkCreator import CANONICAl_LOLLIPOP_NAME
 from tests.LinkCreator import CreatedNoteLink
+from tests.LinkCreator import DESTINATION_MODEL_CLASS_ID
 from tests.LinkCreator import IMPLEMENTING_UML_CLASS_ID
 from tests.LinkCreator import IMPLEMENTING_UML_CLASS_NAME
 from tests.LinkCreator import MODEL_INTERFACE_CANONICAL_ID
+from tests.LinkCreator import SOURCE_MODEL_CLASS_ID
 from tests.LinkCreator import SUBCLASS_MODEL_ID
 from tests.LinkCreator import SUBCLASS_UML_CLASS_ID
 from tests.LinkCreator import SUBCLASS_UML_CLASS_NAME
-
-from tests.LinkCreator import SOURCE_MODEL_CLASS_ID as INT_SOURCE_PYUT_CLASS_ID
-from tests.LinkCreator import DESTINATION_MODEL_CLASS_ID as INT_DESTINATION_PYUT_CLASS_ID
 
 from tests.LinkCreator import SOURCE_UML_CLASS_ID
 from tests.LinkCreator import DESTINATION_UML_CLASS_ID
@@ -36,15 +40,8 @@ from tests.LinkCreator import LinkCreator
 
 from umlshapes.lib.ogl import OGLInitialize
 
-from umlio.IOTypes import UmlDocument
-
-from umlio.serializer.UmlShapesToXml import UmlShapesToXml
-
 from unittest import TestSuite
 from unittest import main as unitTestMain
-
-SOURCE_MODEL_CLASS_ID:      str = str(INT_SOURCE_PYUT_CLASS_ID)
-DESTINATION_MODEL_CLASS_ID: str = str(INT_DESTINATION_PYUT_CLASS_ID)
 
 
 EXPECTED_BARE_ASSOCIATION_XML: str = (

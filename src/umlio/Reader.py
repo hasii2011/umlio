@@ -59,7 +59,7 @@ class Reader:
 
     def _decompressFile(self, fileName: Path) -> str:
         """
-        Decompresses a previously Pyut compressed file
+        Decompresses a previously UML Diagrammer compressed file
 
         Args:
             fileName: Fully qualified file name with a PROJECT_SUFFIX suffix
