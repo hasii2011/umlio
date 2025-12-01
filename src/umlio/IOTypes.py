@@ -27,7 +27,7 @@ from umlshapes.types.UmlPosition import UmlPosition
 
 from umlio.XMLConstants import XmlConstants
 
-XML_VERSION: str = '12.0'
+XML_VERSION: str = '14.0'
 
 PROJECT_SUFFIX: str = '.udt'        # UML Diagramming Tool
 XML_SUFFIX:     str = '.xml'

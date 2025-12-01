@@ -44,18 +44,18 @@ from umlio.serializer.UmlShapesToXml import UmlShapesToXml
 
 from tests.umlio.UmlIOBaseTest import UmlIOBaseTest
 
-EXPECTED_EMPTY_PROJECT: str = '<?xml version=\'1.0\' encoding=\'iso-8859-1\'?>\n<UmlProject fileName="." version="12.0" codePath="/users/hasii" />'
+EXPECTED_EMPTY_PROJECT: str = '<?xml version=\'1.0\' encoding=\'iso-8859-1\'?>\n<UmlProject fileName="." version="14.0" codePath="/users/hasii" />'
 
 EXPECTED_EMPTY_DIAGRAM: str = (
     "<?xml version='1.0' encoding='iso-8859-1'?>\n"
-    '<UmlProject fileName="." version="12.0" codePath="/users/hasii">\n    '
+    '<UmlProject fileName="." version="14.0" codePath="/users/hasii">\n    '
     '<UMLDiagram documentType="Not Set" title="" scrollPositionX="1" scrollPositionY="1" pixelsPerUnitX="1" pixelsPerUnitY="1" />\n'
     '</UmlProject>'
 )
 
 EXPECTED_SINGLE_CLASS_XML: str = (
     "<?xml version='1.0' encoding='iso-8859-1'?>\n"
-    '<UmlProject fileName="." version="12.0" codePath="/users/hasii">\n'
+    '<UmlProject fileName="." version="14.0" codePath="/users/hasii">\n'
     '    <UMLDiagram documentType="Class Document" title="Unit Test Class Diagram" scrollPositionX="1" scrollPositionY="1" pixelsPerUnitX="1" pixelsPerUnitY="1">\n'
     '        <UmlClass id="play.small.long.group" width="125" height="100" x="300" y="500">\n'
     '            <ModelClass id="0" name="ClassName1" displayMethods="True" displayParameters="Unspecified" displayConstructor="Unspecified" displayDunderMethods="Unspecified" displayFields="True" displayStereotype="True" fileName="" description="" />\n'
@@ -66,7 +66,7 @@ EXPECTED_SINGLE_CLASS_XML: str = (
 
 EXPECTED_SINGLE_USE_CASE_XML: str = (
     "<?xml version='1.0' encoding='iso-8859-1'?>\n"
-    '<UmlProject fileName="." version="12.0" codePath="/users/hasii">\n'
+    '<UmlProject fileName="." version="14.0" codePath="/users/hasii">\n'
     '    <UMLDiagram documentType="Use Case Document" title="Use Case Diagram" scrollPositionX="1" scrollPositionY="1" pixelsPerUnitX="1" pixelsPerUnitY="1">\n'
     '        <UmlUseCase id="remember.central.issue.child" width="125" height="100" x="300" y="500">\n'
     '            <ModelUseCase id="1" name="I am a lonely boy" fileName="" />\n'
@@ -77,7 +77,7 @@ EXPECTED_SINGLE_USE_CASE_XML: str = (
 
 EXPECTED_SINGLE_ACTOR: str = (
     "<?xml version='1.0' encoding='iso-8859-1'?>\n"
-    '<UmlProject fileName="." version="12.0" codePath="/users/hasii">\n'
+    '<UmlProject fileName="." version="14.0" codePath="/users/hasii">\n'
     '    <UMLDiagram documentType="Use Case Document" title="Use Case Actor Diagram" scrollPositionX="1" scrollPositionY="1" pixelsPerUnitX="1" pixelsPerUnitY="1">\n'
     '        <UmlActor id="remember.central.issue.child" width="233" height="233" x="500" y="200">\n'
     '            <ModelActor id="0" name="LoboMalo" fileName="" />\n'
@@ -88,7 +88,7 @@ EXPECTED_SINGLE_ACTOR: str = (
 
 EXPECTED_SINGLE_NOTE: str = (
     "<?xml version='1.0' encoding='iso-8859-1'?>\n"
-    '<UmlProject fileName="." version="12.0" codePath="/users/hasii">\n'
+    '<UmlProject fileName="." version="14.0" codePath="/users/hasii">\n'
     '    <UMLDiagram documentType="Use Case Document" title="Uml Note Diagram" scrollPositionX="1" scrollPositionY="1" pixelsPerUnitX="1" pixelsPerUnitY="1">\n'
     '        <UmlNote id="remember.the.Alamo" width="233" height="233" x="666" y="777">\n'
     '            <ModelNote id="777" content="I am the best MAGA Note" fileName="" />\n'
@@ -99,7 +99,7 @@ EXPECTED_SINGLE_NOTE: str = (
 
 EXPECTED_SINGLE_TEXT: str = (
     "<?xml version='1.0' encoding='iso-8859-1'?>\n"
-    '<UmlProject fileName="." version="12.0" codePath="/users/hasii">\n'
+    '<UmlProject fileName="." version="14.0" codePath="/users/hasii">\n'
     '    <UMLDiagram documentType="Class Document" title="Uml Text Diagram" scrollPositionX="1" scrollPositionY="1" pixelsPerUnitX="1" pixelsPerUnitY="1">\n'
     '        <UmlText id="remember.the.Alamo" width="150" height="50" x="1024" y="768">\n'
     '            <ModelText id="1789" content="Soy el mejor texto americano" />\n'

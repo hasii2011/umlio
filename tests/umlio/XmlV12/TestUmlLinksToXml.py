@@ -46,7 +46,7 @@ from unittest import main as unitTestMain
 
 EXPECTED_BARE_ASSOCIATION_XML: str = (
     "<?xml version='1.0' encoding='iso-8859-1'?>\n"
-    '<UmlProject fileName="." version="12.0" codePath="/users/hasii">\n'
+    '<UmlProject fileName="." version="14.0" codePath="/users/hasii">\n'
     '    <UMLDiagram documentType="Class Document" title="Bare Association Class Diagram" scrollPositionX="1" scrollPositionY="1" pixelsPerUnitX="1" pixelsPerUnitY="1">\n'
     f'        <UmlClass id="{SOURCE_UML_CLASS_ID}" width="150" height="75" x="100" y="100">\n'
     f'            <ModelClass id="{SOURCE_MODEL_CLASS_ID}" name="GeneratedClass-0" displayMethods="True" displayParameters="Unspecified" displayConstructor="Unspecified" displayDunderMethods="Unspecified" displayFields="True" displayStereotype="True" fileName="" description="" />\n'
@@ -66,7 +66,7 @@ EXPECTED_BARE_ASSOCIATION_XML: str = (
 
 EXPECTED_INHERITANCE_XML: str = (
     "<?xml version='1.0' encoding='iso-8859-1'?>\n"
-    '<UmlProject fileName="." version="12.0" codePath="/users/hasii">\n'
+    '<UmlProject fileName="." version="14.0" codePath="/users/hasii">\n'
     '    <UMLDiagram documentType="Class Document" title="Inheritance Class Diagram" scrollPositionX="1" scrollPositionY="1" pixelsPerUnitX="1" pixelsPerUnitY="1">\n'
     f'        <UmlClass id="{SUBCLASS_UML_CLASS_ID}" width="150" height="75" x="200" y="300">\n'
     f'            <ModelClass id="{SUBCLASS_MODEL_ID}" name="{SUBCLASS_UML_CLASS_NAME}" displayMethods="True" displayParameters="Unspecified" displayConstructor="Unspecified" displayDunderMethods="Unspecified" displayFields="True" displayStereotype="True" fileName="" description="" />\n'
@@ -85,7 +85,7 @@ EXPECTED_INHERITANCE_XML: str = (
 
 EXPECTED_INTERFACE_XML: str = (
     "<?xml version='1.0' encoding='iso-8859-1'?>\n"
-    '<UmlProject fileName="." version="12.0" codePath="/users/hasii">\n'
+    '<UmlProject fileName="." version="14.0" codePath="/users/hasii">\n'
     '    <UMLDiagram documentType="Class Document" title="Interface Class Diagram" scrollPositionX="1" scrollPositionY="1" pixelsPerUnitX="1" pixelsPerUnitY="1">\n'
     '        <UmlClass id="valley.darkness.implementor" width="150" height="75" x="4444" y="4444">\n'
     '            <ModelClass id="4444" name="Implementor" displayMethods="True" displayParameters="Unspecified" displayConstructor="Unspecified" displayDunderMethods="Unspecified" displayFields="True" displayStereotype="True" fileName="" description="" />\n'
@@ -104,7 +104,7 @@ EXPECTED_INTERFACE_XML: str = (
 
 EXPECTED_LOLLIPOP_XML: str = (
     "<?xml version='1.0' encoding='iso-8859-1'?>\n"
-    f'<UmlProject fileName="." version="12.0" codePath="/users/hasii">\n'
+    f'<UmlProject fileName="." version="14.0" codePath="/users/hasii">\n'
     f'    <UMLDiagram documentType="Class Document" title="Lollipop Class Diagram" scrollPositionX="1" scrollPositionY="1" pixelsPerUnitX="1" pixelsPerUnitY="1">\n'
     f'        <UmlClass id="valley.darkness.implementor" width="150" height="75" x="3333" y="3333">\n'
     f'            <ModelClass id="4444" name="{IMPLEMENTING_UML_CLASS_NAME}" displayMethods="True" displayParameters="Unspecified" displayConstructor="Unspecified" displayDunderMethods="Unspecified" displayFields="True" displayStereotype="True" fileName="" description="" />\n'
