@@ -192,7 +192,7 @@ class DiagramManager(Simplebook):
         for umlLink in umlLinks:
             umlLink.umlFrame = diagramFrame
             if isinstance(umlLink, UmlInheritance):
-                umInheritance: UmlInheritance = cast(UmlInheritance, umlLink)
+                umInheritance: UmlInheritance = umlLink
                 subClass  = umInheritance.subClass
                 baseClass = umInheritance.baseClass
 
@@ -201,23 +201,21 @@ class DiagramManager(Simplebook):
                 diagramFrame.umlDiagram.AddShape(umInheritance)
                 umInheritance.Show(True)
 
-                umlLinkEventHandler: UmlLinkEventHandler = UmlLinkEventHandler(umlLink=umlLink)
+                umlLinkEventHandler: UmlLinkEventHandler = UmlLinkEventHandler(umlLink=umlLink, previousEventHandler=umlLink.GetEventHandler())
                 umlLinkEventHandler.umlPubSubEngine = self._umlPubSubEngine
-                umlLinkEventHandler.SetPreviousHandler(umlLink.GetEventHandler())
                 umlLink.SetEventHandler(umlLinkEventHandler)
 
             elif isinstance(umlLink, UmlNoteLink):
-                umlNoteLink: UmlNoteLink = cast(UmlNoteLink, umlLink)
-                sourceNote:       UmlNote  = umlNoteLink.sourceNote
-                destinationClass: UmlClass = umlNoteLink.destinationClass
+                umlNoteLink:      UmlNoteLink = umlLink
+                sourceNote:       UmlNote     = umlNoteLink.sourceNote
+                destinationClass: UmlClass    = umlNoteLink.destinationClass
 
                 sourceNote.addLink(umlNoteLink=umlNoteLink, umlClass=destinationClass)
 
                 diagramFrame.umlDiagram.AddShape(umlNoteLink)
                 umlNoteLink.Show(True)
-                eventHandler: UmlNoteLinkEventHandler = UmlNoteLinkEventHandler(umlNoteLink=umlNoteLink)
+                eventHandler: UmlNoteLinkEventHandler = UmlNoteLinkEventHandler(umlNoteLink=umlNoteLink, previousEventHandler=umlNoteLink.GetEventHandler())
                 eventHandler.umlPubSubEngine = self._umlPubSubEngine
-                eventHandler.SetPreviousHandler(umlLink.GetEventHandler())
                 umlNoteLink.SetEventHandler(eventHandler)
             elif isinstance(umlLink, (UmlAssociation, UmlComposition, UmlAggregation)):
 
@@ -228,7 +226,7 @@ class DiagramManager(Simplebook):
                 diagramFrame.umlDiagram.AddShape(umlLink)
                 umlLink.Show(True)
 
-                umlAssociationEventHandler: UmlAssociationEventHandler = UmlAssociationEventHandler(umlAssociation=umlLink)
+                umlAssociationEventHandler: UmlAssociationEventHandler = UmlAssociationEventHandler(umlAssociation=umlLink, umlPubSubEngine=self._umlPubSubEngine)
                 umlAssociationEventHandler.umlPubSubEngine = self._umlPubSubEngine
                 umlAssociationEventHandler.SetPreviousHandler(umlLink.GetEventHandler())
                 umlLink.SetEventHandler(umlAssociationEventHandler)
@@ -245,7 +243,7 @@ class DiagramManager(Simplebook):
         umlShape.umlFrame = diagramFrame
         diagram: UmlDiagram = diagramFrame.umlDiagram
 
-        eventHandler: UmlBaseEventHandler = eventHandlerClass()
+        eventHandler: UmlBaseEventHandler = eventHandlerClass(previousEventHandler=umlShape.GetEventHandler())
         eventHandler.SetShape(umlShape)
         eventHandler.umlPubSubEngine = self._umlPubSubEngine
 
