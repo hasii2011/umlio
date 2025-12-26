@@ -6,7 +6,6 @@ from typing import cast
 from logging import Logger
 from logging import getLogger
 
-
 from wx import Window
 from wx import Simplebook
 
@@ -30,10 +29,12 @@ from umlshapes.shapes.UmlText import UmlText
 from umlshapes.shapes.UmlUseCase import UmlUseCase
 
 from umlshapes.links.UmlNoteLink import UmlNoteLink
+from umlshapes.links.UmlInterface import UmlInterface
 from umlshapes.links.UmlAssociation import UmlAssociation
 from umlshapes.links.UmlInheritance import UmlInheritance
 from umlshapes.links.UmlComposition import UmlComposition
 from umlshapes.links.UmlAggregation import UmlAggregation
+
 from umlshapes.links.UmlLollipopInterface import UmlLollipopInterface
 
 from umlshapes.UmlBaseEventHandler import UmlBaseEventHandler
@@ -189,6 +190,15 @@ class DiagramManager(Simplebook):
             umlLollipopInterface.SetEventHandler(lollipopEventHandler)
 
     def _layoutLinks(self, diagramFrame: ClassDiagramFrame | UseCaseDiagramFrame, umlLinks: UmlLinks):
+        """
+        In all instances you still have to do the addLink call between the shapes.  The
+        method respects the end positions and control points that may have been set by the
+        deserializer
+
+        Args:
+            diagramFrame:
+            umlLinks:
+        """
         for umlLink in umlLinks:
             umlLink.umlFrame = diagramFrame
             if isinstance(umlLink, UmlInheritance):
@@ -217,6 +227,7 @@ class DiagramManager(Simplebook):
                 eventHandler: UmlNoteLinkEventHandler = UmlNoteLinkEventHandler(umlNoteLink=umlNoteLink, previousEventHandler=umlNoteLink.GetEventHandler())
                 eventHandler.umlPubSubEngine = self._umlPubSubEngine
                 umlNoteLink.SetEventHandler(eventHandler)
+
             elif isinstance(umlLink, (UmlAssociation, UmlComposition, UmlAggregation)):
 
                 source = umlLink.sourceShape
@@ -225,11 +236,21 @@ class DiagramManager(Simplebook):
 
                 diagramFrame.umlDiagram.AddShape(umlLink)
                 umlLink.Show(True)
-
+                # noinspection PyUnusedLocal
                 umlAssociationEventHandler: UmlAssociationEventHandler = UmlAssociationEventHandler(umlAssociation=umlLink, umlPubSubEngine=self._umlPubSubEngine)
-                umlAssociationEventHandler.umlPubSubEngine = self._umlPubSubEngine
-                umlAssociationEventHandler.SetPreviousHandler(umlLink.GetEventHandler())
-                umlLink.SetEventHandler(umlAssociationEventHandler)
+
+            elif isinstance(umlLink, UmlInterface):
+                umlInterface: UmlInterface = umlLink
+                interfaceClass:    UmlClass = umlInterface.interfaceClass
+                implementingClass: UmlClass = umlInterface.implementingClass
+
+                implementingClass.addLink(umlLink=umlInterface, destinationClass=interfaceClass)
+                diagramFrame.umlDiagram.AddShape(umlInterface)
+                umlInterface.Show(True)
+
+                umlLinkEventHandler = UmlLinkEventHandler(umlLink=umlInterface, previousEventHandler=umlInterface.GetEventHandler())
+                umlLinkEventHandler.umlPubSubEngine = self._umlPubSubEngine
+                umlLink.SetEventHandler(umlLinkEventHandler)
 
     def _layoutShape(self, umlShape: UmlShape, diagramFrame: ClassDiagramFrame | UseCaseDiagramFrame, eventHandlerClass: type[UmlBaseEventHandler]):
         """

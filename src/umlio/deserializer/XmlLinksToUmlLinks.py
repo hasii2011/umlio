@@ -10,8 +10,6 @@ from logging import getLogger
 
 from dataclasses import dataclass
 
-from wx import Point
-
 from untangle import Element
 
 from codeallybasic.SecureConversions import SecureConversions
@@ -23,6 +21,8 @@ from umlmodel.Link import LinkSource
 from umlmodel.enumerations.LinkType import LinkType
 
 from umlshapes.types.Common import EndPoints
+from umlshapes.types.UmlPosition import UmlPosition
+from umlshapes.types.UmlPosition import UmlPositions
 
 from umlshapes.links.UmlLink import UmlLink
 from umlshapes.links.UmlNoteLink import UmlNoteLink
@@ -30,13 +30,14 @@ from umlshapes.links.UmlAssociation import UmlAssociation
 from umlshapes.links.UmlInheritance import UmlInheritance
 from umlshapes.links.UmlComposition import UmlComposition
 from umlshapes.links.UmlAggregation import UmlAggregation
+from umlshapes.links.UmlInterface import UmlInterface
 
 from umlshapes.shapes.UmlClass import UmlClass
 from umlshapes.shapes.UmlNote import UmlNote
 from umlshapes.shapes.UmlUseCase import UmlUseCase
 from umlshapes.shapes.UmlActor import UmlActor
 
-
+from umlshapes.ShapeTypes import UmlLinkGenre
 from umlshapes.ShapeTypes import LinkableUmlShape
 from umlshapes.ShapeTypes import LinkableUmlShapes
 
@@ -96,7 +97,7 @@ class XmlLinksToUmlLinks:
     def _umlLinkElementToUmlLink(self, umlLinkElement: Element, linkableUmlShapes: LinkableUmlShapes) -> UmlLink:
 
         linkElements: Elements = cast(Elements, umlLinkElement.get_elements(XmlConstants.ELEMENT_MODEL_LINK))
-        assert len(linkElements) == 1, 'There can only be one'
+        assert len(linkElements) == 1, 'There can only be one'      # noqa
 
         singleLinkElement: Element = linkElements[0]        # I hate this short cut
 
@@ -129,9 +130,9 @@ class XmlLinksToUmlLinks:
             toPosition=umlLinkAttributes.toPosition,
             fromPosition=umlLinkAttributes.fromPosition
         )
-        controlPoints: List[Point] = self._getLineControlPoints(umlLinkElement=umlLinkElement)
+        controlPoints: UmlPositions = self._getLineControlPoints(umlLinkElement=umlLinkElement)
         for cp in controlPoints:
-            umlLink.InsertLineControlPoint(point=cp)
+            umlLink.addLineControlPoint(umlPosition=cp)
 
         return umlLink
 
@@ -214,7 +215,7 @@ class XmlLinksToUmlLinks:
         else:
             assert False, f'{linkableUmlShape=} is not a destination linkable UML Shape'
 
-    def _getLineControlPoints(self, umlLinkElement: Element) -> List[Point]:
+    def _getLineControlPoints(self, umlLinkElement: Element) -> UmlPositions:
         """
          <LineControlPoint x="100" y="100" />
 
@@ -224,19 +225,19 @@ class XmlLinksToUmlLinks:
         Returns:
         """
 
-        controlPoints: List[Point] = []
+        controlPoints: UmlPositions = UmlPositions([])
 
         controlPointElements: Elements = cast(Elements, umlLinkElement.get_elements(XmlConstants.ELEMENT_MODEL_LINE_CONTROL_POINT))
         for controlPointElement in controlPointElements:
             x: int = SecureConversions.secureInteger(controlPointElement[XmlConstants.ATTRIBUTE_X])
             y: int = SecureConversions.secureInteger(controlPointElement[XmlConstants.ATTRIBUTE_Y])
 
-            point: Point = Point(x=x, y=y)
-            controlPoints.append(point)
+            umlPosition: UmlPosition = UmlPosition(x=x, y=y)
+            controlPoints.append(umlPosition)
 
         return controlPoints
 
-    def _umlLinkFactory(self, srcShape: LinkableUmlShape, link: Link, destShape: LinkableUmlShape) -> UmlLink:
+    def _umlLinkFactory(self, srcShape: LinkableUmlShape, link: Link, destShape: LinkableUmlShape) -> UmlLinkGenre:
         """
 
         Args:
@@ -245,11 +246,12 @@ class XmlLinksToUmlLinks:
             destShape:
 
         Returns:  The appropriate UML Link shape
-
         """
         if link.linkType == LinkType.INHERITANCE:
             # Note dest and source are reversed here
-            return UmlInheritance(baseClass=cast(UmlClass, destShape), link=link, subClass=cast(UmlClass, srcShape))
+            subClass:  UmlClass = srcShape              # type: ignore
+            baseClass: UmlClass = destShape             # type: ignore
+            return UmlInheritance(baseClass=baseClass, link=link, subClass=subClass)
         elif link.linkType in ASSOCIATION_LINK_TYPES:
             umlAssociation = CLASSMAP[link.linkType](link)
             #
@@ -259,9 +261,17 @@ class XmlLinksToUmlLinks:
             umlAssociation.destinationShape = destShape
             return umlAssociation
         elif link.linkType == LinkType.NOTELINK:
+            umlNote:     UmlNote     = srcShape         # type: ignore
+            umlClass:    UmlClass    = destShape        # type: ignore
             umlNoteLink: UmlNoteLink = UmlNoteLink(link=link)
-            umlNoteLink.sourceNote       = cast(UmlNote, srcShape)
-            umlNoteLink.destinationClass = cast(UmlClass, destShape)
+            umlNoteLink.sourceNote       = umlNote
+            umlNoteLink.destinationClass = umlClass
             return umlNoteLink
+        elif link.linkType == LinkType.INTERFACE:
+            implementingClass: UmlClass = srcShape      # type: ignore
+            interfaceClass:    UmlClass = destShape     # type: ignore
+            umlInterface: UmlInterface = UmlInterface(link=link, implementingClass=implementingClass, interfaceClass=interfaceClass)
+
+            return umlInterface
         else:
             assert False, f'Unknown link type, {link.linkType=}'
