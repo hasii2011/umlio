@@ -9,28 +9,27 @@ from logging import getLogger
 
 from dataclasses import dataclass
 
+from umlmodel.Link import Link
+from umlmodel.Note import Note
 from umlmodel.Class import Class
 from umlmodel.Interface import Interface
-from umlmodel.Link import Link
 from umlmodel.ModelTypes import ClassName
-from umlmodel.Note import Note
+
 from umlmodel.enumerations.LinkType import LinkType
-from umlshapes.links.UmlLollipopInterface import UmlLollipopInterface
+
+from umlshapes.links.UmlLink import UmlLink
 from umlshapes.links.UmlNoteLink import UmlNoteLink
-from umlshapes.shapes.UmlNote import UmlNote
-from umlshapes.types.Common import AttachmentSide
-
-from wx import Point
-
 from umlshapes.links.UmlInterface import UmlInterface
 from umlshapes.links.UmlInheritance import UmlInheritance
 from umlshapes.links.UmlAssociation import UmlAssociation
-from umlshapes.links.UmlLink import UmlLink
+from umlshapes.links.UmlLollipopInterface import UmlLollipopInterface
 
+from umlshapes.shapes.UmlNote import UmlNote
 from umlshapes.shapes.UmlClass import UmlClass
 
 from umlshapes.frames.DiagramFrame import DiagramFrame
 
+from umlshapes.types.Common import AttachmentSide
 from umlshapes.types.UmlPosition import UmlPosition
 
 BASE_UML_CLASS_NAME:     str = 'BaseClass'
@@ -60,7 +59,9 @@ LOLLIPOP_ATTACHMENT_SIDE:    AttachmentSide = AttachmentSide.RIGHT
 MODEL_INTERFACE_CANONICAL_ID: str            = '0xDEADBEEF'
 
 DESTINATION_UML_CLASS_NAME: str = 'DestinationClass'
-MODEL_NOTE_ID:              str = '6262'
+UML_NOTE_ID:                str = 'Note.UML.Identifier'
+MODEL_NOTE_ID:              str = 'Note.Model.Identifier'
+UML_NOTE_LINK_ID:           str = 'Note.Link.Identifier'
 
 
 @dataclass
@@ -125,17 +126,17 @@ class LinkCreator:
 
         self.logger.info(f'{sourceUmlClass.id=} {destinationUmlClass.id=}')
 
-        link: Link = self._createAssociationLink(sourceClass=sourceUmlClass.modelClass,
-                                                 destinationClass=destinationUmlClass.modelClass,
-                                                 associationCounter=associationDescription.associationCounter
-                                                 )
+        link: Link = self._createModelAssociationLink(sourceClass=sourceUmlClass.modelClass,
+                                                      destinationClass=destinationUmlClass.modelClass,
+                                                      associationCounter=associationDescription.associationCounter
+                                                      )
 
         associationDescription.associationCounter += 1
 
         umlAssociation = associationDescription.associationClass(link)
 
         umlAssociation.id = UML_LINK_CANONICAL_MONIKER
-        umlAssociation.SetCanvas(self._diagramFrame)
+        umlAssociation.umlFrame = self._diagramFrame
         if link.linkType != LinkType.LOLLIPOP:
             umlAssociation.MakeLineControlPoints(n=2)
 
@@ -152,20 +153,20 @@ class LinkCreator:
         baseModelClass:     Class = Class(name=f'{BASE_UML_CLASS_NAME}')
         subClassModelClass: Class = Class(name=f'{SUBCLASS_UML_CLASS_NAME}')
 
-        baseModelClass.id = BASE_CLASS_MODEL_ID
-        subClassModelClass.id  = SUBCLASS_MODEL_ID
+        baseModelClass.id     = BASE_CLASS_MODEL_ID
+        subClassModelClass.id = SUBCLASS_MODEL_ID
 
         baseUmlClass:     UmlClass = UmlClass(modelClass=baseModelClass)
         subClassUmlClass: UmlClass = UmlClass(modelClass=subClassModelClass)
 
-        baseUmlClass.id       = BASE_UML_CLASS_ID
-        subClassUmlClass.id   = SUBCLASS_UML_CLASS_ID
+        baseUmlClass.id     = BASE_UML_CLASS_ID
+        subClassUmlClass.id = SUBCLASS_UML_CLASS_ID
 
         baseUmlClass.position     = UmlPosition(x=100, y=100)
         subClassUmlClass.position = UmlPosition(x=200, y=300)
 
-        baseUmlClass.SetCanvas(self._diagramFrame)
-        subClassUmlClass.SetCanvas(self._diagramFrame)
+        baseUmlClass.umlFrame     = self._diagramFrame
+        subClassUmlClass.umlFrame = self._diagramFrame
 
         inheritance: Link = Link(linkType=LinkType.INHERITANCE, source=subClassModelClass, destination=baseModelClass)
 
@@ -173,12 +174,13 @@ class LinkCreator:
 
         umlInheritance.id = UML_LINK_CANONICAL_MONIKER
 
-        umlInheritance.SetCanvas(self._diagramFrame)
+        umlInheritance.umlFrame = self._diagramFrame
         umlInheritance.MakeLineControlPoints(n=2)       # Make this configurable
 
         umlInheritance.SetEnds(x1=0, y1=0, x2=0, y2=0)
-        umlInheritance.InsertLineControlPoint(point=Point(x=100, y=100))
-        umlInheritance.InsertLineControlPoint(point=Point(x=200, y=200))
+
+        umlInheritance.addLineControlPoint(umlPosition=UmlPosition(x=100, y=100))
+        umlInheritance.addLineControlPoint(umlPosition=UmlPosition(x=200, y=200))
 
         # REMEMBER:   from subclass to base class
         subClassUmlClass.addLink(umlLink=umlInheritance, destinationClass=baseUmlClass)
@@ -206,8 +208,8 @@ class LinkCreator:
         interfaceUmlClass.position    = UmlPosition(x=3333, y=3333)
         implementingUmlClass.position = UmlPosition(x=4444, y=4444)
 
-        interfaceUmlClass.SetCanvas(self._diagramFrame)
-        implementingUmlClass.SetCanvas(self._diagramFrame)
+        interfaceUmlClass.umlFrame    = self._diagramFrame
+        implementingUmlClass.umlFrame = self._diagramFrame
 
         interface: Link = Link(linkType=LinkType.INTERFACE, source=implementingModelClass, destination=interfaceModelClass)
 
@@ -215,11 +217,11 @@ class LinkCreator:
 
         umlInterface.id = UML_LINK_CANONICAL_MONIKER
 
-        umlInterface.SetCanvas(self._diagramFrame)
+        umlInterface.umlFrame = self._diagramFrame
         umlInterface.MakeLineControlPoints(n=2)       # Make this configurable
 
-        umlInterface.InsertLineControlPoint(point=Point(x=372, y=433))
-        umlInterface.InsertLineControlPoint(point=Point(x=400, y=433))
+        umlInterface.addLineControlPoint(umlPosition=UmlPosition(x=372, y=433))
+        umlInterface.addLineControlPoint(umlPosition=UmlPosition(x=400, y=433))
 
         # REMEMBER:   from subclass to base class
         implementingUmlClass.addLink(umlLink=umlInterface, destinationClass=interfaceUmlClass)
@@ -268,16 +270,24 @@ class LinkCreator:
         note.id = MODEL_NOTE_ID
 
         sourceUmlNote: UmlNote  = UmlNote(note=note)
+        sourceUmlNote.id       = UML_NOTE_ID
         sourceUmlNote.position = UmlPosition(x=300, y=200)
         sourceUmlNote.modelNote = note
 
-        link: Link = Link(linkType=LinkType.NOTELINK)
-        link.source      = note
-        link.destination = destinationClass
+        modelLink: Link = Link(linkType=LinkType.NOTELINK)
+        modelLink.source      = note
+        modelLink.destination = destinationClass
 
-        umlNoteLink: UmlNoteLink = UmlNoteLink(link=link)
+        umlNoteLink: UmlNoteLink = UmlNoteLink(link=modelLink)
+        umlNoteLink.id               = UML_NOTE_LINK_ID
         umlNoteLink.sourceNote       = sourceUmlNote
         umlNoteLink.destinationClass = destinationUmlClass
+
+        umlNoteLink.addLineControlPoint(umlPosition=UmlPosition(x=372, y=433))
+        umlNoteLink.addLineControlPoint(umlPosition=UmlPosition(x=400, y=433))
+
+        sourceUmlNote.umlFrame = self._diagramFrame
+        sourceUmlNote.addLink(umlNoteLink=umlNoteLink, umlClass=destinationUmlClass)
 
         return CreatedNoteLink(
             destinationUmlClass=destinationUmlClass,
@@ -287,9 +297,9 @@ class LinkCreator:
 
     def _createUmlClassPair(self, classCounter: int) -> Tuple[UmlClass, UmlClass]:
 
-        sourceClass:      Class = self._createSimpleClass(classCounter=classCounter)
+        sourceClass:      Class = self._createSimpleModelClass(classCounter=classCounter)
         classCounter += 1
-        destinationClass: Class = self._createSimpleClass(classCounter=classCounter)
+        destinationClass: Class = self._createSimpleModelClass(classCounter=classCounter)
 
         sourceClass.id      = SOURCE_MODEL_CLASS_ID
         destinationClass.id = DESTINATION_MODEL_CLASS_ID
@@ -300,22 +310,23 @@ class LinkCreator:
         sourceUmlClass.position      = UmlPosition(x=100, y=100)
         destinationUmlClass.position = UmlPosition(x=200, y=300)
 
-        sourceUmlClass.SetCanvas(self._diagramFrame)
-        destinationUmlClass.SetCanvas(self._diagramFrame)
+        sourceUmlClass.umlFrame      = self._diagramFrame
+        sourceUmlClass.umlFrame      = self._diagramFrame
+        destinationUmlClass.umlFrame = self._diagramFrame
 
         sourceUmlClass.id      = SOURCE_UML_CLASS_ID
         destinationUmlClass.id = DESTINATION_UML_CLASS_ID
 
         return sourceUmlClass, destinationUmlClass
 
-    def _createSimpleClass(self, classCounter: int) -> Class:
+    def _createSimpleModelClass(self, classCounter: int) -> Class:
 
         className:  str   = f'GeneratedClass-{classCounter}'
         modelClass: Class = Class(name=className)
 
         return modelClass
 
-    def _createAssociationLink(self, sourceClass: Class, destinationClass: Class, associationCounter: int) -> Link:
+    def _createModelAssociationLink(self, sourceClass: Class, destinationClass: Class, associationCounter: int) -> Link:
 
         name: str = f'Association-{associationCounter}'
 
@@ -329,7 +340,7 @@ class LinkCreator:
 
         return link
 
-    def _createInheritanceLink(self, inheritanceCounter: int, baseUmlClass: UmlClass, subUmlClass: UmlClass) -> Link:
+    def _createModelInheritanceLink(self, inheritanceCounter: int, baseUmlClass: UmlClass, subUmlClass: UmlClass) -> Link:
 
         name: str = f'Inheritance {inheritanceCounter}'
 

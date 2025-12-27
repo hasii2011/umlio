@@ -13,6 +13,9 @@ from xml.etree.ElementTree import SubElement
 from umlshapes.types.DeltaXY import DeltaXY
 from umlshapes.links.UmlLink import UmlLink
 from umlshapes.links.UmlAssociation import UmlAssociation
+from umlshapes.links.UmlInheritance import UmlInheritance
+from umlshapes.links.UmlInterface import UmlInterface
+from umlshapes.links.UmlNoteLink import UmlNoteLink
 from umlshapes.links.UmlAssociationLabel import UmlAssociationLabel
 
 from umlshapes.links.eventhandlers.UmlLinkEventHandler import LineControlPoints
@@ -44,9 +47,20 @@ class UmlLinksToXml(BaseUmlToXml):
         return documentTop
 
     def _umlLinkToXml(self, documentElement: Element, umlLink: UmlLink) -> Element:
+        """
+        Nothing special about inheritance and interface links as all their attributes
+        are picked up as standard link attributes;  They need no additional sub elements
+        other than the control points which are standard
+        Args:
+            documentElement:
+            umlLink:
+
+        Returns:  The DOM element that represents the links
+
+        """
 
         attributes:        ElementAttributes = self._umlLinkAttributes(umlLink=umlLink)
-        oglLinkSubElement: Element           = SubElement(documentElement, XmlConstants.ELEMENT_UML_LINK, attrib=attributes)
+        umlLinkSubElement: Element           = SubElement(documentElement, XmlConstants.ELEMENT_UML_LINK, attrib=attributes)
 
         if isinstance(umlLink, UmlAssociation):
 
@@ -54,7 +68,7 @@ class UmlLinksToXml(BaseUmlToXml):
             src:             UmlAssociationLabel = umlLink.sourceCardinality
             dst:             UmlAssociationLabel = umlLink.destinationCardinality
             associationLabels = {
-                XmlConstants.ELEMENT_ASSOCIATION_LABEL:      associationName,
+                XmlConstants.ELEMENT_ASSOCIATION_LABEL:             associationName,
                 XmlConstants.ELEMENT_ASSOCIATION_SOURCE_LABEL:      src,
                 XmlConstants.ELEMENT_ASSOCIATION_DESTINATION_LABEL: dst
             }
@@ -68,7 +82,15 @@ class UmlLinksToXml(BaseUmlToXml):
                     XmlConstants.ATTRIBUTE_DELTA_Y: str(linkDelta.deltaY),
                 })
                 # noinspection PyUnusedLocal
-                labelElement: Element = SubElement(oglLinkSubElement, eltName, attrib=labelAttributes)
+                labelElement: Element = SubElement(umlLinkSubElement, eltName, attrib=labelAttributes)
+        elif isinstance(umlLink, UmlInheritance):
+            pass                                        # Nothing special here
+        elif isinstance(umlLink, UmlInterface):
+            pass                                        # Nothing special here
+        elif isinstance(umlLink, UmlNoteLink):
+            pass
+        else:
+            assert False, 'Should never come here'
 
         lineControlPoints: LineControlPoints = umlLink.GetLineControlPoints()
         realControlPoints: LineControlPoints = self._removeEndPoints(umlLink=umlLink, lineControlPoints=lineControlPoints)
@@ -78,11 +100,11 @@ class UmlLinksToXml(BaseUmlToXml):
                 XmlConstants.ATTRIBUTE_X: str(wxPoint.x),
                 XmlConstants.ATTRIBUTE_Y: str(wxPoint.y),
             })
-            SubElement(oglLinkSubElement, XmlConstants.ELEMENT_MODEL_LINE_CONTROL_POINT, attrib=controlPointAttributes)
+            SubElement(umlLinkSubElement, XmlConstants.ELEMENT_MODEL_LINE_CONTROL_POINT, attrib=controlPointAttributes)
 
-        self._umlModelToXml.linkToXml(link=umlLink.modelLink, umlLinkElement=oglLinkSubElement)
+        self._umlModelToXml.linkToXml(link=umlLink.modelLink, umlLinkElement=umlLinkSubElement)
 
-        return oglLinkSubElement
+        return umlLinkSubElement
 
     def _umlLinkAttributes(self, umlLink: UmlLink) -> ElementAttributes:
 

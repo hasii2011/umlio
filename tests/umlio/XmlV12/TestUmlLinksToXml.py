@@ -10,27 +10,29 @@ from umlshapes.frames.ClassDiagramFrame import ClassDiagramFrame
 
 from umlshapes.preferences.UmlPreferences import UmlPreferences
 
+from tests.LinkCreator import MODEL_NOTE_ID
+from tests.LinkCreator import UML_NOTE_ID
+from tests.LinkCreator import UML_NOTE_LINK_ID
 from umlio.IOTypes import UmlDocument
 
 from umlio.serializer.UmlShapesToXml import UmlShapesToXml
 
-from tests.LinkCreator import BASE_CLASS_MODEL_ID
-from tests.LinkCreator import BASE_UML_CLASS_ID
-from tests.LinkCreator import BASE_UML_CLASS_NAME
-from tests.LinkCreator import CANONICAl_LOLLIPOP_NAME
 from tests.LinkCreator import CreatedNoteLink
-from tests.LinkCreator import DESTINATION_MODEL_CLASS_ID
+from tests.LinkCreator import BASE_UML_CLASS_ID
+from tests.LinkCreator import SUBCLASS_MODEL_ID
+from tests.LinkCreator import BASE_CLASS_MODEL_ID
+from tests.LinkCreator import SOURCE_UML_CLASS_ID
+from tests.LinkCreator import BASE_UML_CLASS_NAME
+from tests.LinkCreator import SOURCE_MODEL_CLASS_ID
+from tests.LinkCreator import SUBCLASS_UML_CLASS_ID
+from tests.LinkCreator import CANONICAl_LOLLIPOP_NAME
+from tests.LinkCreator import SUBCLASS_UML_CLASS_NAME
+from tests.LinkCreator import DESTINATION_UML_CLASS_ID
 from tests.LinkCreator import IMPLEMENTING_UML_CLASS_ID
+from tests.LinkCreator import UML_LINK_CANONICAL_MONIKER
+from tests.LinkCreator import DESTINATION_MODEL_CLASS_ID
 from tests.LinkCreator import IMPLEMENTING_UML_CLASS_NAME
 from tests.LinkCreator import MODEL_INTERFACE_CANONICAL_ID
-from tests.LinkCreator import SOURCE_MODEL_CLASS_ID
-from tests.LinkCreator import SUBCLASS_MODEL_ID
-from tests.LinkCreator import SUBCLASS_UML_CLASS_ID
-from tests.LinkCreator import SUBCLASS_UML_CLASS_NAME
-
-from tests.LinkCreator import SOURCE_UML_CLASS_ID
-from tests.LinkCreator import DESTINATION_UML_CLASS_ID
-from tests.LinkCreator import UML_LINK_CANONICAL_MONIKER
 
 from umlio.IOTypes import UmlDocumentTitle
 from umlio.IOTypes import UmlDocumentType
@@ -118,6 +120,22 @@ EXPECTED_LOLLIPOP_XML: str = (
     f'</UmlProject>'
 )
 
+EXPECTED_NOTE_LINK_XML: str = (
+    "<?xml version='1.0' encoding='iso-8859-1'?>\n"
+    f'<UmlProject fileName="." version="14.0" codePath="/users/hasii">\n'
+    f'    <UMLDiagram documentType="Class Document" title="Note Link Diagram" scrollPositionX="1" scrollPositionY="1" pixelsPerUnitX="1" pixelsPerUnitY="1">\n'
+    f'        <UmlClass id="{DESTINATION_UML_CLASS_ID}" width="150" height="75" x="300" y="100">\n'
+    f'            <ModelClass id="{DESTINATION_MODEL_CLASS_ID}" name="DestinationClass" displayMethods="True" displayParameters="Unspecified" displayConstructor="Unspecified" displayDunderMethods="Unspecified" displayFields="True" displayStereotype="True" fileName="" description="" />\n'
+    f'        </UmlClass>\n'
+    f'        <UmlNote id="{UML_NOTE_ID}" width="150" height="50" x="300" y="200">\n'
+    f'            <ModelNote id="{MODEL_NOTE_ID}" content="I am a note" fileName="" />\n'
+    f'        </UmlNote>\n'
+    f'        <UmlLink id="{UML_NOTE_LINK_ID}" fromX="375" fromY="200" toX="375" toY="174" spline="False">\n'
+    f'            <ModelLink name="" type="NOTELINK" sourceId="{MODEL_NOTE_ID}" destinationId="{DESTINATION_MODEL_CLASS_ID}" bidirectional="False" sourceCardinalityValue="" destinationCardinalityValue="" />\n'
+    f'        </UmlLink>\n'
+    f'    </UMLDiagram>\n'
+    f'</UmlProject>'
+)
 
 class TestUmlLinksToXml(UnitTestBaseW):
     """
@@ -150,16 +168,19 @@ class TestUmlLinksToXml(UnitTestBaseW):
         umlShapesToXml:  UmlShapesToXml = self._createXmlCreator()
         noteLinkDiagram: UmlDocument    = self._createUmlDiagram(UmlDocumentType.CLASS_DOCUMENT, 'Note Link Diagram')
 
-        createdLink: CreatedNoteLink = self._linkCreator.createNoteLink()
+        createNoteLink: CreatedNoteLink = self._linkCreator.createNoteLink()
 
-        noteLinkDiagram.umlClasses.append(createdLink.destinationUmlClass)
-        noteLinkDiagram.umlNotes.append(createdLink.sourceNote)
+        noteLinkDiagram.umlClasses.append(createNoteLink.destinationUmlClass)
+        noteLinkDiagram.umlNotes.append(createNoteLink.sourceNote)
+        noteLinkDiagram.umlLinks.append(createNoteLink.umlNoteLink)
 
         umlShapesToXml.serialize(umlDiagram=noteLinkDiagram)
 
         noteLinkXml: str = umlShapesToXml.xml
 
         self._debugWriteToFile('NoteLink.xml', xml=noteLinkXml)
+        self.maxDiff = None
+        self.assertEqual(EXPECTED_NOTE_LINK_XML, noteLinkXml, 'UML Note Link serialization changed')
 
     def testBareAssociation(self):
 
