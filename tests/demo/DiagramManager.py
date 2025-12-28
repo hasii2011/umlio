@@ -6,6 +6,7 @@ from typing import cast
 from logging import Logger
 from logging import getLogger
 
+from umlshapes.frames.DiagramFrame import DiagramFrame
 from wx import Window
 from wx import Simplebook
 
@@ -16,25 +17,30 @@ from umlshapes.frames.ClassDiagramFrame import ClassDiagramFrame
 from umlshapes.frames.SequenceDiagramFrame import SequenceDiagramFrame
 from umlshapes.frames.UseCaseDiagramFrame import UseCaseDiagramFrame
 
-from umlshapes.shapes.eventhandlers.UmlClassEventHandler import UmlClassEventHandler
-from umlshapes.shapes.eventhandlers.UmlActorEventHandler import UmlActorEventHandler
 from umlshapes.shapes.eventhandlers.UmlNoteEventHandler import UmlNoteEventHandler
 from umlshapes.shapes.eventhandlers.UmlTextEventHandler import UmlTextEventHandler
+from umlshapes.shapes.eventhandlers.UmlActorEventHandler import UmlActorEventHandler
+from umlshapes.shapes.eventhandlers.UmlClassEventHandler import UmlClassEventHandler
 from umlshapes.shapes.eventhandlers.UmlUseCaseEventHandler import UmlUseCaseEventHandler
 
-from umlshapes.shapes.UmlActor import UmlActor
-from umlshapes.shapes.UmlClass import UmlClass
+from umlshapes.ShapeTypes import UmlShapes
+
+from umlshapes.frames.UmlFrame import UmlFrame
+
 from umlshapes.shapes.UmlNote import UmlNote
 from umlshapes.shapes.UmlText import UmlText
+from umlshapes.shapes.UmlActor import UmlActor
+from umlshapes.shapes.UmlClass import UmlClass
 from umlshapes.shapes.UmlUseCase import UmlUseCase
+from umlshapes.shapes.UmlControlPoint import UmlControlPoint
 
+from umlshapes.links.UmlLink import UmlLink
 from umlshapes.links.UmlNoteLink import UmlNoteLink
 from umlshapes.links.UmlInterface import UmlInterface
 from umlshapes.links.UmlAssociation import UmlAssociation
 from umlshapes.links.UmlInheritance import UmlInheritance
 from umlshapes.links.UmlComposition import UmlComposition
 from umlshapes.links.UmlAggregation import UmlAggregation
-
 from umlshapes.links.UmlLollipopInterface import UmlLollipopInterface
 
 from umlshapes.UmlBaseEventHandler import UmlBaseEventHandler
@@ -90,6 +96,48 @@ class DiagramManager(Simplebook):
         self._createPages()
 
         self.SetSelection(0)
+
+    @property
+    def umlDocuments(self) -> UmlDocuments:
+        """
+        The input document at UI creation may be out of date.  So recreate it by
+        re-reading the shapes from the frames;  Update the internal variable and
+        return it
+
+        Returns:  The updated UML Documents
+
+        """
+        umlDocuments: UmlDocuments = UmlDocuments({})
+        pageCount: int = self.GetPageCount()
+
+        for pageIdx in range(0, pageCount):
+
+            umlDocument: UmlDocument = UmlDocument()
+            page:         Window = self.GetPage(pageIdx)
+            currentTitle: str    = self.GetPageText(pageIdx)
+
+            if isinstance(page, ClassDiagramFrame):
+                classDiagramFrame: ClassDiagramFrame = page
+                umlDocument.documentType = UmlDocumentType.CLASS_DOCUMENT
+                umlDocument = self._toBasicUmlDocument(umlDocument=umlDocument, documentTitle=currentTitle, diagramFrame=classDiagramFrame)
+            elif isinstance(page, UseCaseDiagramFrame):
+                useCaseDiagramFrame: UseCaseDiagramFrame = page
+                umlDocument.documentType = UmlDocumentType.USE_CASE_DOCUMENT
+                umlDocument = self._toBasicUmlDocument(umlDocument=umlDocument, documentTitle=currentTitle, diagramFrame=useCaseDiagramFrame)
+                self.logger.warning('Not yet implemented')
+            elif isinstance(page, SequenceDiagramFrame):
+                umlDocument.documentType = UmlDocumentType.SEQUENCE_DOCUMENT
+                sequenceDiagramFrame: SequenceDiagramFrame = page
+                umlDocument = self._toBasicUmlDocument(umlDocument=umlDocument, documentTitle=currentTitle, diagramFrame=sequenceDiagramFrame)
+                self.logger.warning('Not yet implemented')
+            else:
+                assert False, 'No such frame type'
+
+            umlDocument = self._populateUmlDocument(page=page, umlDocument=umlDocument)
+            umlDocuments[umlDocument.documentTitle] = umlDocument
+
+        self._umlDocuments = umlDocuments
+        return self._umlDocuments
 
     def setPage(self, umlDocumentTitle: UmlDocumentTitle):
         self.SetSelection(self._diagramTitleToPage[umlDocumentTitle])
@@ -275,3 +323,64 @@ class DiagramManager(Simplebook):
         umlShape.Show(True)
 
         diagramFrame.refresh()
+
+    def _toBasicUmlDocument(self, umlDocument: UmlDocument, documentTitle: str, diagramFrame: DiagramFrame) -> UmlDocument:
+        """
+        Document type set by caller
+        Args:
+            umlDocument:    Partial UML Document
+            documentTitle:  The string from the tab (Not visible but maintained)
+            diagramFrame:   The associated diagram frame
+
+        Returns:  The updated UML Document (additional meta data)
+        """
+        scrollPosX, scrollPosY = diagramFrame.GetViewStart()
+
+        xUnit, yUnit = diagramFrame.GetScrollPixelsPerUnit()
+
+        umlDocument.documentTitle   = UmlDocumentTitle(documentTitle)
+        umlDocument.scrollPositionX = scrollPosX
+        umlDocument.scrollPositionY = scrollPosY
+        umlDocument.pixelsPerUnitX  = xUnit
+        umlDocument.pixelsPerUnitY  = yUnit
+
+        return umlDocument
+
+    def _populateUmlDocument(self, page: Window, umlDocument: UmlDocument) -> UmlDocument:
+
+        umlFrame: UmlFrame = cast(UmlFrame, page)
+
+        umlShapes: UmlShapes = umlFrame.umlShapes
+
+        for umlShape in umlShapes:
+            # noinspection PyUnusedLocal
+            match umlShape:
+                case UmlClass() as umlShape:
+                    umlDocument.umlClasses.append(umlShape)
+                case UmlInheritance() | UmlInterface() | UmlAssociation() | UmlNoteLink() as umlShape:
+                    umlDocument.umlLinks.append(umlShape)
+                case UmlLollipopInterface() as umlShape:
+                    umlDocument.umlLinks.append(cast(UmlLink, umlShape))  # temp cast until umlio supports UmlLollipopInterfaces
+                case UmlNote() as umlShape:
+                    umlDocument.umlNotes.append(umlShape)
+                case UmlText() as umlShape:
+                    umlDocument.umlTexts.append(umlShape)
+                case UmlUseCase() as umlShape:
+                    umlDocument.umlUseCases.append(umlShape)
+                case UmlActor() as umlShape:
+                    umlDocument.umlActors.append(umlShape)
+                case UmlControlPoint() as umlShape:
+                    pass
+                # case OglSDMessage() as umlShape:  # Put here so it does not fall into OglLink
+                #     oglSDMessage: OglSDMessage = cast(OglSDMessage, umlShape)
+                #     modelId: int = oglSDMessage.object.id
+                #     oglDocument.oglSDMessages[modelId] = oglSDMessage
+                #
+                # case OglSDInstance() as umlShape:
+                #     oglSDInstance: OglSDInstance = cast(OglSDInstance, umlShape)
+                #     modelId = oglSDInstance.SDInstance.id
+                #     umlDocument.oglSDInstances[modelId] = oglSDInstance
+                case _:
+                    self.logger.warning(f'Unknown Uml object type: {umlShape}, not saved')
+
+        return umlDocument

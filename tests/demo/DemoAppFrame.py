@@ -1,26 +1,27 @@
 
-from logging import Logger
-from logging import getLogger
-from pathlib import Path
 from typing import List
 from typing import cast
 
-from wx import CallAfter
-from wx import CommandEvent
-from wx import DEFAULT_FRAME_STYLE
+from logging import Logger
+from logging import getLogger
+
+from pathlib import Path
+
+from wx import FD_OPEN
+from wx import ID_EXIT
 from wx import EVT_MENU
 from wx import FD_CHANGE_DIR
 from wx import FD_FILE_MUST_EXIST
-from wx import FD_OPEN
+from wx import DEFAULT_FRAME_STYLE
 from wx import FRAME_FLOAT_ON_PARENT
-from wx import FileSelector
-from wx import ID_EXIT
 
 from wx import Menu
 from wx import MenuBar
 from wx import NB_LEFT
 from wx import Notebook
-from wx.core import CallLater
+from wx import CallLater
+from wx import FileSelector
+from wx import CommandEvent
 
 from wx.lib.sized_controls import SizedFrame
 from wx.lib.sized_controls import SizedPanel
@@ -36,15 +37,16 @@ from umlio.IOTypes import XML_SUFFIX
 from umlio.IOTypes import PROJECT_SUFFIX
 
 from umlio.Reader import Reader
+from umlio.Writer import Writer
 
 from tests.demo.DemoCommon import Identifiers
 from tests.demo.ProjectPanel import ProjectPanel
 
-FRAME_WIDTH:  int = 800
-FRAME_HEIGHT: int = 400
+FRAME_WIDTH:  int = 960
+FRAME_HEIGHT: int = 640
 
 PROJECT_WILDCARD: str = f'UML Diagrammer files (*.{PROJECT_SUFFIX})|*{PROJECT_SUFFIX}'
-XML_WILDCARD:     str = f'Extensible Markup Language (*.{XML_SUFFIX})|*{XML_SUFFIX}'
+XML_WILDCARD:     str = f'UML Diagrammer XML   (*.{XML_SUFFIX})|*{XML_SUFFIX}'
 
 
 class DemoAppFrame(SizedFrame):
@@ -77,7 +79,8 @@ class DemoAppFrame(SizedFrame):
         fileMenu: Menu    = Menu()
 
         fileMenu.Append(Identifiers.ID_OPEN_PROJECT_FILE, 'Open Project')
-        fileMenu.Append(Identifiers.ID_OPEN_XML_FILE,     'Open Xml Diagram')
+        fileMenu.Append(Identifiers.ID_OPEN_XML_FILE,     'Open XML Diagram')
+        fileMenu.Append(Identifiers.ID_WRITE_XML_FILE,    'Write XML Diagram')
         fileMenu.AppendSeparator()
         fileMenu.Append(ID_EXIT, '&Quit', "Quit Application")
         fileMenu.AppendSeparator()
@@ -88,8 +91,9 @@ class DemoAppFrame(SizedFrame):
         self.SetMenuBar(menuBar)
 
         # self.Bind(EVT_MENU, self._onOglPreferences, id=ID_PREFERENCES)
-        self.Bind(EVT_MENU, self._onLoadProject, id=Identifiers.ID_OPEN_PROJECT_FILE)
-        self.Bind(EVT_MENU, self._onLoadXmlFile, id=Identifiers.ID_OPEN_XML_FILE)
+        self.Bind(EVT_MENU, self._onLoadProject,  id=Identifiers.ID_OPEN_PROJECT_FILE)
+        self.Bind(EVT_MENU, self._onLoadXmlFile,  id=Identifiers.ID_OPEN_XML_FILE)
+        self.Bind(EVT_MENU, self._onWriteXmlFile, id=Identifiers.ID_WRITE_XML_FILE)
 
     # noinspection PyUnusedLocal
     def _onLoadProject(self, event: CommandEvent):
@@ -121,6 +125,17 @@ class DemoAppFrame(SizedFrame):
 
         self._loadNewProject(umlProject)
 
+    # noinspection PyUnusedLocal
+    def _onWriteXmlFile(self, event: CommandEvent):
+
+        specifiedFileName: str = FileSelector("Choose a XML file to write", wildcard=XML_WILDCARD, flags=FD_CHANGE_DIR)
+
+        if specifiedFileName != '':
+
+            projectPanel: ProjectPanel = cast(ProjectPanel, self._notebook.GetCurrentPage())
+            writer: Writer = Writer()
+            writer.writeXmlFile(umlProject=projectPanel.umlProject, fileName=Path(specifiedFileName))
+
     def _loadNewProject(self, umlProject: UmlProject):
 
         if self._notebook is None:
@@ -144,14 +159,3 @@ class DemoAppFrame(SizedFrame):
         self._notebook = Notebook(sizedPanel, style=NB_LEFT)    # TODO: should be an application preference
         self._notebook.SetSizerProps(expand=True, proportion=1)
         CallLater(millis=200, callableObj=self._notebook.PostSizeEventToParent)
-
-    # noinspection PyUnusedLocal
-    def onPageClosing(self, event):
-        """
-        Event handler that is called when a page in the notebook is closing
-        """
-        page = self._notebook.GetCurrentPage()
-        page.Close()
-        if len(self._openProjects) == 0:
-            CallAfter(self._notebook.Destroy)
-            self._notebook = None

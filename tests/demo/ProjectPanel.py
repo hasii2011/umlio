@@ -34,6 +34,7 @@ class ProjectPanel(SplitterWindow):
         self.logger: Logger = getLogger(__name__)
         super().__init__(parent=parent)
 
+        self._umlProject:    UmlProject          = umlProject
         self.appEventEngine: DemoAppPubSubEngine = appEventEngine
 
         self._projectTree:    ProjectTree    = ProjectTree(parent=self, appEventEngine=appEventEngine, umlProject=umlProject)
@@ -54,6 +55,11 @@ class ProjectPanel(SplitterWindow):
         sashPosition: int = round(windowSize.width * 0.3)     # TODO:  This should be a preference
         self.logger.info(f'{sashPosition=}')
         self.SetSashPosition(position=sashPosition, redraw=True)
+
+    @property
+    def umlProject(self) -> UmlProject:
+        self._umlProject.umlDocuments = self._diagramManager.umlDocuments
+        return self._umlProject
 
     def _diagramSelectionChangedListener(self, treeData: TreeData):
         self.logger.debug(f'{treeData=}')

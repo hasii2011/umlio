@@ -16,3 +16,4 @@ INCREMENT_Y: int = 25
 class Identifiers:
     ID_OPEN_XML_FILE:     ID_REFERENCE = wxNewIdRef()
     ID_OPEN_PROJECT_FILE: ID_REFERENCE = wxNewIdRef()
+    ID_WRITE_XML_FILE:    ID_REFERENCE = wxNewIdRef()
