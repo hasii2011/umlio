@@ -20,7 +20,7 @@ from umlmodel.Link import LinkSource
 
 from umlmodel.enumerations.LinkType import LinkType
 
-from umlshapes.types.Common import EndPoints
+from umlshapes.types.Common import EndPositions
 from umlshapes.types.UmlPosition import UmlPosition
 from umlshapes.types.UmlPosition import UmlPositions
 
@@ -126,7 +126,7 @@ class XmlLinksToUmlLinks:
 
         umlLink.MakeLineControlPoints(n=2)       # Make this configurable
 
-        umlLink.endPoints = EndPoints(
+        umlLink.endPositions = EndPositions(
             toPosition=umlLinkAttributes.toPosition,
             fromPosition=umlLinkAttributes.fromPosition
         )

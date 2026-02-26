@@ -20,7 +20,7 @@ from umlshapes.links.UmlAssociationLabel import UmlAssociationLabel
 
 from umlshapes.links.eventhandlers.UmlLinkEventHandler import LineControlPoints
 
-from umlshapes.types.Common import EndPoints
+from umlshapes.types.Common import EndPositions
 from umlshapes.types.UmlPosition import UmlPosition
 
 from umlio.IOTypes import ElementAttributes
@@ -111,10 +111,10 @@ class UmlLinksToXml(BaseUmlToXml):
         # srcX, srcY   = umlLink.sourceAnchor.model.GetPosition()
         # destX, destY = umlLink.destinationAnchor.model.GetPosition()
 
-        umlLinkId:    str         = str(umlLink.id)
-        endPoints:    EndPoints   = umlLink.endPoints
-        fromPosition: UmlPosition = endPoints.fromPosition
-        toPosition:   UmlPosition = endPoints.toPosition
+        umlLinkId:    str          = str(umlLink.id)
+        endPoints:    EndPositions = umlLink.endPositions
+        fromPosition: UmlPosition  = endPoints.fromPosition
+        toPosition:   UmlPosition  = endPoints.toPosition
 
         attributes: ElementAttributes = ElementAttributes({
             XmlConstants.ATTRIBUTE_ID:          umlLinkId,
