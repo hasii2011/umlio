@@ -16,7 +16,7 @@ from umlshapes.links.UmlAssociation import UmlAssociation
 from umlshapes.links.UmlInheritance import UmlInheritance
 from umlshapes.links.UmlInterface import UmlInterface
 from umlshapes.links.UmlNoteLink import UmlNoteLink
-from umlshapes.links.UmlAssociationLabel import UmlAssociationLabel
+from umlshapes.links.UmlLinkLabel import UmlLinkLabel
 
 from umlshapes.links.eventhandlers.UmlLinkEventHandler import LineControlPoints
 
@@ -64,16 +64,16 @@ class UmlLinksToXml(BaseUmlToXml):
 
         if isinstance(umlLink, UmlAssociation):
 
-            associationName: UmlAssociationLabel = umlLink.associationName
-            src:             UmlAssociationLabel = umlLink.sourceCardinality
-            dst:             UmlAssociationLabel = umlLink.destinationCardinality
+            associationName: UmlLinkLabel = umlLink.associationName
+            src:             UmlLinkLabel = umlLink.sourceCardinality
+            dst:             UmlLinkLabel = umlLink.destinationCardinality
             associationLabels = {
                 XmlConstants.ELEMENT_ASSOCIATION_LABEL:             associationName,
                 XmlConstants.ELEMENT_ASSOCIATION_SOURCE_LABEL:      src,
                 XmlConstants.ELEMENT_ASSOCIATION_DESTINATION_LABEL: dst
             }
             for eltName in associationLabels:
-                umlAssociationLabel: UmlAssociationLabel = associationLabels[eltName]
+                umlAssociationLabel: UmlLinkLabel = associationLabels[eltName]
 
                 linkDelta: DeltaXY = umlAssociationLabel.linkDelta
 

@@ -59,7 +59,7 @@ EXPECTED_BARE_ASSOCIATION_XML: str = (
     f'        <UmlLink id="{UML_LINK_CANONICAL_MONIKER}" fromX="194" fromY="174" toX="256" toY="300" spline="False">\n'
     '            <AssociationName deltaX="0" deltaY="0" />\n'
     '            <SourceCardinality deltaX="0" deltaY="0" />\n'
-    '            <DestinationCardinality deltaX="0" deltaY="0" />\n'
+    '            <DestinationCardinality deltaX="0" deltaY="30" />\n'
     f'            <ModelLink name="Association-0" type="ASSOCIATION" sourceId="{SOURCE_MODEL_CLASS_ID}" destinationId="{DESTINATION_MODEL_CLASS_ID}" bidirectional="False" sourceCardinalityValue="src Card" destinationCardinalityValue="dst Card" />\n'
     '        </UmlLink>\n'
     '    </UMLDiagram>\n'

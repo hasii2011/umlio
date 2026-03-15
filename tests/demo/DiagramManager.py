@@ -232,9 +232,10 @@ class DiagramManager(Simplebook):
 
             diagramFrame.umlDiagram.AddShape(umlLollipopInterface)
             umlLollipopInterface.Show(True)
+
             lollipopEventHandler: UmlLollipopInterfaceEventHandler = UmlLollipopInterfaceEventHandler(lollipopInterface=umlLollipopInterface)
             lollipopEventHandler.umlPubSubEngine = self._umlPubSubEngine
-            lollipopEventHandler.SetPreviousHandler(umlLollipopInterface.GetEventHandler())
+
             umlLollipopInterface.SetEventHandler(lollipopEventHandler)
 
     def _layoutLinks(self, diagramFrame: ClassDiagramFrame | UseCaseDiagramFrame, umlLinks: UmlLinks):
