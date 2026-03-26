@@ -106,6 +106,8 @@ class XmlLinksToUmlLinks:
                                             linkableUmlShapes=linkableUmlShapes
                                             )
 
+        self._rationalizeTheLinkDataModel(umlLink=umlLink)
+
         return umlLink
 
     def _getUmlLink(self, umlLinkElement: Element, singleLinkElement: Element, linkableUmlShapes: LinkableUmlShapes) -> UmlLink:
@@ -275,3 +277,36 @@ class XmlLinksToUmlLinks:
             return umlInterface
         else:
             assert False, f'Unknown link type, {link.linkType=}'
+
+    def _rationalizeTheLinkDataModel(self, umlLink: UmlLink):
+        """
+        Updates one of the following lists in a PyutLinkedObject data model
+
+        ._parents   for Inheritance and Interface links
+        ._links     for all other link types
+
+        Args:
+            umlLink:       A UML Link
+        """
+
+        modelLink: Link = umlLink.modelLink
+
+        if modelLink.linkType == LinkType.INHERITANCE:
+            inheritanceLink: UmlInheritance = cast(UmlInheritance, umlLink)
+            inheritanceLink.subClass.modelClass.addParent(inheritanceLink.baseClass.modelClass)
+        elif modelLink.linkType == LinkType.INTERFACE:
+            interfaceLink: UmlInterface = cast(UmlInterface, umlLink)
+            interfaceLink.implementingClass.modelClass.addParent(interfaceLink.interfaceClass.modelClass)
+
+        else:
+            srcShape: LinkableUmlShape = umlLink.sourceShape
+            self.logger.debug(f'source ID: {srcShape.id} - destination ID: {umlLink.destinationShape.id}')
+
+            if isinstance(srcShape, UmlClass):
+                srcShape.modelClass.addLink(modelLink)
+            elif isinstance(srcShape, UmlNote):
+                srcShape.modelNote.addLink(modelLink)
+            elif isinstance(srcShape, UmlActor):
+                srcShape.modelActor.addLink(modelLink)
+            elif isinstance(srcShape, UmlUseCase):
+                srcShape.modelUseCase.addLink(modelLink)

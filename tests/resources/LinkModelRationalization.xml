@@ -1,0 +1,465 @@
+<?xml version='1.0' encoding='iso-8859-1'?>
+<UmlProject fileName="/Users/humberto.a.sanchez.ii/UmlDiagramProjects/LinkModelRationalization.udt" version="14.0" codePath=".">
+    <UMLDiagram documentType="Class Document" title="MultiLink Diagram" scrollPositionX="0" scrollPositionY="0" pixelsPerUnitX="20" pixelsPerUnitY="20">
+        <UmlClass id="kill-remember-medical-party" width="173" height="225" x="752" y="27">
+            <ModelClass id="learn-private-problem-word" name="BaseCommand" displayMethods="True" displayParameters="Unspecified" displayConstructor="Do Not Display" displayDunderMethods="Unspecified" displayFields="True" displayStereotype="True" fileName="" description="Reversed Engineered by the one and only:&#10;Gato Malo - Humberto A. Sanchez II&#10;Generated: 23 March 2026&#10;Version: 3.0">
+                <ModelMethod name="__init__" visibility="PUBLIC" returnType="">
+                    <SourceCode>
+                        <Code>def _removeShape(self, umlShape: 'UmlShapeGenre'):</Code>
+                        <Code>    self._umlFrame.umlDiagram.RemoveShape(umlShape)</Code>
+                        <Code>    self._umlFrame.refresh()</Code>
+                        <Code />
+                    </SourceCode>
+                    <ModelParameter name="partialName" parameterType="str" defaultValue="" />
+                    <ModelParameter name="umlModelBase" parameterType="UmlModelBase" defaultValue="" />
+                    <ModelParameter name="umlPosition" parameterType="UmlPosition" defaultValue="" />
+                    <ModelParameter name="umlFrame" parameterType="'UmlFrame'" defaultValue="" />
+                    <ModelParameter name="umlPubSubEngine" parameterType="IUmlPubSubEngine" defaultValue="" />
+                </ModelMethod>
+                <ModelMethod name="GetName" visibility="PUBLIC" returnType="str">
+                    <SourceCode>
+                        <Code>def _removeShape(self, umlShape: 'UmlShapeGenre'):</Code>
+                        <Code>    self._umlFrame.umlDiagram.RemoveShape(umlShape)</Code>
+                        <Code>    self._umlFrame.refresh()</Code>
+                        <Code />
+                    </SourceCode>
+                </ModelMethod>
+                <ModelMethod name="CanUndo" visibility="PUBLIC" returnType="">
+                    <SourceCode>
+                        <Code>def _removeShape(self, umlShape: 'UmlShapeGenre'):</Code>
+                        <Code>    self._umlFrame.umlDiagram.RemoveShape(umlShape)</Code>
+                        <Code>    self._umlFrame.refresh()</Code>
+                        <Code />
+                    </SourceCode>
+                </ModelMethod>
+                <ModelMethod name="_setupEventHandler" visibility="PROTECTED" returnType="">
+                    <SourceCode>
+                        <Code>def _removeShape(self, umlShape: 'UmlShapeGenre'):</Code>
+                        <Code>    self._umlFrame.umlDiagram.RemoveShape(umlShape)</Code>
+                        <Code>    self._umlFrame.refresh()</Code>
+                        <Code />
+                    </SourceCode>
+                    <ModelParameter name="umlShape" parameterType="" defaultValue="" />
+                    <ModelParameter name="eventHandler" parameterType="'UmlBaseEventHandler'" defaultValue="" />
+                </ModelMethod>
+                <ModelMethod name="_setupUmlShape" visibility="PROTECTED" returnType="">
+                    <SourceCode>
+                        <Code>def _removeShape(self, umlShape: 'UmlShapeGenre'):</Code>
+                        <Code>    self._umlFrame.umlDiagram.RemoveShape(umlShape)</Code>
+                        <Code>    self._umlFrame.refresh()</Code>
+                        <Code />
+                    </SourceCode>
+                    <ModelParameter name="umlShape" parameterType="'UmlShapeGenre'" defaultValue="" />
+                </ModelMethod>
+                <ModelMethod name="_removeShape" visibility="PROTECTED" returnType="">
+                    <SourceCode>
+                        <Code>def _removeShape(self, umlShape: 'UmlShapeGenre'):</Code>
+                        <Code>    self._umlFrame.umlDiagram.RemoveShape(umlShape)</Code>
+                        <Code>    self._umlFrame.refresh()</Code>
+                        <Code />
+                    </SourceCode>
+                    <ModelParameter name="umlShape" parameterType="'UmlShapeGenre'" defaultValue="" />
+                </ModelMethod>
+                <ModelField name="timeStamp" visibility="PUBLIC" fieldType="int" defaultValue="" />
+            </ModelClass>
+        </UmlClass>
+        <UmlClass id="try-democratic-back-health" width="293" height="150" x="77" y="63">
+            <ModelClass id="bring-start-federal-end" name="NoteCutCommand" displayMethods="True" displayParameters="Unspecified" displayConstructor="Do Not Display" displayDunderMethods="Unspecified" displayFields="True" displayStereotype="True" fileName="" description="Reversed Engineered by the one and only:&#10;Gato Malo - Humberto A. Sanchez II&#10;Generated: 23 March 2026&#10;Version: 3.0">
+                <ModelMethod name="__init__" visibility="PUBLIC" returnType="">
+                    <SourceCode>
+                        <Code>def _createCutShape(self, umlModelBase: UmlModelBase) -&gt; 'UmlShapeGenre':</Code>
+                        <Code />
+                        <Code>    from umlshapes.shapes.UmlNote import UmlNote</Code>
+                        <Code>    from umlshapes.shapes.eventhandlers.UmlNoteEventHandler import UmlNoteEventHandler</Code>
+                        <Code />
+                        <Code>    umlShape:     UmlNote             = UmlNote(cast(Note, umlModelBase))</Code>
+                        <Code>    eventHandler: UmlNoteEventHandler = UmlNoteEventHandler(previousEventHandler=umlShape.GetEventHandler())</Code>
+                        <Code />
+                        <Code>    self._setupEventHandler(umlShape=umlShape, eventHandler=eventHandler)</Code>
+                        <Code />
+                        <Code>    return umlShape</Code>
+                        <Code />
+                    </SourceCode>
+                    <ModelParameter name="umlNote" parameterType="'UmlNote'" defaultValue="" />
+                    <ModelParameter name="umlPosition" parameterType="UmlPosition" defaultValue="" />
+                    <ModelParameter name="umlFrame" parameterType="'UmlFrame'" defaultValue="" />
+                    <ModelParameter name="umlPubSubEngine" parameterType="IUmlPubSubEngine" defaultValue="" />
+                </ModelMethod>
+                <ModelMethod name="Do" visibility="PUBLIC" returnType="bool">
+                    <SourceCode>
+                        <Code>def _createCutShape(self, umlModelBase: UmlModelBase) -&gt; 'UmlShapeGenre':</Code>
+                        <Code />
+                        <Code>    from umlshapes.shapes.UmlNote import UmlNote</Code>
+                        <Code>    from umlshapes.shapes.eventhandlers.UmlNoteEventHandler import UmlNoteEventHandler</Code>
+                        <Code />
+                        <Code>    umlShape:     UmlNote             = UmlNote(cast(Note, umlModelBase))</Code>
+                        <Code>    eventHandler: UmlNoteEventHandler = UmlNoteEventHandler(previousEventHandler=umlShape.GetEventHandler())</Code>
+                        <Code />
+                        <Code>    self._setupEventHandler(umlShape=umlShape, eventHandler=eventHandler)</Code>
+                        <Code />
+                        <Code>    return umlShape</Code>
+                        <Code />
+                    </SourceCode>
+                </ModelMethod>
+                <ModelMethod name="Undo" visibility="PUBLIC" returnType="bool">
+                    <SourceCode>
+                        <Code>def _createCutShape(self, umlModelBase: UmlModelBase) -&gt; 'UmlShapeGenre':</Code>
+                        <Code />
+                        <Code>    from umlshapes.shapes.UmlNote import UmlNote</Code>
+                        <Code>    from umlshapes.shapes.eventhandlers.UmlNoteEventHandler import UmlNoteEventHandler</Code>
+                        <Code />
+                        <Code>    umlShape:     UmlNote             = UmlNote(cast(Note, umlModelBase))</Code>
+                        <Code>    eventHandler: UmlNoteEventHandler = UmlNoteEventHandler(previousEventHandler=umlShape.GetEventHandler())</Code>
+                        <Code />
+                        <Code>    self._setupEventHandler(umlShape=umlShape, eventHandler=eventHandler)</Code>
+                        <Code />
+                        <Code>    return umlShape</Code>
+                        <Code />
+                    </SourceCode>
+                </ModelMethod>
+                <ModelMethod name="_createCutShape" visibility="PROTECTED" returnType="'UmlShapeGenre'">
+                    <SourceCode>
+                        <Code>def _createCutShape(self, umlModelBase: UmlModelBase) -&gt; 'UmlShapeGenre':</Code>
+                        <Code />
+                        <Code>    from umlshapes.shapes.UmlNote import UmlNote</Code>
+                        <Code>    from umlshapes.shapes.eventhandlers.UmlNoteEventHandler import UmlNoteEventHandler</Code>
+                        <Code />
+                        <Code>    umlShape:     UmlNote             = UmlNote(cast(Note, umlModelBase))</Code>
+                        <Code>    eventHandler: UmlNoteEventHandler = UmlNoteEventHandler(previousEventHandler=umlShape.GetEventHandler())</Code>
+                        <Code />
+                        <Code>    self._setupEventHandler(umlShape=umlShape, eventHandler=eventHandler)</Code>
+                        <Code />
+                        <Code>    return umlShape</Code>
+                        <Code />
+                    </SourceCode>
+                    <ModelParameter name="umlModelBase" parameterType="UmlModelBase" defaultValue="" />
+                </ModelMethod>
+            </ModelClass>
+        </UmlClass>
+        <UmlClass id="offer-small-car-part" width="143" height="105" x="483" y="88">
+            <ModelClass id="tell-big-friend-side" name="BaseCutCommand" displayMethods="True" displayParameters="Unspecified" displayConstructor="Do Not Display" displayDunderMethods="Unspecified" displayFields="True" displayStereotype="True" fileName="" description="Reversed Engineered by the one and only:&#10;Gato Malo - Humberto A. Sanchez II&#10;Generated: 23 March 2026&#10;Version: 3.0">
+                <ModelMethod name="__init__" visibility="PUBLIC" returnType="">
+                    <SourceCode>
+                        <Code>class Meta(ABC):</Code>
+                        <Code>    abstract = True</Code>
+                        <Code />
+                        <Code>    @abstractmethod</Code>
+                        <Code>    def _createCutShape(self, baseAttributes: UmlModelBase) -&gt; 'UmlShapeGenre':</Code>
+                        <Code>        """</Code>
+                        <Code>        Specific cut types create their version of the shape;  Also the shape</Code>
+                        <Code>        should have its specific event handler set up</Code>
+                        <Code />
+                        <Code>        Args:</Code>
+                        <Code>            baseAttributes:     The model object for the UML Shape</Code>
+                        <Code />
+                        <Code>        Returns:  The correct UML Shape</Code>
+                        <Code />
+                        <Code>        """</Code>
+                        <Code>        pass</Code>
+                        <Code />
+                    </SourceCode>
+                    <ModelParameter name="partialName" parameterType="str" defaultValue="" />
+                    <ModelParameter name="umlModelBase" parameterType="UmlModelBase" defaultValue="" />
+                    <ModelParameter name="umlPosition" parameterType="UmlPosition" defaultValue="" />
+                    <ModelParameter name="umlFrame" parameterType="'UmlFrame'" defaultValue="" />
+                    <ModelParameter name="umlPubSubEngine" parameterType="IUmlPubSubEngine" defaultValue="" />
+                </ModelMethod>
+            </ModelClass>
+        </UmlClass>
+        <UmlClass id="learn-financial-place-power" width="319" height="150" x="679" y="670">
+            <ModelClass id="be-left-year-father" name="UseCasePasteCommand" displayMethods="True" displayParameters="Unspecified" displayConstructor="Do Not Display" displayDunderMethods="Unspecified" displayFields="True" displayStereotype="True" fileName="" description="Reversed Engineered by the one and only:&#10;Gato Malo - Humberto A. Sanchez II&#10;Generated: 23 March 2026&#10;Version: 3.0">
+                <ModelMethod name="__init__" visibility="PUBLIC" returnType="">
+                    <SourceCode>
+                        <Code>def _createPastedShape(self, baseAttributes: UmlModelBase) -&gt; 'UmlShapeGenre':</Code>
+                        <Code />
+                        <Code>    from umlshapes.shapes.UmlUseCase import UmlUseCase</Code>
+                        <Code>    from umlshapes.shapes.eventhandlers.UmlUseCaseEventHandler import UmlUseCaseEventHandler</Code>
+                        <Code />
+                        <Code>    umlShape:     UmlUseCase             = UmlUseCase(cast(UseCase, baseAttributes))</Code>
+                        <Code>    eventHandler: UmlUseCaseEventHandler = UmlUseCaseEventHandler(previousEventHandler=umlShape.GetEventHandler())</Code>
+                        <Code />
+                        <Code>    self._setupEventHandler(umlShape=umlShape, eventHandler=eventHandler)</Code>
+                        <Code />
+                        <Code>    return umlShape</Code>
+                        <Code />
+                    </SourceCode>
+                    <ModelParameter name="umlModelBase" parameterType="UmlModelBase" defaultValue="" />
+                    <ModelParameter name="umlPosition" parameterType="UmlPosition" defaultValue="" />
+                    <ModelParameter name="umlFrame" parameterType="'UmlFrame'" defaultValue="" />
+                    <ModelParameter name="umlPubSubEngine" parameterType="IUmlPubSubEngine" defaultValue="" />
+                </ModelMethod>
+                <ModelMethod name="Do" visibility="PUBLIC" returnType="bool">
+                    <SourceCode>
+                        <Code>def _createPastedShape(self, baseAttributes: UmlModelBase) -&gt; 'UmlShapeGenre':</Code>
+                        <Code />
+                        <Code>    from umlshapes.shapes.UmlUseCase import UmlUseCase</Code>
+                        <Code>    from umlshapes.shapes.eventhandlers.UmlUseCaseEventHandler import UmlUseCaseEventHandler</Code>
+                        <Code />
+                        <Code>    umlShape:     UmlUseCase             = UmlUseCase(cast(UseCase, baseAttributes))</Code>
+                        <Code>    eventHandler: UmlUseCaseEventHandler = UmlUseCaseEventHandler(previousEventHandler=umlShape.GetEventHandler())</Code>
+                        <Code />
+                        <Code>    self._setupEventHandler(umlShape=umlShape, eventHandler=eventHandler)</Code>
+                        <Code />
+                        <Code>    return umlShape</Code>
+                        <Code />
+                    </SourceCode>
+                </ModelMethod>
+                <ModelMethod name="Undo" visibility="PUBLIC" returnType="bool">
+                    <SourceCode>
+                        <Code>def _createPastedShape(self, baseAttributes: UmlModelBase) -&gt; 'UmlShapeGenre':</Code>
+                        <Code />
+                        <Code>    from umlshapes.shapes.UmlUseCase import UmlUseCase</Code>
+                        <Code>    from umlshapes.shapes.eventhandlers.UmlUseCaseEventHandler import UmlUseCaseEventHandler</Code>
+                        <Code />
+                        <Code>    umlShape:     UmlUseCase             = UmlUseCase(cast(UseCase, baseAttributes))</Code>
+                        <Code>    eventHandler: UmlUseCaseEventHandler = UmlUseCaseEventHandler(previousEventHandler=umlShape.GetEventHandler())</Code>
+                        <Code />
+                        <Code>    self._setupEventHandler(umlShape=umlShape, eventHandler=eventHandler)</Code>
+                        <Code />
+                        <Code>    return umlShape</Code>
+                        <Code />
+                    </SourceCode>
+                </ModelMethod>
+                <ModelMethod name="_createPastedShape" visibility="PROTECTED" returnType="'UmlShapeGenre'">
+                    <SourceCode>
+                        <Code>def _createPastedShape(self, baseAttributes: UmlModelBase) -&gt; 'UmlShapeGenre':</Code>
+                        <Code />
+                        <Code>    from umlshapes.shapes.UmlUseCase import UmlUseCase</Code>
+                        <Code>    from umlshapes.shapes.eventhandlers.UmlUseCaseEventHandler import UmlUseCaseEventHandler</Code>
+                        <Code />
+                        <Code>    umlShape:     UmlUseCase             = UmlUseCase(cast(UseCase, baseAttributes))</Code>
+                        <Code>    eventHandler: UmlUseCaseEventHandler = UmlUseCaseEventHandler(previousEventHandler=umlShape.GetEventHandler())</Code>
+                        <Code />
+                        <Code>    self._setupEventHandler(umlShape=umlShape, eventHandler=eventHandler)</Code>
+                        <Code />
+                        <Code>    return umlShape</Code>
+                        <Code />
+                    </SourceCode>
+                    <ModelParameter name="baseAttributes" parameterType="UmlModelBase" defaultValue="" />
+                </ModelMethod>
+            </ModelClass>
+        </UmlClass>
+        <UmlClass id="leave-young-likely-information" width="319" height="146" x="1254" y="350">
+            <ModelClass id="seem-final-major-school" name="ClassPasteCommand" displayMethods="True" displayParameters="Unspecified" displayConstructor="Do Not Display" displayDunderMethods="Unspecified" displayFields="True" displayStereotype="True" fileName="" description="Reversed Engineered by the one and only:&#10;Gato Malo - Humberto A. Sanchez II&#10;Generated: 23 March 2026&#10;Version: 3.0">
+                <ModelMethod name="__init__" visibility="PUBLIC" returnType="">
+                    <SourceCode>
+                        <Code>def _createPastedShape(self, umlModelBase: UmlModelBase) -&gt; 'UmlShapeGenre':</Code>
+                        <Code />
+                        <Code>    from umlshapes.shapes.UmlClass import UmlClass</Code>
+                        <Code>    from umlshapes.shapes.eventhandlers.UmlClassEventHandler import UmlClassEventHandler</Code>
+                        <Code />
+                        <Code>    umlShape:     UmlClass             = UmlClass(cast(Class, umlModelBase))</Code>
+                        <Code>    eventHandler: UmlClassEventHandler = UmlClassEventHandler(previousEventHandler=umlShape.GetEventHandler())</Code>
+                        <Code />
+                        <Code>    self._setupEventHandler(umlShape=umlShape, eventHandler=eventHandler)</Code>
+                        <Code />
+                        <Code>    return umlShape</Code>
+                        <Code />
+                    </SourceCode>
+                    <ModelParameter name="umlModelBase" parameterType="UmlModelBase" defaultValue="" />
+                    <ModelParameter name="umlPosition" parameterType="UmlPosition" defaultValue="" />
+                    <ModelParameter name="umlFrame" parameterType="'UmlFrame'" defaultValue="" />
+                    <ModelParameter name="umlPubSubEngine" parameterType="IUmlPubSubEngine" defaultValue="" />
+                </ModelMethod>
+                <ModelMethod name="GetName" visibility="PUBLIC" returnType="str">
+                    <SourceCode>
+                        <Code>def _createPastedShape(self, umlModelBase: UmlModelBase) -&gt; 'UmlShapeGenre':</Code>
+                        <Code />
+                        <Code>    from umlshapes.shapes.UmlClass import UmlClass</Code>
+                        <Code>    from umlshapes.shapes.eventhandlers.UmlClassEventHandler import UmlClassEventHandler</Code>
+                        <Code />
+                        <Code>    umlShape:     UmlClass             = UmlClass(cast(Class, umlModelBase))</Code>
+                        <Code>    eventHandler: UmlClassEventHandler = UmlClassEventHandler(previousEventHandler=umlShape.GetEventHandler())</Code>
+                        <Code />
+                        <Code>    self._setupEventHandler(umlShape=umlShape, eventHandler=eventHandler)</Code>
+                        <Code />
+                        <Code>    return umlShape</Code>
+                        <Code />
+                    </SourceCode>
+                </ModelMethod>
+                <ModelMethod name="Do" visibility="PUBLIC" returnType="bool">
+                    <SourceCode>
+                        <Code>def _createPastedShape(self, umlModelBase: UmlModelBase) -&gt; 'UmlShapeGenre':</Code>
+                        <Code />
+                        <Code>    from umlshapes.shapes.UmlClass import UmlClass</Code>
+                        <Code>    from umlshapes.shapes.eventhandlers.UmlClassEventHandler import UmlClassEventHandler</Code>
+                        <Code />
+                        <Code>    umlShape:     UmlClass             = UmlClass(cast(Class, umlModelBase))</Code>
+                        <Code>    eventHandler: UmlClassEventHandler = UmlClassEventHandler(previousEventHandler=umlShape.GetEventHandler())</Code>
+                        <Code />
+                        <Code>    self._setupEventHandler(umlShape=umlShape, eventHandler=eventHandler)</Code>
+                        <Code />
+                        <Code>    return umlShape</Code>
+                        <Code />
+                    </SourceCode>
+                </ModelMethod>
+                <ModelMethod name="Undo" visibility="PUBLIC" returnType="bool">
+                    <SourceCode>
+                        <Code>def _createPastedShape(self, umlModelBase: UmlModelBase) -&gt; 'UmlShapeGenre':</Code>
+                        <Code />
+                        <Code>    from umlshapes.shapes.UmlClass import UmlClass</Code>
+                        <Code>    from umlshapes.shapes.eventhandlers.UmlClassEventHandler import UmlClassEventHandler</Code>
+                        <Code />
+                        <Code>    umlShape:     UmlClass             = UmlClass(cast(Class, umlModelBase))</Code>
+                        <Code>    eventHandler: UmlClassEventHandler = UmlClassEventHandler(previousEventHandler=umlShape.GetEventHandler())</Code>
+                        <Code />
+                        <Code>    self._setupEventHandler(umlShape=umlShape, eventHandler=eventHandler)</Code>
+                        <Code />
+                        <Code>    return umlShape</Code>
+                        <Code />
+                    </SourceCode>
+                </ModelMethod>
+                <ModelMethod name="_createPastedShape" visibility="PROTECTED" returnType="'UmlShapeGenre'">
+                    <SourceCode>
+                        <Code>def _createPastedShape(self, umlModelBase: UmlModelBase) -&gt; 'UmlShapeGenre':</Code>
+                        <Code />
+                        <Code>    from umlshapes.shapes.UmlClass import UmlClass</Code>
+                        <Code>    from umlshapes.shapes.eventhandlers.UmlClassEventHandler import UmlClassEventHandler</Code>
+                        <Code />
+                        <Code>    umlShape:     UmlClass             = UmlClass(cast(Class, umlModelBase))</Code>
+                        <Code>    eventHandler: UmlClassEventHandler = UmlClassEventHandler(previousEventHandler=umlShape.GetEventHandler())</Code>
+                        <Code />
+                        <Code>    self._setupEventHandler(umlShape=umlShape, eventHandler=eventHandler)</Code>
+                        <Code />
+                        <Code>    return umlShape</Code>
+                        <Code />
+                    </SourceCode>
+                    <ModelParameter name="umlModelBase" parameterType="UmlModelBase" defaultValue="" />
+                </ModelMethod>
+            </ModelClass>
+        </UmlClass>
+        <UmlClass id="feel-cut-hot-child" width="319" height="150" x="141" y="352">
+            <ModelClass id="leave-traditional-close-state" name="ActorPasteCommand" displayMethods="True" displayParameters="Unspecified" displayConstructor="Do Not Display" displayDunderMethods="Unspecified" displayFields="True" displayStereotype="True" fileName="" description="Reversed Engineered by the one and only:&#10;Gato Malo - Humberto A. Sanchez II&#10;Generated: 23 March 2026&#10;Version: 3.0">
+                <ModelMethod name="__init__" visibility="PUBLIC" returnType="">
+                    <SourceCode>
+                        <Code>def _createPastedShape(self, umlModelBase: UmlModelBase) -&gt; 'UmlShapeGenre':</Code>
+                        <Code />
+                        <Code>    from umlshapes.shapes.UmlActor import UmlActor</Code>
+                        <Code>    from umlshapes.shapes.eventhandlers.UmlActorEventHandler import UmlActorEventHandler</Code>
+                        <Code />
+                        <Code>    umlShape:     UmlActor             = UmlActor(cast(Actor, umlModelBase))</Code>
+                        <Code>    eventHandler: UmlActorEventHandler = UmlActorEventHandler(previousEventHandler=umlShape.GetEventHandler())</Code>
+                        <Code />
+                        <Code>    self._setupEventHandler(umlShape=umlShape, eventHandler=eventHandler)</Code>
+                        <Code />
+                        <Code>    return umlShape</Code>
+                        <Code />
+                    </SourceCode>
+                    <ModelParameter name="umlModelBase" parameterType="UmlModelBase" defaultValue="" />
+                    <ModelParameter name="umlPosition" parameterType="UmlPosition" defaultValue="" />
+                    <ModelParameter name="umlFrame" parameterType="'UmlFrame'" defaultValue="" />
+                    <ModelParameter name="umlPubSubEngine" parameterType="IUmlPubSubEngine" defaultValue="" />
+                </ModelMethod>
+                <ModelMethod name="Do" visibility="PUBLIC" returnType="bool">
+                    <SourceCode>
+                        <Code>def _createPastedShape(self, umlModelBase: UmlModelBase) -&gt; 'UmlShapeGenre':</Code>
+                        <Code />
+                        <Code>    from umlshapes.shapes.UmlActor import UmlActor</Code>
+                        <Code>    from umlshapes.shapes.eventhandlers.UmlActorEventHandler import UmlActorEventHandler</Code>
+                        <Code />
+                        <Code>    umlShape:     UmlActor             = UmlActor(cast(Actor, umlModelBase))</Code>
+                        <Code>    eventHandler: UmlActorEventHandler = UmlActorEventHandler(previousEventHandler=umlShape.GetEventHandler())</Code>
+                        <Code />
+                        <Code>    self._setupEventHandler(umlShape=umlShape, eventHandler=eventHandler)</Code>
+                        <Code />
+                        <Code>    return umlShape</Code>
+                        <Code />
+                    </SourceCode>
+                </ModelMethod>
+                <ModelMethod name="Undo" visibility="PUBLIC" returnType="bool">
+                    <SourceCode>
+                        <Code>def _createPastedShape(self, umlModelBase: UmlModelBase) -&gt; 'UmlShapeGenre':</Code>
+                        <Code />
+                        <Code>    from umlshapes.shapes.UmlActor import UmlActor</Code>
+                        <Code>    from umlshapes.shapes.eventhandlers.UmlActorEventHandler import UmlActorEventHandler</Code>
+                        <Code />
+                        <Code>    umlShape:     UmlActor             = UmlActor(cast(Actor, umlModelBase))</Code>
+                        <Code>    eventHandler: UmlActorEventHandler = UmlActorEventHandler(previousEventHandler=umlShape.GetEventHandler())</Code>
+                        <Code />
+                        <Code>    self._setupEventHandler(umlShape=umlShape, eventHandler=eventHandler)</Code>
+                        <Code />
+                        <Code>    return umlShape</Code>
+                        <Code />
+                    </SourceCode>
+                </ModelMethod>
+                <ModelMethod name="_createPastedShape" visibility="PROTECTED" returnType="'UmlShapeGenre'">
+                    <SourceCode>
+                        <Code>def _createPastedShape(self, umlModelBase: UmlModelBase) -&gt; 'UmlShapeGenre':</Code>
+                        <Code />
+                        <Code>    from umlshapes.shapes.UmlActor import UmlActor</Code>
+                        <Code>    from umlshapes.shapes.eventhandlers.UmlActorEventHandler import UmlActorEventHandler</Code>
+                        <Code />
+                        <Code>    umlShape:     UmlActor             = UmlActor(cast(Actor, umlModelBase))</Code>
+                        <Code>    eventHandler: UmlActorEventHandler = UmlActorEventHandler(previousEventHandler=umlShape.GetEventHandler())</Code>
+                        <Code />
+                        <Code>    self._setupEventHandler(umlShape=umlShape, eventHandler=eventHandler)</Code>
+                        <Code />
+                        <Code>    return umlShape</Code>
+                        <Code />
+                    </SourceCode>
+                    <ModelParameter name="umlModelBase" parameterType="UmlModelBase" defaultValue="" />
+                </ModelMethod>
+            </ModelClass>
+        </UmlClass>
+        <UmlClass id="watch-ready-nice-change" width="160" height="120" x="761" y="364">
+            <ModelClass id="hear-difficult-game-year" name="BasePasteCommand" displayMethods="True" displayParameters="Unspecified" displayConstructor="Do Not Display" displayDunderMethods="Unspecified" displayFields="True" displayStereotype="True" fileName="" description="Reversed Engineered by the one and only:&#10;Gato Malo - Humberto A. Sanchez II&#10;Generated: 23 March 2026&#10;Version: 3.0">
+                <ModelMethod name="__init__" visibility="PUBLIC" returnType="">
+                    <SourceCode>
+                        <Code>def _undo(self, umlShape: 'UmlShapeGenre'):</Code>
+                        <Code>    """</Code>
+                        <Code>    Common code for basic Undo</Code>
+                        <Code>    Args:</Code>
+                        <Code>        umlShape:  The shape to remove from the frame</Code>
+                        <Code />
+                        <Code>    """</Code>
+                        <Code>    self._removeShape(umlShape=umlShape)</Code>
+                        <Code />
+                    </SourceCode>
+                    <ModelParameter name="partialName" parameterType="str" defaultValue="" />
+                    <ModelParameter name="umlModelBase" parameterType="UmlModelBase" defaultValue="" />
+                    <ModelParameter name="umlPosition" parameterType="UmlPosition" defaultValue="" />
+                    <ModelParameter name="umlFrame" parameterType="'UmlFrame'" defaultValue="" />
+                    <ModelParameter name="umlPubSubEngine" parameterType="IUmlPubSubEngine" defaultValue="" />
+                </ModelMethod>
+                <ModelMethod name="_undo" visibility="PROTECTED" returnType="">
+                    <SourceCode>
+                        <Code>@abstractmethod</Code>
+                        <Code>    def _createPastedShape(self, umlModelBase: UmlModelBase) -&gt; 'UmlShapeGenre':</Code>
+                        <Code>        """</Code>
+                        <Code>        Specific paste types create their version of the shape;  Also the shape</Code>
+                        <Code>        should have its specific event handler set up</Code>
+                        <Code />
+                        <Code>        Args:</Code>
+                        <Code>            umlModelBase:     The model object for the UML Shape</Code>
+                        <Code />
+                        <Code>        Returns:  The correct UML Shape</Code>
+                        <Code />
+                        <Code>        """</Code>
+                        <Code>        pass</Code>
+                        <Code />
+                        <Code />
+                    </SourceCode>
+                    <ModelParameter name="umlShape" parameterType="'UmlShapeGenre'" defaultValue="" />
+                </ModelMethod>
+            </ModelClass>
+        </UmlClass>
+        <UmlLink id="appear-popular-good-book" fromX="369" fromY="139" toX="483" toY="140" spline="False">
+            <ModelLink name="" type="INHERITANCE" sourceId="bring-start-federal-end" destinationId="tell-big-friend-side" bidirectional="False" sourceCardinalityValue="" destinationCardinalityValue="" />
+        </UmlLink>
+        <UmlLink id="seem-short-huge-game" fromX="625" fromY="140" toX="752" toY="139" spline="False">
+            <ModelLink name="" type="INHERITANCE" sourceId="tell-big-friend-side" destinationId="learn-private-problem-word" bidirectional="False" sourceCardinalityValue="" destinationCardinalityValue="" />
+        </UmlLink>
+        <UmlLink id="tell-high-new-power" fromX="840" fromY="364" toX="839" toY="251" spline="False">
+            <ModelLink name="" type="INHERITANCE" sourceId="hear-difficult-game-year" destinationId="learn-private-problem-word" bidirectional="False" sourceCardinalityValue="" destinationCardinalityValue="" />
+        </UmlLink>
+        <UmlLink id="give-strong-problem-friend" fromX="839" fromY="670" toX="840" toY="484" spline="False">
+            <ModelLink name="" type="INHERITANCE" sourceId="be-left-year-father" destinationId="hear-difficult-game-year" bidirectional="False" sourceCardinalityValue="" destinationCardinalityValue="" />
+        </UmlLink>
+        <UmlLink id="write-must-medical-area" fromX="1254" fromY="423" toX="921" toY="424" spline="False">
+            <ModelLink name="" type="INHERITANCE" sourceId="seem-final-major-school" destinationId="hear-difficult-game-year" bidirectional="False" sourceCardinalityValue="" destinationCardinalityValue="" />
+        </UmlLink>
+        <UmlLink id="keep-clear-simple-others" fromX="459" fromY="426" toX="761" toY="424" spline="False">
+            <ModelLink name="" type="INHERITANCE" sourceId="leave-traditional-close-state" destinationId="hear-difficult-game-year" bidirectional="False" sourceCardinalityValue="" destinationCardinalityValue="" />
+        </UmlLink>
+    </UMLDiagram>
+</UmlProject>

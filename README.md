@@ -10,7 +10,7 @@
 
 # Introduction
 
-This package provides a common way to read and write [Pyut](https://github.com/hasii2011/pyut) XML files.  It is the updated
+This package provides a common way to read and write [UML Diagrammer ](https://github.com/hasii2011/umldiagrammer) UDT/XML files.  It is the updated
 version of [oglio](https://github.com/hasii2011/oglio).  This version supports [umlshapes](https://github.com/hasii2011/umlshapes).
 
 # Installation
@@ -21,7 +21,7 @@ pip install umlio
 
 ___
 
-Written by Humberto A. Sanchez II <mailto@Humberto.A.Sanchez.II@gmail.com>, (C) 2025
+Written by Humberto A. Sanchez II <mailto@Humberto.A.Sanchez.II@gmail.com>, (C) 2026
 
 
 ## Note

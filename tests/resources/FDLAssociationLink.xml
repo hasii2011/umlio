@@ -1,0 +1,40 @@
+<?xml version='1.0' encoding='iso-8859-1'?>
+<UmlProject fileName="/Users/humberto.a.sanchez.ii/UmlDiagramProjects/FDLAssociationLink.udt" version="14.0" codePath=".">
+    <UMLDiagram documentType="Class Document" title="AssociationLinks" scrollPositionX="0" scrollPositionY="0" pixelsPerUnitX="20" pixelsPerUnitY="20">
+        <UmlClass id="might-important-international-business" width="158" height="92" x="437" y="171">
+            <ModelClass id="expect-physical-low-door" name="Aggregator" displayMethods="True" displayParameters="Unspecified" displayConstructor="Unspecified" displayDunderMethods="Unspecified" displayFields="True" displayStereotype="True" fileName="" description="" />
+        </UmlClass>
+        <UmlClass id="begin-current-book-state" width="172" height="90" x="128" y="452">
+            <ModelClass id="talk-seem-natural-art" name="AggregateOne" displayMethods="True" displayParameters="Unspecified" displayConstructor="Unspecified" displayDunderMethods="Unspecified" displayFields="True" displayStereotype="True" fileName="" description="" />
+        </UmlClass>
+        <UmlClass id="pay-big-american-car" width="145" height="90" x="448" y="463">
+            <ModelClass id="do-common-traditional-thing" name="AggregateTwo" displayMethods="True" displayParameters="Unspecified" displayConstructor="Unspecified" displayDunderMethods="Unspecified" displayFields="True" displayStereotype="True" fileName="" description="" />
+        </UmlClass>
+        <UmlClass id="put-foreign-change-office" width="167" height="90" x="780" y="452">
+            <ModelClass id="mean-big-left-people" name="AggregateThree" displayMethods="True" displayParameters="Unspecified" displayConstructor="Unspecified" displayDunderMethods="Unspecified" displayFields="True" displayStereotype="True" fileName="" description="" />
+        </UmlClass>
+        <UmlText id="see-hold-different-child" width="392" height="50" x="335" y="37">
+            <ModelText id="follow-say-recent-level" content="Do not move these shapes are rename anything" />
+        </UmlText>
+        <UmlLink id="become-human-close-name" fromX="437" fromY="217" toX="214" toY="452" spline="False">
+            <AssociationName deltaX="112" deltaY="-4" />
+            <SourceCardinality deltaX="0" deltaY="0" />
+            <DestinationCardinality deltaX="0" deltaY="0" />
+            <LineControlPoint x="213" y="218" />
+            <ModelLink name="red-minute" type="AGGREGATION" sourceId="expect-physical-low-door" destinationId="talk-seem-natural-art" bidirectional="False" sourceCardinalityValue="" destinationCardinalityValue="" />
+        </UmlLink>
+        <UmlLink id="include-economic-door-name" fromX="517" fromY="263" toX="519" toY="463" spline="False">
+            <AssociationName deltaX="0" deltaY="0" />
+            <SourceCardinality deltaX="0" deltaY="0" />
+            <DestinationCardinality deltaX="0" deltaY="30" />
+            <ModelLink name="right-morning" type="AGGREGATION" sourceId="expect-physical-low-door" destinationId="do-common-traditional-thing" bidirectional="False" sourceCardinalityValue="" destinationCardinalityValue="" />
+        </UmlLink>
+        <UmlLink id="spend-free-low-student" fromX="595" fromY="217" toX="863" toY="452" spline="False">
+            <AssociationName deltaX="0" deltaY="0" />
+            <SourceCardinality deltaX="0" deltaY="0" />
+            <DestinationCardinality deltaX="0" deltaY="30" />
+            <LineControlPoint x="861" y="218" />
+            <ModelLink name="significant-head" type="AGGREGATION" sourceId="expect-physical-low-door" destinationId="mean-big-left-people" bidirectional="False" sourceCardinalityValue="" destinationCardinalityValue="" />
+        </UmlLink>
+    </UMLDiagram>
+</UmlProject>
