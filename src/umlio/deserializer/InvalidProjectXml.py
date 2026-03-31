@@ -1,0 +1,3 @@
+
+class InvalidProjectXml(Exception):
+    pass

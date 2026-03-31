@@ -41,12 +41,15 @@ from umlshapes.ShapeTypes import UmlLinkGenre
 from umlshapes.ShapeTypes import LinkableUmlShape
 from umlshapes.ShapeTypes import LinkableUmlShapes
 
+from umlshapes.BasicUtils import BasicUtils
+
 from umlio.IOTypes import Elements
 from umlio.IOTypes import UmlLinkAttributes
 from umlio.IOTypes import UmlLinks
 from umlio.IOTypes import umlLinksFactory
 
 from umlio.XMLConstants import XmlConstants
+from umlio.deserializer.InvalidProjectXml import InvalidProjectXml
 
 from umlio.deserializer.XmlToUmlModel import XmlToUmlModel
 
@@ -106,7 +109,7 @@ class XmlLinksToUmlLinks:
                                             linkableUmlShapes=linkableUmlShapes
                                             )
 
-        self._rationalizeTheLinkDataModel(umlLink=umlLink)
+        BasicUtils.rationalizeTheLinkDataModel(umlLink=umlLink)
 
         return umlLink
 
@@ -167,8 +170,11 @@ class XmlLinksToUmlLinks:
 
         Returns:  The connected shapes;  Will assert if it cannot find them
         """
-        sourceId: str = linkElement[XmlConstants.ATTRIBUTE_SOURCE_ID]
-        dstId:    str = linkElement[XmlConstants.ATTRIBUTE_DESTINATION_ID]
+        sourceId: str | None = linkElement[XmlConstants.ATTRIBUTE_SOURCE_ID]
+        dstId:    str | None = linkElement[XmlConstants.ATTRIBUTE_DESTINATION_ID]
+
+        if sourceId is None or dstId is None:
+            raise InvalidProjectXml(f'Links must have source and destination IDs.  {sourceId=} {dstId=}')
 
         try:
             sourceShape:      LinkableUmlShape = linkableUmlShapes[sourceId]
@@ -277,36 +283,3 @@ class XmlLinksToUmlLinks:
             return umlInterface
         else:
             assert False, f'Unknown link type, {link.linkType=}'
-
-    def _rationalizeTheLinkDataModel(self, umlLink: UmlLink):
-        """
-        Updates one of the following lists in a PyutLinkedObject data model
-
-        ._parents   for Inheritance and Interface links
-        ._links     for all other link types
-
-        Args:
-            umlLink:       A UML Link
-        """
-
-        modelLink: Link = umlLink.modelLink
-
-        if modelLink.linkType == LinkType.INHERITANCE:
-            inheritanceLink: UmlInheritance = cast(UmlInheritance, umlLink)
-            inheritanceLink.subClass.modelClass.addParent(inheritanceLink.baseClass.modelClass)
-        elif modelLink.linkType == LinkType.INTERFACE:
-            interfaceLink: UmlInterface = cast(UmlInterface, umlLink)
-            interfaceLink.implementingClass.modelClass.addParent(interfaceLink.interfaceClass.modelClass)
-
-        else:
-            srcShape: LinkableUmlShape = umlLink.sourceShape
-            self.logger.debug(f'source ID: {srcShape.id} - destination ID: {umlLink.destinationShape.id}')
-
-            if isinstance(srcShape, UmlClass):
-                srcShape.modelClass.addLink(modelLink)
-            elif isinstance(srcShape, UmlNote):
-                srcShape.modelNote.addLink(modelLink)
-            elif isinstance(srcShape, UmlActor):
-                srcShape.modelActor.addLink(modelLink)
-            elif isinstance(srcShape, UmlUseCase):
-                srcShape.modelUseCase.addLink(modelLink)
