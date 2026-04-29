@@ -13,7 +13,7 @@ from umlio.IOTypes import UmlDocumentTitle
 from umlio.IOTypes import UmlDocumentType
 from umlio.IOTypes import XML_SUFFIX
 
-EXTERNAL_DIFF_PROGRAM: str = 'diff'
+EXTERNAL_DIFF_PROGRAM: str = '/usr/bin/diff'
 
 EMPTY_DIAGRAMS_BASE_FILENAME: str = 'EmptyDiagramsProject'
 EMPTY_DIAGRAMS_XML_PROJECT: str = f'{EMPTY_DIAGRAMS_BASE_FILENAME}{XML_SUFFIX}'
