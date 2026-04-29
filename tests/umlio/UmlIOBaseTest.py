@@ -49,6 +49,7 @@ class UmlIOBaseTest(UnitTestBaseW):
     def _runDiff(self, generatedFile: Path, goldenFile: Path, diffProgram: str = EXTERNAL_DIFF_PROGRAM) -> int:
 
         command: str = f'{diffProgram} {goldenFile} {generatedFile}'
+        print(f'{command=}')
         completedProcess: CompletedProcess = subProcessRun([command], shell=True, capture_output=True, text=True, check=False)
 
         if completedProcess.returncode != 0:
