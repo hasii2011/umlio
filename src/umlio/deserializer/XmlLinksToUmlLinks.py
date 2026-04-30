@@ -20,6 +20,8 @@ from umlmodel.Link import LinkSource
 
 from umlmodel.enumerations.LinkType import LinkType
 
+from umlshapes.utils.BasicUtils import BasicUtils
+
 from umlshapes.types.Common import EndPositions
 from umlshapes.types.UmlPosition import UmlPosition
 from umlshapes.types.UmlPosition import UmlPositions
@@ -41,7 +43,6 @@ from umlshapes.ShapeTypes import UmlLinkGenre
 from umlshapes.ShapeTypes import LinkableUmlShape
 from umlshapes.ShapeTypes import LinkableUmlShapes
 
-from umlshapes.BasicUtils import BasicUtils
 
 from umlio.IOTypes import Elements
 from umlio.IOTypes import UmlLinkAttributes
@@ -181,7 +182,7 @@ class XmlLinksToUmlLinks:
             destinationShape: LinkableUmlShape = linkableUmlShapes[dstId]
         except KeyError as ke:
             self.logger.error(f'{linkableUmlShapes=}')
-            self.logger.error(f'Developer Error -- {linkElement=}')
+            self.logger.error(f'Developer Error -- {linkElement=}')     # noqa
             self.logger.error(f'Developer Error -- {sourceId=} {dstId=}  KeyError index: {ke}')
             assert False, 'Developer error'
 
@@ -259,7 +260,11 @@ class XmlLinksToUmlLinks:
             # Note dest and source are reversed here
             subClass:  UmlClass = srcShape              # type: ignore
             baseClass: UmlClass = destShape             # type: ignore
-            return UmlInheritance(baseClass=baseClass, link=link, subClass=subClass)
+
+            umlInheritance: UmlInheritance = UmlInheritance(baseClass=baseClass, link=link, subClass=subClass)
+
+            return umlInheritance
+
         elif link.linkType in ASSOCIATION_LINK_TYPES:
             umlAssociation = CLASSMAP[link.linkType](link)
             #

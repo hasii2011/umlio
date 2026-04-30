@@ -20,7 +20,7 @@ from tests.demo.pubsubengine.DemoMessageType import DemoMessageType
 from tests.demo.pubsubengine.IAppPubSubEngine import IAppPubSubEngine
 from tests.demo.pubsubengine.IAppPubSubEngine import UniqueId
 
-from umlshapes.UmlUtils import UmlUtils
+from umlshapes.utils.IDUtil import IDUtil
 
 from umlio.IOTypes import UmlDocumentTitle
 from umlio.IOTypes import UmlProject
@@ -66,7 +66,7 @@ class ProjectTree(TreeCtrl):
         for documentName in self._umlProject.umlDocuments.keys():
             documentNode: TreeItemId = self.AppendItem(self.root, documentName)
 
-            treeNodeID: TreeNodeID = TreeNodeID(UmlUtils.getID())
+            treeNodeID: TreeNodeID = TreeNodeID(IDUtil.getID())
             treeData:   TreeData   = TreeData(
                 documentName=documentName,
                 treeNodeID=treeNodeID

@@ -22,6 +22,7 @@ from wx import Notebook
 from wx import CallLater
 from wx import FileSelector
 from wx import CommandEvent
+from wx import Window
 
 from wx.lib.sized_controls import SizedFrame
 from wx.lib.sized_controls import SizedPanel
@@ -29,8 +30,6 @@ from wx.lib.sized_controls import SizedPanel
 from umlshapes.preferences.UmlPreferences import UmlPreferences
 
 from umlshapes.pubsubengine.UmlPubSubEngine import UmlPubSubEngine
-
-from tests.demo.pubsubengine.DemoAppPubSubEngine import DemoAppPubSubEngine
 
 from umlio.IOTypes import UmlProject
 from umlio.IOTypes import XML_SUFFIX
@@ -41,6 +40,8 @@ from umlio.Writer import Writer
 
 from tests.demo.DemoCommon import Identifiers
 from tests.demo.ProjectPanel import ProjectPanel
+
+from tests.demo.pubsubengine.DemoAppPubSubEngine import DemoAppPubSubEngine
 
 FRAME_WIDTH:  int = 960
 FRAME_HEIGHT: int = 640
@@ -141,11 +142,11 @@ class DemoAppFrame(SizedFrame):
         if self._notebook is None:
             self._createTheOverArchingNotebook()
 
-        projectPanel: ProjectPanel = ProjectPanel(self._notebook,
+        projectPanel: ProjectPanel = ProjectPanel(cast(Window, self._notebook),
                                                   appEventEngine=self._demoAppPubSubEngine,
                                                   umlPubSibEngine=self._umlPubSubEngine,
                                                   umlProject=umlProject)
-        self._notebook.AddPage(page=projectPanel, text=umlProject.fileName.stem)
+        self._notebook.AddPage(page=projectPanel, text=umlProject.fileName.stem)        # noqa
         self._openProjects.append(umlProject)
 
     def _createTheOverArchingNotebook(self):
