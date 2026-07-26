@@ -140,10 +140,13 @@ class UmlLinksToXml(BaseUmlToXml):
 
         realControlPoints: LineControlPoints = LineControlPoints(lineControlPoints[:])
 
-        x1, y1, x2, y2 = umlLink.FindLineEndPoints()
+        # x1, y1, x2, y2 = umlLink.FindLineEndPoints()        # bug does not work
 
-        pt1: Point = Point(x1, y1)
-        pt2: Point = Point(x2, y2)
+        endPoint1 = realControlPoints[0]
+        endPoint2 = realControlPoints[-1]
+
+        pt1: Point = Point(endPoint1.x, endPoint1.y)
+        pt2: Point = Point(endPoint2.x, endPoint2.y)
 
         realControlPoints.remove(pt1)
         realControlPoints.remove(pt2)
