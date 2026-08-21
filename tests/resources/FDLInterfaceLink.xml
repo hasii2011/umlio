@@ -5,13 +5,13 @@
             <ModelClass id="look-show-social-person" name="IInterface" displayMethods="True" displayParameters="Unspecified" displayConstructor="Unspecified" displayDunderMethods="Unspecified" displayFields="True" displayStereotype="True" fileName="" description="" />
         </UmlClass>
         <UmlClass id="win-different-simple-money" width="196" height="90" x="103" y="373">
-            <ModelClass id="add-similar-system-night" name="ImplementorOne" displayMethods="True" displayParameters="Unspecified" displayConstructor="Unspecified" displayDunderMethods="Unspecified" displayFields="True" displayStereotype="True" fileName="" description="" />
+            <ModelClass id="add-similar-system-night" name="ImplementorOne" stereotype="implementationClass" displayMethods="True" displayParameters="Unspecified" displayConstructor="Unspecified" displayDunderMethods="Unspecified" displayFields="True" displayStereotype="True" fileName="" description="" />
         </UmlClass>
         <UmlClass id="hear-american-group-question" width="196" height="90" x="400" y="377">
-            <ModelClass id="write-certain-dead-people" name="ImplementorTwo" displayMethods="True" displayParameters="Unspecified" displayConstructor="Unspecified" displayDunderMethods="Unspecified" displayFields="True" displayStereotype="True" fileName="" description="" />
+            <ModelClass id="write-certain-dead-people" name="ImplementorTwo" stereotype="implementationClass" displayMethods="True" displayParameters="Unspecified" displayConstructor="Unspecified" displayDunderMethods="Unspecified" displayFields="True" displayStereotype="True" fileName="" description="" />
         </UmlClass>
         <UmlClass id="help-find-easy-head" width="196" height="90" x="728" y="376">
-            <ModelClass id="serve-able-result-case" name="ImplementorThree" displayMethods="True" displayParameters="Unspecified" displayConstructor="Unspecified" displayDunderMethods="Unspecified" displayFields="True" displayStereotype="True" fileName="" description="" />
+            <ModelClass id="serve-able-result-case" name="ImplementorThree" stereotype="implementationClass" displayMethods="True" displayParameters="Unspecified" displayConstructor="Unspecified" displayDunderMethods="Unspecified" displayFields="True" displayStereotype="True" fileName="" description="" />
         </UmlClass>
         <UmlText id="remember-walk-military-minute" width="309" height="50" x="305" y="55">
             <ModelText id="like-natural-power-level" content="Do not rename or move anyting here" />

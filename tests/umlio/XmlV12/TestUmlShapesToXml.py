@@ -58,7 +58,7 @@ EXPECTED_SINGLE_CLASS_XML: str = (
     '<UmlProject fileName="." version="14.0" codePath="/users/hasii">\n'
     '    <UMLDiagram documentType="Class Document" title="Unit Test Class Diagram" scrollPositionX="1" scrollPositionY="1" pixelsPerUnitX="1" pixelsPerUnitY="1">\n'
     '        <UmlClass id="play.small.long.group" width="125" height="100" x="300" y="500">\n'
-    '            <ModelClass id="0" name="ClassName1" displayMethods="True" displayParameters="Unspecified" displayConstructor="Unspecified" displayDunderMethods="Unspecified" displayFields="True" displayStereotype="True" fileName="" description="" />\n'
+    '            <ModelClass id="0" name="ClassName1" stereotype="metaclass" displayMethods="True" displayParameters="Unspecified" displayConstructor="Unspecified" displayDunderMethods="Unspecified" displayFields="True" displayStereotype="True" fileName="" description="" />\n'
     '        </UmlClass>\n'
     '    </UMLDiagram>\n'
     '</UmlProject>'
@@ -162,7 +162,7 @@ class TestUmlShapesToXml(UmlIOBaseTest):
     def testSingleUmlClass(self):
 
         umlShapesToXml:     UmlShapesToXml = self._createXmlCreator()
-        singleClassDiagram: UmlDocument     = self._createUmlDiagram(UmlDocumentType.CLASS_DOCUMENT, 'Unit Test Class Diagram')
+        singleClassDiagram: UmlDocument    = self._createUmlDiagram(UmlDocumentType.CLASS_DOCUMENT, 'Unit Test Class Diagram')
         singleClass:        UmlClass       = self._createSingleClass()
 
         singleClass.id = 'play.small.long.group'        # So XML matches

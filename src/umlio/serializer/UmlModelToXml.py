@@ -53,10 +53,11 @@ class UmlModelToXml:
             A new updated element
         """
 
-        commonAttributes = self._classCommonAttributes(modelClass)
+        commonAttributes: ElementAttributes = self._classCommonAttributes(modelClass)
         attributes = {
             XmlConstants.ATTRIBUTE_ID:                     modelClass.id,
             XmlConstants.ATTRIBUTE_NAME:                   modelClass.name,
+            XmlConstants.ATTRIBUTE_STEREOTYPE:             modelClass.stereotype.value,
             XmlConstants.ATTRIBUTE_DISPLAY_METHODS:        str(modelClass.showMethods),
             XmlConstants.ATTRIBUTE_DISPLAY_PARAMETERS:     modelClass.displayParameters.value,
             XmlConstants.ATTRIBUTE_DISPLAY_CONSTRUCTOR:    modelClass.displayConstructor.value,
@@ -132,8 +133,8 @@ class UmlModelToXml:
         noteId:       str = note.id
         content:      str = note.content
         fixedContent: str = content.replace(osLineSep, XML_END_OF_LINE_MARKER)
-        if note.fileName is None:
-            note.fileName = ''
+
+        assert note.fileName is not None, 'I have a contract'
 
         attributes: ElementAttributes = ElementAttributes({
             XmlConstants.ATTRIBUTE_ID:       str(noteId),
@@ -162,8 +163,8 @@ class UmlModelToXml:
 
         actorId:  str = actor.id
         fileName: str = actor.fileName
-        if fileName is None:
-            fileName = ''
+
+        assert fileName is not None, 'I have a contract'
 
         attributes: ElementAttributes = ElementAttributes({
             XmlConstants.ATTRIBUTE_ID:       actorId,
@@ -178,8 +179,8 @@ class UmlModelToXml:
 
         useCaseId: str = useCase.id
         fileName:  str = useCase.fileName
-        if fileName is None:
-            fileName = ''
+
+        assert fileName is not None, 'I have a contract'
 
         attributes: ElementAttributes = ElementAttributes({
             XmlConstants.ATTRIBUTE_ID:       useCaseId,
@@ -256,14 +257,14 @@ class UmlModelToXml:
 
         return methodElement
 
-    def _classCommonAttributes(self, classCommon: ClassCommon):
+    def _classCommonAttributes(self, classCommon: ClassCommon) -> ElementAttributes:
 
-        attributes = {
+        attributes: ElementAttributes = ElementAttributes({
             XmlConstants.ATTRIBUTE_DESCRIPTION: classCommon.description
-        }
+        })
         return attributes
 
-    def _sourceCodeToXml(self, sourceCode: SourceCode, methodElement: Element):
+    def _sourceCodeToXml(self, sourceCode: SourceCode, methodElement: Element) -> Element:
 
         codeRoot: Element = SubElement(methodElement, XmlConstants.ELEMENT_MODEL_SOURCE_CODE)
 
