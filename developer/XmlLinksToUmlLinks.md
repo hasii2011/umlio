@@ -8,7 +8,7 @@ This class is the counterpart to `UmlLinksToXml` and is essential for loading sa
 
 *   Parsing `<UmlLink>` elements within a larger diagram XML structure.
 *   Identifying the source and destination shapes for each link using a provided dictionary of existing shapes.
-*   Re-creating the logical `Link` data model by collaborating with `XmlToUmlModel`.
+*   Recreating the logical `Link` data model by collaborating with `XmlToUmlModel`.
 *   Instantiating the correct graphical `UmlLink` subclass (e.g., `UmlAssociation`, `UmlInheritance`) based on the link's type.
 *   Restoring the link's graphical properties, including its ID, spline status, and the control points that define its path.
 
@@ -22,28 +22,33 @@ The deserialization process has a specific order. `XmlLinksToUmlLinks` must be c
 ## Usage Example
 
 ```python
+from untangle import Element
 from untangle import parse
 from umlio.deserializer.XmlLinksToUmlLinks import XmlLinksToUmlLinks
-from umlio.deserializer.XmlShapesToUmlShapes import XmlShapesToUmlShapes # Used to get shapes first
+from umlio.deserializer.XmlShapesToUmlShapes import XmlShapesToUmlShapes  # Used to get shapes first
+from umlio.IOTypes import LinkableUmlShapes
+from umlio.IOTypes import UmlLinks
+from umlgraphics.UmlLink import UmlLink
 
-# Assume 'xml_file_path' is the path to a saved .xml diagram
-xml_root = parse(xml_file_path)
-diagram_element = xml_root.UmlProject.UMLDiagram
+# Assume 'xmlFilePath' is the path to a saved .xml diagram
+xmlRoot: Element = parse(xmlFilePath)
+diagramElement: Element = xmlRoot.UmlProject.UMLDiagram
 
 # 1. First, deserialize all the shapes
-shape_deserializer = XmlShapesToUmlShapes()
-linkable_shapes = shape_deserializer.getLinkableUmlShapes(diagram_element)
+shapeDeserializer: XmlShapesToUmlShapes = XmlShapesToUmlShapes()
+linkableShapes: LinkableUmlShapes = shapeDeserializer.getLinkableUmlShapes(diagramElement)
 
 # 2. Now, deserialize the links using the created shapes
-link_deserializer = XmlLinksToUmlLinks()
-uml_links = link_deserializer.deserialize(
-    umlDiagramElement=diagram_element,
-    linkableUmlShapes=linkable_shapes
+linkDeserializer: XmlLinksToUmlLinks = XmlLinksToUmlLinks()
+umlLinks: UmlLinks = linkDeserializer.deserialize(
+    umlDiagramElement=diagramElement,
+    linkableUmlShapes=linkableShapes
 )
 
-# The 'uml_links' variable now holds a list of reconstructed UmlLink objects
-for link in uml_links:
-    print(f"Recreated link: {link.id} from {link.sourceShape.id} to {link.destinationShape.id}")
+# The 'umlLinks' variable now holds a list of reconstructed UmlLink objects
+link: UmlLink
+for link in umlLinks:
+    print(f'Recreated link: {link.id} from {link.sourceShape.id} to {link.destinationShape.id}')
 
 ```
 
@@ -55,13 +60,17 @@ The constructor initializes the `XmlLinksToUmlLinks` deserializer. It also creat
 
 ### `deserialize(self, umlDiagramElement: Element, linkableUmlShapes: LinkableUmlShapes) -> UmlLinks`
 
-This is the main public method that drives the deserialization of links. It finds all `<UmlLink>` elements within the provided `umlDiagramElement`, processes each one to reconstruct a `UmlLink` object, and returns them as a list.
+This is the main public method that drives the deserialization of links. It:
+*   finds all `<UmlLink>` elements within the provided `umlDiagramElement`,
+*   processes each one to reconstruct a `UmlLink` object,
+*   and returns the resulting list.
 
-*   **Parameters:**
-    *   `umlDiagramElement` (`Element`): The parent XML element (`<UMLDiagram>`) containing the `<UmlLink>` elements to be processed.
-    *   `linkableUmlShapes` (`LinkableUmlShapes`): A dictionary mapping the ID of every linkable shape in the diagram to its object instance.
-*   **Returns:**
-    *   `UmlLinks`: A list of the newly created `UmlLink` objects.
+**Parameters:**
+    `umlDiagramElement` (`Element`): The parent XML element (`<UMLDiagram>`) containing the `<UmlLink>` elements to be processed.  
+    `linkableUmlShapes` (`LinkableUmlShapes`): A dictionary mapping the ID of every linkable shape in the diagram to its object instance.
+
+**Returns:**
+    `UmlLinks`: A list of the newly created `UmlLink` objects.
 
 ## Expected XML Input Structure
 

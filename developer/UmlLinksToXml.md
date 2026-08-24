@@ -10,7 +10,7 @@ This class is a key component of the serialization process, ensuring that the vi
 
 *   Iterating over a list of `UmlLink` objects.
 *   Generating a `<UmlLink>` XML element for each link.
-*   Serializing base link attributes such as ID, end-point coordinates, and spline status.
+*   Serializing base link attributes such as ID, endpoint coordinates, and spline status.
 *   Handling specific sub-elements for different link types (e.g., labels for `UmlAssociation`).
 *   Writing out the line control points that define the link's path.
 *   Collaborating with `UmlModelToXml` to serialize the underlying logical `ModelLink`.
@@ -18,23 +18,25 @@ This class is a key component of the serialization process, ensuring that the vi
 ## Usage Example
 
 ```python
-from xml.etree.ElementTree import Element, tostring
+from xml.etree.ElementTree import Element
+from xml.etree.ElementTree import tostring
+
 from umlio.serializer.UmlLinksToXml import UmlLinksToXml
 from umlio.IOTypes import UmlLinks
 
-# Assume 'diagram_links' is a list of UmlLink objects (UmlLinks)
-# and 'root_element' is the top-level XML element (e.g., <UMLDiagram>)
-diagram_links: UmlLinks = [...] 
-root_element: Element = Element('UMLDiagram')
+# Assume 'diagramLinks' is a list of UmlLink objects (UmlLinks)
+# and 'rootElement' is the top-level XML element (e.g., <UMLDiagram>)
+diagramLinks: UmlLinks = [...]
+rootElement: Element = Element('UMLDiagram')
 
 # Instantiate the serializer
-link_serializer = UmlLinksToXml()
+linkSerializer: UmlLinksToXml = UmlLinksToXml()
 
 # Serialize the links into the root XML element
-link_serializer.serialize(documentTop=root_element, umlLinks=diagram_links)
+linkSerializer.serialize(documentTop=rootElement, umlLinks=diagramLinks)
 
-# The root_element now contains all the UmlLink XML data
-print(tostring(root_element).decode())
+# The rootElement now contains all the UmlLink XML data
+print(tostring(rootElement).decode())
 ```
 
 ## Public Methods
@@ -57,14 +59,14 @@ This is the main entry point for the serialization process. It iterates through 
 
 The serializer can process the following `UmlLink` subclasses:
 
-*   `UmlAssociation`: A relationship between two classifiers. Serializes with extra elements for the association name and cardinality labels.
+*   `UmlAssociation`: A relationship between two classes; serialized with additional elements for the association name and cardinality labels.
 *   `UmlInheritance`: A generalization/specialization relationship.
 *   `UmlInterface`: A relationship where one class realizes an interface.
-*   `UmlNoteLink`: A link connecting a `UmlNote` to another shape.
+*   `UmlNoteLink`: A link connecting a `UmlNote` to a UML class.
 
 ## XML Output Structure
 
-The basic structure for a serialized link is as follows.
+The basic structure for a serialized link is as follows:
 
 ### Generic Link
 
