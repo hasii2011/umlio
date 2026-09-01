@@ -1,5 +1,9 @@
 
+from typing import Iterator
+
 from pathlib import Path
+
+from difflib import unified_diff
 
 from codeallyadvanced.ui.UnitTestBaseW import UnitTestBaseW
 
@@ -45,6 +49,8 @@ from umlshapes.lib.ogl import OGLInitialize
 from unittest import TestSuite
 from unittest import main as unitTestMain
 
+from termcolor import cprint
+
 
 EXPECTED_BARE_ASSOCIATION_XML: str = (
     "<?xml version='1.0' encoding='iso-8859-1'?>\n"
@@ -57,9 +63,9 @@ EXPECTED_BARE_ASSOCIATION_XML: str = (
     f'            <ModelClass id="{DESTINATION_MODEL_CLASS_ID}" name="GeneratedClass-1" stereotype="noStereotype" displayMethods="True" displayParameters="Unspecified" displayConstructor="Unspecified" displayDunderMethods="Unspecified" displayFields="True" displayStereotype="True" fileName="" description="" />\n'
     '        </UmlClass>\n'
     f'        <UmlLink id="{UML_LINK_CANONICAL_MONIKER}" fromX="194" fromY="174" toX="256" toY="300" spline="False">\n'
-    '            <AssociationName deltaX="0" deltaY="0" />\n'
-    '            <SourceCardinality deltaX="0" deltaY="0" />\n'
-    '            <DestinationCardinality deltaX="0" deltaY="30" />\n'
+    '            <AssociationName width="75" height="24" deltaX="0" deltaY="0" />\n'
+    '            <SourceCardinality width="75" height="24" deltaX="0" deltaY="0" />\n'
+    '            <DestinationCardinality width="75" height="24" deltaX="0" deltaY="30" />\n'
     f'            <ModelLink name="Association-0" type="ASSOCIATION" sourceId="{SOURCE_MODEL_CLASS_ID}" destinationId="{DESTINATION_MODEL_CLASS_ID}" bidirectional="False" sourceCardinalityValue="src Card" destinationCardinalityValue="dst Card" />\n'
     '        </UmlLink>\n'
     '    </UMLDiagram>\n'
@@ -162,6 +168,13 @@ class TestUmlLinksToXml(UnitTestBaseW):
         )
 
         self._linkCreator: LinkCreator = LinkCreator(diagramFrame=self._diagramFrame)
+        #
+        #  I am using a custom diff so I can see the XML diffs
+        #  I do not want the unit tests traceback output
+        #
+        import sys
+        # noinspection SpellCheckingInspection
+        sys.tracebacklimit = 0
 
     def tearDown(self):
         super().tearDown()
@@ -285,7 +298,17 @@ class TestUmlLinksToXml(UnitTestBaseW):
         self._debugWriteToFile(fileName, xml=associationXML)
 
         self.maxDiff = None
-        self.assertEqual(expectedXml, associationXML, failMessage)
+        if associationXML != expectedXml:
+            diff: Iterator[str] = unified_diff(
+                expectedXml.splitlines(),
+                associationXML.splitlines(),
+                fromfile='Expected',
+                tofile='Actual'
+            )
+            self._prettyPrintDiffs(diff)
+            self.fail(failMessage)
+
+        # self.assertEqual(expectedXml, associationXML, failMessage)
 
     def _createXmlCreator(self) -> UmlShapesToXml:
 
@@ -306,6 +329,25 @@ class TestUmlLinksToXml(UnitTestBaseW):
 
         p.write_text(xml)
 
+    def _prettyPrintDiffs(self, diff: Iterator[str]):
+        """
+        I like my Gemini 3.7 flash generated code !!
+
+        Args:
+            diff:  The return value from a call to unified_diff
+
+        """
+        # print('\033[2J\033[H', end='')
+        cprint('--- XML Differences (Expected vs Actual) ---', 'yellow', attrs=['bold'])
+        for diffLine in diff:
+            if diffLine.startswith('+'):
+                cprint(diffLine, 'green')
+            elif diffLine.startswith('-'):
+                cprint(diffLine, 'red')
+            elif diffLine.startswith('@'):
+                cprint(diffLine, 'cyan')
+            else:
+                print(diffLine)
 
 def suite() -> TestSuite:
     import unittest

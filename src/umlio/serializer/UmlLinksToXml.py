@@ -1,11 +1,8 @@
 
-from typing import cast
-
 from logging import Logger
 from logging import getLogger
 
 from wx import Point
-
 
 from xml.etree.ElementTree import Element
 from xml.etree.ElementTree import SubElement
@@ -22,6 +19,7 @@ from umlshapes.links.eventhandlers.UmlLinkEventHandler import LineControlPoints
 
 from umlshapes.types.Common import EndPositions
 from umlshapes.types.UmlPosition import UmlPosition
+from umlshapes.types.UmlDimensions import UmlDimensions
 
 from umlio.IOTypes import ElementAttributes
 from umlio.IOTypes import UmlLinks
@@ -77,7 +75,10 @@ class UmlLinksToXml(BaseUmlToXml):
 
                 linkDelta: DeltaXY = umlAssociationLabel.linkDelta
 
+                labelSize: UmlDimensions = umlAssociationLabel.size
                 labelAttributes: ElementAttributes = ElementAttributes({
+                    XmlConstants.ATTRIBUTE_WIDTH:   str(labelSize.width),
+                    XmlConstants.ATTRIBUTE_HEIGHT:  str(labelSize.height),
                     XmlConstants.ATTRIBUTE_DELTA_X: str(linkDelta.deltaX),
                     XmlConstants.ATTRIBUTE_DELTA_Y: str(linkDelta.deltaY),
                 })
@@ -93,9 +94,9 @@ class UmlLinksToXml(BaseUmlToXml):
             assert False, 'Should never come here'
 
         lineControlPoints: LineControlPoints = umlLink.GetLineControlPoints()
-        realControlPoints: LineControlPoints = self._removeEndPoints(umlLink=umlLink, lineControlPoints=lineControlPoints)
+        realControlPoints: LineControlPoints = self._removeEndPoints(lineControlPoints=lineControlPoints)
         for pt in realControlPoints:
-            wxPoint: Point = cast(Point, pt)
+            wxPoint: Point = pt
             controlPointAttributes: ElementAttributes = ElementAttributes({
                 XmlConstants.ATTRIBUTE_X: str(wxPoint.x),
                 XmlConstants.ATTRIBUTE_Y: str(wxPoint.y),
@@ -127,12 +128,11 @@ class UmlLinksToXml(BaseUmlToXml):
 
         return attributes
 
-    def _removeEndPoints(self, umlLink: 'UmlLink', lineControlPoints: LineControlPoints) -> LineControlPoints:
+    def _removeEndPoints(self, lineControlPoints: LineControlPoints) -> LineControlPoints:
         """
         Do not consider the end points
 
         Args:
-            umlLink:
             lineControlPoints:
 
         Returns:  The control points less the 2 end points

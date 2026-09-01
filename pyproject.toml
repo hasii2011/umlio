@@ -29,6 +29,7 @@ test = [
     'html-testRunner~=1.2.1',
     'human_id==0.2.0',
     'types-networkx==3.6.1.20260728',
+    'termcolor>=3.3.0',
 ]
 
 deploy = [
