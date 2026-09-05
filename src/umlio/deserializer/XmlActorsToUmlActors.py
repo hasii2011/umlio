@@ -1,6 +1,4 @@
 
-from typing import cast
-
 from logging import Logger
 from logging import getLogger
 
@@ -35,7 +33,7 @@ class XmlActorsToUmlActors:
         Returns:  deserialized UmlNote objects if any exist, else an empty list
         """
         umlActors:     UmlActors = umlActorsFactory()
-        actorElements: Elements = cast(Elements, umlDiagramElement.get_elements(XmlConstants.ELEMENT_UML_ACTOR))
+        actorElements: Elements  = umlDiagramElement.get_elements(XmlConstants.ELEMENT_UML_ACTOR)
 
         for actorElement in actorElements:
             self.logger.debug(f'{actorElement}')

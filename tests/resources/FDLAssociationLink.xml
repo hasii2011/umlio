@@ -17,22 +17,22 @@
             <ModelText id="follow-say-recent-level" content="Do not move these shapes are rename anything" />
         </UmlText>
         <UmlLink id="become-human-close-name" fromX="437" fromY="217" toX="214" toY="452" spline="False">
-            <AssociationName deltaX="112" deltaY="-4" />
-            <SourceCardinality deltaX="0" deltaY="0" />
-            <DestinationCardinality deltaX="0" deltaY="0" />
+            <AssociationName width="140" height="24" deltaX="112" deltaY="-4" />
+            <SourceCardinality width="130" height="24" deltaX="0" deltaY="0" />
+            <DestinationCardinality width="120" height="24" deltaX="0" deltaY="0" />
             <LineControlPoint x="213" y="218" />
             <ModelLink name="red-minute" type="AGGREGATION" sourceId="expect-physical-low-door" destinationId="talk-seem-natural-art" bidirectional="False" sourceCardinalityValue="" destinationCardinalityValue="" />
         </UmlLink>
         <UmlLink id="include-economic-door-name" fromX="517" fromY="263" toX="519" toY="463" spline="False">
-            <AssociationName deltaX="0" deltaY="0" />
-            <SourceCardinality deltaX="0" deltaY="0" />
-            <DestinationCardinality deltaX="0" deltaY="30" />
+            <AssociationName width="140" height="24" deltaX="0" deltaY="0" />
+            <SourceCardinality width="130" height="24" deltaX="0" deltaY="0" />
+            <DestinationCardinality width="120" height="24" deltaX="0" deltaY="30" />
             <ModelLink name="right-morning" type="AGGREGATION" sourceId="expect-physical-low-door" destinationId="do-common-traditional-thing" bidirectional="False" sourceCardinalityValue="" destinationCardinalityValue="" />
         </UmlLink>
         <UmlLink id="spend-free-low-student" fromX="595" fromY="217" toX="863" toY="452" spline="False">
             <AssociationName deltaX="0" deltaY="0" />
-            <SourceCardinality deltaX="0" deltaY="0" />
-            <DestinationCardinality deltaX="0" deltaY="30" />
+            <SourceCardinality width="130" height="24" deltaX="0" deltaY="0" />
+            <DestinationCardinality width="120" height="24" deltaX="0" deltaY="30" />
             <LineControlPoint x="861" y="218" />
             <ModelLink name="significant-head" type="AGGREGATION" sourceId="expect-physical-low-door" destinationId="mean-big-left-people" bidirectional="False" sourceCardinalityValue="" destinationCardinalityValue="" />
         </UmlLink>

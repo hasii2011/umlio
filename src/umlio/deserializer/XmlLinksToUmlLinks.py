@@ -1,15 +1,20 @@
 
 from typing import Dict
 from typing import List
-from typing import NewType
-from typing import Union
+from typing import Tuple
 from typing import cast
+from typing import Union
+from typing import NewType
 
 from logging import Logger
 from logging import getLogger
 
 from dataclasses import dataclass
 
+from umlshapes.links.LabelType import LabelType
+from umlshapes.links.UmlLinkLabel import UmlLinkLabel
+from umlshapes.types.DeltaXY import DeltaXY
+from umlshapes.types.UmlDimensions import UmlDimensions
 from untangle import Element
 
 from codeallybasic.SecureConversions import SecureConversions
@@ -78,6 +83,9 @@ ASSOCIATION_LINK_TYPES: List[LinkType] = [
     LinkType.COMPOSITION, LinkType.AGGREGATION, LinkType.ASSOCIATION
 ]
 
+DEFAULT_MISSING_LINK_LABEL_WIDTH:  int = 140
+DEFAULT_MISSING_LINK_LABEL_HEIGHT: int = 24
+
 
 class XmlLinksToUmlLinks:
     def __init__(self):
@@ -88,7 +96,7 @@ class XmlLinksToUmlLinks:
     def deserialize(self, umlDiagramElement: Element, linkableUmlShapes: LinkableUmlShapes) -> UmlLinks:
 
         umlLinks:     UmlLinks = umlLinksFactory()
-        linkElements: Elements = cast(Elements, umlDiagramElement.get_elements(XmlConstants.ELEMENT_UML_LINK))
+        linkElements: Elements = umlDiagramElement.get_elements(XmlConstants.ELEMENT_UML_LINK)
 
         for linkElement in linkElements:
             self.logger.debug(f'{linkElement=}')
@@ -100,7 +108,7 @@ class XmlLinksToUmlLinks:
 
     def _umlLinkElementToUmlLink(self, umlLinkElement: Element, linkableUmlShapes: LinkableUmlShapes) -> UmlLink:
 
-        linkElements: Elements = cast(Elements, umlLinkElement.get_elements(XmlConstants.ELEMENT_MODEL_LINK))
+        linkElements: Elements = umlLinkElement.get_elements(XmlConstants.ELEMENT_MODEL_LINK)
         assert len(linkElements) == 1, 'There can only be one'      # noqa
 
         singleLinkElement: Element = linkElements[0]        # I hate this short cut
@@ -123,6 +131,12 @@ class XmlLinksToUmlLinks:
                                                 link=link,
                                                 destShape=connectedShapes.destinationShape,
                                                 )
+        if link.linkType in ASSOCIATION_LINK_TYPES:
+
+            umlAssociation: UmlAssociation = cast(UmlAssociation, umlLink)
+            umlAssociation.associationName        = self._getAssociationNameLabel(umlLinkElement, associationName=link.name)
+            umlAssociation.sourceCardinality      = self._getSourceCardinalityNameLabel(umlLinkElement, sourceCardinality=link.sourceCardinality)
+            umlAssociation.destinationCardinality = self._getDestinationCardinalityNameLabel(umlLinkElement, destinationCardinality=link.destinationCardinality)
 
         umlLinkAttributes: UmlLinkAttributes = UmlLinkAttributes.fromGraphicLink(linkElement=umlLinkElement)
         self.logger.debug(f'{umlLinkAttributes}=')
@@ -236,10 +250,10 @@ class XmlLinksToUmlLinks:
 
         controlPoints: UmlPositions = UmlPositions([])
 
-        controlPointElements: Elements = cast(Elements, umlLinkElement.get_elements(XmlConstants.ELEMENT_MODEL_LINE_CONTROL_POINT))
+        controlPointElements: Elements = umlLinkElement.get_elements(XmlConstants.ELEMENT_MODEL_LINE_CONTROL_POINT)
         for controlPointElement in controlPointElements:
-            x: int = SecureConversions.secureInteger(controlPointElement[XmlConstants.ATTRIBUTE_X])
-            y: int = SecureConversions.secureInteger(controlPointElement[XmlConstants.ATTRIBUTE_Y])
+            x: int = SecureConversions.secureInteger(cast(str, controlPointElement[XmlConstants.ATTRIBUTE_X]))
+            y: int = SecureConversions.secureInteger(cast(str, controlPointElement[XmlConstants.ATTRIBUTE_Y]))
 
             umlPosition: UmlPosition = UmlPosition(x=x, y=y)
             controlPoints.append(umlPosition)
@@ -288,3 +302,102 @@ class XmlLinksToUmlLinks:
             return umlInterface
         else:
             assert False, f'Unknown link type, {link.linkType=}'
+
+    def _getAssociationNameLabel(self, umlLinkElement: Element, associationName: str) -> UmlLinkLabel:
+        """
+            <AssociationName width="75" height="24" deltaX="0" deltaY="0" />
+
+        Args:
+            umlLinkElement: The <UmlLink> XML element containing the <AssociationName> child tag
+            associationName: The association name
+
+        Returns:  A deserialized link label that represents the association name
+        """
+        nameElement: Element = umlLinkElement.AssociationName
+
+        umlLinkLabel: UmlLinkLabel = self._getNameLabel(labelElement=nameElement, text=associationName, labelType=LabelType.ASSOCIATION_NAME)
+        return umlLinkLabel
+
+    def _getSourceCardinalityNameLabel(self, umlLinkElement: Element, sourceCardinality: str) -> UmlLinkLabel:
+        """
+        <SourceCardinality width="100" height="24" deltaX="0" deltaY="0" />
+
+        Args:
+            umlLinkElement:     The <UmlLink> XML element containing the <SourceCardinality> child tag
+            sourceCardinality:  The value of the source cardinality
+
+        Returns:  A deserialized link label that represents the link source cardinality
+
+        """
+        nameElement: Element = umlLinkElement.SourceCardinality
+        umlLinkLabel: UmlLinkLabel = self._getNameLabel(labelElement=nameElement, text=sourceCardinality, labelType=LabelType.SOURCE_CARDINALITY)
+
+        return umlLinkLabel
+
+    def _getDestinationCardinalityNameLabel(self, umlLinkElement: Element, destinationCardinality: str) -> UmlLinkLabel:
+        """
+        <DestinationCardinality width="100" height="24" deltaX="0" deltaY="0" />
+
+        Args:
+            umlLinkElement:     The <UmlLink> XML element containing the <DestinationCardinality> child tag
+            destinationCardinality:  The value of the destination cardinality
+
+        Returns:  A deserialized link label that represents the link destination cardinality
+
+        """
+
+        nameElement: Element = umlLinkElement.DestinationCardinality
+        umlLinkLabel: UmlLinkLabel = self._getNameLabel(labelElement=nameElement, text=destinationCardinality, labelType=LabelType.DESTINATION_CARDINALITY)
+
+        return umlLinkLabel
+
+    def _getNameLabel(self, labelElement: Element, text: str, labelType: LabelType) -> UmlLinkLabel:
+
+        umlLinkLabel: UmlLinkLabel = UmlLinkLabel(label=text, labelType=labelType)
+
+        self.logger.info(f'Get link name attributes for: {labelType.value}')
+
+        size:      UmlDimensions
+        linkDelta: DeltaXY
+        size, linkDelta = self._getLinkNameAttributes(nameElement=labelElement)
+
+        umlLinkLabel.size      = size
+        umlLinkLabel.linkDelta = linkDelta
+
+        return umlLinkLabel
+
+    def _getLinkNameAttributes(self, nameElement: Element) -> Tuple[UmlDimensions, DeltaXY]:
+        """
+        Put in some temp code for old project that do not have the width/height attributes on UmlLinkLabel's
+        Args:
+            nameElement:  A general element for association name, source/destination cardinality,
+
+        Returns: A tuple of the UmlDimensions and DeltaXY attributes of a UmlLinkLabel
+
+        """
+        widthStr: str | None  = nameElement[XmlConstants.ATTRIBUTE_WIDTH]
+        width:    int
+        if widthStr is None:
+            width = DEFAULT_MISSING_LINK_LABEL_WIDTH
+            self.logger.warning(f'Missing link label width, synthesized the value: {DEFAULT_MISSING_LINK_LABEL_WIDTH}')
+        else:
+            width = SecureConversions.secureInteger(widthStr)
+
+        heightStr: str | None = nameElement[XmlConstants.ATTRIBUTE_HEIGHT]
+        height:    int
+        if heightStr is None:
+            height = DEFAULT_MISSING_LINK_LABEL_HEIGHT
+            self.logger.warning(f'Missing link label height, synthesized the value: {DEFAULT_MISSING_LINK_LABEL_HEIGHT}')
+        else:
+            height = SecureConversions.secureInteger(heightStr)
+
+        deltaXStr: str = cast(str, nameElement[XmlConstants.ATTRIBUTE_DELTA_X])
+        deltaYStr: str = cast(str, nameElement[XmlConstants.ATTRIBUTE_DELTA_Y])
+
+        deltaX: int = SecureConversions.secureInteger(deltaXStr)
+        deltaY: int = SecureConversions.secureInteger(deltaYStr)
+
+        size: UmlDimensions = UmlDimensions(width=width, height=height)
+        linkDelta: DeltaXY = DeltaXY(deltaX=deltaX, deltaY=deltaY)
+
+        return size, linkDelta

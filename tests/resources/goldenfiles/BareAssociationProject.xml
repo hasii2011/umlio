@@ -8,9 +8,9 @@
             <ModelClass id="777" name="GeneratedClass-1" displayMethods="True" displayParameters="Unspecified" displayConstructor="Unspecified" displayDunderMethods="Unspecified" displayFields="True" displayStereotype="True" fileName="" description="" />
        </UmlClass>
         <UmlLink id="die.free.open.point" fromX="194" fromY="174" toX="256" toY="300" spline="False">
-            <AssociationName deltaX="0" deltaY="0" />
-            <SourceCardinality deltaX="0" deltaY="0" />
-            <DestinationCardinality deltaX="0" deltaY="0" />
+            <AssociationName width="100" height="24" deltaX="0" deltaY="0" />
+            <SourceCardinality width="100" height="24" deltaX="0" deltaY="0" />
+            <DestinationCardinality width="100" height="24" deltaX="0" deltaY="0" />
             <ModelLink name="BareAssociation" type="ASSOCIATION" sourceId="777" destinationId="666" bidirectional="False" sourceCardinalityValue="src Card" destinationCardinalityValue="dst Card" />
         </UmlLink>
     </UMLDiagram>
