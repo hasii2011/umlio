@@ -7,18 +7,19 @@ name='umlio'
 dynamic = ["version"]
 description = 'serialize deserialize umlshapes'
 readme = "README.md"
-license = 'AGPL-1.0-or-later'
 authors = [{name = 'Humberto A. Sanchez II', email = 'Humberto.A.Sanchez.II@gmail.com'}]
 maintainers = [{name = 'Humberto A. Sanchez II', email = 'Humberto.A.Sanchez.II@gmail.com'}]
-keywords = ['pyut,graphical shapes,python']
+keywords = ['uml', 'graphical', 'shapes', 'python', 'umldiagrammer']
+license = 'AGPL-1.0-or-later'
+license-files = ['LICENSE']
 
 dependencies = [
-    'untangle==1.2.1',
+    'untangle>=1.3.0',
     'wxPython>=4.3.1',
     'codeallybasic>=1.40.0',
-    'codeallyadvanced>=2.5.7',
+    'codeallyadvanced>=3.0.0',
     'umlmodel>=3.5.0',
-    'umlshapes>=2.3.1',
+    'umlshapes>=3.1.0',
 ]
 
 [project.optional-dependencies]
@@ -36,7 +37,7 @@ deploy = [
     'wheel==0.48.0',
     'setuptools==84.0.0',
     'twine==7.0.0',
-    'build==1.5.0',
+    'build==1.6.1',
 ]
 
 [project.urls]
