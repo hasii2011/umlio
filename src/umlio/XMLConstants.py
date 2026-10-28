@@ -65,6 +65,13 @@ class XmlConstants:
     ATTRIBUTE_SOURCE_TIME:      str = 'sourceTime'
     ATTRIBUTE_DESTINATION_TIME: str = 'destinationTime'
 
+    ATTRIBUTE_MESSAGE_TYPE:  str = 'messageType'
+    ATTRIBUTE_START_Y:       str = 'startY'
+    ATTRIBUTE_END_Y:         str = 'endY'
+    ATTRIBUTE_NESTING_LEVEL: str = 'nestingLevel'
+    ATTRIBUTE_OPERATOR:      str = 'operator'
+    ATTRIBUTE_GUARD:         str = 'guard'
+
     ATTRIBUTE_IMPLEMENTING_CLASS_NAME:   str = 'implementingClassName'
     ATTRIBUTE_LINE_CENTUM:               str = 'lineCentum'
     ATTRIBUTE_ATTACHMENT_SIDE:           str = 'attachmentSide'
@@ -82,6 +89,12 @@ class XmlConstants:
     ELEMENT_UML_TEXT:     str = 'UmlText'
     ELEMENT_UML_LINK:     str = 'UmlLink'
     ELEMENT_LOLLIPOP:     str = 'UmlLollipopInterface'
+
+    ELEMENT_UML_SD_INSTANCE:          str = 'UmlSDInstance'
+    ELEMENT_UML_SD_MESSAGE:           str = 'UmlSDMessage'
+    ELEMENT_UML_SD_EXECUTION:         str = 'UmlSDExecution'
+    ELEMENT_UML_SD_COMBINED_FRAGMENT: str = 'UmlSDCombinedFragment'
+    ELEMENT_SD_INTERACTION_OPERAND:   str = 'SDInteractionOperand'
 
     ELEMENT_ASSOCIATION_LABEL:             str = 'AssociationName'
     ELEMENT_ASSOCIATION_SOURCE_LABEL:      str = 'SourceCardinality'
