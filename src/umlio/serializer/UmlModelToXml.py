@@ -4,6 +4,8 @@ from logging import getLogger
 
 from os import linesep as osLineSep
 
+from typing import Optional
+
 from xml.etree.ElementTree import Element
 from xml.etree.ElementTree import SubElement
 
@@ -22,6 +24,7 @@ from umlmodel.Method import SourceCode
 from umlmodel.ModelTypes import ClassName
 from umlmodel.Note import Note
 from umlmodel.Parameter import Parameter
+from umlmodel.SDExecution import SDExecution
 from umlmodel.SDInstance import SDInstance
 from umlmodel.SDMessage import SDMessage
 from umlmodel.Text import Text
@@ -135,9 +138,11 @@ class UmlModelToXml:
         fixedContent: str = content.replace(osLineSep, XML_END_OF_LINE_MARKER)
 
         assert note.fileName is not None, 'I have a contract'
+        assert note.name is not None, 'I have a contract'
 
         attributes: ElementAttributes = ElementAttributes({
             XmlConstants.ATTRIBUTE_ID:       str(noteId),
+            XmlConstants.ATTRIBUTE_NAME:     note.name,
             XmlConstants.ATTRIBUTE_CONTENT:  fixedContent,
             XmlConstants.ATTRIBUTE_FILENAME: note.fileName,
         })
@@ -196,9 +201,8 @@ class UmlModelToXml:
         sdInstanceId: str = sdInstance.id
 
         attributes: ElementAttributes = ElementAttributes({
-            XmlConstants.ATTRIBUTE_ID:               sdInstanceId,
-            XmlConstants.ATTRIBUTE_INSTANCE_NAME:    sdInstance.instanceName,
-            XmlConstants.ATTRIBUTE_LIFE_LINE_LENGTH: str(sdInstance.instanceLifeLineLength),
+            XmlConstants.ATTRIBUTE_ID:            sdInstanceId,
+            XmlConstants.ATTRIBUTE_INSTANCE_NAME: sdInstance.instanceName,
         })
 
         modelSDInstanceElement: Element = SubElement(sdInstanceElement, XmlConstants.ELEMENT_MODEL_SD_INSTANCE, attrib=attributes)
@@ -209,11 +213,16 @@ class UmlModelToXml:
 
         sdMessageId: str = sdMessage.id
 
-        srcInstance: LinkSource      = sdMessage.source
-        dstInstance: LinkDestination = sdMessage.destination
+        srcInstance: Optional[LinkSource]      = sdMessage.source
+        dstInstance: Optional[LinkDestination] = sdMessage.destination
 
-        idSrc: str = srcInstance.id
-        idDst: str = dstInstance.id
+        idSrc: str = ''
+        if srcInstance is not None:
+            idSrc = srcInstance.id
+
+        idDst: str = ''
+        if dstInstance is not None:
+            idDst = dstInstance.id
 
         attributes: ElementAttributes = ElementAttributes({
             XmlConstants.ATTRIBUTE_ID:                        sdMessageId,
@@ -227,6 +236,41 @@ class UmlModelToXml:
         modelSDMessageElement: Element = SubElement(sdMessageElement, XmlConstants.ELEMENT_MODEL_SD_MESSAGE, attrib=attributes)
 
         return modelSDMessageElement
+
+    def sdExecutionToXml(self, sdExecution: SDExecution, sdExecutionElement: Element) -> Element:
+
+        sdExecutionId: str = sdExecution.id
+
+        instanceId: str = ''
+        if sdExecution.instance is not None:
+            instanceId = sdExecution.instance.id
+
+        operation: str = ''
+        if sdExecution.operation is not None:
+            operation = sdExecution.operation
+
+        attributes: ElementAttributes = ElementAttributes({
+            XmlConstants.ATTRIBUTE_ID:            sdExecutionId,
+            XmlConstants.ATTRIBUTE_INSTANCE_ID:   instanceId,
+            XmlConstants.ATTRIBUTE_START_TIME:    str(sdExecution.startTime),
+            XmlConstants.ATTRIBUTE_END_TIME:      str(sdExecution.endTime),
+            XmlConstants.ATTRIBUTE_NESTING_LEVEL: str(sdExecution.nestingLevel),
+            XmlConstants.ATTRIBUTE_OPERATION:     operation,
+        })
+
+        if sdExecution.startMessage is not None:
+            attributes[XmlConstants.ATTRIBUTE_START_MESSAGE_ID] = sdExecution.startMessage.id
+
+        if sdExecution.finishMessage is not None:
+            attributes[XmlConstants.ATTRIBUTE_FINISH_MESSAGE_ID] = sdExecution.finishMessage.id
+
+        modelSDExecutionElement: Element = SubElement(
+            sdExecutionElement,
+            XmlConstants.ELEMENT_MODEL_SD_EXECUTION,
+            attrib=attributes
+        )
+
+        return modelSDExecutionElement
 
     def _methodToXml(self, method: Method, classElement: Element) -> Element:
         """

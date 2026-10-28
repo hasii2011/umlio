@@ -61,9 +61,25 @@ class XmlConstants:
     ATTRIBUTE_SD_MESSAGE_DESTINATION_ID: str = 'destinationId'
 
     ATTRIBUTE_INSTANCE_NAME:    str = 'instanceName'
+    ATTRIBUTE_INSTANCE_ID:      str = 'instanceId'
     ATTRIBUTE_LIFE_LINE_LENGTH: str = 'lifeLineLength'
     ATTRIBUTE_SOURCE_TIME:      str = 'sourceTime'
     ATTRIBUTE_DESTINATION_TIME: str = 'destinationTime'
+    ATTRIBUTE_START_TIME:       str = 'startTime'
+    ATTRIBUTE_END_TIME:         str = 'endTime'
+    ATTRIBUTE_OPERATION:        str = 'operation'
+    ATTRIBUTE_START_MESSAGE_ID:  str = 'startMessageId'
+    ATTRIBUTE_FINISH_MESSAGE_ID: str = 'finishMessageId'
+
+    ATTRIBUTE_MESSAGE_TYPE:        str = 'messageType'
+    ATTRIBUTE_VERTICAL_OFFSET:     str = 'verticalOffset'
+    ATTRIBUTE_PROPORTIONAL_OFFSET: str = 'proportionalOffset'
+    ATTRIBUTE_FIXED_X:             str = 'fixedX'
+    ATTRIBUTE_START_Y:       str = 'startY'
+    ATTRIBUTE_END_Y:         str = 'endY'
+    ATTRIBUTE_NESTING_LEVEL: str = 'nestingLevel'
+    ATTRIBUTE_OPERATOR:      str = 'operator'
+    ATTRIBUTE_GUARD:         str = 'guard'
 
     ATTRIBUTE_IMPLEMENTING_CLASS_NAME:   str = 'implementingClassName'
     ATTRIBUTE_LINE_CENTUM:               str = 'lineCentum'
@@ -82,6 +98,13 @@ class XmlConstants:
     ELEMENT_UML_TEXT:     str = 'UmlText'
     ELEMENT_UML_LINK:     str = 'UmlLink'
     ELEMENT_LOLLIPOP:     str = 'UmlLollipopInterface'
+
+    ELEMENT_UML_SD_INSTANCE:          str = 'UmlSDInstance'
+    ELEMENT_UML_SD_MESSAGE:           str = 'UmlSDMessage'
+    ELEMENT_UML_SD_EXECUTION:         str = 'UmlSDExecution'
+    ELEMENT_UML_SD_COMBINED_FRAGMENT: str = 'UmlSDCombinedFragment'
+    ELEMENT_SD_INTERACTION_OPERAND:   str = 'SDInteractionOperand'
+    ELEMENT_UML_SD_MESSAGE_LABEL:     str = 'UmlSDMessageLabel'
 
     ELEMENT_ASSOCIATION_LABEL:             str = 'AssociationName'
     ELEMENT_ASSOCIATION_SOURCE_LABEL:      str = 'SourceCardinality'
@@ -107,5 +130,6 @@ class XmlConstants:
 
     ELEMENT_MODEL_SD_INSTANCE:   str = 'ModelSDInstance'
     ELEMENT_MODEL_SD_MESSAGE:    str = 'ModelSDMessage'
+    ELEMENT_MODEL_SD_EXECUTION:  str = 'ModelSDExecution'
 
     ELEMENT_MODEL_LINE_CONTROL_POINT: str = 'LineControlPoint'

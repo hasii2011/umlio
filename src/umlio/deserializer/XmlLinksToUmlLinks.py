@@ -272,8 +272,8 @@ class XmlLinksToUmlLinks:
         """
         if link.linkType == LinkType.INHERITANCE:
             # Note dest and source are reversed here
-            subClass:  UmlClass = srcShape              # type: ignore
-            baseClass: UmlClass = destShape             # type: ignore
+            subClass:  UmlClass = cast(UmlClass, srcShape)
+            baseClass: UmlClass = cast(UmlClass, destShape)
 
             umlInheritance: UmlInheritance = UmlInheritance(baseClass=baseClass, link=link, subClass=subClass)
 
@@ -288,15 +288,15 @@ class XmlLinksToUmlLinks:
             umlAssociation.destinationShape = destShape
             return umlAssociation
         elif link.linkType == LinkType.NOTELINK:
-            umlNote:     UmlNote     = srcShape         # type: ignore
-            umlClass:    UmlClass    = destShape        # type: ignore
+            umlNote:     UmlNote     = cast(UmlNote, srcShape)
+            umlClass:    UmlClass    = cast(UmlClass, destShape)
             umlNoteLink: UmlNoteLink = UmlNoteLink(link=link)
             umlNoteLink.sourceNote       = umlNote
             umlNoteLink.destinationClass = umlClass
             return umlNoteLink
         elif link.linkType == LinkType.INTERFACE:
-            implementingClass: UmlClass = srcShape      # type: ignore
-            interfaceClass:    UmlClass = destShape     # type: ignore
+            implementingClass: UmlClass = cast(UmlClass, srcShape)
+            interfaceClass:    UmlClass = cast(UmlClass, destShape)
             umlInterface: UmlInterface = UmlInterface(link=link, implementingClass=implementingClass, interfaceClass=interfaceClass)
 
             return umlInterface

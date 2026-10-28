@@ -21,6 +21,11 @@ from umlshapes.shapes.UmlText import UmlText
 from umlshapes.shapes.UmlUseCase import UmlUseCase
 from umlshapes.links.UmlLollipopInterface import UmlLollipopInterface
 
+from umlshapes.sd.UmlSDInstance import UmlSDInstance
+from umlshapes.sd.UmlSDMessage import UmlSDMessage
+from umlshapes.sd.UmlSDExecution import UmlSDExecution
+from umlshapes.sd.UmlSDCombinedFragment import UmlSDCombinedFragment
+
 from umlshapes.links.UmlLink import UmlLink
 from umlshapes.types.UmlDimensions import UmlDimensions
 from umlshapes.types.UmlPosition import UmlPosition
@@ -42,6 +47,11 @@ UmlTexts         = NewType('UmlTexts',        List[UmlText])
 UmlLinks         = NewType('UmlLinks',        List[UmlLink])
 
 UmlLollipopInterfaces = NewType('UmlLollipopInterfaces', List[UmlLollipopInterface])
+
+UmlSDInstances         = NewType('UmlSDInstances', List[UmlSDInstance])
+UmlSDMessages          = NewType('UmlSDMessages', List[UmlSDMessage])
+UmlSDExecutions        = NewType('UmlSDExecutions', List[UmlSDExecution])
+UmlSDCombinedFragments = NewType('UmlSDCombinedFragments', List[UmlSDCombinedFragment])
 
 ElementAttributes = NewType('ElementAttributes', Dict[str, str])
 
@@ -86,6 +96,22 @@ def umlLollipopInterfacesFactory() -> UmlLollipopInterfaces:
     return UmlLollipopInterfaces([])
 
 
+def umlSDInstancesFactory() -> UmlSDInstances:
+    return UmlSDInstances([])
+
+
+def umlSDMessagesFactory() -> UmlSDMessages:
+    return UmlSDMessages([])
+
+
+def umlSDExecutionsFactory() -> UmlSDExecutions:
+    return UmlSDExecutions([])
+
+
+def umlSDCombinedFragmentsFactory() -> UmlSDCombinedFragments:
+    return UmlSDCombinedFragments([])
+
+
 DEFAULT_PROJECT_TITLE:         UmlDocumentTitle = UmlDocumentTitle('NewProject')
 DEFAULT_CLASS_DIAGRAM_NAME:    UmlDocumentTitle = UmlDocumentTitle('Class Diagram')
 DEFAULT_USE_CASE_DIAGRAM_NAME: UmlDocumentTitle = UmlDocumentTitle('Use Case Diagram')
@@ -109,6 +135,11 @@ class UmlDocument:
     umlLinks:        UmlLinks    = field(default_factory=umlLinksFactory)
 
     umlLollipopInterfaces: UmlLollipopInterfaces = field(default_factory=umlLollipopInterfacesFactory)
+
+    umlSDInstances:         UmlSDInstances         = field(default_factory=umlSDInstancesFactory)
+    umlSDMessages:          UmlSDMessages          = field(default_factory=umlSDMessagesFactory)
+    umlSDExecutions:        UmlSDExecutions        = field(default_factory=umlSDExecutionsFactory)
+    umlSDCombinedFragments: UmlSDCombinedFragments = field(default_factory=umlSDCombinedFragmentsFactory)
 
     @classmethod
     def classDocument(cls) -> 'UmlDocument':

@@ -22,6 +22,11 @@ from umlio.serializer.UmlClassToXml import UmlClassToXml
 from umlio.serializer.UmlUseCasesToXml import UmlUseCasesToXml
 from umlio.serializer.UmlLollipopsToXml import UmlLollipopsToXml
 
+from umlio.serializer.UmlSDInstancesToXml import UmlSDInstancesToXml
+from umlio.serializer.UmlSDMessagesToXml import UmlSDMessagesToXml
+from umlio.serializer.UmlSDExecutionsToXml import UmlSDExecutionsToXml
+from umlio.serializer.UmlSDCombinedFragmentsToXml import UmlSDCombinedFragmentsToXml
+
 from umlio.XMLConstants import XmlConstants
 
 INDENT_SPACES: str = '    '     # TODO: Make this configurable
@@ -91,6 +96,11 @@ class UmlShapesToXml:
         umlLinksToXml:   UmlLinksToXml    = UmlLinksToXml()
         umlLollipopsToXml: UmlLollipopsToXml = UmlLollipopsToXml()
 
+        umlSDInstancesToXml:         UmlSDInstancesToXml         = UmlSDInstancesToXml()
+        umlSDMessagesToXml:          UmlSDMessagesToXml          = UmlSDMessagesToXml()
+        umlSDExecutionsToXml:        UmlSDExecutionsToXml        = UmlSDExecutionsToXml()
+        umlSDCombinedFragmentsToXml: UmlSDCombinedFragmentsToXml = UmlSDCombinedFragmentsToXml()
+
         documentElement: Element       = self._umlDocumentAttributesToXml(umlDiagram=umlDiagram)
 
         umlClassToXml.serialize(documentTop=documentElement, umlClasses=umlDiagram.umlClasses)
@@ -101,6 +111,11 @@ class UmlShapesToXml:
         umlLinksToXml.serialize(documentTop=documentElement, umlLinks=umlDiagram.umlLinks)
 
         umlLollipopsToXml.serialize(documentTop=documentElement, umlLollipops=umlDiagram.umlLollipopInterfaces)
+
+        umlSDInstancesToXml.serialize(documentTop=documentElement, umlSDInstances=umlDiagram.umlSDInstances)
+        umlSDMessagesToXml.serialize(documentTop=documentElement, umlSDMessages=umlDiagram.umlSDMessages)
+        umlSDExecutionsToXml.serialize(documentTop=documentElement, umlSDExecutions=umlDiagram.umlSDExecutions)
+        umlSDCombinedFragmentsToXml.serialize(documentTop=documentElement, umlSDCombinedFragments=umlDiagram.umlSDCombinedFragments)
 
     def writeXml(self, fileName: Path):
         """

@@ -22,6 +22,10 @@ from umlio.IOTypes import UmlLollipopInterfaces
 from umlio.IOTypes import UmlNotes
 from umlio.IOTypes import UmlTexts
 from umlio.IOTypes import UmlProject
+from umlio.IOTypes import UmlSDCombinedFragments
+from umlio.IOTypes import UmlSDExecutions
+from umlio.IOTypes import UmlSDInstances
+from umlio.IOTypes import UmlSDMessages
 from umlio.IOTypes import UmlUseCases
 
 from umlio.deserializer.XmlActorsToUmlActors import XmlActorsToUmlActors
@@ -29,6 +33,10 @@ from umlio.deserializer.XmlClassesToUmlClasses import XmlClassesToUmlClasses
 from umlio.deserializer.XmlLinksToUmlLinks import XmlLinksToUmlLinks
 from umlio.deserializer.XmlLollipopsToUmlLollipops import XmlLollipopsToUmlLollipops
 from umlio.deserializer.XmlNotesToUmlNotes import XmlNotesToUmlNotes
+from umlio.deserializer.XmlSDExecutionsToUmlSDExecutions import XmlSDExecutionsToUmlSDExecutions
+from umlio.deserializer.XmlSDFragmentsToUmlSDCombinedFragments import XmlSDFragmentsToUmlSDCombinedFragments
+from umlio.deserializer.XmlSDInstancesToUmlSDInstances import XmlSDInstancesToUmlSDInstances
+from umlio.deserializer.XmlSDMessagesToUmlSDMessages import XmlSDMessagesToUmlSDMessages
 from umlio.deserializer.XmlTextsToUmlTexts import XmlTextsToUmlTexts
 from umlio.deserializer.XmlUseCasesToUmlUseCases import XmlUseCasesToUmlUseCases
 
@@ -105,6 +113,11 @@ class XmlToUmlShapes:
                 umlDocument.documentType = UmlDocumentType.SEQUENCE_DOCUMENT
                 umlDocument.umlTexts   = self._deserializeUmlTextElements(umlDiagramElement=umlDiagramElement)
                 umlDocument.umlNotes    = self._deserializeUmlNoteElements(umlDiagramElement=umlDiagramElement)
+
+                umlDocument.umlSDInstances         = self._deserializeUmlSDInstanceElements(umlDiagramElement=umlDiagramElement)
+                umlDocument.umlSDMessages          = self._deserializeUmlSDMessageElements(umlDiagramElement=umlDiagramElement, umlSDInstances=umlDocument.umlSDInstances)
+                umlDocument.umlSDExecutions        = self._deserializeUmlSDExecutionElements(umlDiagramElement=umlDiagramElement, umlSDInstances=umlDocument.umlSDInstances)
+                umlDocument.umlSDCombinedFragments = self._deserializeUmlSDCombinedFragmentElements(umlDiagramElement=umlDiagramElement)
 
             else:
                 assert False, 'Unknown diagram Type - Perhaps corrupted fle'
@@ -189,6 +202,74 @@ class XmlToUmlShapes:
                                                                                           linkableUmlShapes=linkableUmlShapes
                                                                                           )
         return lollipopInterfaces
+
+    def _deserializeUmlSDInstanceElements(self, umlDiagramElement: Element) -> UmlSDInstances:
+        """
+        Deserializes sequence diagram instance shapes.
+
+        Args:
+            umlDiagramElement: The diagram untangle Element
+
+        Returns:
+            The list of deserialized UmlSDInstance objects
+        """
+        xmlSDInstancesToUmlSDInstances: XmlSDInstancesToUmlSDInstances = XmlSDInstancesToUmlSDInstances()
+        umlSDInstances:                 UmlSDInstances                 = xmlSDInstancesToUmlSDInstances.deserialize(umlDiagramElement=umlDiagramElement)
+
+        return umlSDInstances
+
+    def _deserializeUmlSDMessageElements(self, umlDiagramElement: Element, umlSDInstances: UmlSDInstances) -> UmlSDMessages:
+        """
+        Deserializes sequence diagram message shapes.
+
+        Args:
+            umlDiagramElement: The diagram untangle Element
+            umlSDInstances:    The deserialized instances for endpoint resolution
+
+        Returns:
+            The list of deserialized UmlSDMessage objects
+        """
+        xmlSDMessagesToUmlSDMessages: XmlSDMessagesToUmlSDMessages = XmlSDMessagesToUmlSDMessages()
+        umlSDMessages:                UmlSDMessages                = xmlSDMessagesToUmlSDMessages.deserialize(
+            umlDiagramElement=umlDiagramElement,
+            umlSDInstances=umlSDInstances
+        )
+
+        return umlSDMessages
+
+    def _deserializeUmlSDExecutionElements(self, umlDiagramElement: Element, umlSDInstances: UmlSDInstances) -> UmlSDExecutions:
+        """
+        Deserializes sequence diagram execution shapes.
+
+        Args:
+            umlDiagramElement: The diagram untangle Element
+            umlSDInstances:    The deserialized instances for lifeline resolution
+
+        Returns:
+            The list of deserialized UmlSDExecution objects
+        """
+        xmlSDExecutionsToUmlSDExecutions: XmlSDExecutionsToUmlSDExecutions = XmlSDExecutionsToUmlSDExecutions()
+        umlSDExecutions:                 UmlSDExecutions                 = xmlSDExecutionsToUmlSDExecutions.deserialize(
+            umlDiagramElement=umlDiagramElement,
+            umlSDInstances=umlSDInstances
+        )
+
+        return umlSDExecutions
+
+    def _deserializeUmlSDCombinedFragmentElements(self, umlDiagramElement: Element) -> UmlSDCombinedFragments:
+        """
+        Deserializes sequence diagram combined fragments.
+
+        Args:
+            umlDiagramElement: The diagram untangle Element
+
+        Returns:
+            The list of deserialized UmlSDCombinedFragment objects
+        """
+        xmlSDFragmentsToUmlSDCombinedFragments: XmlSDFragmentsToUmlSDCombinedFragments = XmlSDFragmentsToUmlSDCombinedFragments()
+        umlSDCombinedFragments:                 UmlSDCombinedFragments                 = xmlSDFragmentsToUmlSDCombinedFragments.deserialize(umlDiagramElement=umlDiagramElement)
+
+        return umlSDCombinedFragments
 
     def _buildLinkableUmlShapes(self, umlDocument: UmlDocument) -> LinkableUmlShapes:
         """

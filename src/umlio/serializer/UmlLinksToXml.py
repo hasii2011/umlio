@@ -1,4 +1,6 @@
 
+from typing import Dict
+
 from logging import Logger
 from logging import getLogger
 
@@ -62,28 +64,28 @@ class UmlLinksToXml(BaseUmlToXml):
 
         if isinstance(umlLink, UmlAssociation):
 
-            associationName: UmlLinkLabel = umlLink.associationName
-            src:             UmlLinkLabel = umlLink.sourceCardinality
-            dst:             UmlLinkLabel = umlLink.destinationCardinality
-            associationLabels = {
+            associationName: UmlLinkLabel | None = umlLink.associationName
+            src:             UmlLinkLabel | None = umlLink.sourceCardinality
+            dst:             UmlLinkLabel | None = umlLink.destinationCardinality
+            associationLabels: Dict[str, UmlLinkLabel | None] = {
                 XmlConstants.ELEMENT_ASSOCIATION_LABEL:             associationName,
                 XmlConstants.ELEMENT_ASSOCIATION_SOURCE_LABEL:      src,
                 XmlConstants.ELEMENT_ASSOCIATION_DESTINATION_LABEL: dst
             }
             for eltName in associationLabels:
-                umlAssociationLabel: UmlLinkLabel = associationLabels[eltName]
+                umlAssociationLabel: UmlLinkLabel | None = associationLabels[eltName]
+                if umlAssociationLabel is not None:
+                    linkDelta: DeltaXY = umlAssociationLabel.linkDelta
 
-                linkDelta: DeltaXY = umlAssociationLabel.linkDelta
-
-                labelSize: UmlDimensions = umlAssociationLabel.size
-                labelAttributes: ElementAttributes = ElementAttributes({
-                    XmlConstants.ATTRIBUTE_WIDTH:   str(labelSize.width),
-                    XmlConstants.ATTRIBUTE_HEIGHT:  str(labelSize.height),
-                    XmlConstants.ATTRIBUTE_DELTA_X: str(linkDelta.deltaX),
-                    XmlConstants.ATTRIBUTE_DELTA_Y: str(linkDelta.deltaY),
-                })
-                # noinspection PyUnusedLocal
-                labelElement: Element = SubElement(umlLinkSubElement, eltName, attrib=labelAttributes)
+                    labelSize: UmlDimensions = umlAssociationLabel.size
+                    labelAttributes: ElementAttributes = ElementAttributes({
+                        XmlConstants.ATTRIBUTE_WIDTH:   str(labelSize.width),
+                        XmlConstants.ATTRIBUTE_HEIGHT:  str(labelSize.height),
+                        XmlConstants.ATTRIBUTE_DELTA_X: str(linkDelta.deltaX),
+                        XmlConstants.ATTRIBUTE_DELTA_Y: str(linkDelta.deltaY),
+                    })
+                    # noinspection PyUnusedLocal
+                    labelElement: Element = SubElement(umlLinkSubElement, eltName, attrib=labelAttributes)
         elif isinstance(umlLink, UmlInheritance):
             pass                                        # Nothing special here
         elif isinstance(umlLink, UmlInterface):

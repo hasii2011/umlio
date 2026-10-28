@@ -26,7 +26,7 @@ class UmlNotesToXml(BaseUmlToXml):
     def serialize(self, documentTop: Element, umlNotes: UmlNotes) -> Element:
 
         for note in umlNotes:
-            umlNote: UmlNote = cast (UmlNote, note)
+            umlNote: UmlNote = note
             umlNoteElement: Element = self._umlNoteToXml(documentTop=documentTop, umlNote=umlNote)
             self._modelToXml.noteToXml(note=umlNote.modelNote, umlNoteElement=umlNoteElement)
 

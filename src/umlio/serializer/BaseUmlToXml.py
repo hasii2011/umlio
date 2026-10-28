@@ -1,5 +1,7 @@
 
 from umlshapes.ShapeTypes import UmlShapeGenre
+from umlshapes.sd.UmlSDInstance import UmlSDInstance
+from umlshapes.sd.UmlSDCombinedFragment import UmlSDCombinedFragment
 
 from umlshapes.types.UmlDimensions import UmlDimensions
 from umlshapes.types.UmlPosition import UmlPosition
@@ -9,11 +11,14 @@ from umlio.IOTypes import ElementAttributes
 from umlio.XMLConstants import XmlConstants
 
 
+UmlBaseShape = UmlShapeGenre | UmlSDInstance | UmlSDCombinedFragment
+
+
 class BaseUmlToXml:
     def __init__(self):
         pass
 
-    def _umlBaseAttributes(self, umlShape: UmlShapeGenre) -> ElementAttributes:
+    def _umlBaseAttributes(self, umlShape: UmlBaseShape) -> ElementAttributes:
         """
         Create the common OglObject attributes
 

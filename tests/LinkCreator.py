@@ -179,11 +179,11 @@ class LinkCreator:
 
         umlInheritance.SetEnds(x1=0, y1=0, x2=0, y2=0)
 
-        umlInheritance.addLineControlPoint(umlPosition=UmlPosition(x=100, y=100))
-        umlInheritance.addLineControlPoint(umlPosition=UmlPosition(x=200, y=200))
-
         # REMEMBER:   from subclass to base class
         subClassUmlClass.addLink(umlLink=umlInheritance, destinationClass=baseUmlClass)
+
+        umlInheritance.addLineControlPoint(umlPosition=UmlPosition(x=100, y=100))
+        umlInheritance.addLineControlPoint(umlPosition=UmlPosition(x=200, y=200))
 
         return CreatedLink(
             sourceUmlClass=subClassUmlClass,
@@ -220,11 +220,11 @@ class LinkCreator:
         umlInterface.umlFrame = self._diagramFrame
         umlInterface.MakeLineControlPoints(n=2)       # Make this configurable
 
-        umlInterface.addLineControlPoint(umlPosition=UmlPosition(x=372, y=433))
-        umlInterface.addLineControlPoint(umlPosition=UmlPosition(x=400, y=433))
-
         # REMEMBER:   from subclass to base class
         implementingUmlClass.addLink(umlLink=umlInterface, destinationClass=interfaceUmlClass)
+
+        umlInterface.addLineControlPoint(umlPosition=UmlPosition(x=372, y=433))
+        umlInterface.addLineControlPoint(umlPosition=UmlPosition(x=400, y=433))
 
         return CreatedLink(
             sourceUmlClass=implementingUmlClass,
