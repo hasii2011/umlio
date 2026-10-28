@@ -28,12 +28,12 @@ Sequence diagram deserialization reconstructs interactive visual shapes (`umlsha
 <UMLDiagram documentType="Sequence Document" title="Order Processing" scrollPositionX="1" scrollPositionY="1" pixelsPerUnitX="1" pixelsPerUnitY="1">
 
     <!-- SD Instance Shapes -->
-    <UmlSDInstance id="customer.instance" x="120" y="60" width="100" height="50">
-        <ModelSDInstance id="inst-001" instanceName="customer:Customer" lifeLineLength="400" />
+    <UmlSDInstance id="customer.instance" x="120" y="60" width="100" height="50" lifeLineLength="400">
+        <ModelSDInstance id="inst-001" instanceName="customer:Customer" />
     </UmlSDInstance>
 
-    <UmlSDInstance id="orderservice.instance" x="340" y="60" width="120" height="50">
-        <ModelSDInstance id="inst-002" instanceName="orderService:OrderService" lifeLineLength="400" />
+    <UmlSDInstance id="orderservice.instance" x="340" y="60" width="120" height="50" lifeLineLength="400">
+        <ModelSDInstance id="inst-002" instanceName="orderService:OrderService" />
     </UmlSDInstance>
 
     <!-- Sequence Messages -->
@@ -90,7 +90,8 @@ XmlToUmlShapes.deserializeXml()
 * **Output**: `UmlSDInstances` (`List[UmlSDInstance]`).
 * **Responsibilities**:
   * Extract `<UmlSDInstance>` attributes: `id`, `x`, `y`, `width`, `height`.
-  * Parse `<ModelSDInstance>` attributes: `instanceName`, `lifeLineLength`.
+  * Parse `<UmlSDInstance>` attributes: `id`, `x`, `y`, `width`, `height`, `lifeLineLength`.
+  * Parse `<ModelSDInstance>` attributes: `instanceName`.
   * Construct `SDInstance` data model.
   * Instantiate `UmlSDInstance` with appropriate canvas/frame reference and lifeline length.
 

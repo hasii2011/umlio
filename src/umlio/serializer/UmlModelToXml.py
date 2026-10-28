@@ -196,9 +196,8 @@ class UmlModelToXml:
         sdInstanceId: str = sdInstance.id
 
         attributes: ElementAttributes = ElementAttributes({
-            XmlConstants.ATTRIBUTE_ID:               sdInstanceId,
-            XmlConstants.ATTRIBUTE_INSTANCE_NAME:    sdInstance.instanceName,
-            XmlConstants.ATTRIBUTE_LIFE_LINE_LENGTH: str(sdInstance.instanceLifeLineLength),
+            XmlConstants.ATTRIBUTE_ID:            sdInstanceId,
+            XmlConstants.ATTRIBUTE_INSTANCE_NAME: sdInstance.instanceName,
         })
 
         modelSDInstanceElement: Element = SubElement(sdInstanceElement, XmlConstants.ELEMENT_MODEL_SD_INSTANCE, attrib=attributes)

@@ -37,11 +37,8 @@ class UmlSDInstancesToXml(BaseUmlToXml):
             The modified documentTop element
         """
         for instance in umlSDInstances:
-
-            umlSDInstance: UmlSDInstance = instance
-            umlSDInstance.sdInstance.instanceLifeLineLength = umlSDInstance.getLifeLineLength()
-
-            umlSDInstanceElement: Element = self._umlSDInstanceToXml(documentTop=documentTop, umlSDInstance=umlSDInstance)
+            umlSDInstance:        UmlSDInstance = instance
+            umlSDInstanceElement: Element       = self._umlSDInstanceToXml(documentTop=documentTop, umlSDInstance=umlSDInstance)
             self._modelToXml.sdInstanceToXml(sdInstance=umlSDInstance.sdInstance, sdInstanceElement=umlSDInstanceElement)
 
         return documentTop
@@ -49,6 +46,8 @@ class UmlSDInstancesToXml(BaseUmlToXml):
     def _umlSDInstanceToXml(self, documentTop: Element, umlSDInstance: UmlSDInstance) -> Element:
 
         attributes: ElementAttributes = self._umlBaseAttributes(umlShape=umlSDInstance)
+        attributes[XmlConstants.ATTRIBUTE_LIFE_LINE_LENGTH] = str(umlSDInstance.getLifeLineLength())
+
         umlSDInstanceSubElement: Element = SubElement(
             documentTop,
             XmlConstants.ELEMENT_UML_SD_INSTANCE,
