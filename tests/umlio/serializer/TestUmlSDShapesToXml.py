@@ -58,10 +58,10 @@ MESSAGE_TIME_STEP:           int = 120
 EXPECTED_SD_INSTANCES_XML: str = (
     "<?xml version='1.0' encoding='iso-8859-1'?>\n"
     '<UMLDiagram documentType="Sequence Document" title="Order Processing" scrollPositionX="1" scrollPositionY="1" pixelsPerUnitX="1" pixelsPerUnitY="1">\n'
-    f'    <UmlSDInstance id="{CUSTOMER_INSTANCE_ID}" width="143" height="400" x="-71" y="-180" lifeLineLength="{DEFAULT_LIFELINE_LENGTH}">\n'
+    f'    <UmlSDInstance id="{CUSTOMER_INSTANCE_ID}" width="{CUSTOMER_INSTANCE_WIDTH}" height="{DEFAULT_LIFELINE_LENGTH}" x="{CUSTOMER_INSTANCE_X}" y="{INSTANCE_Y}" lifeLineLength="{DEFAULT_LIFELINE_LENGTH}">\n'
     f'        <ModelSDInstance id="{CUSTOMER_MODEL_ID}" instanceName="{CUSTOMER_INSTANCE_NAME}" />\n'
     '    </UmlSDInstance>\n'
-    f'    <UmlSDInstance id="{ORDER_SERVICE_INSTANCE_ID}" width="186" height="400" x="-93" y="-180" lifeLineLength="{DEFAULT_LIFELINE_LENGTH}">\n'
+    f'    <UmlSDInstance id="{ORDER_SERVICE_INSTANCE_ID}" width="{ORDER_SERVICE_INSTANCE_WIDTH}" height="{DEFAULT_LIFELINE_LENGTH}" x="{ORDER_SERVICE_INSTANCE_X}" y="{INSTANCE_Y}" lifeLineLength="{DEFAULT_LIFELINE_LENGTH}">\n'
     f'        <ModelSDInstance id="{ORDER_SERVICE_MODEL_ID}" instanceName="{ORDER_SERVICE_INSTANCE_NAME}" />\n'
     '    </UmlSDInstance>\n'
     '</UMLDiagram>'
@@ -79,10 +79,10 @@ EXPECTED_SD_MESSAGES_XML: str = (
 EXPECTED_SEQUENCE_DIAGRAM_XML: str = (
     "<?xml version='1.0' encoding='iso-8859-1'?>\n"
     '<UMLDiagram documentType="Sequence Document" title="Order Processing" scrollPositionX="1" scrollPositionY="1" pixelsPerUnitX="1" pixelsPerUnitY="1">\n'
-    f'    <UmlSDInstance id="{CUSTOMER_INSTANCE_ID}" width="143" height="400" x="-71" y="-180" lifeLineLength="{DEFAULT_LIFELINE_LENGTH}">\n'
+    f'    <UmlSDInstance id="{CUSTOMER_INSTANCE_ID}" width="{CUSTOMER_INSTANCE_WIDTH}" height="{DEFAULT_LIFELINE_LENGTH}" x="{CUSTOMER_INSTANCE_X}" y="{INSTANCE_Y}" lifeLineLength="{DEFAULT_LIFELINE_LENGTH}">\n'
     f'        <ModelSDInstance id="{CUSTOMER_MODEL_ID}" instanceName="{CUSTOMER_INSTANCE_NAME}" />\n'
     '    </UmlSDInstance>\n'
-    f'    <UmlSDInstance id="{ORDER_SERVICE_INSTANCE_ID}" width="186" height="400" x="-93" y="-180" lifeLineLength="{DEFAULT_LIFELINE_LENGTH}">\n'
+    f'    <UmlSDInstance id="{ORDER_SERVICE_INSTANCE_ID}" width="{ORDER_SERVICE_INSTANCE_WIDTH}" height="{DEFAULT_LIFELINE_LENGTH}" x="{ORDER_SERVICE_INSTANCE_X}" y="{INSTANCE_Y}" lifeLineLength="{DEFAULT_LIFELINE_LENGTH}">\n'
     f'        <ModelSDInstance id="{ORDER_SERVICE_MODEL_ID}" instanceName="{ORDER_SERVICE_INSTANCE_NAME}" />\n'
     '    </UmlSDInstance>\n'
     f'    <UmlSDMessage id="{MESSAGE_PLACE_ORDER_ID}" messageType="Synchronous Message">\n'
@@ -171,9 +171,11 @@ class TestUmlSDShapesToXml(UmlIOBaseTest):
             umlPubSubEngine=self._pubSubEngine
         )
         umlSDInstance1.id = CUSTOMER_INSTANCE_ID
-        umlSDInstance1.position = UmlPosition(x=CUSTOMER_INSTANCE_X, y=INSTANCE_Y)
         umlSDInstance1.setInstanceWidth(CUSTOMER_INSTANCE_WIDTH)
         umlSDInstance1.setLifeLineLength(DEFAULT_LIFELINE_LENGTH)
+        umlSDInstance1._size.SetWidth(CUSTOMER_INSTANCE_WIDTH)
+        umlSDInstance1._size.SetHeight(DEFAULT_LIFELINE_LENGTH)
+        umlSDInstance1.position = UmlPosition(x=CUSTOMER_INSTANCE_X, y=INSTANCE_Y)
 
         umlSDInstance2: UmlSDInstance = UmlSDInstance(
             sdInstance=sdInstance2,
@@ -181,9 +183,11 @@ class TestUmlSDShapesToXml(UmlIOBaseTest):
             umlPubSubEngine=self._pubSubEngine
         )
         umlSDInstance2.id = ORDER_SERVICE_INSTANCE_ID
-        umlSDInstance2.position = UmlPosition(x=ORDER_SERVICE_INSTANCE_X, y=INSTANCE_Y)
         umlSDInstance2.setInstanceWidth(ORDER_SERVICE_INSTANCE_WIDTH)
         umlSDInstance2.setLifeLineLength(DEFAULT_LIFELINE_LENGTH)
+        umlSDInstance2._size.SetWidth(ORDER_SERVICE_INSTANCE_WIDTH)
+        umlSDInstance2._size.SetHeight(DEFAULT_LIFELINE_LENGTH)
+        umlSDInstance2.position = UmlPosition(x=ORDER_SERVICE_INSTANCE_X, y=INSTANCE_Y)
 
         return UmlSDInstances([umlSDInstance1, umlSDInstance2])
 
