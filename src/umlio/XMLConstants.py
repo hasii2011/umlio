@@ -61,9 +61,15 @@ class XmlConstants:
     ATTRIBUTE_SD_MESSAGE_DESTINATION_ID: str = 'destinationId'
 
     ATTRIBUTE_INSTANCE_NAME:    str = 'instanceName'
+    ATTRIBUTE_INSTANCE_ID:      str = 'instanceId'
     ATTRIBUTE_LIFE_LINE_LENGTH: str = 'lifeLineLength'
     ATTRIBUTE_SOURCE_TIME:      str = 'sourceTime'
     ATTRIBUTE_DESTINATION_TIME: str = 'destinationTime'
+    ATTRIBUTE_START_TIME:       str = 'startTime'
+    ATTRIBUTE_END_TIME:         str = 'endTime'
+    ATTRIBUTE_OPERATION:        str = 'operation'
+    ATTRIBUTE_START_MESSAGE_ID:  str = 'startMessageId'
+    ATTRIBUTE_FINISH_MESSAGE_ID: str = 'finishMessageId'
 
     ATTRIBUTE_MESSAGE_TYPE:  str = 'messageType'
     ATTRIBUTE_START_Y:       str = 'startY'
@@ -120,5 +126,6 @@ class XmlConstants:
 
     ELEMENT_MODEL_SD_INSTANCE:   str = 'ModelSDInstance'
     ELEMENT_MODEL_SD_MESSAGE:    str = 'ModelSDMessage'
+    ELEMENT_MODEL_SD_EXECUTION:  str = 'ModelSDExecution'
 
     ELEMENT_MODEL_LINE_CONTROL_POINT: str = 'LineControlPoint'

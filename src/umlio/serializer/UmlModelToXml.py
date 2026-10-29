@@ -22,6 +22,7 @@ from umlmodel.Method import SourceCode
 from umlmodel.ModelTypes import ClassName
 from umlmodel.Note import Note
 from umlmodel.Parameter import Parameter
+from umlmodel.SDExecution import SDExecution
 from umlmodel.SDInstance import SDInstance
 from umlmodel.SDMessage import SDMessage
 from umlmodel.Text import Text
@@ -226,6 +227,41 @@ class UmlModelToXml:
         modelSDMessageElement: Element = SubElement(sdMessageElement, XmlConstants.ELEMENT_MODEL_SD_MESSAGE, attrib=attributes)
 
         return modelSDMessageElement
+
+    def sdExecutionToXml(self, sdExecution: SDExecution, sdExecutionElement: Element) -> Element:
+
+        sdExecutionId: str = sdExecution.id
+
+        instanceId: str = ''
+        if sdExecution.instance is not None:
+            instanceId = sdExecution.instance.id
+
+        operation: str = ''
+        if sdExecution.operation is not None:
+            operation = sdExecution.operation
+
+        attributes: ElementAttributes = ElementAttributes({
+            XmlConstants.ATTRIBUTE_ID:            sdExecutionId,
+            XmlConstants.ATTRIBUTE_INSTANCE_ID:   instanceId,
+            XmlConstants.ATTRIBUTE_START_TIME:    str(sdExecution.startTime),
+            XmlConstants.ATTRIBUTE_END_TIME:      str(sdExecution.endTime),
+            XmlConstants.ATTRIBUTE_NESTING_LEVEL: str(sdExecution.nestingLevel),
+            XmlConstants.ATTRIBUTE_OPERATION:     operation,
+        })
+
+        if sdExecution.startMessage is not None:
+            attributes[XmlConstants.ATTRIBUTE_START_MESSAGE_ID] = sdExecution.startMessage.id
+
+        if sdExecution.finishMessage is not None:
+            attributes[XmlConstants.ATTRIBUTE_FINISH_MESSAGE_ID] = sdExecution.finishMessage.id
+
+        modelSDExecutionElement: Element = SubElement(
+            sdExecutionElement,
+            XmlConstants.ELEMENT_MODEL_SD_EXECUTION,
+            attrib=attributes
+        )
+
+        return modelSDExecutionElement
 
     def _methodToXml(self, method: Method, classElement: Element) -> Element:
         """

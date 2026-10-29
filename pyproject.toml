@@ -18,8 +18,8 @@ dependencies = [
     'wxPython>=4.3.1',
     'codeallybasic>=1.41.0',
     'codeallyadvanced>=3.1.0',
-    'umlmodel>=3.5.0',
-    'umlshapes>=4.0.0',
+    'umlmodel>=4.0.0',
+    'umlshapes>=4.1.1',
 ]
 
 [project.optional-dependencies]

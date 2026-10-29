@@ -11,6 +11,7 @@ from xml.etree.ElementTree import Element
 from xml.etree.ElementTree import indent as xmlIndent
 from xml.etree.ElementTree import tostring as xmlToString
 
+from umlmodel.SDExecution import SDExecution
 from umlmodel.SDInstance import SDInstance
 from umlmodel.SDMessage import SDMessage
 
@@ -21,13 +22,16 @@ from umlshapes.pubsubengine.UmlPubSubEngine import UmlPubSubEngine
 from umlshapes.sd.SDMessageType import SDMessageType
 from umlshapes.sd.UmlSDInstance import UmlSDInstance
 from umlshapes.sd.UmlSDMessage import UmlSDMessage
+from umlshapes.sd.UmlSDExecution import UmlSDExecution
 from umlshapes.types.UmlPosition import UmlPosition
 
 from umlio.IOTypes import UmlDocumentType
 from umlio.IOTypes import UmlSDInstances
 from umlio.IOTypes import UmlSDMessages
+from umlio.IOTypes import UmlSDExecutions
 from umlio.serializer.UmlSDInstancesToXml import UmlSDInstancesToXml
 from umlio.serializer.UmlSDMessagesToXml import UmlSDMessagesToXml
+from umlio.serializer.UmlSDExecutionsToXml import UmlSDExecutionsToXml
 from umlio.XMLConstants import XmlConstants
 
 from tests.umlio.UmlIOBaseTest import UmlIOBaseTest
@@ -35,14 +39,17 @@ from tests.umlio.UmlIOBaseTest import UmlIOBaseTest
 CUSTOMER_INSTANCE_ID:        str = 'customer.instance'
 ORDER_SERVICE_INSTANCE_ID:   str = 'orderservice.instance'
 MESSAGE_PLACE_ORDER_ID:      str = 'msg.placeorder'
+EXECUTION_ORDER_SERVICE_ID:  str = 'exec.orderservice.1'
 
 CUSTOMER_MODEL_ID:           str = 'inst-001'
 ORDER_SERVICE_MODEL_ID:      str = 'inst-002'
 MESSAGE_MODEL_ID:            str = 'sdmsg-001'
+EXECUTION_MODEL_ID:          str = 'sdexec-001'
 
 CUSTOMER_INSTANCE_NAME:      str = 'customer:Customer'
 ORDER_SERVICE_INSTANCE_NAME: str = 'orderService:OrderService'
 MESSAGE_TEXT:                str = 'placeOrder(orderId)'
+EXECUTION_OPERATION_NAME:    str = 'placeOrder'
 
 INSTANCE_Y:                  int = 60
 CUSTOMER_INSTANCE_X:         int = 120
@@ -54,6 +61,10 @@ ORDER_SERVICE_INSTANCE_WIDTH: int = 120
 DEFAULT_LIFELINE_LENGTH:     int = 400
 
 MESSAGE_TIME_STEP:           int = 120
+
+EXECUTION_START_Y:           int = 120
+EXECUTION_END_Y:             int = 260
+EXECUTION_NESTING_LEVEL:     int = 0
 
 EXPECTED_SD_INSTANCES_XML: str = (
     "<?xml version='1.0' encoding='iso-8859-1'?>\n"
@@ -76,6 +87,15 @@ EXPECTED_SD_MESSAGES_XML: str = (
     '</UMLDiagram>'
 )
 
+EXPECTED_SD_EXECUTIONS_XML: str = (
+    "<?xml version='1.0' encoding='iso-8859-1'?>\n"
+    '<UMLDiagram documentType="Sequence Document" title="Order Processing" scrollPositionX="1" scrollPositionY="1" pixelsPerUnitX="1" pixelsPerUnitY="1">\n'
+    f'    <UmlSDExecution id="{EXECUTION_ORDER_SERVICE_ID}">\n'
+    f'        <ModelSDExecution id="{EXECUTION_MODEL_ID}" instanceId="{ORDER_SERVICE_MODEL_ID}" startTime="{EXECUTION_START_Y}" endTime="{EXECUTION_END_Y}" nestingLevel="{EXECUTION_NESTING_LEVEL}" operation="{EXECUTION_OPERATION_NAME}" />\n'
+    '    </UmlSDExecution>\n'
+    '</UMLDiagram>'
+)
+
 EXPECTED_SEQUENCE_DIAGRAM_XML: str = (
     "<?xml version='1.0' encoding='iso-8859-1'?>\n"
     '<UMLDiagram documentType="Sequence Document" title="Order Processing" scrollPositionX="1" scrollPositionY="1" pixelsPerUnitX="1" pixelsPerUnitY="1">\n'
@@ -88,6 +108,9 @@ EXPECTED_SEQUENCE_DIAGRAM_XML: str = (
     f'    <UmlSDMessage id="{MESSAGE_PLACE_ORDER_ID}" messageType="Synchronous Message">\n'
     f'        <ModelSDMessage id="{MESSAGE_MODEL_ID}" message="{MESSAGE_TEXT}" sourceTime="{MESSAGE_TIME_STEP}" destinationTime="{MESSAGE_TIME_STEP}" sourceId="{CUSTOMER_MODEL_ID}" destinationId="{ORDER_SERVICE_MODEL_ID}" />\n'
     '    </UmlSDMessage>\n'
+    f'    <UmlSDExecution id="{EXECUTION_ORDER_SERVICE_ID}">\n'
+    f'        <ModelSDExecution id="{EXECUTION_MODEL_ID}" instanceId="{ORDER_SERVICE_MODEL_ID}" startTime="{EXECUTION_START_Y}" endTime="{EXECUTION_END_Y}" nestingLevel="{EXECUTION_NESTING_LEVEL}" operation="{EXECUTION_OPERATION_NAME}" />\n'
+    '    </UmlSDExecution>\n'
     '</UMLDiagram>'
 )
 
@@ -141,9 +164,23 @@ class TestUmlSDShapesToXml(UmlIOBaseTest):
         self.maxDiff = None
         self.assertEqual(EXPECTED_SD_MESSAGES_XML, actualXml, 'SD Messages serialization changed')
 
+    def testSerializeSDExecutions(self):
+        umlSDInstances: UmlSDInstances = self._createTestSDInstances()
+        umlSDExecutions: UmlSDExecutions = self._createTestSDExecutions(umlSDInstances=umlSDInstances)
+
+        documentTop: Element = self._createDiagramElement()
+        serializer: UmlSDExecutionsToXml = UmlSDExecutionsToXml()
+        serializer.serialize(documentTop=documentTop, umlSDExecutions=umlSDExecutions)
+
+        actualXml: str = self._toPrettyXml(element=documentTop)
+
+        self.maxDiff = None
+        self.assertEqual(EXPECTED_SD_EXECUTIONS_XML, actualXml, 'SD Executions serialization changed')
+
     def testSerializeSequenceDiagramFull(self):
         umlSDInstances: UmlSDInstances = self._createTestSDInstances()
         umlSDMessages: UmlSDMessages = self._createTestSDMessages()
+        umlSDExecutions: UmlSDExecutions = self._createTestSDExecutions(umlSDInstances=umlSDInstances)
 
         documentTop: Element = self._createDiagramElement()
 
@@ -152,6 +189,9 @@ class TestUmlSDShapesToXml(UmlIOBaseTest):
 
         messagesSerializer: UmlSDMessagesToXml = UmlSDMessagesToXml()
         messagesSerializer.serialize(documentTop=documentTop, umlSDMessages=umlSDMessages)
+
+        executionsSerializer: UmlSDExecutionsToXml = UmlSDExecutionsToXml()
+        executionsSerializer.serialize(documentTop=documentTop, umlSDExecutions=umlSDExecutions)
 
         actualXml: str = self._toPrettyXml(element=documentTop)
 
@@ -216,6 +256,29 @@ class TestUmlSDShapesToXml(UmlIOBaseTest):
 
         return UmlSDMessages([umlSDMessage1])
 
+    def _createTestSDExecutions(self, umlSDInstances: UmlSDInstances) -> UmlSDExecutions:
+        orderServiceInstance: UmlSDInstance = umlSDInstances[1]
+
+        sdExecution1: SDExecution = SDExecution(
+            instance=orderServiceInstance.sdInstance,
+            startTime=EXECUTION_START_Y,
+            endTime=EXECUTION_END_Y,
+            nestingLevel=EXECUTION_NESTING_LEVEL,
+            operation=EXECUTION_OPERATION_NAME
+        )
+        sdExecution1.id = EXECUTION_MODEL_ID
+
+        umlSDExecution1: UmlSDExecution = UmlSDExecution(
+            lifeLine=orderServiceInstance._umlSDLifeLine,
+            startY=EXECUTION_START_Y,
+            endY=EXECUTION_END_Y,
+            nestingLevel=EXECUTION_NESTING_LEVEL,
+            sdExecution=sdExecution1
+        )
+        umlSDExecution1.id = EXECUTION_ORDER_SERVICE_ID
+
+        return UmlSDExecutions([umlSDExecution1])
+
     def _createDiagramElement(self) -> Element:
         diagramAttributes = {
             XmlConstants.ATTRIBUTE_DOCUMENT_TYPE:    UmlDocumentType.SEQUENCE_DOCUMENT.value,
@@ -236,6 +299,7 @@ def suite() -> TestSuite:
     testSuite: TestSuite = TestSuite()
     testSuite.addTest(TestUmlSDShapesToXml('testSerializeSDInstances'))
     testSuite.addTest(TestUmlSDShapesToXml('testSerializeSDMessages'))
+    testSuite.addTest(TestUmlSDShapesToXml('testSerializeSDExecutions'))
     testSuite.addTest(TestUmlSDShapesToXml('testSerializeSequenceDiagramFull'))
     return testSuite
 

@@ -228,9 +228,8 @@ class XmlToUmlModel:
         instanceElement: Element    = umlSDInstanceElement.ModelSDInstance
         sdInstance:  SDInstance = SDInstance()
 
-        sdInstance.id                     = instanceElement[XmlConstants.ATTRIBUTE_ID]
-        sdInstance.instanceName           = instanceElement[XmlConstants.ATTRIBUTE_INSTANCE_NAME]
-        sdInstance.instanceLifeLineLength = SecureConversions.secureInteger(instanceElement[XmlConstants.ATTRIBUTE_LIFE_LINE_LENGTH])
+        sdInstance.id           = instanceElement[XmlConstants.ATTRIBUTE_ID]
+        sdInstance.instanceName = instanceElement[XmlConstants.ATTRIBUTE_INSTANCE_NAME]
 
         return sdInstance
 

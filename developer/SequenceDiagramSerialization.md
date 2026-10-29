@@ -8,14 +8,16 @@ Serialization converts interactive visual shapes (`umlshapes.sd`) and their corr
 
 ---
 
-## Existing Foundation in `UmlModelToXml`
+## Foundation in `UmlModelToXml`
 
-The logical data model serialization methods for Sequence Diagrams are already implemented in `src/umlio/serializer/UmlModelToXml.py`:
+The logical data model serialization methods for Sequence Diagrams are implemented in `src/umlio/serializer/UmlModelToXml.py`:
 
 - **`sdInstanceToXml(self, sdInstance: SDInstance, sdInstanceElement: Element) -> Element`**:
   Serializes `<ModelSDInstance>` with `id` and `instanceName`.
 - **`sdMessageToXml(self, sdMessage: SDMessage, sdMessageElement: Element) -> Element`**:
   Serializes `<ModelSDMessage>` with `id`, `message`, `sourceTime`, `destinationTime`, `sourceId`, and `destinationId`.
+- **`sdExecutionToXml(self, sdExecution: SDExecution, sdExecutionElement: Element) -> Element`**:
+  Serializes `<ModelSDExecution>` with `id`, `instanceId`, `startTime`, `endTime`, `nestingLevel`, and `operation`.
 
 ---
 
@@ -43,7 +45,9 @@ The logical data model serialization methods for Sequence Diagrams are already i
     </UmlSDMessage>
 
     <!-- Execution Specifications (Activation Bars) -->
-    <UmlSDExecution id="exec.orderservice.1" attachedToId="orderservice.instance" startY="120" endY="260" nestingLevel="0" />
+    <UmlSDExecution id="exec.orderservice.1">
+        <ModelSDExecution id="sdexec-001" instanceId="orderservice.instance" startTime="120" endTime="260" nestingLevel="0" operation="placeOrder" />
+    </UmlSDExecution>
 
     <!-- Combined Fragments -->
     <UmlSDCombinedFragment id="fragment.alt.1" operator="alt" x="80" y="160" width="380" height="120">
@@ -72,6 +76,7 @@ UmlShapesToXml.serialize(umlDiagram)
   ├── UmlSDMessagesToXml.serialize(documentTop, umlDiagram.umlSDMessages)
   │     └── UmlModelToXml.sdMessageToXml()
   ├── UmlSDExecutionsToXml.serialize(documentTop, umlDiagram.umlSDExecutions)
+  │     └── UmlModelToXml.sdExecutionToXml()
   ├── UmlSDCombinedFragmentsToXml.serialize(documentTop, umlDiagram.umlSDCombinedFragments)
   ├── UmlTextsToXml.serialize(documentTop, umlDiagram.umlTexts)
   └── UmlNotesToXml.serialize(documentTop, umlDiagram.umlNotes)
@@ -98,8 +103,8 @@ UmlShapesToXml.serialize(umlDiagram)
 * **Input**: `documentTop` (`Element`), `umlSDExecutions` (`UmlSDExecutions`).
 * **Responsibilities**:
   * Iterate over each `UmlSDExecution`.
-  * Retrieve the parent `UmlSDInstance` ID via `execution.lifeLine.umlSDInstance.id`.
-  * Create `<UmlSDExecution>` `SubElement` with attributes: `id`, `attachedToId`, `startY`, `endY`, and `nestingLevel`.
+  * Create `<UmlSDExecution>` `SubElement` with attribute `id`.
+  * Delegate underlying model persistence to `UmlModelToXml.sdExecutionToXml()`.
 
 ### 4. `UmlSDCombinedFragmentsToXml` (`BaseUmlToXml`)
 * **Input**: `documentTop` (`Element`), `umlSDCombinedFragments` (`UmlSDCombinedFragments`).
