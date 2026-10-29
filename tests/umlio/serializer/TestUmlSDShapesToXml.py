@@ -1,10 +1,7 @@
 
-from typing import Optional
-
 from unittest import TestSuite
 from unittest import main as unitTestMain
 
-from wx import App
 from wx import Frame
 
 from xml.etree.ElementTree import Element
@@ -19,16 +16,23 @@ from umlshapes.frames.SequenceDiagramFrame import SequenceDiagramFrame
 from umlshapes.lib.ogl import OGLInitialize
 from umlshapes.pubsubengine.IUmlPubSubEngine import IUmlPubSubEngine
 from umlshapes.pubsubengine.UmlPubSubEngine import UmlPubSubEngine
+from umlshapes.sd.SDFragmentOperator import SDFragmentOperator
+from umlshapes.sd.SDInteractionOperand import SDInteractionOperand
+from umlshapes.sd.SDInteractionOperand import SDInteractionOperands
 from umlshapes.sd.SDMessageType import SDMessageType
+from umlshapes.sd.UmlSDCombinedFragment import UmlSDCombinedFragment
 from umlshapes.sd.UmlSDInstance import UmlSDInstance
 from umlshapes.sd.UmlSDMessage import UmlSDMessage
 from umlshapes.sd.UmlSDExecution import UmlSDExecution
+from umlshapes.types.UmlDimensions import UmlDimensions
 from umlshapes.types.UmlPosition import UmlPosition
 
 from umlio.IOTypes import UmlDocumentType
+from umlio.IOTypes import UmlSDCombinedFragments
 from umlio.IOTypes import UmlSDInstances
 from umlio.IOTypes import UmlSDMessages
 from umlio.IOTypes import UmlSDExecutions
+from umlio.serializer.UmlSDCombinedFragmentsToXml import UmlSDCombinedFragmentsToXml
 from umlio.serializer.UmlSDInstancesToXml import UmlSDInstancesToXml
 from umlio.serializer.UmlSDMessagesToXml import UmlSDMessagesToXml
 from umlio.serializer.UmlSDExecutionsToXml import UmlSDExecutionsToXml
@@ -40,6 +44,7 @@ CUSTOMER_INSTANCE_ID:        str = 'customer.instance'
 ORDER_SERVICE_INSTANCE_ID:   str = 'orderservice.instance'
 MESSAGE_PLACE_ORDER_ID:      str = 'msg.placeorder'
 EXECUTION_ORDER_SERVICE_ID:  str = 'exec.orderservice.1'
+FRAGMENT_ALT_ID:             str = 'fragment.alt.1'
 
 CUSTOMER_MODEL_ID:           str = 'inst-001'
 ORDER_SERVICE_MODEL_ID:      str = 'inst-002'
@@ -50,6 +55,20 @@ CUSTOMER_INSTANCE_NAME:      str = 'customer:Customer'
 ORDER_SERVICE_INSTANCE_NAME: str = 'orderService:OrderService'
 MESSAGE_TEXT:                str = 'placeOrder(orderId)'
 EXECUTION_OPERATION_NAME:    str = 'placeOrder'
+
+FRAGMENT_OPERATOR:           str = 'alt'
+FRAGMENT_X:                  int = 80
+FRAGMENT_Y:                  int = 160
+FRAGMENT_WIDTH:              int = 380
+FRAGMENT_HEIGHT:             int = 120
+
+OPERAND_1_GUARD:             str = '[order != null]'
+OPERAND_1_START_Y:           int = 160
+OPERAND_1_END_Y:             int = 220
+
+OPERAND_2_GUARD:             str = '[else]'
+OPERAND_2_START_Y:           int = 220
+OPERAND_2_END_Y:             int = 280
 
 INSTANCE_Y:                  int = 60
 CUSTOMER_INSTANCE_X:         int = 120
@@ -96,6 +115,16 @@ EXPECTED_SD_EXECUTIONS_XML: str = (
     '</UMLDiagram>'
 )
 
+EXPECTED_SD_COMBINED_FRAGMENTS_XML: str = (
+    "<?xml version='1.0' encoding='iso-8859-1'?>\n"
+    '<UMLDiagram documentType="Sequence Document" title="Order Processing" scrollPositionX="1" scrollPositionY="1" pixelsPerUnitX="1" pixelsPerUnitY="1">\n'
+    f'    <UmlSDCombinedFragment id="{FRAGMENT_ALT_ID}" width="{FRAGMENT_WIDTH}" height="{FRAGMENT_HEIGHT}" x="{FRAGMENT_X}" y="{FRAGMENT_Y}" operator="{FRAGMENT_OPERATOR}">\n'
+    f'        <SDInteractionOperand guard="{OPERAND_1_GUARD}" startY="{OPERAND_1_START_Y}" endY="{OPERAND_1_END_Y}" />\n'
+    f'        <SDInteractionOperand guard="{OPERAND_2_GUARD}" startY="{OPERAND_2_START_Y}" endY="{OPERAND_2_END_Y}" />\n'
+    '    </UmlSDCombinedFragment>\n'
+    '</UMLDiagram>'
+)
+
 EXPECTED_SEQUENCE_DIAGRAM_XML: str = (
     "<?xml version='1.0' encoding='iso-8859-1'?>\n"
     '<UMLDiagram documentType="Sequence Document" title="Order Processing" scrollPositionX="1" scrollPositionY="1" pixelsPerUnitX="1" pixelsPerUnitY="1">\n'
@@ -111,6 +140,10 @@ EXPECTED_SEQUENCE_DIAGRAM_XML: str = (
     f'    <UmlSDExecution id="{EXECUTION_ORDER_SERVICE_ID}">\n'
     f'        <ModelSDExecution id="{EXECUTION_MODEL_ID}" instanceId="{ORDER_SERVICE_MODEL_ID}" startTime="{EXECUTION_START_Y}" endTime="{EXECUTION_END_Y}" nestingLevel="{EXECUTION_NESTING_LEVEL}" operation="{EXECUTION_OPERATION_NAME}" />\n'
     '    </UmlSDExecution>\n'
+    f'    <UmlSDCombinedFragment id="{FRAGMENT_ALT_ID}" width="{FRAGMENT_WIDTH}" height="{FRAGMENT_HEIGHT}" x="{FRAGMENT_X}" y="{FRAGMENT_Y}" operator="{FRAGMENT_OPERATOR}">\n'
+    f'        <SDInteractionOperand guard="{OPERAND_1_GUARD}" startY="{OPERAND_1_START_Y}" endY="{OPERAND_1_END_Y}" />\n'
+    f'        <SDInteractionOperand guard="{OPERAND_2_GUARD}" startY="{OPERAND_2_START_Y}" endY="{OPERAND_2_END_Y}" />\n'
+    '    </UmlSDCombinedFragment>\n'
     '</UMLDiagram>'
 )
 
@@ -177,10 +210,23 @@ class TestUmlSDShapesToXml(UmlIOBaseTest):
         self.maxDiff = None
         self.assertEqual(EXPECTED_SD_EXECUTIONS_XML, actualXml, 'SD Executions serialization changed')
 
+    def testSerializeSDCombinedFragments(self):
+        umlSDCombinedFragments: UmlSDCombinedFragments = self._createTestSDCombinedFragments()
+
+        documentTop: Element = self._createDiagramElement()
+        serializer: UmlSDCombinedFragmentsToXml = UmlSDCombinedFragmentsToXml()
+        serializer.serialize(documentTop=documentTop, umlSDCombinedFragments=umlSDCombinedFragments)
+
+        actualXml: str = self._toPrettyXml(element=documentTop)
+
+        self.maxDiff = None
+        self.assertEqual(EXPECTED_SD_COMBINED_FRAGMENTS_XML, actualXml, 'SD Combined Fragments serialization changed')
+
     def testSerializeSequenceDiagramFull(self):
         umlSDInstances: UmlSDInstances = self._createTestSDInstances()
         umlSDMessages: UmlSDMessages = self._createTestSDMessages()
         umlSDExecutions: UmlSDExecutions = self._createTestSDExecutions(umlSDInstances=umlSDInstances)
+        umlSDCombinedFragments: UmlSDCombinedFragments = self._createTestSDCombinedFragments()
 
         documentTop: Element = self._createDiagramElement()
 
@@ -192,6 +238,9 @@ class TestUmlSDShapesToXml(UmlIOBaseTest):
 
         executionsSerializer: UmlSDExecutionsToXml = UmlSDExecutionsToXml()
         executionsSerializer.serialize(documentTop=documentTop, umlSDExecutions=umlSDExecutions)
+
+        combinedFragmentsSerializer: UmlSDCombinedFragmentsToXml = UmlSDCombinedFragmentsToXml()
+        combinedFragmentsSerializer.serialize(documentTop=documentTop, umlSDCombinedFragments=umlSDCombinedFragments)
 
         actualXml: str = self._toPrettyXml(element=documentTop)
 
@@ -279,6 +328,33 @@ class TestUmlSDShapesToXml(UmlIOBaseTest):
 
         return UmlSDExecutions([umlSDExecution1])
 
+    def _createTestSDCombinedFragments(self) -> UmlSDCombinedFragments:
+        operand1: SDInteractionOperand = SDInteractionOperand(
+            guard=OPERAND_1_GUARD,
+            startTimeStep=OPERAND_1_START_Y,
+            endTimeStep=OPERAND_1_END_Y
+        )
+        operand2: SDInteractionOperand = SDInteractionOperand(
+            guard=OPERAND_2_GUARD,
+            startTimeStep=OPERAND_2_START_Y,
+            endTimeStep=OPERAND_2_END_Y
+        )
+        operands: SDInteractionOperands = SDInteractionOperands([operand1, operand2])
+
+        fragment: UmlSDCombinedFragment = UmlSDCombinedFragment(
+            operator=SDFragmentOperator.ALT,
+            operands=operands,
+            x=FRAGMENT_X,
+            y=FRAGMENT_Y,
+            width=FRAGMENT_WIDTH,
+            height=FRAGMENT_HEIGHT
+        )
+        fragment.id = FRAGMENT_ALT_ID
+        fragment.size = UmlDimensions(width=FRAGMENT_WIDTH, height=FRAGMENT_HEIGHT)
+        fragment.position = UmlPosition(x=FRAGMENT_X, y=FRAGMENT_Y)
+
+        return UmlSDCombinedFragments([fragment])
+
     def _createDiagramElement(self) -> Element:
         diagramAttributes = {
             XmlConstants.ATTRIBUTE_DOCUMENT_TYPE:    UmlDocumentType.SEQUENCE_DOCUMENT.value,
@@ -296,11 +372,12 @@ class TestUmlSDShapesToXml(UmlIOBaseTest):
 
 
 def suite() -> TestSuite:
+    import unittest
+
     testSuite: TestSuite = TestSuite()
-    testSuite.addTest(TestUmlSDShapesToXml('testSerializeSDInstances'))
-    testSuite.addTest(TestUmlSDShapesToXml('testSerializeSDMessages'))
-    testSuite.addTest(TestUmlSDShapesToXml('testSerializeSDExecutions'))
-    testSuite.addTest(TestUmlSDShapesToXml('testSerializeSequenceDiagramFull'))
+
+    testSuite.addTest(unittest.defaultTestLoader.loadTestsFromTestCase(testCaseClass=TestUmlSDShapesToXml))
+
     return testSuite
 
 

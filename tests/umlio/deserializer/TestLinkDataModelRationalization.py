@@ -1,6 +1,4 @@
 
-from typing import cast
-
 from pathlib import Path
 
 from umlshapes.lib.ogl import OGLInitialize
@@ -9,8 +7,6 @@ from umlmodel.Class import Class
 from umlmodel.Class import ClassIndex
 from umlmodel.Link import Links
 from umlmodel.ModelTypes import ClassName
-
-from umlshapes.shapes.UmlClass import UmlClass
 
 from umlio.IOTypes import UmlClasses
 from umlio.IOTypes import UmlDocument
@@ -76,7 +72,7 @@ class TestLinkDataModelRationalization(UnitTestBaseW):
         modelClassIndex:  ClassIndex = ClassIndex({})
         for umlClass in umlClasses:
 
-            modelClass: Class = cast(UmlClass, umlClass).modelClass
+            modelClass: Class = umlClass.modelClass
             modelClassIndex[ClassName(modelClass.name)] = modelClass
 
         basePasteCommand:    Class = modelClassIndex[ClassName('BasePasteCommand')]
@@ -113,7 +109,7 @@ class TestLinkDataModelRationalization(UnitTestBaseW):
         modelClassIndex:  ClassIndex = ClassIndex({})
         for umlClass in umlClasses:
 
-            modelClass: Class = cast(UmlClass, umlClass).modelClass
+            modelClass: Class = umlClass.modelClass
             modelClassIndex[ClassName(modelClass.name)] = modelClass
 
         self.logger.debug(f'{modelClassIndex=}')
@@ -148,7 +144,7 @@ class TestLinkDataModelRationalization(UnitTestBaseW):
         modelClassIndex:  ClassIndex = ClassIndex({})
         for umlClass in umlClasses:
 
-            modelClass: Class = cast(UmlClass, umlClass).modelClass
+            modelClass: Class = umlClass.modelClass
             modelClassIndex[ClassName(modelClass.name)] = modelClass
 
         self.logger.debug(f'{modelClassIndex=}')
