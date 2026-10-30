@@ -20,20 +20,15 @@ from umlio.IOTypes import UmlSDMessages
 from umlio.deserializer.XmlSDInstancesToUmlSDInstances import XmlSDInstancesToUmlSDInstances
 from umlio.deserializer.XmlSDMessagesToUmlSDMessages import XmlSDMessagesToUmlSDMessages
 
-from tests.umlio.serializer.TestUmlSDShapesToXml import CUSTOMER_MODEL_ID
-from tests.umlio.serializer.TestUmlSDShapesToXml import EXPECTED_SD_INSTANCES_XML
-from tests.umlio.serializer.TestUmlSDShapesToXml import EXPECTED_SD_MESSAGES_XML
-from tests.umlio.serializer.TestUmlSDShapesToXml import MESSAGE_MODEL_ID
-from tests.umlio.serializer.TestUmlSDShapesToXml import MESSAGE_PLACE_ORDER_ID
-from tests.umlio.serializer.TestUmlSDShapesToXml import MESSAGE_TEXT
-from tests.umlio.serializer.TestUmlSDShapesToXml import MESSAGE_TIME_STEP
-from tests.umlio.serializer.TestUmlSDShapesToXml import ORDER_SERVICE_MODEL_ID
-
-EMPTY_SD_DIAGRAM_XML: str = (
-    "<?xml version='1.0' encoding='iso-8859-1'?>\n"
-    '<UMLDiagram documentType="Sequence Document" title="Empty SD Diagram" scrollPositionX="1" scrollPositionY="1" pixelsPerUnitX="1" pixelsPerUnitY="1">\n'
-    '</UMLDiagram>'
-)
+from tests.umlio.SequenceDiagramTestConstants import CUSTOMER_MODEL_ID
+from tests.umlio.SequenceDiagramTestConstants import EMPTY_SD_DIAGRAM_XML
+from tests.umlio.SequenceDiagramTestConstants import EXPECTED_SD_INSTANCES_XML
+from tests.umlio.SequenceDiagramTestConstants import EXPECTED_SD_MESSAGES_XML
+from tests.umlio.SequenceDiagramTestConstants import MESSAGE_MODEL_ID
+from tests.umlio.SequenceDiagramTestConstants import MESSAGE_PLACE_ORDER_ID
+from tests.umlio.SequenceDiagramTestConstants import MESSAGE_TEXT
+from tests.umlio.SequenceDiagramTestConstants import MESSAGE_TIME_STEP
+from tests.umlio.SequenceDiagramTestConstants import ORDER_SERVICE_MODEL_ID
 
 
 class TestXmlSDMessagesToUmlSDMessages(UnitTestBaseW):

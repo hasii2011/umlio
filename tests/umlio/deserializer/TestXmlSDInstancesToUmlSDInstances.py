@@ -17,23 +17,18 @@ from umlshapes.sd.UmlSDInstance import UmlSDInstance
 from umlio.IOTypes import UmlSDInstances
 from umlio.deserializer.XmlSDInstancesToUmlSDInstances import XmlSDInstancesToUmlSDInstances
 
-from tests.umlio.serializer.TestUmlSDShapesToXml import CUSTOMER_INSTANCE_ID
-from tests.umlio.serializer.TestUmlSDShapesToXml import CUSTOMER_INSTANCE_NAME
-from tests.umlio.serializer.TestUmlSDShapesToXml import CUSTOMER_INSTANCE_X
-from tests.umlio.serializer.TestUmlSDShapesToXml import CUSTOMER_MODEL_ID
-from tests.umlio.serializer.TestUmlSDShapesToXml import DEFAULT_LIFELINE_LENGTH
-from tests.umlio.serializer.TestUmlSDShapesToXml import EXPECTED_SD_INSTANCES_XML
-from tests.umlio.serializer.TestUmlSDShapesToXml import INSTANCE_Y
-from tests.umlio.serializer.TestUmlSDShapesToXml import ORDER_SERVICE_INSTANCE_ID
-from tests.umlio.serializer.TestUmlSDShapesToXml import ORDER_SERVICE_INSTANCE_NAME
-from tests.umlio.serializer.TestUmlSDShapesToXml import ORDER_SERVICE_INSTANCE_X
-from tests.umlio.serializer.TestUmlSDShapesToXml import ORDER_SERVICE_MODEL_ID
-
-EMPTY_SD_DIAGRAM_XML: str = (
-    "<?xml version='1.0' encoding='iso-8859-1'?>\n"
-    '<UMLDiagram documentType="Sequence Document" title="Empty SD Diagram" scrollPositionX="1" scrollPositionY="1" pixelsPerUnitX="1" pixelsPerUnitY="1">\n'
-    '</UMLDiagram>'
-)
+from tests.umlio.SequenceDiagramTestConstants import CUSTOMER_INSTANCE_ID
+from tests.umlio.SequenceDiagramTestConstants import CUSTOMER_INSTANCE_NAME
+from tests.umlio.SequenceDiagramTestConstants import CUSTOMER_INSTANCE_X
+from tests.umlio.SequenceDiagramTestConstants import CUSTOMER_MODEL_ID
+from tests.umlio.SequenceDiagramTestConstants import DEFAULT_LIFELINE_LENGTH
+from tests.umlio.SequenceDiagramTestConstants import EMPTY_SD_DIAGRAM_XML
+from tests.umlio.SequenceDiagramTestConstants import EXPECTED_SD_INSTANCES_XML
+from tests.umlio.SequenceDiagramTestConstants import INSTANCE_Y
+from tests.umlio.SequenceDiagramTestConstants import ORDER_SERVICE_INSTANCE_ID
+from tests.umlio.SequenceDiagramTestConstants import ORDER_SERVICE_INSTANCE_NAME
+from tests.umlio.SequenceDiagramTestConstants import ORDER_SERVICE_INSTANCE_X
+from tests.umlio.SequenceDiagramTestConstants import ORDER_SERVICE_MODEL_ID
 
 
 class TestXmlSDInstancesToUmlSDInstances(UnitTestBaseW):
