@@ -1,4 +1,5 @@
 
+from typing import Optional
 from typing import cast
 
 from dataclasses import dataclass
@@ -24,6 +25,7 @@ from umlmodel.Parameter import Parameter
 from umlmodel.ParameterType import ParameterType
 from umlmodel.ReturnType import ReturnType
 from umlmodel.SDInstance import SDInstance
+from umlmodel.SDExecution import SDExecution
 from umlmodel.enumerations.Visibility import Visibility
 
 from umlmodel.Actor import Actor
@@ -62,12 +64,23 @@ class ConvolutedModelSDMessageInformation:
     destinationId: str           = '-1'
 
 
+@dataclass
+class ConvolutedModelSDExecutionInformation:
+    """
+    This class is necessary because I do not want to mix UML Shapes and UML model code;  Unfortunately,
+    the IDs of the SDInstance are buried and require a lookup
+
+    """
+    sdExecution:     SDExecution = cast(SDExecution, None)
+    instanceId:      str         = '-1'
+    startMessageId:  str         = ''
+    finishMessageId: str         = ''
+
+
 class XmlToUmlModel:
     """
     Converts Uml Model Version 14 XML to Uml Model instance
     """
-    NOTE_NAME:   str = 'Note'
-    noteCounter: int = 0
 
     def __init__(self):
 
@@ -82,8 +95,8 @@ class XmlToUmlModel:
 
         displayStr:              str               = classElement[XmlConstants.ATTRIBUTE_DISPLAY_PARAMETERS]
         displayParameters:       DisplayParameters = DisplayParameters(displayStr)
-        displayConstructorStr:   str               = classElement[XmlConstants.ATTRIBUTE_DISPLAY_CONSTRUCTOR]
-        displayDunderMethodsStr: str               = classElement[XmlConstants.ATTRIBUTE_DISPLAY_DUNDER_METHODS]
+        displayConstructorStr:   Optional[str]     = classElement[XmlConstants.ATTRIBUTE_DISPLAY_CONSTRUCTOR]
+        displayDunderMethodsStr: Optional[str]     = classElement[XmlConstants.ATTRIBUTE_DISPLAY_DUNDER_METHODS]
 
         displayConstructor:   DisplayMethods = self._secureDisplayMethods(displayStr=displayConstructorStr)
         displayDunderMethods: DisplayMethods = self._secureDisplayMethods(displayStr=displayDunderMethodsStr)
@@ -266,6 +279,58 @@ class XmlToUmlModel:
 
         return bogus
 
+    def sdExecutionToModelSDExecution(self, umlSDExecutionElement: Element) -> ConvolutedModelSDExecutionInformation:
+        """
+        Deserializes a ModelSDExecution element from an enclosing UmlSDExecution element.
+
+        Args:
+            umlSDExecutionElement: The UmlSDExecution untangle Element containing a ModelSDExecution
+
+        Returns:
+            ConvolutedModelSDExecutionInformation containing the deserialized SDExecution and lookup IDs
+        """
+        executionElement: Element = umlSDExecutionElement.ModelSDExecution
+
+        sdExecutionId: str = executionElement[XmlConstants.ATTRIBUTE_ID]
+        instanceId:    str = executionElement[XmlConstants.ATTRIBUTE_INSTANCE_ID]
+
+        startTime:    int = int(executionElement[XmlConstants.ATTRIBUTE_START_TIME])
+        endTime:      int = int(executionElement[XmlConstants.ATTRIBUTE_END_TIME])
+        nestingLevel: int = int(executionElement[XmlConstants.ATTRIBUTE_NESTING_LEVEL])
+
+        operation: Optional[str] = None
+        rawOperation: Optional[str] = executionElement[XmlConstants.ATTRIBUTE_OPERATION]
+        if rawOperation is not None:
+            if len(rawOperation.strip()) > 0:
+                operation = rawOperation.strip()
+
+        startMessageId: str = ''
+        rawStartMessageId: Optional[str] = executionElement[XmlConstants.ATTRIBUTE_START_MESSAGE_ID]
+        if rawStartMessageId is not None:
+            startMessageId = rawStartMessageId
+
+        finishMessageId: str = ''
+        rawFinishMessageId: Optional[str] = executionElement[XmlConstants.ATTRIBUTE_FINISH_MESSAGE_ID]
+        if rawFinishMessageId is not None:
+            finishMessageId = rawFinishMessageId
+
+        sdExecution: SDExecution = SDExecution(
+            instance=cast(SDInstance, None),
+            startTime=startTime,
+            endTime=endTime,
+            nestingLevel=nestingLevel,
+            operation=operation
+        )
+        sdExecution.id = sdExecutionId
+
+        bogus: ConvolutedModelSDExecutionInformation = ConvolutedModelSDExecutionInformation()
+        bogus.sdExecution     = sdExecution
+        bogus.instanceId      = instanceId
+        bogus.startMessageId  = startMessageId
+        bogus.finishMessageId = finishMessageId
+
+        return bogus
+
     def _methodToModelMethods(self, classElement: Element) -> Methods:
         """
         The model class may not have methods;
@@ -386,16 +451,21 @@ class XmlToUmlModel:
         Returns:  The updated UML instance as
         """
 
-        umlModelBase.id       = modelElement[XmlConstants.ATTRIBUTE_ID]
-        umlModelBase.name     = modelElement[XmlConstants.ATTRIBUTE_NAME]
-        umlModelBase.fileName = modelElement[XmlConstants.ATTRIBUTE_FILENAME]
+        name:     str = modelElement[XmlConstants.ATTRIBUTE_NAME]
+        baseId:   str = modelElement[XmlConstants.ATTRIBUTE_ID]
+        fileName: str = modelElement[XmlConstants.ATTRIBUTE_FILENAME]
 
-        if umlModelBase.name is None:
-            XmlToUmlModel.noteCounter += 1
-            umlModelBase.name = f'{XmlToUmlModel.NOTE_NAME}-{XmlToUmlModel.noteCounter}'
+        assert name is not None, 'I have a contract'
+        assert baseId is not None, 'I have a contract'
+        assert fileName is not None, 'I have a contract'
+
+        umlModelBase.id       = baseId
+        umlModelBase.name     = name
+        umlModelBase.fileName = fileName
+
         return umlModelBase
 
-    def _secureDisplayMethods(self, displayStr: str) -> DisplayMethods:
+    def _secureDisplayMethods(self, displayStr: Optional[str]) -> DisplayMethods:
 
         if displayStr is not None:
             displayMethods: DisplayMethods = DisplayMethods(displayStr)

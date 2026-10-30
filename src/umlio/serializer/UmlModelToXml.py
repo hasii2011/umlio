@@ -136,9 +136,11 @@ class UmlModelToXml:
         fixedContent: str = content.replace(osLineSep, XML_END_OF_LINE_MARKER)
 
         assert note.fileName is not None, 'I have a contract'
+        assert note.name is not None, 'I have a contract'
 
         attributes: ElementAttributes = ElementAttributes({
             XmlConstants.ATTRIBUTE_ID:       str(noteId),
+            XmlConstants.ATTRIBUTE_NAME:     note.name,
             XmlConstants.ATTRIBUTE_CONTENT:  fixedContent,
             XmlConstants.ATTRIBUTE_FILENAME: note.fileName,
         })

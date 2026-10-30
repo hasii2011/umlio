@@ -91,7 +91,7 @@ EXPECTED_SINGLE_NOTE: str = (
     '<UmlProject fileName="." version="14.0" codePath="/users/hasii">\n'
     '    <UMLDiagram documentType="Use Case Document" title="Uml Note Diagram" scrollPositionX="1" scrollPositionY="1" pixelsPerUnitX="1" pixelsPerUnitY="1">\n'
     '        <UmlNote id="remember.the.Alamo" width="233" height="233" x="666" y="777">\n'
-    '            <ModelNote id="777" content="I am the best MAGA Note" fileName="" />\n'
+    '            <ModelNote id="777" name="" content="I am the best MAGA Note" fileName="" />\n'
     '        </UmlNote>\n'
     '    </UMLDiagram>\n'
     '</UmlProject>'

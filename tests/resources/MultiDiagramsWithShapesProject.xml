@@ -30,7 +30,7 @@
             </ModelClass>
         </UmlClass>
         <UmlNote id="remember.the.Alamo" width="100" height="75" x="300" y="300">
-            <ModelNote id="777" content="I am the best MAGA Note" fileName="" />
+            <ModelNote id="777" name="" content="I am the best MAGA Note" fileName="" />
         </UmlNote>
     </UMLDiagram>
     <UMLDiagram documentType="Use Case Document" title="Simple Use Case" scrollPositionX="1" scrollPositionY="1" pixelsPerUnitX="1" pixelsPerUnitY="1">
