@@ -53,11 +53,10 @@ from umlio.XMLConstants import XmlConstants
 
 
 @dataclass
-class ConvolutedModelSDMessageInformation:
+class SDMessageDeserializationInfo:
     """
-    This class is necessary because I do not want to mix UML Shapes and UML mode code;  Unfortunately,
-    the IDs of the SDInstance are buried and require a lookup
-
+    Intermediate data container holding an SDMessage and its unresolved
+    endpoint instance IDs during deserialization.
     """
     sdMessage:     SDMessage = cast(SDMessage, None)
     sourceId:      str           = '-1'
@@ -65,11 +64,10 @@ class ConvolutedModelSDMessageInformation:
 
 
 @dataclass
-class ConvolutedModelSDExecutionInformation:
+class SDExecutionDeserializationInfo:
     """
-    This class is necessary because I do not want to mix UML Shapes and UML model code;  Unfortunately,
-    the IDs of the SDInstance are buried and require a lookup
-
+    Intermediate data container holding an SDExecution and its unresolved
+    SDInstance ID and optional start/finish message IDs during deserialization.
     """
     sdExecution:     SDExecution = cast(SDExecution, None)
     instanceId:      str         = '-1'
@@ -246,13 +244,14 @@ class XmlToUmlModel:
 
         return sdInstance
 
-    def sdMessageToModelSDMessage(self, umlSDMessageElement: Element) -> ConvolutedModelSDMessageInformation:
+    def sdMessageToModelSDMessage(self, umlSDMessageElement: Element) -> SDMessageDeserializationInfo:
         """
-        TODO:  Need to fix how SD Messages are created
-        Args:
-            umlSDMessageElement:
+        Deserializes a ModelSDMessage element from an enclosing UmlSDMessage element.
 
-        Returns:  Bogus data class
+        Args:
+            umlSDMessageElement: The UmlSDMessage untangle Element containing a ModelSDMessage
+
+        Returns:  SDMessageDeserializationInfo with deserialized SDMessage and unresolved endpoint IDs
         """
         messageElement: Element = umlSDMessageElement.ModelSDMessage
 
@@ -271,15 +270,15 @@ class XmlToUmlModel:
         sdMessage.sourceY      = srcTime
         sdMessage.destinationY = dstTime
 
-        bogus: ConvolutedModelSDMessageInformation = ConvolutedModelSDMessageInformation()
+        deserializationInfo: SDMessageDeserializationInfo = SDMessageDeserializationInfo()
 
-        bogus.sdMessage = sdMessage
-        bogus.sourceId      = srcID
-        bogus.destinationId = dstID
+        deserializationInfo.sdMessage = sdMessage
+        deserializationInfo.sourceId      = srcID
+        deserializationInfo.destinationId = dstID
 
-        return bogus
+        return deserializationInfo
 
-    def sdExecutionToModelSDExecution(self, umlSDExecutionElement: Element) -> ConvolutedModelSDExecutionInformation:
+    def sdExecutionToModelSDExecution(self, umlSDExecutionElement: Element) -> SDExecutionDeserializationInfo:
         """
         Deserializes a ModelSDExecution element from an enclosing UmlSDExecution element.
 
@@ -287,7 +286,7 @@ class XmlToUmlModel:
             umlSDExecutionElement: The UmlSDExecution untangle Element containing a ModelSDExecution
 
         Returns:
-            ConvolutedModelSDExecutionInformation containing the deserialized SDExecution and lookup IDs
+            SDExecutionDeserializationInfo containing the deserialized SDExecution and lookup IDs
         """
         executionElement: Element = umlSDExecutionElement.ModelSDExecution
 
@@ -323,13 +322,13 @@ class XmlToUmlModel:
         )
         sdExecution.id = sdExecutionId
 
-        bogus: ConvolutedModelSDExecutionInformation = ConvolutedModelSDExecutionInformation()
-        bogus.sdExecution     = sdExecution
-        bogus.instanceId      = instanceId
-        bogus.startMessageId  = startMessageId
-        bogus.finishMessageId = finishMessageId
+        deserializationInfo: SDExecutionDeserializationInfo = SDExecutionDeserializationInfo()
+        deserializationInfo.sdExecution     = sdExecution
+        deserializationInfo.instanceId      = instanceId
+        deserializationInfo.startMessageId  = startMessageId
+        deserializationInfo.finishMessageId = finishMessageId
 
-        return bogus
+        return deserializationInfo
 
     def _methodToModelMethods(self, classElement: Element) -> Methods:
         """
