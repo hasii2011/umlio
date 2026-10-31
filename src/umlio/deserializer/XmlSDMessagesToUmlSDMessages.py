@@ -7,8 +7,6 @@ from untangle import Element
 
 from umlmodel.SDInstance import SDInstance
 from umlmodel.SDMessage import SDMessage
-from umlshapes.frames.SequenceDiagramFrame import SequenceDiagramFrame
-from umlshapes.pubsubengine.IUmlPubSubEngine import IUmlPubSubEngine
 from umlshapes.sd.SDMessageType import SDMessageType
 from umlshapes.sd.UmlSDInstance import UmlSDInstance
 from umlshapes.sd.UmlSDMessage import UmlSDMessage
@@ -27,16 +25,10 @@ class XmlSDMessagesToUmlSDMessages:
     Deserializes UmlSDMessage elements from untangle XML into UmlSDMessages.
     """
 
-    def __init__(
-        self,
-        diagramFrame: SequenceDiagramFrame,
-        umlPubSubEngine: IUmlPubSubEngine
-    ):
+    def __init__(self):
         self.logger: Logger = getLogger(__name__)
 
-        self._xmlToUmlModel:   XmlToUmlModel        = XmlToUmlModel()
-        self._diagramFrame:    SequenceDiagramFrame = diagramFrame
-        self._umlPubSubEngine: IUmlPubSubEngine     = umlPubSubEngine
+        self._xmlToUmlModel: XmlToUmlModel = XmlToUmlModel()
 
     def deserialize(self, umlDiagramElement: Element, umlSDInstances: UmlSDInstances) -> UmlSDMessages:
         """
@@ -84,20 +76,14 @@ class XmlSDMessagesToUmlSDMessages:
 
             umlSDMessage: UmlSDMessage = UmlSDMessage(
                 sdMessage=sdMessage,
-                umlPubSubEngine=self._umlPubSubEngine,
                 messageType=messageType
             )
-            umlSDMessage.id       = messageId
-            umlSDMessage.umlFrame = self._diagramFrame
+            umlSDMessage.id = messageId
 
-            if sourceInstance is not None and destInstance is not None:
-                sourceInstance.umlSDLifeLine.addMessage(umlSDMessage=umlSDMessage, destinationLifeLine=destInstance.umlSDLifeLine)
-            else:
-                if sourceInstance is not None:
-                    sourceInstance.umlSDLifeLine.addMessage(umlSDMessage=umlSDMessage, destinationLifeLine=None)
-                else:
-                    if destInstance is not None:
-                        destInstance.umlSDLifeLine.addMessage(umlSDMessage=umlSDMessage)
+            if sourceInstance is not None:
+                umlSDMessage.SetFrom(sourceInstance.umlSDLifeLine)
+            if destInstance is not None:
+                umlSDMessage.SetTo(destInstance.umlSDLifeLine)
 
             umlSDMessage.fromY = sdMessage.sourceY
             umlSDMessage.toY   = sdMessage.destinationY

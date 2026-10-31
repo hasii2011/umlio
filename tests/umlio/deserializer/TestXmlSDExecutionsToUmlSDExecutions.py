@@ -8,10 +8,7 @@ from untangle import parse
 
 from codeallyadvanced.ui.UnitTestBaseW import UnitTestBaseW
 
-from umlshapes.frames.SequenceDiagramFrame import SequenceDiagramFrame
 from umlshapes.lib.ogl import OGLInitialize
-from umlshapes.pubsubengine.IUmlPubSubEngine import IUmlPubSubEngine
-from umlshapes.pubsubengine.UmlPubSubEngine import UmlPubSubEngine
 from umlshapes.sd.UmlSDExecution import UmlSDExecution
 
 from umlio.IOTypes import UmlSDExecutions
@@ -44,12 +41,6 @@ class TestXmlSDExecutionsToUmlSDExecutions(UnitTestBaseW):
         super().setUp()
         OGLInitialize()
 
-        self._pubSubEngine: IUmlPubSubEngine     = UmlPubSubEngine()
-        self._diagramFrame: SequenceDiagramFrame = SequenceDiagramFrame(
-            parent=self._topLevelWindow,
-            umlPubSubEngine=self._pubSubEngine
-        )
-
     def testEmptyDiagramDeserialization(self):
         root:              Element                          = parse(EMPTY_SD_DIAGRAM_XML)
         diagramElement:    Element                          = root.UMLDiagram
@@ -63,13 +54,10 @@ class TestXmlSDExecutionsToUmlSDExecutions(UnitTestBaseW):
         self.assertEqual(0, len(deserializedExecs), 'Expected 0 executions for empty diagram')
 
     def testExecutionDeserialization(self):
-        instancesRoot:        Element                         = parse(EXPECTED_SD_INSTANCES_XML)
-        instancesDiagramElem: Element                         = instancesRoot.UMLDiagram
-        instancesDeserializer: XmlSDInstancesToUmlSDInstances = XmlSDInstancesToUmlSDInstances(
-            diagramFrame=self._diagramFrame,
-            umlPubSubEngine=self._pubSubEngine
-        )
-        deserializedInstances: UmlSDInstances = instancesDeserializer.deserialize(umlDiagramElement=instancesDiagramElem)
+        instancesRoot:         Element                        = parse(EXPECTED_SD_INSTANCES_XML)
+        instancesDiagramElem:  Element                        = instancesRoot.UMLDiagram
+        instancesDeserializer: XmlSDInstancesToUmlSDInstances = XmlSDInstancesToUmlSDInstances()
+        deserializedInstances: UmlSDInstances                 = instancesDeserializer.deserialize(umlDiagramElement=instancesDiagramElem)
 
         executionsRoot:        Element                          = parse(EXPECTED_SD_EXECUTIONS_XML)
         executionsDiagramElem: Element                          = executionsRoot.UMLDiagram

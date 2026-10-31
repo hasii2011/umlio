@@ -19,7 +19,7 @@ dependencies = [
     'codeallybasic>=1.41.0',
     'codeallyadvanced>=3.1.0',
     'umlmodel>=4.0.0',
-    'umlshapes>=4.1.1',
+    'umlshapes>=5.0.0',
 ]
 
 [project.optional-dependencies]

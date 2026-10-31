@@ -8,10 +8,7 @@ from untangle import parse
 
 from codeallyadvanced.ui.UnitTestBaseW import UnitTestBaseW
 
-from umlshapes.frames.SequenceDiagramFrame import SequenceDiagramFrame
 from umlshapes.lib.ogl import OGLInitialize
-from umlshapes.pubsubengine.IUmlPubSubEngine import IUmlPubSubEngine
-from umlshapes.pubsubengine.UmlPubSubEngine import UmlPubSubEngine
 from umlshapes.sd.UmlSDInstance import UmlSDInstance
 
 from umlio.IOTypes import UmlSDInstances
@@ -44,22 +41,13 @@ class TestXmlSDInstancesToUmlSDInstances(UnitTestBaseW):
         super().setUp()
         OGLInitialize()
 
-        self._pubSubEngine: IUmlPubSubEngine     = UmlPubSubEngine()
-        self._diagramFrame: SequenceDiagramFrame = SequenceDiagramFrame(
-            parent=self._topLevelWindow,
-            umlPubSubEngine=self._pubSubEngine
-        )
-
     def tearDown(self):
         super().tearDown()
 
     def testDeserializeSDInstances(self):
         root:           Element                        = parse(EXPECTED_SD_INSTANCES_XML)
         diagram:        Element                        = root.UMLDiagram
-        deserializer:   XmlSDInstancesToUmlSDInstances = XmlSDInstancesToUmlSDInstances(
-            diagramFrame=self._diagramFrame,
-            umlPubSubEngine=self._pubSubEngine
-        )
+        deserializer:   XmlSDInstancesToUmlSDInstances = XmlSDInstancesToUmlSDInstances()
         umlSDInstances: UmlSDInstances                 = deserializer.deserialize(umlDiagramElement=diagram)
 
         self.assertEqual(2, len(umlSDInstances), 'Expected 2 deserialized UmlSDInstance shapes')
@@ -83,10 +71,7 @@ class TestXmlSDInstancesToUmlSDInstances(UnitTestBaseW):
     def testDeserializeEmptySDInstances(self):
         root:           Element                        = parse(EMPTY_SD_DIAGRAM_XML)
         diagram:        Element                        = root.UMLDiagram
-        deserializer:   XmlSDInstancesToUmlSDInstances = XmlSDInstancesToUmlSDInstances(
-            diagramFrame=self._diagramFrame,
-            umlPubSubEngine=self._pubSubEngine
-        )
+        deserializer:   XmlSDInstancesToUmlSDInstances = XmlSDInstancesToUmlSDInstances()
         umlSDInstances: UmlSDInstances                 = deserializer.deserialize(umlDiagramElement=diagram)
 
         self.assertEqual(0, len(umlSDInstances), 'Expected 0 deserialized UmlSDInstance shapes for empty diagram')

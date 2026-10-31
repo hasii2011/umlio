@@ -1,8 +1,7 @@
 
+from unittest import defaultTestLoader
 from unittest import TestSuite
 from unittest import main as unitTestMain
-
-from wx import Frame
 
 from xml.etree.ElementTree import Element
 from xml.etree.ElementTree import indent as xmlIndent
@@ -12,10 +11,7 @@ from umlmodel.SDExecution import SDExecution
 from umlmodel.SDInstance import SDInstance
 from umlmodel.SDMessage import SDMessage
 
-from umlshapes.frames.SequenceDiagramFrame import SequenceDiagramFrame
 from umlshapes.lib.ogl import OGLInitialize
-from umlshapes.pubsubengine.IUmlPubSubEngine import IUmlPubSubEngine
-from umlshapes.pubsubengine.UmlPubSubEngine import UmlPubSubEngine
 from umlshapes.sd.SDFragmentOperator import SDFragmentOperator
 from umlshapes.sd.SDInteractionOperand import SDInteractionOperand
 from umlshapes.sd.SDInteractionOperand import SDInteractionOperands
@@ -57,7 +53,6 @@ from tests.umlio.SequenceDiagramTestConstants import EXPECTED_SD_MESSAGES_XML
 from tests.umlio.SequenceDiagramTestConstants import EXPECTED_SEQUENCE_DIAGRAM_XML
 from tests.umlio.SequenceDiagramTestConstants import FRAGMENT_ALT_ID
 from tests.umlio.SequenceDiagramTestConstants import FRAGMENT_HEIGHT
-
 from tests.umlio.SequenceDiagramTestConstants import FRAGMENT_WIDTH
 from tests.umlio.SequenceDiagramTestConstants import FRAGMENT_X
 from tests.umlio.SequenceDiagramTestConstants import FRAGMENT_Y
@@ -77,6 +72,7 @@ from tests.umlio.SequenceDiagramTestConstants import ORDER_SERVICE_INSTANCE_NAME
 from tests.umlio.SequenceDiagramTestConstants import ORDER_SERVICE_INSTANCE_WIDTH
 from tests.umlio.SequenceDiagramTestConstants import ORDER_SERVICE_INSTANCE_X
 from tests.umlio.SequenceDiagramTestConstants import ORDER_SERVICE_MODEL_ID
+
 from tests.umlio.UmlIOBaseTest import UmlIOBaseTest
 
 
@@ -93,16 +89,7 @@ class TestUmlSDShapesToXml(UmlIOBaseTest):
         super().setUp()
         OGLInitialize()
 
-        self._dummyParent: Frame = Frame(None)
-        self._pubSubEngine: IUmlPubSubEngine = UmlPubSubEngine()
-        self._diagramFrame: SequenceDiagramFrame = SequenceDiagramFrame(
-            parent=self._dummyParent,
-            umlPubSubEngine=self._pubSubEngine
-        )
-
     def tearDown(self):
-        if self._dummyParent is not None:
-            self._dummyParent.Destroy()
         super().tearDown()
 
     def testSerializeSDInstances(self):
@@ -187,9 +174,7 @@ class TestUmlSDShapesToXml(UmlIOBaseTest):
         sdInstance2.id = ORDER_SERVICE_MODEL_ID
 
         umlSDInstance1: UmlSDInstance = UmlSDInstance(
-            sdInstance=sdInstance1,
-            diagramFrame=self._diagramFrame,
-            umlPubSubEngine=self._pubSubEngine
+            sdInstance=sdInstance1
         )
         umlSDInstance1.id = CUSTOMER_INSTANCE_ID
         umlSDInstance1.setInstanceWidth(CUSTOMER_INSTANCE_WIDTH)
@@ -199,9 +184,7 @@ class TestUmlSDShapesToXml(UmlIOBaseTest):
         umlSDInstance1.position = UmlPosition(x=CUSTOMER_INSTANCE_X, y=INSTANCE_Y)
 
         umlSDInstance2: UmlSDInstance = UmlSDInstance(
-            sdInstance=sdInstance2,
-            diagramFrame=self._diagramFrame,
-            umlPubSubEngine=self._pubSubEngine
+            sdInstance=sdInstance2
         )
         umlSDInstance2.id = ORDER_SERVICE_INSTANCE_ID
         umlSDInstance2.setInstanceWidth(ORDER_SERVICE_INSTANCE_WIDTH)
@@ -230,7 +213,6 @@ class TestUmlSDShapesToXml(UmlIOBaseTest):
 
         umlSDMessage1: UmlSDMessage = UmlSDMessage(
             sdMessage=sdMessage1,
-            umlPubSubEngine=self._pubSubEngine,
             messageType=SDMessageType.SYNCHRONOUS
         )
         umlSDMessage1.id = MESSAGE_PLACE_ORDER_ID
@@ -288,7 +270,7 @@ class TestUmlSDShapesToXml(UmlIOBaseTest):
         return UmlSDCombinedFragments([fragment])
 
     def _createDiagramElement(self) -> Element:
-        diagramAttributes = {
+        diagramAttributes: dict[str, str] = {
             XmlConstants.ATTRIBUTE_DOCUMENT_TYPE:    UmlDocumentType.SEQUENCE_DOCUMENT.value,
             XmlConstants.ATTRIBUTE_TITLE:            'Order Processing',
             XmlConstants.ATTRIBUTE_SCROLL_POSITION_X: '1',
@@ -304,11 +286,7 @@ class TestUmlSDShapesToXml(UmlIOBaseTest):
 
 
 def suite() -> TestSuite:
-    import unittest
-
-    testSuite: TestSuite = TestSuite()
-
-    testSuite.addTest(unittest.defaultTestLoader.loadTestsFromTestCase(testCaseClass=TestUmlSDShapesToXml))
+    testSuite: TestSuite = defaultTestLoader.loadTestsFromTestCase(testCaseClass=TestUmlSDShapesToXml)
 
     return testSuite
 

@@ -6,8 +6,6 @@ from typing import Optional
 from untangle import Element
 
 from umlmodel.SDInstance import SDInstance
-from umlshapes.frames.SequenceDiagramFrame import SequenceDiagramFrame
-from umlshapes.pubsubengine.IUmlPubSubEngine import IUmlPubSubEngine
 from umlshapes.sd.UmlSDInstance import UmlSDInstance
 
 from umlio.IOTypes import Elements
@@ -21,19 +19,13 @@ from umlio.deserializer.XmlToUmlModel import XmlToUmlModel
 class XmlSDInstancesToUmlSDInstances:
     """
     Deserializes UmlSDInstance elements from untangle XML into UmlSDInstances.
-
-    Sequence diagram instance shapes (UmlSDInstance) require an active
-    SequenceDiagramFrame and an IUmlPubSubEngine to host their OGL composite
-    constraints and event handlers.
     """
 
-    def __init__(self, diagramFrame: SequenceDiagramFrame, umlPubSubEngine: IUmlPubSubEngine):
+    def __init__(self):
 
         self.logger: Logger = getLogger(__name__)
 
-        self._xmlToUmlModel:   XmlToUmlModel        = XmlToUmlModel()
-        self._diagramFrame:    SequenceDiagramFrame = diagramFrame
-        self._umlPubSubEngine: IUmlPubSubEngine     = umlPubSubEngine
+        self._xmlToUmlModel: XmlToUmlModel = XmlToUmlModel()
 
     def deserialize(self, umlDiagramElement: Element) -> UmlSDInstances:
         """
@@ -55,9 +47,7 @@ class XmlSDInstancesToUmlSDInstances:
             sdInstance:         SDInstance         = self._xmlToUmlModel.sdInstanceToModelSDInstance(umlSDInstanceElement=instanceElement)
 
             umlSDInstance: UmlSDInstance = UmlSDInstance(
-                sdInstance=sdInstance,
-                diagramFrame=self._diagramFrame,
-                umlPubSubEngine=self._umlPubSubEngine
+                sdInstance=sdInstance
             )
 
             umlSDInstance.id = graphicInformation.id

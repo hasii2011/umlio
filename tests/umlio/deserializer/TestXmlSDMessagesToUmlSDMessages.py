@@ -8,10 +8,7 @@ from untangle import parse
 
 from codeallyadvanced.ui.UnitTestBaseW import UnitTestBaseW
 
-from umlshapes.frames.SequenceDiagramFrame import SequenceDiagramFrame
 from umlshapes.lib.ogl import OGLInitialize
-from umlshapes.pubsubengine.IUmlPubSubEngine import IUmlPubSubEngine
-from umlshapes.pubsubengine.UmlPubSubEngine import UmlPubSubEngine
 from umlshapes.sd.SDMessageType import SDMessageType
 from umlshapes.sd.UmlSDMessage import UmlSDMessage
 
@@ -44,31 +41,19 @@ class TestXmlSDMessagesToUmlSDMessages(UnitTestBaseW):
         super().setUp()
         OGLInitialize()
 
-        self._pubSubEngine: IUmlPubSubEngine     = UmlPubSubEngine()
-        self._diagramFrame: SequenceDiagramFrame = SequenceDiagramFrame(
-            parent=self._topLevelWindow,
-            umlPubSubEngine=self._pubSubEngine
-        )
-
     def tearDown(self):
         super().tearDown()
 
     def testDeserializeSDMessages(self):
         instanceRoot:         Element                        = parse(EXPECTED_SD_INSTANCES_XML)
         instanceDiagram:      Element                        = instanceRoot.UMLDiagram
-        instanceDeserializer: XmlSDInstancesToUmlSDInstances = XmlSDInstancesToUmlSDInstances(
-            diagramFrame=self._diagramFrame,
-            umlPubSubEngine=self._pubSubEngine
-        )
-        umlSDInstances: UmlSDInstances = instanceDeserializer.deserialize(umlDiagramElement=instanceDiagram)
+        instanceDeserializer: XmlSDInstancesToUmlSDInstances = XmlSDInstancesToUmlSDInstances()
+        umlSDInstances:       UmlSDInstances                 = instanceDeserializer.deserialize(umlDiagramElement=instanceDiagram)
 
         messageRoot:         Element                      = parse(EXPECTED_SD_MESSAGES_XML)
         messageDiagram:      Element                      = messageRoot.UMLDiagram
-        messageDeserializer: XmlSDMessagesToUmlSDMessages = XmlSDMessagesToUmlSDMessages(
-            diagramFrame=self._diagramFrame,
-            umlPubSubEngine=self._pubSubEngine
-        )
-        umlSDMessages: UmlSDMessages = messageDeserializer.deserialize(
+        messageDeserializer: XmlSDMessagesToUmlSDMessages = XmlSDMessagesToUmlSDMessages()
+        umlSDMessages:       UmlSDMessages                = messageDeserializer.deserialize(
             umlDiagramElement=messageDiagram,
             umlSDInstances=umlSDInstances
         )
@@ -94,11 +79,8 @@ class TestXmlSDMessagesToUmlSDMessages(UnitTestBaseW):
         root:                Element                      = parse(EMPTY_SD_DIAGRAM_XML)
         diagram:             Element                      = root.UMLDiagram
         umlSDInstances:      UmlSDInstances               = UmlSDInstances([])
-        messageDeserializer: XmlSDMessagesToUmlSDMessages = XmlSDMessagesToUmlSDMessages(
-            diagramFrame=self._diagramFrame,
-            umlPubSubEngine=self._pubSubEngine
-        )
-        umlSDMessages: UmlSDMessages = messageDeserializer.deserialize(
+        messageDeserializer: XmlSDMessagesToUmlSDMessages = XmlSDMessagesToUmlSDMessages()
+        umlSDMessages:       UmlSDMessages                = messageDeserializer.deserialize(
             umlDiagramElement=diagram,
             umlSDInstances=umlSDInstances
         )
