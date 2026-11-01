@@ -1,0 +1,21 @@
+<?xml version='1.0' encoding='iso-8859-1'?>
+<UmlProject fileName="/Users/humberto.a.sanchez.ii/SampleProject.udt" version="14.0" codePath="/Users/humberto.a.sanchez.ii">
+    <UMLDiagram documentType="Sequence Document" title="Order Processing" scrollPositionX="1" scrollPositionY="1" pixelsPerUnitX="1" pixelsPerUnitY="1">
+        <UmlSDInstance id="customer.instance" width="100" height="400" x="120" y="60" lifeLineLength="400">
+            <ModelSDInstance id="inst-001" instanceName="customer:Customer" />
+        </UmlSDInstance>
+        <UmlSDInstance id="orderservice.instance" width="120" height="400" x="340" y="60" lifeLineLength="400">
+            <ModelSDInstance id="inst-002" instanceName="orderService:OrderService" />
+        </UmlSDInstance>
+        <UmlSDMessage id="msg.placeorder" messageType="Synchronous Message">
+            <ModelSDMessage id="sdmsg-001" message="placeOrder(orderId)" sourceTime="120" destinationTime="120" sourceId="inst-001" destinationId="inst-002" />
+        </UmlSDMessage>
+        <UmlSDExecution id="exec.orderservice.1">
+            <ModelSDExecution id="sdexec-001" instanceId="inst-002" startTime="120" endTime="260" nestingLevel="0" operation="placeOrder" />
+        </UmlSDExecution>
+        <UmlSDCombinedFragment id="fragment.alt.1" width="380" height="120" x="80" y="160" operator="alt">
+            <SDInteractionOperand guard="[order != null]" startY="160" endY="220" />
+            <SDInteractionOperand guard="[else]" startY="220" endY="280" />
+        </UmlSDCombinedFragment>
+    </UMLDiagram>
+</UmlProject>
