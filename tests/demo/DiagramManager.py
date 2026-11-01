@@ -8,6 +8,7 @@ from logging import getLogger
 
 from wx import Window
 from wx import Simplebook
+from wx import ClientDC
 
 from umlshapes.frames.DiagramFrame import DiagramFrame
 from umlshapes.frames.DiagramFrame import FrameId
@@ -15,6 +16,8 @@ from umlshapes.frames.ClassDiagramFrame import ClassDiagramFrame
 from umlshapes.frames.SequenceDiagramFrame import SequenceDiagramFrame
 from umlshapes.frames.UseCaseDiagramFrame import UseCaseDiagramFrame
 from umlshapes.frames.UmlFrame import UmlFrame
+
+from umlshapes.types.UmlPosition import UmlPosition
 
 from umlshapes.UmlDiagram import UmlDiagram
 from umlshapes.UmlBaseEventHandler import UmlBaseEventHandler
@@ -262,10 +265,19 @@ class DiagramManager(Simplebook):
             umlLollipopInterface.SetEventHandler(lollipopEventHandler)
 
     def _layoutSDInstances(self, diagramFrame: SequenceDiagramFrame, umlSDInstances: UmlSDInstances):
+        dc: ClientDC = ClientDC(diagramFrame)
+        diagramFrame.PrepareDC(dc)
+
         for umlSDInstance in umlSDInstances:
+            savedPosition: UmlPosition = umlSDInstance.position
             umlSDInstance.umlFrame = diagramFrame
             diagramFrame.umlDiagram.AddShape(umlSDInstance)
             umlSDInstance.Show(True)
+
+            centerX: int
+            centerY: int
+            centerX, centerY = umlSDInstance.computeCenterXY(position=savedPosition)
+            umlSDInstance.Move(dc, centerX, centerY)
 
             eventHandler: UmlSdInstanceEventHandler = UmlSdInstanceEventHandler(
                 umlSdInstance=umlSDInstance,
@@ -279,6 +291,7 @@ class DiagramManager(Simplebook):
             umlSDMessage.umlFrame = diagramFrame
             diagramFrame.umlDiagram.AddShape(umlSDMessage)
             umlSDMessage.Show(True)
+            umlSDMessage.updateMessage()
 
             eventHandler: UmlSDMessageEventHandler = UmlSDMessageEventHandler(
                 umlSDMessage=umlSDMessage,
@@ -289,8 +302,11 @@ class DiagramManager(Simplebook):
 
     def _layoutSDExecutions(self, diagramFrame: SequenceDiagramFrame, umlSDExecutions: UmlSDExecutions):
         for umlSDExecution in umlSDExecutions:
-            diagramFrame.umlDiagram.AddShape(umlSDExecution)
-            umlSDExecution.Show(True)
+            if umlSDExecution.lifeLine is not None:
+                umlSDExecution.lifeLine.addExecution(execution=umlSDExecution)
+            else:
+                diagramFrame.umlDiagram.AddShape(umlSDExecution)
+                umlSDExecution.Show(True)
 
             eventHandler: UmlSDExecutionEventHandler = UmlSDExecutionEventHandler(
                 umlSDExecution=umlSDExecution,
