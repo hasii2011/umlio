@@ -46,6 +46,7 @@ class UmlSDInstancesToXml(BaseUmlToXml):
     def _umlSDInstanceToXml(self, documentTop: Element, umlSDInstance: UmlSDInstance) -> Element:
 
         attributes: ElementAttributes = self._umlBaseAttributes(umlShape=umlSDInstance)
+        attributes[XmlConstants.ATTRIBUTE_WIDTH]            = str(umlSDInstance.getInstanceWidth())
         attributes[XmlConstants.ATTRIBUTE_LIFE_LINE_LENGTH] = str(umlSDInstance.getLifeLineLength())
 
         umlSDInstanceSubElement: Element = SubElement(

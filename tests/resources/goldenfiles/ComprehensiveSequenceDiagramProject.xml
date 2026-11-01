@@ -7,16 +7,16 @@
         <UmlText id="text.checkout.header" width="300" height="30" x="50" y="20">
             <ModelText id="text-hdr-1" content="Online Checkout End-to-End Flow" />
         </UmlText>
-        <UmlSDInstance id="customer.instance" width="143" height="400" x="80" y="60" lifeLineLength="580">
+        <UmlSDInstance id="customer.instance" width="100" height="400" x="80" y="60" lifeLineLength="580">
             <ModelSDInstance id="inst-customer" instanceName="customer:Customer" />
         </UmlSDInstance>
-        <UmlSDInstance id="orderservice.instance" width="186" height="400" x="300" y="60" lifeLineLength="580">
+        <UmlSDInstance id="orderservice.instance" width="120" height="400" x="300" y="60" lifeLineLength="580">
             <ModelSDInstance id="inst-orderservice" instanceName="orderService:OrderService" />
         </UmlSDInstance>
-        <UmlSDInstance id="inventory.instance" width="185" height="400" x="540" y="60" lifeLineLength="580">
+        <UmlSDInstance id="inventory.instance" width="120" height="400" x="540" y="60" lifeLineLength="580">
             <ModelSDInstance id="inst-inventory" instanceName="inventory:InventoryService" />
         </UmlSDInstance>
-        <UmlSDInstance id="payment.instance" width="244" height="400" x="780" y="60" lifeLineLength="580">
+        <UmlSDInstance id="payment.instance" width="120" height="400" x="780" y="60" lifeLineLength="580">
             <ModelSDInstance id="inst-payment" instanceName="paymentGateway:PaymentGateway" />
         </UmlSDInstance>
         <UmlSDMessage id="msg.webhook" messageType="Found Message">
