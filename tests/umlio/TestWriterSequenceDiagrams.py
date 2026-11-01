@@ -1,0 +1,232 @@
+
+from unittest import defaultTestLoader
+from unittest import TestSuite
+from unittest import main as unitTestMain
+
+from pathlib import Path
+
+from codeallybasic.UnitTestBase import UnitTestBase
+
+from umlmodel.SDExecution import SDExecution
+from umlmodel.SDInstance import SDInstance
+from umlmodel.SDMessage import SDMessage
+
+from umlshapes.lib.ogl import OGLInitialize
+from umlshapes.sd.SDFragmentOperator import SDFragmentOperator
+from umlshapes.sd.SDInteractionOperand import SDInteractionOperand
+from umlshapes.sd.SDInteractionOperand import SDInteractionOperands
+from umlshapes.sd.SDMessageType import SDMessageType
+from umlshapes.sd.UmlSDCombinedFragment import UmlSDCombinedFragment
+from umlshapes.sd.UmlSDExecution import UmlSDExecution
+from umlshapes.sd.UmlSDInstance import UmlSDInstance
+from umlshapes.sd.UmlSDMessage import UmlSDMessage
+from umlshapes.types.UmlDimensions import UmlDimensions
+from umlshapes.types.UmlPosition import UmlPosition
+
+from umlio.IOTypes import UmlDocument
+from umlio.IOTypes import UmlDocumentTitle
+from umlio.IOTypes import UmlDocumentType
+from umlio.IOTypes import UmlProject
+from umlio.IOTypes import UmlSDCombinedFragments
+from umlio.IOTypes import UmlSDExecutions
+from umlio.IOTypes import UmlSDInstances
+from umlio.IOTypes import UmlSDMessages
+from umlio.Writer import Writer
+
+from tests.umlio.GoldenFileConstants import SEQUENCE_DIAGRAM_COMPRESSED_PROJECT
+from tests.umlio.GoldenFileConstants import SEQUENCE_DIAGRAM_XML_PROJECT
+
+from tests.umlio.SequenceDiagramTestConstants import CUSTOMER_INSTANCE_ID
+from tests.umlio.SequenceDiagramTestConstants import CUSTOMER_INSTANCE_NAME
+from tests.umlio.SequenceDiagramTestConstants import CUSTOMER_INSTANCE_WIDTH
+from tests.umlio.SequenceDiagramTestConstants import CUSTOMER_INSTANCE_X
+from tests.umlio.SequenceDiagramTestConstants import CUSTOMER_MODEL_ID
+from tests.umlio.SequenceDiagramTestConstants import DEFAULT_LIFELINE_LENGTH
+from tests.umlio.SequenceDiagramTestConstants import EXECUTION_END_Y
+from tests.umlio.SequenceDiagramTestConstants import EXECUTION_MODEL_ID
+from tests.umlio.SequenceDiagramTestConstants import EXECUTION_NESTING_LEVEL
+from tests.umlio.SequenceDiagramTestConstants import EXECUTION_OPERATION_NAME
+from tests.umlio.SequenceDiagramTestConstants import EXECUTION_ORDER_SERVICE_ID
+from tests.umlio.SequenceDiagramTestConstants import EXECUTION_START_Y
+from tests.umlio.SequenceDiagramTestConstants import FRAGMENT_ALT_ID
+from tests.umlio.SequenceDiagramTestConstants import FRAGMENT_HEIGHT
+from tests.umlio.SequenceDiagramTestConstants import FRAGMENT_WIDTH
+from tests.umlio.SequenceDiagramTestConstants import FRAGMENT_X
+from tests.umlio.SequenceDiagramTestConstants import FRAGMENT_Y
+from tests.umlio.SequenceDiagramTestConstants import INSTANCE_Y
+from tests.umlio.SequenceDiagramTestConstants import MESSAGE_MODEL_ID
+from tests.umlio.SequenceDiagramTestConstants import MESSAGE_PLACE_ORDER_ID
+from tests.umlio.SequenceDiagramTestConstants import MESSAGE_TEXT
+from tests.umlio.SequenceDiagramTestConstants import MESSAGE_TIME_STEP
+from tests.umlio.SequenceDiagramTestConstants import OPERAND_1_END_Y
+from tests.umlio.SequenceDiagramTestConstants import OPERAND_1_GUARD
+from tests.umlio.SequenceDiagramTestConstants import OPERAND_1_START_Y
+from tests.umlio.SequenceDiagramTestConstants import OPERAND_2_END_Y
+from tests.umlio.SequenceDiagramTestConstants import OPERAND_2_GUARD
+from tests.umlio.SequenceDiagramTestConstants import OPERAND_2_START_Y
+from tests.umlio.SequenceDiagramTestConstants import ORDER_SERVICE_INSTANCE_ID
+from tests.umlio.SequenceDiagramTestConstants import ORDER_SERVICE_INSTANCE_NAME
+from tests.umlio.SequenceDiagramTestConstants import ORDER_SERVICE_INSTANCE_WIDTH
+from tests.umlio.SequenceDiagramTestConstants import ORDER_SERVICE_INSTANCE_X
+from tests.umlio.SequenceDiagramTestConstants import ORDER_SERVICE_MODEL_ID
+
+from tests.umlio.UmlIOBaseTest import UmlIOBaseTest
+
+UNIT_TEST_DIAGRAM_DIRECTORY: str = 'UmlDiagramProjects'
+
+
+class TestWriterSequenceDiagrams(UmlIOBaseTest):
+    """
+    Integration tests for serializing Sequence Diagrams through Writer.
+    """
+
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+
+    def setUp(self):
+        super().setUp()
+        OGLInitialize()
+
+    def tearDown(self):
+        super().tearDown()
+
+    def testWriteSequenceDiagramXmlFile(self):
+
+        directory:               Path = Path.home() / UNIT_TEST_DIAGRAM_DIRECTORY
+        sequenceDiagramFileName: Path = directory / SEQUENCE_DIAGRAM_XML_PROJECT
+
+        umlProject: UmlProject = self._createSequenceDiagramProject()
+        directory.mkdir(parents=True, exist_ok=True)
+        sequenceDiagramFileName.touch()
+        writer: Writer = Writer()
+        writer.writeXmlFile(umlProject=umlProject, fileName=sequenceDiagramFileName)
+
+        goldenFileName: str = UnitTestBase.getFullyQualifiedResourceFileName(
+            package=UmlIOBaseTest.GOLDEN_FILES_PACKAGE_NAME,
+            fileName=SEQUENCE_DIAGRAM_XML_PROJECT
+        )
+        status: int = self._runDiff(generatedFile=sequenceDiagramFileName, goldenFile=Path(goldenFileName))
+
+        self.assertEqual(0, status)
+
+    def testWriteSequenceDiagramCompressedFile(self):
+        directory:               Path = Path.home() / UNIT_TEST_DIAGRAM_DIRECTORY
+        sequenceDiagramFileName: Path = directory / SEQUENCE_DIAGRAM_COMPRESSED_PROJECT
+
+        umlProject: UmlProject = self._createSequenceDiagramProject()
+        directory.mkdir(parents=True, exist_ok=True)
+        sequenceDiagramFileName.touch()
+
+        writer: Writer = Writer()
+        writer.writeFile(umlProject=umlProject, fileName=sequenceDiagramFileName)
+
+        actualFileSize: int = sequenceDiagramFileName.stat().st_size
+
+        self.assertTrue(actualFileSize > 0, 'Looks like it is empty')
+
+    def _createSequenceDiagramProject(self) -> UmlProject:
+
+        umlProject: UmlProject = UmlProject()
+        umlProject.codePath = Path('/Users/humberto.a.sanchez.ii')
+        umlProject.fileName = Path('/Users/humberto.a.sanchez.ii/SampleProject.udt')
+
+        title:   UmlDocumentTitle = UmlDocumentTitle('Order Processing')
+        diagram: UmlDocument      = self._createUmlDiagram(diagramType=UmlDocumentType.SEQUENCE_DOCUMENT, diagramTitle=title)
+
+        sdInstance1: SDInstance = SDInstance(instanceName=CUSTOMER_INSTANCE_NAME)
+        sdInstance1.id = CUSTOMER_MODEL_ID
+
+        sdInstance2: SDInstance = SDInstance(instanceName=ORDER_SERVICE_INSTANCE_NAME)
+        sdInstance2.id = ORDER_SERVICE_MODEL_ID
+
+        umlSDInstance1: UmlSDInstance = UmlSDInstance(sdInstance=sdInstance1)
+        umlSDInstance1.id = CUSTOMER_INSTANCE_ID
+        umlSDInstance1.setInstanceWidth(CUSTOMER_INSTANCE_WIDTH)
+        umlSDInstance1.setLifeLineLength(DEFAULT_LIFELINE_LENGTH)
+        umlSDInstance1._size.SetWidth(CUSTOMER_INSTANCE_WIDTH)
+        umlSDInstance1._size.SetHeight(DEFAULT_LIFELINE_LENGTH)
+        umlSDInstance1.position = UmlPosition(x=CUSTOMER_INSTANCE_X, y=INSTANCE_Y)
+
+        umlSDInstance2: UmlSDInstance = UmlSDInstance(sdInstance=sdInstance2)
+        umlSDInstance2.id = ORDER_SERVICE_INSTANCE_ID
+        umlSDInstance2.setInstanceWidth(ORDER_SERVICE_INSTANCE_WIDTH)
+        umlSDInstance2.setLifeLineLength(DEFAULT_LIFELINE_LENGTH)
+        umlSDInstance2._size.SetWidth(ORDER_SERVICE_INSTANCE_WIDTH)
+        umlSDInstance2._size.SetHeight(DEFAULT_LIFELINE_LENGTH)
+        umlSDInstance2.position = UmlPosition(x=ORDER_SERVICE_INSTANCE_X, y=INSTANCE_Y)
+
+        sdMessage1: SDMessage = SDMessage(
+            message=MESSAGE_TEXT,
+            src=sdInstance1,
+            sourceY=MESSAGE_TIME_STEP,
+            dst=sdInstance2,
+            destinationY=MESSAGE_TIME_STEP
+        )
+        sdMessage1.id = MESSAGE_MODEL_ID
+
+        umlSDMessage1: UmlSDMessage = UmlSDMessage(
+            sdMessage=sdMessage1,
+            messageType=SDMessageType.SYNCHRONOUS
+        )
+        umlSDMessage1.id = MESSAGE_PLACE_ORDER_ID
+
+        sdExecution1: SDExecution = SDExecution(
+            instance=sdInstance2,
+            startTime=EXECUTION_START_Y,
+            endTime=EXECUTION_END_Y,
+            nestingLevel=EXECUTION_NESTING_LEVEL,
+            operation=EXECUTION_OPERATION_NAME
+        )
+        sdExecution1.id = EXECUTION_MODEL_ID
+
+        umlSDExecution1: UmlSDExecution = UmlSDExecution(
+            lifeLine=umlSDInstance2._umlSDLifeLine,
+            startY=EXECUTION_START_Y,
+            endY=EXECUTION_END_Y,
+            nestingLevel=EXECUTION_NESTING_LEVEL,
+            sdExecution=sdExecution1
+        )
+        umlSDExecution1.id = EXECUTION_ORDER_SERVICE_ID
+
+        operand1: SDInteractionOperand = SDInteractionOperand(
+            guard=OPERAND_1_GUARD,
+            startTimeStep=OPERAND_1_START_Y,
+            endTimeStep=OPERAND_1_END_Y
+        )
+        operand2: SDInteractionOperand = SDInteractionOperand(
+            guard=OPERAND_2_GUARD,
+            startTimeStep=OPERAND_2_START_Y,
+            endTimeStep=OPERAND_2_END_Y
+        )
+        operands: SDInteractionOperands = SDInteractionOperands([operand1, operand2])
+
+        fragment: UmlSDCombinedFragment = UmlSDCombinedFragment(
+            operator=SDFragmentOperator.ALT,
+            operands=operands,
+            x=FRAGMENT_X,
+            y=FRAGMENT_Y,
+            width=FRAGMENT_WIDTH,
+            height=FRAGMENT_HEIGHT
+        )
+        fragment.id = FRAGMENT_ALT_ID
+        fragment.size = UmlDimensions(width=FRAGMENT_WIDTH, height=FRAGMENT_HEIGHT)
+        fragment.position = UmlPosition(x=FRAGMENT_X, y=FRAGMENT_Y)
+
+        diagram.umlSDInstances = UmlSDInstances([umlSDInstance1, umlSDInstance2])
+        diagram.umlSDMessages = UmlSDMessages([umlSDMessage1])
+        diagram.umlSDExecutions = UmlSDExecutions([umlSDExecution1])
+        diagram.umlSDCombinedFragments = UmlSDCombinedFragments([fragment])
+
+        umlProject.umlDocuments[title] = diagram
+
+        return umlProject
+
+
+def suite() -> TestSuite:
+    testSuite: TestSuite = defaultTestLoader.loadTestsFromTestCase(TestWriterSequenceDiagrams)
+    return testSuite
+
+
+if __name__ == '__main__':
+    unitTestMain()

@@ -12,11 +12,11 @@ from umlio.IOTypes import UmlDocumentType
 from umlio.IOTypes import UmlProject
 from umlio.Writer import Writer
 
+from tests.umlio.GoldenFileConstants import EMPTY_DIAGRAMS_COMPRESSED_PROJECT
+from tests.umlio.GoldenFileConstants import EMPTY_DIAGRAMS_XML_PROJECT
 from tests.umlio.UmlIOBaseTest import UmlIOBaseTest
-from tests.umlio.UmlIOBaseTest import EMPTY_DIAGRAMS_COMPRESSED_PROJECT
-from tests.umlio.UmlIOBaseTest import EMPTY_DIAGRAMS_XML_PROJECT
 
-UNIT_TEST_DIAGRAM_DIRECTORY:       str = 'UmlDiagramProjects'
+UNIT_TEST_DIAGRAM_DIRECTORY: str = 'UmlDiagramProjects'
 
 EXPECTED_FILE_SIZE: int = 258
 

@@ -7,7 +7,14 @@ from pathlib import Path
 from codeallyadvanced.ui.UnitTestBaseW import UnitTestBaseW
 from codeallybasic.UnitTestBase import UnitTestBase
 
-from tests.umlio.UmlIOBaseTest import EMPTY_DIAGRAMS_XML_PROJECT
+from tests.umlio.GoldenFileConstants import COMPLEX_CLASSES_DIAGRAM_XML_PROJECT
+from tests.umlio.GoldenFileConstants import EMPTY_DIAGRAMS_XML_PROJECT
+from tests.umlio.GoldenFileConstants import INHERITANCE_XML_PROJECT
+from tests.umlio.GoldenFileConstants import SEQUENCE_DIAGRAM_XML_PROJECT
+from tests.umlio.GoldenFileConstants import SINGLE_ACTOR_DIAGRAM_XML_PROJECT
+from tests.umlio.GoldenFileConstants import SINGLE_NOTE_DIAGRAM_XML_PROJECT
+from tests.umlio.GoldenFileConstants import SINGLE_TEXT_DIAGRAM_XML_PROJECT
+from tests.umlio.GoldenFileConstants import SINGLE_USE_CASE_DIAGRAM_XML_PROJECT
 from tests.umlio.UmlIOBaseTest import UmlIOBaseTest
 
 from umlshapes.lib.ogl import OGLInitialize
@@ -17,13 +24,6 @@ from umlio.IOTypes import UmlDocumentTitle
 from umlio.IOTypes import UmlProject
 
 from umlio.Reader import Reader
-
-SINGLE_TEXT_DIAGRAM_XML_PROJECT:     str = 'SingleTextProject.xml'
-SINGLE_NOTE_DIAGRAM_XML_PROJECT:     str = 'SingleNoteProject.xml'
-SINGLE_ACTOR_DIAGRAM_XML_PROJECT:    str = 'SingleActorProject.xml'
-SINGLE_USE_CASE_DIAGRAM_XML_PROJECT: str = 'SingleUseCaseProject.xml'
-COMPLEX_CLASSES_DIAGRAM_XML_PROJECT: str = 'ComplexClassesProject.xml'
-INHERITANCE_XML_PROJECT:             str = 'InheritanceProject.xml'
 
 
 class TestReader(UnitTestBaseW):
@@ -131,6 +131,21 @@ class TestReader(UnitTestBaseW):
         inheritanceDiagram: UmlDocument = umlProject.umlDocuments[UmlDocumentTitle('Inheritance Class Diagram')]
 
         self.assertEqual(1, len(inheritanceDiagram.umlLinks), 'Not the correct # of links')
+
+    def testDeserializeSequenceDiagram(self):
+        sequenceDiagramProject: str = UnitTestBase.getFullyQualifiedResourceFileName(
+            package=UmlIOBaseTest.GOLDEN_FILES_PACKAGE_NAME,
+            fileName=SEQUENCE_DIAGRAM_XML_PROJECT)
+
+        reader:     Reader     = Reader()
+        umlProject: UmlProject = reader.readXmlFile(Path(sequenceDiagramProject))
+
+        sdDiagram: UmlDocument = umlProject.umlDocuments[UmlDocumentTitle('Order Processing')]
+
+        self.assertEqual(2, len(sdDiagram.umlSDInstances), 'Not the correct # of SD instances')
+        self.assertEqual(1, len(sdDiagram.umlSDMessages), 'Not the correct # of SD messages')
+        self.assertEqual(1, len(sdDiagram.umlSDExecutions), 'Not the correct # of SD executions')
+        self.assertEqual(1, len(sdDiagram.umlSDCombinedFragments), 'Not the correct # of SD combined fragments')
 
 
 def suite() -> TestSuite:

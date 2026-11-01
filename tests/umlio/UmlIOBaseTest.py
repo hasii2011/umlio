@@ -7,17 +7,11 @@ from subprocess import CompletedProcess
 from codeallyadvanced.ui.UnitTestBaseW import UnitTestBaseW
 from codeallybasic.UnitTestBase import UnitTestBase
 
-from umlio.IOTypes import PROJECT_SUFFIX
 from umlio.IOTypes import UmlDocument
 from umlio.IOTypes import UmlDocumentTitle
 from umlio.IOTypes import UmlDocumentType
-from umlio.IOTypes import XML_SUFFIX
 
 EXTERNAL_DIFF_PROGRAM: str = '/usr/bin/diff'
-
-EMPTY_DIAGRAMS_BASE_FILENAME: str = 'EmptyDiagramsProject'
-EMPTY_DIAGRAMS_XML_PROJECT: str = f'{EMPTY_DIAGRAMS_BASE_FILENAME}{XML_SUFFIX}'
-EMPTY_DIAGRAMS_COMPRESSED_PROJECT: str = f'{EMPTY_DIAGRAMS_BASE_FILENAME}{PROJECT_SUFFIX}'
 
 
 class UmlIOBaseTest(UnitTestBaseW):

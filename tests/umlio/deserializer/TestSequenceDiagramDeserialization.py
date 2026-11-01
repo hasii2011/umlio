@@ -23,6 +23,8 @@ from umlio.IOTypes import UmlProject
 from umlio.Reader import Reader
 from umlio.deserializer.XmlToUmlShapes import XmlToUmlShapes
 
+from tests.umlio.GoldenFileConstants import SEQUENCE_DIAGRAM_XML_PROJECT
+
 from tests.umlio.SequenceDiagramTestConstants import CUSTOMER_INSTANCE_ID
 from tests.umlio.SequenceDiagramTestConstants import CUSTOMER_INSTANCE_NAME
 from tests.umlio.SequenceDiagramTestConstants import CUSTOMER_INSTANCE_X
@@ -58,8 +60,7 @@ from tests.umlio.SequenceDiagramTestConstants import ORDER_SERVICE_INSTANCE_X
 from tests.umlio.SequenceDiagramTestConstants import ORDER_SERVICE_MODEL_ID
 from tests.umlio.UmlIOBaseTest import UmlIOBaseTest
 
-GOLDEN_SEQUENCE_DIAGRAM_FILENAME: str = 'SequenceDiagramProject.xml'
-ORDER_PROCESSING_TITLE:           str = 'Order Processing'
+ORDER_PROCESSING_TITLE: str = 'Order Processing'
 
 
 class TestSequenceDiagramDeserialization(UnitTestBaseW):
@@ -99,7 +100,7 @@ class TestSequenceDiagramDeserialization(UnitTestBaseW):
     def testDeserializeGoldenFile(self):
         goldenFilePath: str = UnitTestBase.getFullyQualifiedResourceFileName(
             package=UmlIOBaseTest.GOLDEN_FILES_PACKAGE_NAME,
-            fileName=GOLDEN_SEQUENCE_DIAGRAM_FILENAME
+            fileName=SEQUENCE_DIAGRAM_XML_PROJECT
         )
 
         reader:     Reader     = Reader()
