@@ -126,14 +126,14 @@ In `src/umlio/serializer/UmlShapesToXml.py`:
 
 ## Phased Implementation Roadmap
 
-1. **Phase 1: `UmlSDInstancesToXml`**
+1. **Phase 1: `UmlSDInstancesToXml`** `[Completed]`
    - Create `src/umlio/serializer/UmlSDInstancesToXml.py`.
-2. **Phase 2: `UmlSDMessagesToXml`**
+2. **Phase 2: `UmlSDMessagesToXml`** `[Completed]`
    - Create `src/umlio/serializer/UmlSDMessagesToXml.py`.
-3. **Phase 3: `UmlSDExecutionsToXml`**
+3. **Phase 3: `UmlSDExecutionsToXml`** `[Completed]`
    - Create `src/umlio/serializer/UmlSDExecutionsToXml.py`.
-4. **Phase 4: `UmlSDCombinedFragmentsToXml`**
+4. **Phase 4: `UmlSDCombinedFragmentsToXml`** `[Completed]`
    - Create `src/umlio/serializer/UmlSDCombinedFragmentsToXml.py`.
-5. **Phase 5: Integration & Verification**
+5. **Phase 5: Integration & Verification** `[Completed]`
    - Update `UmlShapesToXml.py` to invoke all sequence diagram serializers.
-   - Add sequence diagram serialization unit tests in `tests/umlio/TestWriter.py`.
+   - Add sequence diagram serialization unit tests in `tests/umlio/serializer/TestUmlSDShapesToXml.py` and `tests/umlio/TestWriterSequenceDiagrams.py`.

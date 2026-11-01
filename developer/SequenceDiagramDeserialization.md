@@ -148,17 +148,17 @@ umlSDCombinedFragments: UmlSDCombinedFragments = field(default_factory=umlSDComb
 
 ## Phased Implementation Roadmap
 
-1. **Phase 1A: Types & Constants Foundation**
+1. **Phase 1A: Types & Constants Foundation** `[Completed]`
    - Update `XMLConstants.py` with SD element and attribute strings.
    - Update `IOTypes.py` with SD NewTypes, factories, and `UmlDocument` fields.
    - Extend `XmlToUmlModel.py` for complete SD model deserialization.
-2. **Phase 1B: Instance & Message Deserializers**
+2. **Phase 1B: Instance & Message Deserializers** `[Completed]`
    - Create `XmlSDInstancesToUmlSDInstances.py`.
    - Create `XmlSDMessagesToUmlSDMessages.py`.
-3. **Phase 1C: Executions & Combined Fragments Deserializers**
+3. **Phase 1C: Executions & Combined Fragments Deserializers** `[Completed]`
    - Create `XmlSDExecutionsToUmlSDExecutions.py`.
    - Create `XmlSDFragmentsToUmlSDCombinedFragments.py`.
-4. **Phase 1D: Integration & Verification**
+4. **Phase 1D: Integration & Verification** `[Completed]`
    - Integrate SD deserializers into `XmlToUmlShapes.py`.
    - Provide golden test XML files in `tests/resources/goldenfiles/`.
-   - Add comprehensive unit tests in `tests/umlio/deserializer/TestSequenceDiagramDeserialization.py`.
+   - Add comprehensive unit tests in `tests/umlio/deserializer/TestSequenceDiagramDeserialization.py` and `tests/umlio/TestReader.py`.

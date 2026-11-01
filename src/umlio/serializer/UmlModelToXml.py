@@ -4,6 +4,8 @@ from logging import getLogger
 
 from os import linesep as osLineSep
 
+from typing import Optional
+
 from xml.etree.ElementTree import Element
 from xml.etree.ElementTree import SubElement
 
@@ -211,11 +213,16 @@ class UmlModelToXml:
 
         sdMessageId: str = sdMessage.id
 
-        srcInstance: LinkSource      = sdMessage.source
-        dstInstance: LinkDestination = sdMessage.destination
+        srcInstance: Optional[LinkSource]      = sdMessage.source
+        dstInstance: Optional[LinkDestination] = sdMessage.destination
 
-        idSrc: str = srcInstance.id
-        idDst: str = dstInstance.id
+        idSrc: str = ''
+        if srcInstance is not None:
+            idSrc = srcInstance.id
+
+        idDst: str = ''
+        if dstInstance is not None:
+            idDst = dstInstance.id
 
         attributes: ElementAttributes = ElementAttributes({
             XmlConstants.ATTRIBUTE_ID:                        sdMessageId,

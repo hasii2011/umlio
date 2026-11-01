@@ -23,6 +23,7 @@ from umlio.IOTypes import UmlProject
 from umlio.Reader import Reader
 from umlio.deserializer.XmlToUmlShapes import XmlToUmlShapes
 
+from tests.umlio.GoldenFileConstants import COMPREHENSIVE_SEQUENCE_DIAGRAM_XML_PROJECT
 from tests.umlio.GoldenFileConstants import SEQUENCE_DIAGRAM_XML_PROJECT
 
 from tests.umlio.SequenceDiagramTestConstants import CUSTOMER_INSTANCE_ID
@@ -60,7 +61,8 @@ from tests.umlio.SequenceDiagramTestConstants import ORDER_SERVICE_INSTANCE_X
 from tests.umlio.SequenceDiagramTestConstants import ORDER_SERVICE_MODEL_ID
 from tests.umlio.UmlIOBaseTest import UmlIOBaseTest
 
-ORDER_PROCESSING_TITLE: str = 'Order Processing'
+ORDER_PROCESSING_TITLE:             str = 'Order Processing'
+COMPREHENSIVE_ORDER_CHECKOUT_TITLE: str = 'Comprehensive Order Checkout'
 
 
 class TestSequenceDiagramDeserialization(UnitTestBaseW):
@@ -110,6 +112,64 @@ class TestSequenceDiagramDeserialization(UnitTestBaseW):
 
         umlDocument: UmlDocument = umlProject.umlDocuments[UmlDocumentTitle(ORDER_PROCESSING_TITLE)]
         self._verifyDeserializedDocument(umlDocument=umlDocument)
+
+    def testDeserializeComprehensiveGoldenFile(self):
+        goldenFilePath: str = UnitTestBase.getFullyQualifiedResourceFileName(
+            package=UmlIOBaseTest.GOLDEN_FILES_PACKAGE_NAME,
+            fileName=COMPREHENSIVE_SEQUENCE_DIAGRAM_XML_PROJECT
+        )
+
+        reader:     Reader     = Reader()
+        umlProject: UmlProject = reader.readXmlFile(fileName=Path(goldenFilePath))
+
+        self.assertIn(UmlDocumentTitle(COMPREHENSIVE_ORDER_CHECKOUT_TITLE), umlProject.umlDocuments)
+
+        umlDocument: UmlDocument = umlProject.umlDocuments[UmlDocumentTitle(COMPREHENSIVE_ORDER_CHECKOUT_TITLE)]
+        self.assertEqual(UmlDocumentType.SEQUENCE_DOCUMENT, umlDocument.documentType)
+
+        self.assertEqual(1, len(umlDocument.umlNotes))
+        self.assertEqual('note.payment.security', umlDocument.umlNotes[0].id)
+        self.assertEqual('PCI-DSS Compliant Gateway Interaction', umlDocument.umlNotes[0].modelNote.content)
+
+        self.assertEqual(1, len(umlDocument.umlTexts))
+        self.assertEqual('text.checkout.header', umlDocument.umlTexts[0].id)
+        self.assertEqual('Online Checkout End-to-End Flow', umlDocument.umlTexts[0].modelText.content)
+
+        self.assertEqual(4, len(umlDocument.umlSDInstances))
+        self.assertEqual('customer.instance', umlDocument.umlSDInstances[0].id)
+        self.assertEqual('orderservice.instance', umlDocument.umlSDInstances[1].id)
+        self.assertEqual('inventory.instance', umlDocument.umlSDInstances[2].id)
+        self.assertEqual('payment.instance', umlDocument.umlSDInstances[3].id)
+
+        self.assertEqual(9, len(umlDocument.umlSDMessages))
+        foundMsg: UmlSDMessage = umlDocument.umlSDMessages[0]
+        self.assertEqual(SDMessageType.FOUND, foundMsg.messageType)
+        self.assertIsNone(foundMsg.sdMessage.source)
+        self.assertIsNotNone(foundMsg.sdMessage.destination)
+
+        syncMsg: UmlSDMessage = umlDocument.umlSDMessages[1]
+        self.assertEqual(SDMessageType.SYNCHRONOUS, syncMsg.messageType)
+        self.assertIsNotNone(syncMsg.sdMessage.source)
+        self.assertIsNotNone(syncMsg.sdMessage.destination)
+
+        selfCallMsg: UmlSDMessage = umlDocument.umlSDMessages[2]
+        self.assertEqual(SDMessageType.SYNCHRONOUS, selfCallMsg.messageType)
+        self.assertEqual(selfCallMsg.sdMessage.source.id, selfCallMsg.sdMessage.destination.id)
+
+        lostMsg: UmlSDMessage = umlDocument.umlSDMessages[8]
+        self.assertEqual(SDMessageType.LOST, lostMsg.messageType)
+        self.assertIsNotNone(lostMsg.sdMessage.source)
+        self.assertIsNone(lostMsg.sdMessage.destination)
+
+        self.assertEqual(4, len(umlDocument.umlSDExecutions))
+        self.assertEqual(0, umlDocument.umlSDExecutions[0].nestingLevel)
+        self.assertEqual(1, umlDocument.umlSDExecutions[1].nestingLevel)
+
+        self.assertEqual(3, len(umlDocument.umlSDCombinedFragments))
+        self.assertEqual(SDFragmentOperator.LOOP, umlDocument.umlSDCombinedFragments[0].operator)
+        self.assertEqual(SDFragmentOperator.ALT, umlDocument.umlSDCombinedFragments[1].operator)
+        self.assertEqual(2, len(umlDocument.umlSDCombinedFragments[1].operands))
+        self.assertEqual(SDFragmentOperator.OPT, umlDocument.umlSDCombinedFragments[2].operator)
 
     def testDeserializeEmptySequenceDiagram(self):
         diagramXml: str = EMPTY_SD_DIAGRAM_XML.split('\n', 1)[1]

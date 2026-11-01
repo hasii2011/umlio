@@ -31,8 +31,10 @@ from umlio.IOTypes import UmlSDCombinedFragments
 from umlio.IOTypes import UmlSDExecutions
 from umlio.IOTypes import UmlSDInstances
 from umlio.IOTypes import UmlSDMessages
+from umlio.Reader import Reader
 from umlio.Writer import Writer
 
+from tests.umlio.GoldenFileConstants import COMPREHENSIVE_SEQUENCE_DIAGRAM_XML_PROJECT
 from tests.umlio.GoldenFileConstants import SEQUENCE_DIAGRAM_COMPRESSED_PROJECT
 from tests.umlio.GoldenFileConstants import SEQUENCE_DIAGRAM_XML_PROJECT
 
@@ -106,6 +108,28 @@ class TestWriterSequenceDiagrams(UmlIOBaseTest):
             package=UmlIOBaseTest.GOLDEN_FILES_PACKAGE_NAME,
             fileName=SEQUENCE_DIAGRAM_XML_PROJECT
         )
+        status: int = self._runDiff(generatedFile=sequenceDiagramFileName, goldenFile=Path(goldenFileName))
+
+        self.assertEqual(0, status)
+
+    def testWriteComprehensiveSequenceDiagramXmlFile(self):
+        directory:               Path = Path.home() / UNIT_TEST_DIAGRAM_DIRECTORY
+        sequenceDiagramFileName: Path = directory / COMPREHENSIVE_SEQUENCE_DIAGRAM_XML_PROJECT
+
+        goldenFileName: str = UnitTestBase.getFullyQualifiedResourceFileName(
+            package=UmlIOBaseTest.GOLDEN_FILES_PACKAGE_NAME,
+            fileName=COMPREHENSIVE_SEQUENCE_DIAGRAM_XML_PROJECT
+        )
+
+        reader:     Reader     = Reader()
+        umlProject: UmlProject = reader.readXmlFile(fileName=Path(goldenFileName))
+        umlProject.fileName    = Path('/Users/humberto.a.sanchez.ii/SampleProject.udt')
+
+        directory.mkdir(parents=True, exist_ok=True)
+        sequenceDiagramFileName.touch()
+        writer: Writer = Writer()
+        writer.writeXmlFile(umlProject=umlProject, fileName=sequenceDiagramFileName)
+
         status: int = self._runDiff(generatedFile=sequenceDiagramFileName, goldenFile=Path(goldenFileName))
 
         self.assertEqual(0, status)
