@@ -1,6 +1,7 @@
 
 from typing import Dict
 from typing import NewType
+from typing import Optional
 from typing import cast
 
 from logging import Logger
@@ -53,6 +54,7 @@ from umlshapes.links.eventhandlers.UmlLollipopInterfaceEventHandler import UmlLo
 from umlshapes.sd.UmlSDCombinedFragment import UmlSDCombinedFragment
 from umlshapes.sd.UmlSDExecution import UmlSDExecution
 from umlshapes.sd.UmlSDInstance import UmlSDInstance
+from umlshapes.sd.UmlSDLifeLine import UmlSDLifeLine
 from umlshapes.sd.UmlSDMessage import UmlSDMessage
 
 from umlshapes.sd.eventhandlers.UmlSDCombinedFragmentEventHandler import UmlSDCombinedFragmentEventHandler
@@ -274,9 +276,10 @@ class DiagramManager(Simplebook):
             diagramFrame.umlDiagram.AddShape(umlSDInstance)
             umlSDInstance.Show(True)
 
-            centerX: int
-            centerY: int
-            centerX, centerY = umlSDInstance.computeCenterXY(position=savedPosition)
+            totalHeight: int = int(umlSDInstance.GetHeight())
+            totalWidth:  int = int(umlSDInstance.GetWidth())
+            centerX:     int = savedPosition.x + (totalWidth // 2)
+            centerY:     int = savedPosition.y + (totalHeight // 2)
             umlSDInstance.Move(dc, centerX, centerY)
 
             eventHandler: UmlSdInstanceEventHandler = UmlSdInstanceEventHandler(
@@ -287,11 +290,27 @@ class DiagramManager(Simplebook):
             umlSDInstance.SetEventHandler(eventHandler)
 
     def _layoutSDMessages(self, diagramFrame: SequenceDiagramFrame, umlSDMessages: UmlSDMessages):
+        dc: ClientDC = ClientDC(diagramFrame)
+        diagramFrame.PrepareDC(dc)
+
         for umlSDMessage in umlSDMessages:
             umlSDMessage.umlFrame = diagramFrame
             diagramFrame.umlDiagram.AddShape(umlSDMessage)
             umlSDMessage.Show(True)
+
+            sourceLifeLine: Optional[UmlSDLifeLine] = umlSDMessage.GetFrom()
+            destLifeLine:   Optional[UmlSDLifeLine] = umlSDMessage.GetTo()
+
+            if sourceLifeLine is not None:
+                sourceLifeLine.addMessage(umlSDMessage=umlSDMessage, destinationLifeLine=destLifeLine)
+            else:
+                if destLifeLine is not None:
+                    destLifeLine.addMessage(umlSDMessage=umlSDMessage)
+
+            umlSDMessage.fromY = umlSDMessage.fromY
+            umlSDMessage.toY   = umlSDMessage.toY
             umlSDMessage.updateMessage()
+            umlSDMessage.OnMoveLink(dc=dc)
 
             eventHandler: UmlSDMessageEventHandler = UmlSDMessageEventHandler(
                 umlSDMessage=umlSDMessage,
