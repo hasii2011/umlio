@@ -43,8 +43,21 @@ class UmlSDCombinedFragmentsToXml(BaseUmlToXml):
 
     def _umlSDCombinedFragmentToXml(self, documentTop: Element, umlSDCombinedFragment: UmlSDCombinedFragment) -> Element:
 
-        attributes: ElementAttributes = self._umlBaseAttributes(umlShape=umlSDCombinedFragment)
-        attributes[XmlConstants.ATTRIBUTE_OPERATOR] = umlSDCombinedFragment.operator.value
+        width:  int = round(umlSDCombinedFragment.GetWidth())
+        height: int = round(umlSDCombinedFragment.GetHeight())
+        leftX:  int = round(umlSDCombinedFragment.GetX() - (width / 2.0))
+        topY:   int = round(umlSDCombinedFragment.GetY() - (height / 2.0))
+
+        attributes: ElementAttributes = ElementAttributes(
+            {
+                XmlConstants.ATTRIBUTE_ID:       str(umlSDCombinedFragment.id),
+                XmlConstants.ATTRIBUTE_WIDTH:    str(width),
+                XmlConstants.ATTRIBUTE_HEIGHT:   str(height),
+                XmlConstants.ATTRIBUTE_X:        str(leftX),
+                XmlConstants.ATTRIBUTE_Y:        str(topY),
+                XmlConstants.ATTRIBUTE_OPERATOR: umlSDCombinedFragment.operator.value,
+            }
+        )
 
         fragmentSubElement: Element = SubElement(
             documentTop,

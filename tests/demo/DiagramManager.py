@@ -205,7 +205,7 @@ class DiagramManager(Simplebook):
         elif isinstance(diagramFrame, SequenceDiagramFrame):
             self._layoutSDInstances(diagramFrame, umlDocument.umlSDInstances)
             self._layoutSDMessages(diagramFrame, umlDocument.umlSDMessages)
-            self._layoutSDExecutions(diagramFrame, umlDocument.umlSDExecutions)
+            self._layoutSDExecutions(umlDocument.umlSDExecutions)
             self._layoutSDCombinedFragments(diagramFrame, umlDocument.umlSDCombinedFragments)
             self._layoutNotes(diagramFrame, umlDocument.umlNotes)
             self._layoutTexts(diagramFrame, umlDocument.umlTexts)
@@ -255,7 +255,7 @@ class DiagramManager(Simplebook):
 
     def _layoutLollipops(self, diagramFrame: ClassDiagramFrame, umlLollipops: UmlLollipopInterfaces):
         for umlLollipop in umlLollipops:
-            umlLollipopInterface: UmlLollipopInterface = cast(UmlLollipopInterface, umlLollipop)
+            umlLollipopInterface: UmlLollipopInterface = umlLollipop
             self.logger.info(f'{umlLollipopInterface}')
 
             diagramFrame.umlDiagram.AddShape(umlLollipopInterface)
@@ -319,13 +319,9 @@ class DiagramManager(Simplebook):
             eventHandler.umlPubSubEngine = self._umlPubSubEngine
             umlSDMessage.SetEventHandler(eventHandler)
 
-    def _layoutSDExecutions(self, diagramFrame: SequenceDiagramFrame, umlSDExecutions: UmlSDExecutions):
+    def _layoutSDExecutions(self, umlSDExecutions: UmlSDExecutions):
         for umlSDExecution in umlSDExecutions:
-            if umlSDExecution.lifeLine is not None:
-                umlSDExecution.lifeLine.addExecution(execution=umlSDExecution)
-            else:
-                diagramFrame.umlDiagram.AddShape(umlSDExecution)
-                umlSDExecution.Show(True)
+            umlSDExecution.lifeLine.addExecution(execution=umlSDExecution)
 
             eventHandler: UmlSDExecutionEventHandler = UmlSDExecutionEventHandler(
                 umlSDExecution=umlSDExecution,
@@ -490,6 +486,6 @@ class DiagramManager(Simplebook):
                 case UmlControlPoint() as umlShape:
                     pass
                 case _:
-                    self.logger.warning(f'Unknown Uml object type: {umlShape}, not saved')
+                    self.logger.warning(f'Unknown Uml object type: {umlShape}, not saved')  # noqa
 
         return umlDocument

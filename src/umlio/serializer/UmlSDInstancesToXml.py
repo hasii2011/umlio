@@ -6,6 +6,7 @@ from xml.etree.ElementTree import Element
 from xml.etree.ElementTree import SubElement
 
 from umlshapes.sd.UmlSDInstance import UmlSDInstance
+from umlshapes.types.UmlPosition import UmlPosition
 
 from umlio.IOTypes import ElementAttributes
 from umlio.IOTypes import UmlSDInstances
@@ -48,6 +49,11 @@ class UmlSDInstancesToXml(BaseUmlToXml):
         attributes: ElementAttributes = self._umlBaseAttributes(umlShape=umlSDInstance)
         attributes[XmlConstants.ATTRIBUTE_WIDTH]            = str(umlSDInstance.getInstanceWidth())
         attributes[XmlConstants.ATTRIBUTE_LIFE_LINE_LENGTH] = str(umlSDInstance.getLifeLineLength())
+
+        if umlSDInstance.GetCanvas() is not None:
+            instancePosition: UmlPosition = umlSDInstance.instanceName.position
+            attributes[XmlConstants.ATTRIBUTE_X] = str(instancePosition.x)
+            attributes[XmlConstants.ATTRIBUTE_Y] = str(instancePosition.y)
 
         umlSDInstanceSubElement: Element = SubElement(
             documentTop,
