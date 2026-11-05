@@ -1,7 +1,6 @@
 
 from typing import Dict
 from typing import NewType
-from typing import Optional
 from typing import cast
 
 from logging import Logger
@@ -9,7 +8,6 @@ from logging import getLogger
 
 from wx import Window
 from wx import Simplebook
-from wx import ClientDC
 
 from umlshapes.frames.DiagramFrame import DiagramFrame
 from umlshapes.frames.DiagramFrame import FrameId
@@ -17,8 +15,6 @@ from umlshapes.frames.ClassDiagramFrame import ClassDiagramFrame
 from umlshapes.frames.SequenceDiagramFrame import SequenceDiagramFrame
 from umlshapes.frames.UseCaseDiagramFrame import UseCaseDiagramFrame
 from umlshapes.frames.UmlFrame import UmlFrame
-
-from umlshapes.types.UmlPosition import UmlPosition
 
 from umlshapes.UmlDiagram import UmlDiagram
 from umlshapes.UmlBaseEventHandler import UmlBaseEventHandler
@@ -62,10 +58,7 @@ from umlshapes.sd.UmlInstanceName import UmlInstanceName
 from umlshapes.sd.SDInstanceConstrainer import SDInstanceConstrainer
 from umlshapes.sd.UmlSDMessageLabel import UmlSDMessageLabel
 
-from umlshapes.sd.eventhandlers.UmlSDCombinedFragmentEventHandler import UmlSDCombinedFragmentEventHandler
-from umlshapes.sd.eventhandlers.UmlSDExecutionEventHandler import UmlSDExecutionEventHandler
-from umlshapes.sd.eventhandlers.UmlSDMessageEventHandler import UmlSDMessageEventHandler
-from umlshapes.sd.eventhandlers.UmlSdInstanceEventHandler import UmlSdInstanceEventHandler
+from tests.demo.SequenceDiagramLayout import SequenceDiagramLayout
 
 from umlshapes.pubsubengine.UmlPubSubEngine import UmlPubSubEngine
 
@@ -80,10 +73,6 @@ from umlio.IOTypes import UmlDocumentTitle
 from umlio.IOTypes import UmlDocumentType
 from umlio.IOTypes import UmlDocuments
 from umlio.IOTypes import UmlLollipopInterfaces
-from umlio.IOTypes import UmlSDCombinedFragments
-from umlio.IOTypes import UmlSDExecutions
-from umlio.IOTypes import UmlSDInstances
-from umlio.IOTypes import UmlSDMessages
 
 FrameIdToUmlDocument = NewType('FrameIdToUmlDocument', Dict[FrameId, UmlDocument])
 UmlDocumentToPage    = NewType('UmlDocumentToPage', Dict[UmlDocumentTitle, int])
@@ -110,6 +99,8 @@ class DiagramManager(Simplebook):
 
         self._diagramTitleToDiagram: FrameIdToUmlDocument = FrameIdToUmlDocument({})
         self._diagramTitleToPage:    UmlDocumentToPage    = UmlDocumentToPage({})
+
+        self._sequenceDiagramLayout: SequenceDiagramLayout = SequenceDiagramLayout(umlPubSubEngine=self._umlPubSubEngine)
 
         # doing any effect should be an application preference
         # self.SetEffect(effect=SHOW_EFFECT_SLIDE_TO_RIGHT)               # TODO:  Should be an application preference
@@ -196,22 +187,22 @@ class DiagramManager(Simplebook):
     def _layoutShapes(self, diagramFrame: ClassDiagramFrame | UseCaseDiagramFrame | SequenceDiagramFrame, umlDocument: UmlDocument):
 
         if isinstance(diagramFrame, ClassDiagramFrame):
+
             self._layoutClasses(diagramFrame, umlDocument.umlClasses)
             self._layoutNotes(diagramFrame, umlDocument.umlNotes)
             self._layoutTexts(diagramFrame, umlDocument.umlTexts)
             self._layoutLinks(diagramFrame, umlDocument.umlLinks)
             self._layoutLollipops(diagramFrame, umlDocument.umlLollipopInterfaces)
         elif isinstance(diagramFrame, UseCaseDiagramFrame):
+
             self._layoutActors(diagramFrame, umlDocument.umlActors)
             self._layoutUseCases(diagramFrame, umlDocument.umlUseCases)
             self._layoutNotes(diagramFrame, umlDocument.umlNotes)
             self._layoutTexts(diagramFrame, umlDocument.umlTexts)
             self._layoutLinks(diagramFrame, umlDocument.umlLinks)
         elif isinstance(diagramFrame, SequenceDiagramFrame):
-            self._layoutSDInstances(diagramFrame, umlDocument.umlSDInstances)
-            self._layoutSDMessages(diagramFrame, umlDocument.umlSDMessages)
-            self._layoutSDExecutions(umlDocument.umlSDExecutions)
-            self._layoutSDCombinedFragments(diagramFrame, umlDocument.umlSDCombinedFragments)
+
+            self._sequenceDiagramLayout.layout(diagramFrame=diagramFrame, umlDocument=umlDocument)
             self._layoutNotes(diagramFrame, umlDocument.umlNotes)
             self._layoutTexts(diagramFrame, umlDocument.umlTexts)
 
@@ -270,83 +261,6 @@ class DiagramManager(Simplebook):
             lollipopEventHandler.umlPubSubEngine = self._umlPubSubEngine
 
             umlLollipopInterface.SetEventHandler(lollipopEventHandler)
-
-    def _layoutSDInstances(self, diagramFrame: SequenceDiagramFrame, umlSDInstances: UmlSDInstances):
-        dc: ClientDC = ClientDC(diagramFrame)
-        diagramFrame.PrepareDC(dc)
-
-        for umlSDInstance in umlSDInstances:
-            savedPosition: UmlPosition = umlSDInstance.position
-            umlSDInstance.umlFrame = diagramFrame
-            diagramFrame.umlDiagram.AddShape(umlSDInstance)
-            umlSDInstance.Show(True)
-
-            totalHeight: int = int(umlSDInstance.GetHeight())
-            totalWidth:  int = int(umlSDInstance.GetWidth())
-            centerX:     int = savedPosition.x + (totalWidth // 2)
-            centerY:     int = savedPosition.y + (totalHeight // 2)
-            umlSDInstance.Move(dc, centerX, centerY)
-
-            eventHandler: UmlSdInstanceEventHandler = UmlSdInstanceEventHandler(
-                umlSdInstance=umlSDInstance,
-                previousEventHandler=umlSDInstance.GetEventHandler()
-            )
-            eventHandler.umlPubSubEngine = self._umlPubSubEngine
-            umlSDInstance.SetEventHandler(eventHandler)
-
-    def _layoutSDMessages(self, diagramFrame: SequenceDiagramFrame, umlSDMessages: UmlSDMessages):
-        dc: ClientDC = ClientDC(diagramFrame)
-        diagramFrame.PrepareDC(dc)
-
-        for umlSDMessage in umlSDMessages:
-            umlSDMessage.umlFrame = diagramFrame
-            diagramFrame.umlDiagram.AddShape(umlSDMessage)
-            umlSDMessage.Show(True)
-
-            sourceLifeLine: Optional[UmlSDLifeLine] = umlSDMessage.GetFrom()
-            destLifeLine:   Optional[UmlSDLifeLine] = umlSDMessage.GetTo()
-
-            if sourceLifeLine is not None:
-                sourceLifeLine.addMessage(umlSDMessage=umlSDMessage, destinationLifeLine=destLifeLine)
-            else:
-                if destLifeLine is not None:
-                    destLifeLine.addMessage(umlSDMessage=umlSDMessage)
-
-            umlSDMessage.fromY = umlSDMessage.fromY
-            umlSDMessage.toY   = umlSDMessage.toY
-            umlSDMessage.updateMessage()
-            umlSDMessage.OnMoveLink(dc=dc)
-
-            eventHandler: UmlSDMessageEventHandler = UmlSDMessageEventHandler(
-                umlSDMessage=umlSDMessage,
-                previousEventHandler=umlSDMessage.GetEventHandler()
-            )
-            eventHandler.umlPubSubEngine = self._umlPubSubEngine
-            umlSDMessage.SetEventHandler(eventHandler)
-
-    def _layoutSDExecutions(self, umlSDExecutions: UmlSDExecutions):
-        for umlSDExecution in umlSDExecutions:
-            umlSDExecution.lifeLine.addExecution(execution=umlSDExecution)
-
-            eventHandler: UmlSDExecutionEventHandler = UmlSDExecutionEventHandler(
-                umlSDExecution=umlSDExecution,
-                previousEventHandler=umlSDExecution.GetEventHandler()
-            )
-            eventHandler.umlPubSubEngine = self._umlPubSubEngine
-            umlSDExecution.SetEventHandler(eventHandler)
-
-    def _layoutSDCombinedFragments(self, diagramFrame: SequenceDiagramFrame, umlSDCombinedFragments: UmlSDCombinedFragments):
-        for umlSDCombinedFragment in umlSDCombinedFragments:
-            umlSDCombinedFragment.umlFrame = diagramFrame
-            diagramFrame.umlDiagram.AddShape(umlSDCombinedFragment)
-            umlSDCombinedFragment.Show(True)
-
-            eventHandler: UmlSDCombinedFragmentEventHandler = UmlSDCombinedFragmentEventHandler(
-                umlSDCombinedFragment=umlSDCombinedFragment,
-                previousEventHandler=umlSDCombinedFragment.GetEventHandler()
-            )
-            eventHandler.umlPubSubEngine = self._umlPubSubEngine
-            umlSDCombinedFragment.SetEventHandler(eventHandler)
 
     def _layoutLinks(self, diagramFrame: ClassDiagramFrame | UseCaseDiagramFrame, umlLinks: UmlLinks):
         """
