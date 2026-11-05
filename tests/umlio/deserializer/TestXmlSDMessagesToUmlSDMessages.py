@@ -87,6 +87,35 @@ class TestXmlSDMessagesToUmlSDMessages(UnitTestBaseW):
 
         self.assertEqual(0, len(umlSDMessages), 'Expected 0 deserialized UmlSDMessage shapes for empty diagram')
 
+    def testDeserializeSDMessageWithLabelOffsets(self):
+        instanceRoot:         Element                        = parse(EXPECTED_SD_INSTANCES_XML)
+        instanceDiagram:      Element                        = instanceRoot.UMLDiagram
+        instanceDeserializer: XmlSDInstancesToUmlSDInstances = XmlSDInstancesToUmlSDInstances()
+        umlSDInstances:       UmlSDInstances                 = instanceDeserializer.deserialize(umlDiagramElement=instanceDiagram)
+
+        customMessageXml: str = (
+            "<?xml version='1.0' encoding='iso-8859-1'?>\n"
+            '<UMLDiagram documentType="Sequence Document" title="Order Processing" scrollPositionX="1" scrollPositionY="1" pixelsPerUnitX="1" pixelsPerUnitY="1">\n'
+            f'    <UmlSDMessage id="{MESSAGE_PLACE_ORDER_ID}" messageType="Synchronous Message">\n'
+            '        <UmlSDMessageLabel verticalOffset="25" proportionalOffset="0.75" fixedX="280" />\n'
+            f'        <ModelSDMessage id="{MESSAGE_MODEL_ID}" message="{MESSAGE_TEXT}" sourceTime="{MESSAGE_TIME_STEP}" destinationTime="{MESSAGE_TIME_STEP}" sourceId="{CUSTOMER_MODEL_ID}" destinationId="{ORDER_SERVICE_MODEL_ID}" />\n'
+            '    </UmlSDMessage>\n'
+            '</UMLDiagram>'
+        )
+        messageRoot:         Element                      = parse(customMessageXml)
+        messageDiagram:      Element                      = messageRoot.UMLDiagram
+        messageDeserializer: XmlSDMessagesToUmlSDMessages = XmlSDMessagesToUmlSDMessages()
+        umlSDMessages:       UmlSDMessages                = messageDeserializer.deserialize(
+            umlDiagramElement=messageDiagram,
+            umlSDInstances=umlSDInstances
+        )
+
+        self.assertEqual(1, len(umlSDMessages))
+        placeOrderMessage: UmlSDMessage = umlSDMessages[0]
+        self.assertEqual(25, placeOrderMessage.messageLabel.verticalOffset)
+        self.assertEqual(0.75, placeOrderMessage.messageLabel.proportionalOffset)
+        self.assertEqual(280, placeOrderMessage.messageLabel.fixedX)
+
 
 def suite() -> TestSuite:
     testSuite: TestSuite = defaultTestLoader.loadTestsFromTestCase(TestXmlSDMessagesToUmlSDMessages)

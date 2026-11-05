@@ -30,6 +30,7 @@ from umlshapes.shapes.UmlActor import UmlActor
 from umlshapes.shapes.UmlClass import UmlClass
 from umlshapes.shapes.UmlUseCase import UmlUseCase
 from umlshapes.shapes.UmlControlPoint import UmlControlPoint
+from umlshapes.shapes.UmlLineControlPoint import UmlLineControlPoint
 
 from umlshapes.shapes.eventhandlers.UmlNoteEventHandler import UmlNoteEventHandler
 from umlshapes.shapes.eventhandlers.UmlTextEventHandler import UmlTextEventHandler
@@ -45,6 +46,7 @@ from umlshapes.links.UmlInheritance import UmlInheritance
 from umlshapes.links.UmlComposition import UmlComposition
 from umlshapes.links.UmlAggregation import UmlAggregation
 from umlshapes.links.UmlLollipopInterface import UmlLollipopInterface
+from umlshapes.links.UmlLinkLabel import UmlLinkLabel
 
 from umlshapes.links.eventhandlers.UmlLinkEventHandler import UmlLinkEventHandler
 from umlshapes.links.eventhandlers.UmlNoteLinkEventHandler import UmlNoteLinkEventHandler
@@ -56,6 +58,9 @@ from umlshapes.sd.UmlSDExecution import UmlSDExecution
 from umlshapes.sd.UmlSDInstance import UmlSDInstance
 from umlshapes.sd.UmlSDLifeLine import UmlSDLifeLine
 from umlshapes.sd.UmlSDMessage import UmlSDMessage
+from umlshapes.sd.UmlInstanceName import UmlInstanceName
+from umlshapes.sd.SDInstanceConstrainer import SDInstanceConstrainer
+from umlshapes.sd.UmlSDMessageLabel import UmlSDMessageLabel
 
 from umlshapes.sd.eventhandlers.UmlSDCombinedFragmentEventHandler import UmlSDCombinedFragmentEventHandler
 from umlshapes.sd.eventhandlers.UmlSDExecutionEventHandler import UmlSDExecutionEventHandler
@@ -483,7 +488,15 @@ class DiagramManager(Simplebook):
                     umlDocument.umlSDExecutions.append(umlShape)
                 case UmlSDCombinedFragment() as umlShape:
                     umlDocument.umlSDCombinedFragments.append(umlShape)
-                case UmlControlPoint() as umlShape:
+                case (
+                    UmlControlPoint()
+                    | UmlLineControlPoint()
+                    | UmlLinkLabel()
+                    | UmlInstanceName()
+                    | UmlSDLifeLine()
+                    | SDInstanceConstrainer()
+                    | UmlSDMessageLabel()
+                ) as umlShape:
                     pass
                 case _:
                     self.logger.warning(f'Unknown Uml object type: {umlShape}, not saved')  # noqa

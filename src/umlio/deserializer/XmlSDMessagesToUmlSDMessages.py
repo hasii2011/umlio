@@ -89,6 +89,21 @@ class XmlSDMessagesToUmlSDMessages:
             umlSDMessage.toY   = sdMessage.destinationY
             umlSDMessage.updateMessage()
 
+            labelElements: Elements = messageElement.get_elements(XmlConstants.ELEMENT_UML_SD_MESSAGE_LABEL)
+            if len(labelElements) > 0:
+                labelElement: Element = labelElements[0]
+                rawVerticalOffset: Optional[str] = labelElement[XmlConstants.ATTRIBUTE_VERTICAL_OFFSET]
+                if rawVerticalOffset is not None:
+                    umlSDMessage.messageLabel.verticalOffset = int(rawVerticalOffset)
+
+                rawProportionalOffset: Optional[str] = labelElement[XmlConstants.ATTRIBUTE_PROPORTIONAL_OFFSET]
+                if rawProportionalOffset is not None:
+                    umlSDMessage.messageLabel.proportionalOffset = float(rawProportionalOffset)
+
+                rawFixedX: Optional[str] = labelElement[XmlConstants.ATTRIBUTE_FIXED_X]
+                if rawFixedX is not None:
+                    umlSDMessage.messageLabel.fixedX = int(rawFixedX)
+
             umlSDMessages.append(umlSDMessage)
 
         return umlSDMessages

@@ -1,72 +1,72 @@
 <?xml version='1.0' encoding='iso-8859-1'?>
 <UmlProject fileName="/Users/humberto.a.sanchez.ii/SampleProject.udt" version="14.0" codePath="/Users/humberto.a.sanchez.ii">
     <UMLDiagram documentType="Sequence Document" title="Comprehensive Order Checkout" scrollPositionX="1" scrollPositionY="1" pixelsPerUnitX="1" pixelsPerUnitY="1">
-        <UmlNote id="note.payment.security" width="160" height="60" x="720" y="240">
+        <UmlNote id="note.payment.security" width="160" height="60" x="760" y="350">
             <ModelNote id="note-sec-1" name="SecurityNote" content="PCI-DSS Compliant Gateway Interaction" fileName="" />
         </UmlNote>
         <UmlText id="text.checkout.header" width="300" height="30" x="50" y="20">
             <ModelText id="text-hdr-1" content="Online Checkout End-to-End Flow" />
         </UmlText>
-        <UmlSDInstance id="customer.instance" width="100" height="400" x="80" y="60" lifeLineLength="580">
+        <UmlSDInstance id="customer.instance" width="160" height="400" x="80" y="60" lifeLineLength="750">
             <ModelSDInstance id="inst-customer" instanceName="customer:Customer" />
         </UmlSDInstance>
-        <UmlSDInstance id="orderservice.instance" width="120" height="400" x="300" y="60" lifeLineLength="580">
+        <UmlSDInstance id="orderservice.instance" width="200" height="400" x="280" y="60" lifeLineLength="750">
             <ModelSDInstance id="inst-orderservice" instanceName="orderService:OrderService" />
         </UmlSDInstance>
-        <UmlSDInstance id="inventory.instance" width="120" height="400" x="540" y="60" lifeLineLength="580">
+        <UmlSDInstance id="inventory.instance" width="200" height="400" x="540" y="60" lifeLineLength="750">
             <ModelSDInstance id="inst-inventory" instanceName="inventory:InventoryService" />
         </UmlSDInstance>
-        <UmlSDInstance id="payment.instance" width="120" height="400" x="780" y="60" lifeLineLength="580">
+        <UmlSDInstance id="payment.instance" width="260" height="400" x="940" y="60" lifeLineLength="750">
             <ModelSDInstance id="inst-payment" instanceName="paymentGateway:PaymentGateway" />
         </UmlSDInstance>
         <UmlSDMessage id="msg.webhook" messageType="Found Message">
-            <ModelSDMessage id="sdmsg-001" message="webhookTrigger()" sourceTime="100" destinationTime="100" sourceId="" destinationId="inst-customer" />
+            <ModelSDMessage id="sdmsg-001" message="webhookTrigger()" sourceTime="135" destinationTime="135" sourceId="" destinationId="inst-customer" />
         </UmlSDMessage>
         <UmlSDMessage id="msg.checkout" messageType="Synchronous Message">
-            <ModelSDMessage id="sdmsg-002" message="checkout(cartId)" sourceTime="130" destinationTime="130" sourceId="inst-customer" destinationId="inst-orderservice" />
+            <ModelSDMessage id="sdmsg-002" message="checkout(cartId)" sourceTime="175" destinationTime="175" sourceId="inst-customer" destinationId="inst-orderservice" />
         </UmlSDMessage>
         <UmlSDMessage id="msg.validatecart" messageType="Synchronous Message">
-            <ModelSDMessage id="sdmsg-003" message="validateCart()" sourceTime="160" destinationTime="180" sourceId="inst-orderservice" destinationId="inst-orderservice" />
+            <ModelSDMessage id="sdmsg-003" message="validateCart()" sourceTime="210" destinationTime="235" sourceId="inst-orderservice" destinationId="inst-orderservice" />
         </UmlSDMessage>
         <UmlSDMessage id="msg.reservestock" messageType="Synchronous Message">
-            <ModelSDMessage id="sdmsg-004" message="reserveStock(item)" sourceTime="230" destinationTime="230" sourceId="inst-orderservice" destinationId="inst-inventory" />
+            <ModelSDMessage id="sdmsg-004" message="reserveStock(item)" sourceTime="330" destinationTime="330" sourceId="inst-orderservice" destinationId="inst-inventory" />
         </UmlSDMessage>
         <UmlSDMessage id="msg.stockreserved" messageType="Return Message">
-            <ModelSDMessage id="sdmsg-005" message="stockReserved" sourceTime="270" destinationTime="270" sourceId="inst-inventory" destinationId="inst-orderservice" />
+            <ModelSDMessage id="sdmsg-005" message="stockReserved" sourceTime="380" destinationTime="380" sourceId="inst-inventory" destinationId="inst-orderservice" />
         </UmlSDMessage>
         <UmlSDMessage id="msg.processpayment" messageType="Synchronous Message">
-            <ModelSDMessage id="sdmsg-006" message="processPayment(amount)" sourceTime="330" destinationTime="330" sourceId="inst-orderservice" destinationId="inst-payment" />
+            <ModelSDMessage id="sdmsg-006" message="processPayment(amount)" sourceTime="450" destinationTime="450" sourceId="inst-orderservice" destinationId="inst-payment" />
         </UmlSDMessage>
         <UmlSDMessage id="msg.receipt" messageType="Return Message">
-            <ModelSDMessage id="sdmsg-007" message="receipt" sourceTime="400" destinationTime="400" sourceId="inst-payment" destinationId="inst-orderservice" />
+            <ModelSDMessage id="sdmsg-007" message="receipt" sourceTime="520" destinationTime="520" sourceId="inst-payment" destinationId="inst-orderservice" />
         </UmlSDMessage>
         <UmlSDMessage id="msg.notifyshipping" messageType="Asynchronous Message">
-            <ModelSDMessage id="sdmsg-008" message="notifyShipping(orderId)" sourceTime="510" destinationTime="510" sourceId="inst-orderservice" destinationId="inst-inventory" />
+            <ModelSDMessage id="sdmsg-008" message="notifyShipping(orderId)" sourceTime="705" destinationTime="705" sourceId="inst-orderservice" destinationId="inst-inventory" />
         </UmlSDMessage>
         <UmlSDMessage id="msg.publishanalytics" messageType="Lost Message">
-            <ModelSDMessage id="sdmsg-009" message="publishAnalyticsEvent()" sourceTime="540" destinationTime="540" sourceId="inst-orderservice" destinationId="" />
+            <ModelSDMessage id="sdmsg-009" message="publishAnalyticsEvent()" sourceTime="755" destinationTime="755" sourceId="inst-orderservice" destinationId="" />
         </UmlSDMessage>
         <UmlSDExecution id="exec.orderservice.root">
-            <ModelSDExecution id="sdexec-001" instanceId="inst-orderservice" startTime="130" endTime="500" nestingLevel="0" operation="checkout" />
+            <ModelSDExecution id="sdexec-001" instanceId="inst-orderservice" startTime="175" endTime="550" nestingLevel="0" operation="checkout" />
         </UmlSDExecution>
         <UmlSDExecution id="exec.orderservice.nested">
-            <ModelSDExecution id="sdexec-002" instanceId="inst-orderservice" startTime="160" endTime="200" nestingLevel="1" operation="validateCart" />
+            <ModelSDExecution id="sdexec-002" instanceId="inst-orderservice" startTime="210" endTime="255" nestingLevel="1" operation="validateCart" />
         </UmlSDExecution>
         <UmlSDExecution id="exec.inventory.reserve">
-            <ModelSDExecution id="sdexec-003" instanceId="inst-inventory" startTime="230" endTime="270" nestingLevel="0" operation="reserveStock" />
+            <ModelSDExecution id="sdexec-003" instanceId="inst-inventory" startTime="330" endTime="380" nestingLevel="0" operation="reserveStock" />
         </UmlSDExecution>
         <UmlSDExecution id="exec.payment.process">
-            <ModelSDExecution id="sdexec-004" instanceId="inst-payment" startTime="330" endTime="420" nestingLevel="0" operation="processPayment" />
+            <ModelSDExecution id="sdexec-004" instanceId="inst-payment" startTime="450" endTime="550" nestingLevel="0" operation="processPayment" />
         </UmlSDExecution>
-        <UmlSDCombinedFragment id="fragment.loop.1" width="380" height="90" x="260" y="210" operator="loop">
-            <SDInteractionOperand guard="[for each item in cart]" startY="210" endY="300" />
+        <UmlSDCombinedFragment id="fragment.loop.1" width="360" height="130" x="330" y="280" operator="loop">
+            <SDInteractionOperand guard="[for each item in cart]" startY="280" endY="410" />
         </UmlSDCombinedFragment>
-        <UmlSDCombinedFragment id="fragment.alt.1" width="820" height="120" x="60" y="360" operator="alt">
-            <SDInteractionOperand guard="[payment approved]" startY="360" endY="420" />
-            <SDInteractionOperand guard="[else: payment failed]" startY="420" endY="480" />
+        <UmlSDCombinedFragment id="fragment.alt.1" width="1060" height="160" x="60" y="480" operator="alt">
+            <SDInteractionOperand guard="[payment approved]" startY="480" endY="560" />
+            <SDInteractionOperand guard="[else: payment failed]" startY="560" endY="640" />
         </UmlSDCombinedFragment>
-        <UmlSDCombinedFragment id="fragment.opt.1" width="340" height="70" x="60" y="490" operator="opt">
-            <SDInteractionOperand guard="[gift option selected]" startY="490" endY="560" />
+        <UmlSDCombinedFragment id="fragment.opt.1" width="640" height="150" x="60" y="660" operator="opt">
+            <SDInteractionOperand guard="[gift option selected]" startY="660" endY="810" />
         </UmlSDCombinedFragment>
     </UMLDiagram>
 </UmlProject>

@@ -71,7 +71,10 @@ class XmlConstants:
     ATTRIBUTE_START_MESSAGE_ID:  str = 'startMessageId'
     ATTRIBUTE_FINISH_MESSAGE_ID: str = 'finishMessageId'
 
-    ATTRIBUTE_MESSAGE_TYPE:  str = 'messageType'
+    ATTRIBUTE_MESSAGE_TYPE:        str = 'messageType'
+    ATTRIBUTE_VERTICAL_OFFSET:     str = 'verticalOffset'
+    ATTRIBUTE_PROPORTIONAL_OFFSET: str = 'proportionalOffset'
+    ATTRIBUTE_FIXED_X:             str = 'fixedX'
     ATTRIBUTE_START_Y:       str = 'startY'
     ATTRIBUTE_END_Y:         str = 'endY'
     ATTRIBUTE_NESTING_LEVEL: str = 'nestingLevel'
@@ -101,6 +104,7 @@ class XmlConstants:
     ELEMENT_UML_SD_EXECUTION:         str = 'UmlSDExecution'
     ELEMENT_UML_SD_COMBINED_FRAGMENT: str = 'UmlSDCombinedFragment'
     ELEMENT_SD_INTERACTION_OPERAND:   str = 'SDInteractionOperand'
+    ELEMENT_UML_SD_MESSAGE_LABEL:     str = 'UmlSDMessageLabel'
 
     ELEMENT_ASSOCIATION_LABEL:             str = 'AssociationName'
     ELEMENT_ASSOCIATION_SOURCE_LABEL:      str = 'SourceCardinality'

@@ -116,6 +116,32 @@ class TestUmlSDShapesToXml(UmlIOBaseTest):
         self.maxDiff = None
         self.assertEqual(EXPECTED_SD_MESSAGES_XML, actualXml, 'SD Messages serialization changed')
 
+    def testSerializeSDMessagesWithCustomLabelOffsets(self):
+        umlSDMessages: UmlSDMessages = self._createTestSDMessages()
+        customMessage: UmlSDMessage  = umlSDMessages[0]
+        customMessage.messageLabel.verticalOffset = 25
+        customMessage.messageLabel.proportionalOffset = 0.75
+        customMessage.messageLabel.fixedX = 280
+
+        documentTop: Element = self._createDiagramElement()
+        serializer: UmlSDMessagesToXml = UmlSDMessagesToXml()
+        serializer.serialize(documentTop=documentTop, umlSDMessages=umlSDMessages)
+
+        actualXml: str = self._toPrettyXml(element=documentTop)
+
+        expectedXml: str = (
+            "<?xml version='1.0' encoding='iso-8859-1'?>\n"
+            '<UMLDiagram documentType="Sequence Document" title="Order Processing" scrollPositionX="1" scrollPositionY="1" pixelsPerUnitX="1" pixelsPerUnitY="1">\n'
+            f'    <UmlSDMessage id="{MESSAGE_PLACE_ORDER_ID}" messageType="Synchronous Message">\n'
+            '        <UmlSDMessageLabel verticalOffset="25" proportionalOffset="0.75" fixedX="280" />\n'
+            f'        <ModelSDMessage id="{MESSAGE_MODEL_ID}" message="{MESSAGE_TEXT}" sourceTime="{MESSAGE_TIME_STEP}" destinationTime="{MESSAGE_TIME_STEP}" sourceId="{CUSTOMER_MODEL_ID}" destinationId="{ORDER_SERVICE_MODEL_ID}" />\n'
+            '    </UmlSDMessage>\n'
+            '</UMLDiagram>'
+        )
+
+        self.maxDiff = None
+        self.assertEqual(expectedXml, actualXml)
+
     def testSerializeSDExecutions(self):
         umlSDInstances: UmlSDInstances = self._createTestSDInstances()
         umlSDExecutions: UmlSDExecutions = self._createTestSDExecutions(umlSDInstances=umlSDInstances)

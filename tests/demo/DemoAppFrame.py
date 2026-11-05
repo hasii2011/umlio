@@ -43,8 +43,8 @@ from tests.demo.ProjectPanel import ProjectPanel
 
 from tests.demo.pubsubengine.DemoAppPubSubEngine import DemoAppPubSubEngine
 
-FRAME_WIDTH:  int = 960
-FRAME_HEIGHT: int = 640
+FRAME_WIDTH:  int = 1600
+FRAME_HEIGHT: int = 860
 
 PROJECT_WILDCARD: str = f'UML Diagrammer files (*.{PROJECT_SUFFIX})|*{PROJECT_SUFFIX}'
 XML_WILDCARD:     str = f'UML Diagrammer XML   (*.{XML_SUFFIX})|*{XML_SUFFIX}'
@@ -97,14 +97,14 @@ class DemoAppFrame(SizedFrame):
         self.Bind(EVT_MENU, self._onWriteXmlFile, id=Identifiers.ID_WRITE_XML_FILE)
 
     # noinspection PyUnusedLocal
-    def _onLoadProject(self, event: CommandEvent):
+    def _onLoadProject(self, _event: CommandEvent):
 
         selectedFile: str = FileSelector("Choose a project file to load", wildcard=PROJECT_WILDCARD, flags=FD_OPEN | FD_FILE_MUST_EXIST | FD_CHANGE_DIR)
         if selectedFile != '':
             self._loadProjectFile(Path(selectedFile))
 
     # noinspection PyUnusedLocal
-    def _onLoadXmlFile(self, event: CommandEvent):
+    def _onLoadXmlFile(self, _event: CommandEvent):
 
         selectedFile: str = FileSelector("Choose a XML file to load", wildcard=XML_WILDCARD, flags=FD_OPEN | FD_FILE_MUST_EXIST | FD_CHANGE_DIR)
         if selectedFile != '':
@@ -127,7 +127,7 @@ class DemoAppFrame(SizedFrame):
         self._loadNewProject(umlProject)
 
     # noinspection PyUnusedLocal
-    def _onWriteXmlFile(self, event: CommandEvent):
+    def _onWriteXmlFile(self, _event: CommandEvent):
 
         specifiedFileName: str = FileSelector("Choose a XML file to write", wildcard=XML_WILDCARD, flags=FD_CHANGE_DIR)
 
