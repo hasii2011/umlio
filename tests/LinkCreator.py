@@ -27,7 +27,7 @@ from umlshapes.links.UmlLollipopInterface import UmlLollipopInterface
 from umlshapes.shapes.UmlNote import UmlNote
 from umlshapes.shapes.UmlClass import UmlClass
 
-from umlshapes.frames.DiagramFrame import DiagramFrame
+from umlshapes.frames.ClassDiagramFrame import ClassDiagramFrame
 
 from umlshapes.types.Common import AttachmentSide
 from umlshapes.types.UmlPosition import UmlPosition
@@ -90,10 +90,10 @@ class CreatedNoteLink:
 
 
 class LinkCreator:
-    def __init__(self, diagramFrame: DiagramFrame):
+    def __init__(self, diagramFrame: ClassDiagramFrame):
         self.logger: Logger = getLogger(__name__)
 
-        self._diagramFrame: DiagramFrame = diagramFrame
+        self._diagramFrame: ClassDiagramFrame = diagramFrame
 
         association: LinkDescription = LinkDescription(
             linkType=LinkType.ASSOCIATION,

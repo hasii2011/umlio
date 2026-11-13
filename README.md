@@ -7,14 +7,57 @@
 
 # Introduction
 
-This package provides a common way to read and write [UML Diagrammer](https://github.com/hasii2011/umldiagrammer) UDT/XML files.  It is the updated
-version of [oglio](https://github.com/hasii2011/oglio).  This version supports [umlshapes](https://github.com/hasii2011/umlshapes).
+`umlio` provides a Python serialization and deserialization layer for [UML Diagrammer](https://github.com/hasii2011/umldiagrammer) `.udt` (compressed project) and `.xml` files (currently XML format `14.0`). It is the updated successor to [oglio](https://github.com/hasii2011/oglio) and bridges [umlmodel](https://github.com/hasii2011/umlmodel) and [umlshapes](https://github.com/hasii2011/umlshapes).
+
+## Supported Diagrams
+
+- **Class Diagrams** (`UmlDocumentType.CLASS_DOCUMENT`): classes, notes, text labels, lollipop interfaces, and links (associations, aggregations, compositions, inheritance, interface realization, and note links).
+- **Use Case Diagrams** (`UmlDocumentType.USE_CASE_DOCUMENT`): actors, use cases, notes, text labels, and links.
+- **Sequence Diagrams** (`UmlDocumentType.SEQUENCE_DOCUMENT`): instances/lifelines, messages, executions, combined fragments, notes, and text labels.
 
 # Installation
+
+Requires Python 3.13 and `wxPython>=4.3.2`:
 
 ```bash
 pip install umlio
 ```
+
+For local development with test and packaging dependencies:
+
+```bash
+pip install -e '.[test,deploy]'
+```
+
+# Usage
+
+Use `Reader` to load `.udt` or `.xml` files into an `UmlProject`, and `Writer` to serialize an `UmlProject` back to disk:
+
+```python
+from pathlib import Path
+
+from umlio.IOTypes import UmlProject
+from umlio.Reader import Reader
+from umlio.Writer import Writer
+
+reader: Reader = Reader()
+umlProject: UmlProject = reader.readProjectFile(fileName=Path('MyProject.udt'))
+
+writer: Writer = Writer()
+writer.writeFile(umlProject=umlProject, fileName=Path('MyProjectCopy.udt'))
+writer.writeXmlFile(umlProject=umlProject, fileName=Path('MyProjectCopy.xml'))
+```
+
+# Development & Verification
+
+Run type checks and the unit test suite from the project root:
+
+```bash
+mypy --config-file .mypi.ini --check-untyped-defs src/umlio tests
+PYTHONPATH=src:. python -m unittest discover -s tests -t . -p 'Test*.py' -v
+```
+
+*(On headless Linux, prefix the test command with `xvfb-run -a` for wxPython.)*
 
 ___
 

@@ -159,6 +159,7 @@ class DiagramManager(Simplebook):
         for umlDocumentTitle, umlDocument in self._umlDocuments.items():
 
             documentType: UmlDocumentType = umlDocument.documentType
+            diagramFrame: ClassDiagramFrame | UseCaseDiagramFrame | SequenceDiagramFrame
 
             if documentType == UmlDocumentType.CLASS_DOCUMENT:
                 diagramFrame = ClassDiagramFrame(
@@ -273,7 +274,7 @@ class DiagramManager(Simplebook):
             umlLinks:
         """
         for umlLink in umlLinks:
-            umlLink.umlFrame = diagramFrame
+            umlLink.umlFrame = cast(ClassDiagramFrame, diagramFrame)
             if isinstance(umlLink, UmlInheritance):
                 umInheritance: UmlInheritance = umlLink
                 subClass  = umInheritance.subClass
@@ -305,7 +306,10 @@ class DiagramManager(Simplebook):
 
                 source = umlLink.sourceShape
                 dest   = umlLink.destinationShape
-                source.addLink(umlLink, dest)
+                if isinstance(source, UmlClass) and isinstance(dest, UmlClass):
+                    source.addLink(umlLink, dest)
+                elif isinstance(source, UmlActor) and isinstance(dest, UmlUseCase):
+                    source.addLink(umlLink, dest)
 
                 diagramFrame.umlDiagram.AddShape(umlLink)
                 umlLink.Show(True)
