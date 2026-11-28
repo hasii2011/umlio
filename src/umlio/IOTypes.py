@@ -48,10 +48,14 @@ UmlLinks         = NewType('UmlLinks',        List[UmlLink])
 
 UmlLollipopInterfaces = NewType('UmlLollipopInterfaces', List[UmlLollipopInterface])
 
-UmlSDInstances         = NewType('UmlSDInstances', List[UmlSDInstance])
-UmlSDMessages          = NewType('UmlSDMessages', List[UmlSDMessage])
-UmlSDExecutions        = NewType('UmlSDExecutions', List[UmlSDExecution])
-UmlSDCombinedFragments = NewType('UmlSDCombinedFragments', List[UmlSDCombinedFragment])
+from umlshapes.ShapeTypes import UmlSDInstances
+from umlshapes.ShapeTypes import UmlSDMessages
+from umlshapes.ShapeTypes import UmlSDExecutions
+from umlshapes.ShapeTypes import UmlSDCombinedFragments
+from umlshapes.ShapeTypes import umlSDInstancesFactory
+from umlshapes.ShapeTypes import umlSDMessagesFactory
+from umlshapes.ShapeTypes import umlSDExecutionsFactory
+from umlshapes.ShapeTypes import umlSDCombinedFragmentsFactory
 
 ElementAttributes = NewType('ElementAttributes', Dict[str, str])
 
@@ -96,20 +100,7 @@ def umlLollipopInterfacesFactory() -> UmlLollipopInterfaces:
     return UmlLollipopInterfaces([])
 
 
-def umlSDInstancesFactory() -> UmlSDInstances:
-    return UmlSDInstances([])
 
-
-def umlSDMessagesFactory() -> UmlSDMessages:
-    return UmlSDMessages([])
-
-
-def umlSDExecutionsFactory() -> UmlSDExecutions:
-    return UmlSDExecutions([])
-
-
-def umlSDCombinedFragmentsFactory() -> UmlSDCombinedFragments:
-    return UmlSDCombinedFragments([])
 
 
 DEFAULT_PROJECT_TITLE:         UmlDocumentTitle = UmlDocumentTitle('NewProject')

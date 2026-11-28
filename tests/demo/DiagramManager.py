@@ -58,7 +58,7 @@ from umlshapes.sd.UmlInstanceName import UmlInstanceName
 from umlshapes.sd.SDInstanceConstrainer import SDInstanceConstrainer
 from umlshapes.sd.UmlSDMessageLabel import UmlSDMessageLabel
 
-from tests.demo.SequenceDiagramLayout import SequenceDiagramLayout
+from umlshapes.sd.SequenceDiagramLayout import SequenceDiagramLayout
 
 from umlshapes.pubsubengine.UmlPubSubEngine import UmlPubSubEngine
 
@@ -203,7 +203,7 @@ class DiagramManager(Simplebook):
             self._layoutLinks(diagramFrame, umlDocument.umlLinks)
         elif isinstance(diagramFrame, SequenceDiagramFrame):
 
-            self._sequenceDiagramLayout.layout(diagramFrame=diagramFrame, umlDocument=umlDocument)
+            self._sequenceDiagramLayout.layout(diagramFrame=diagramFrame, shapesProvider=umlDocument)
             self._layoutNotes(diagramFrame, umlDocument.umlNotes)
             self._layoutTexts(diagramFrame, umlDocument.umlTexts)
 
